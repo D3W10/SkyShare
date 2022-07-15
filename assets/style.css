@@ -1,0 +1,1514 @@
+:root {
+    --background: #ffffff;
+    --foreground: #111111;
+    --red: #ed4e50;
+    --orange: #f69a68;
+    --overlay: rgba(0, 0, 0, 0.1);
+    --littleOverlay: rgba(0, 0, 0, 0.05);
+    --scrollbar: rgba(0, 0, 0, 0.2);
+    --textShadow: 0px 0px 10px rgb(100 100 100 / 35%);
+    --dropShadow: drop-shadow(0px 0px 10px rgb(100 100 100 / 20%));
+    --iconShadow: drop-shadow(0px 0px 10px rgb(100 100 100 / 70%));
+    --insetBoxShadow: 0px 0px 30px 0px rgb(100 100 100 / 20%) inset;
+    --sidebarBrightness: brightness(0);
+    --gradient-1: linear-gradient(100deg, #a2facf, #64acff);
+    --gradient-2: linear-gradient(100deg, #ff7170, #ffe57f);
+    --gradient-3: linear-gradient(100deg, #3bf0e4, #bca1f7);
+    --gradient-4: linear-gradient(100deg, #db469f, #2188ff);
+    --gradient-5: linear-gradient(100deg, #9867f0, #ed4e50);
+    --gradient-6: linear-gradient(100deg, #2188ff, #804eda);
+    --accent: #00CAF3;
+    --codeShadow: #ffe57f;
+}
+
+[theme="dark"] {
+    --background: #000000;
+    --foreground: #eeeeee;
+    --overlay: rgba(255, 255, 255, 0.1);
+    --littleOverlay: rgba(255, 255, 255, 0.05);
+    --scrollbar: rgba(255, 255, 255, 0.2);
+    --textShadow: 0px 0px 10px rgb(155 155 155 / 35%);
+    --dropShadow: drop-shadow(0px 0px 10px rgb(155 155 155 / 20%));
+    --iconShadow: drop-shadow(0px 0px 10px rgb(155 155 155 / 70%));
+    --insetBoxShadow: 0px 0px 30px 0px rgb(155 155 155 / 20%) inset;
+    --sidebarBrightness: brightness(2) grayscale(1);
+    --codeShadow: #806600;
+}
+
+/* #region Common Styles */
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar);
+    border-radius: 10px;
+}
+
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: var(--foreground);
+    background-color: var(--background);
+    font-family: montserrat;
+    font-weight: 500;
+    overflow: hidden;
+    user-select: none;
+}
+
+h1 {
+    margin: 0 0 20px;
+    color: var(--foreground);
+    font-size: 1.3em;
+    font-weight: 800;
+}
+
+h2 {
+    margin: 30px 0 10px;
+    color: var(--foreground);
+    font-size: 1em;
+    font-weight: 700;
+}
+
+p {
+    margin: 10px 0;
+    color: var(--foreground);
+    font-size: 14px;
+}
+
+span {
+    color: var(--foreground);
+}
+
+img {
+    display: block;
+    -webkit-user-drag: none;
+}
+
+button {
+    width: fit-content;
+    margin: 0;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: var(--foreground);
+    background-color: var(--overlay);
+    border: 0;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: bold;
+    transition: color 0.2s 0.05s, opacity 0.4s;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 1;
+}
+
+button:hover {
+    color: var(--background);
+}
+
+button::before {
+    content: "";
+    width: 0;
+    padding-bottom: 0;
+    position: absolute;
+    border-radius: 100vw;
+    transition: width 0.4s, padding-bottom 0.4s;
+    z-index: -1;
+}
+
+button:hover::before {
+    width: 105%;
+    padding-bottom: 105%;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+button:disabled:hover {
+    color: inherit;
+}
+
+button:disabled:hover::before {
+    width: 0;
+    padding-bottom: 0;
+}
+
+button[alt] {
+    height: 30px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s, font-weight 0.2s, opacity 0.4s;
+}
+
+button[alt]:hover {
+    font-weight: 800;
+}
+
+button[alt]:hover::before {
+    width: 0%;
+    padding-bottom: 0%;
+}
+
+button[alt]:disabled:hover {
+    color: var(--foreground) !important;
+    font-weight: 600;
+}
+
+a {
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: bold;
+    transition: opacity 0.4s, filter 0.4s;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+a[disabled] {
+    cursor: unset;
+    filter: grayscale();
+}
+
+a[disabled]:hover {
+    opacity: unset;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select {
+    padding: 5px;
+    color: var(--foreground);
+    background-color: var(--overlay);
+    border: 0;
+    border-bottom: solid 2px var(--overlay);
+    border-radius: 5px;
+    font: inherit;
+    font-size: 14px;
+    outline: 0;
+    transition: border-bottom 0.2s, opacity 0.4s;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="tel"]:focus, select:focus {
+    border-bottom-color: var(--focusColor);
+    --focusColor: var(--littleOverlay);
+}
+
+input[type="text"]:disabled, input[type="email"]:disabled, input[type="password"]:disabled, input[type="tel"]:disabled, select:disabled {
+    opacity: 0.7;
+}
+
+input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+    background-color: var(--overlay);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    appearance: none;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--accent);
+}
+
+hr {
+    width: -webkit-fill-available;
+    height: 3px;
+    margin: 10px;
+    border: 0;
+    border-radius: 100vw;
+    background-color: var(--littleOverlay);
+}
+
+option {
+    background-color: var(--background);
+}
+
+icon {
+    display: flex;
+    fill: var(--foreground);
+}
+
+imgx {
+    background-image: var(--image);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 100vw;
+}
+
+pbar {
+    width: 100%;
+    height: 5px;
+    display: block;
+    background-color: var(--overlay);
+    border-radius: 100vw;
+    --value: 0%;
+}
+
+pbar::before {
+    content: "";
+    width: var(--value);
+    height: inherit;
+    display: inherit;
+    background-color: var(--accent);
+    border-radius: inherit;
+    transition: width 0.2s;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.columns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.columns > div:first-of-type {
+    width: 40%;
+    min-width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.columns > div {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.spaceAlign {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.spaceAlign > div {
+    width: 100%;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.spaceAlign > div:last-child {
+    margin: 0;
+}
+
+.spaceAlign > div > p {
+    margin: 0 0 5px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.spaceAlign > div > button {
+    width: 100%;
+}
+
+.spaceAlign > div > div {
+    display: flex;
+}
+
+.spaceAlign > div > span {
+    height: 19px;
+}
+
+.spaceAlign > div icon {
+    transition: fill 0.2s, opacity 0.4s;
+    cursor: pointer;
+}
+
+.spaceAlign > div icon:hover {
+    fill: var(--accent);
+}
+
+.spaceAlign > div icon[disabled] {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.spaceAlign > div icon[disabled]:hover {
+    fill: unset;
+}
+
+.spaceAlign > div > icon {
+    width: 45px;
+}
+
+.spaceAlign > div > div > icon {
+    width: 30px;
+}
+
+.iconFocus {
+    justify-content: center;
+    align-items: center;
+}
+
+.iconFocus > img, .iconFocus > icon, .iconFocus > imgx {
+    width: 50%;
+    fill: var(--accent);
+}
+
+.iconFocus > imgx {
+    padding-bottom: 50%;
+}
+
+.blockOptions {
+    margin-left: 30px;
+}
+
+.blockOptions > div {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    background-color: var(--littleOverlay);
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
+
+.blockOptions > div:hover {
+    background-color: var(--overlay);
+}
+
+.blockOptions > div > icon {
+    width: 30px;
+    margin-right: 10px;
+}
+
+/* #endregion */
+
+/* #region Frame Bar */
+
+#frameBar {
+    height: 40px;
+    width: 100vw;
+    padding: 7.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-app-region: drag;
+}
+
+#frameBar > div {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+#frameBar > div > img {
+    height: 19px;
+    margin: 0 10px 0 4px;
+    -webkit-app-region: no-drag;
+}
+
+#frameBar > div > div {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+}
+
+#frameBar > div > div::before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-radius: 100vw;
+    transition: width 0.4s, height 0.4s;
+    z-index: -1;
+}
+
+#frameBar > div > div:hover::before {
+    width: 35px;
+    height: 35px;
+}
+
+#frameBar > div > div:first-child {
+    margin-left: 0;
+}
+
+#minimizeCircle::before {
+    background-color: var(--orange);
+}
+
+#closeCircle::before {
+    background-color: var(--red);
+}
+
+#frameBar > div > div > icon {
+    width: 20px;
+    transition: fill 0.4s;
+}
+
+#frameBar > div > div:hover > icon {
+    fill: var(--background);
+}
+
+/* #endregion */
+
+/* #region Content, Sidebar and Tabs */
+
+#content {
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: row;
+}
+
+#sidebar {
+    max-width: 230px;
+    min-width: 230px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    opacity: 1;
+    transition: opacity 0.4s;
+}
+
+#sidebar[disabled] {
+    opacity: 0.7;
+}
+
+#sidebar[disabled] > a {
+    cursor: default;
+}
+
+#sidebar[disabled] > a:hover {
+    opacity: 1;
+}
+
+#sidebar > a:first-child {
+    height: 60px;
+    margin: 0 5px 5px;
+    padding: 5px;
+    color: var(--foreground);
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.4s, background-color 0.4s;
+}
+
+#sidebar[disabled] > a:first-child {
+    cursor: default;
+}
+
+#sidebar > a:first-child > imgx {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 100vw;
+}
+
+#sidebar > a:first-child > span {
+    background-image: unset;
+    background-clip: unset;
+    text-shadow: unset;
+    filter: unset;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+}
+
+#sidebar > a:first-child.selected {
+    background-color: var(--littleOverlay);
+}
+
+#sidebar > a {
+    width: -webkit-fill-available;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#sidebar > a > icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+    filter: var(--iconShadow);
+    transition: fill 0.2s;
+}
+
+#sidebar > a > span {
+    background-image: var(--textColor);
+    background-clip: unset;
+    text-shadow: var(--textShadow);
+    filter: var(--sidebarBrightness);
+    transition: filter 0.2s;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#sidebar > a.selected:hover {
+    opacity: 1;
+}
+
+#sidebar > a.selected > icon {
+    fill: var(--iconColor);
+}
+
+#sidebar > a.selected > span {
+    filter: brightness(1);
+}
+
+#appTab {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 0 0 0;
+    box-shadow: var(--insetBoxShadow);
+    overflow: hidden;
+}
+
+#appTab > div {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    position: relative;
+    opacity: 1;
+    overflow: hidden overlay;
+    transition: opacity 0.2s;
+}
+
+#appTab > div > div {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+#appTab > div > div:first-child {
+    display: flex;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#appTab > div > div > div {
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+}
+
+#loadBar {
+    height: 7px !important;
+    padding: 0 !important;
+    display: none;
+    position: absolute !important;
+    border-radius: 10px 0 0 !important;
+    transition: width 0.2s;
+}
+
+#loadBar::before, #loadBar::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    background-color: var(--accent);
+    border-radius: 100vh;;
+}
+
+#loadBar::before {
+    animation: progressFirstLine 2100ms cubic-bezier(0.65, 0.81, 0.73, 0.4) infinite;
+}
+
+#loadBar::after {
+    animation: progressLastLine 2100ms cubic-bezier(0.16, 0.84, 0.44, 1) 1150ms infinite;
+}
+
+/* #endregion */
+
+/* #region Home Panel */
+
+#homePanel > div.detailed > #homeBasic {
+    display: none;
+}
+
+#homePanel > div.detailed > #homeDetailed {
+    display: flex;
+}
+
+#homeAppName {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+#homeDetailed {
+    display: none;
+    flex-direction: column;
+    overflow: overlay;
+}
+
+#homeDetailed > div {
+    margin-bottom: 15px;
+    padding: 15px 15px 15px 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--littleOverlay);
+    border-radius: 10px;
+}
+
+#homeDetailed > div:last-child {
+    margin-bottom: 0;
+}
+
+#homeDetailed > div > div {
+    display: flex;
+    align-items: center;
+}
+
+#homeDetailed > div > div > icon {
+    height: 50px;
+}
+
+#homeDetailed > div > div:last-child > icon {
+    height: 35px;
+    margin: 0 10px;
+    opacity: 0;
+    transition: opacity 0.2s, fill 0.2s;
+    cursor: pointer;
+}
+
+#homeDetailed > div:hover > div:last-child > icon {
+    opacity: 1;
+}
+
+#homeDetailed > div:hover > div:last-child > icon:hover {
+    fill: var(--accent);
+}
+
+#homeDetailed > div > div > div {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#homeDetailed > div > div > div > span:first-of-type {
+    margin-bottom: 5px;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+#homeDetailed > div > div > div > span:last-of-type {
+    font-size: 14px;
+}
+
+/* #endregion */
+
+/* #region Send Panel */
+
+#sendPanel button::before {
+    background-image: var(--gradient-2);
+}
+
+#filesSpace {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: solid 5px var(--overlay);
+    border-radius: 15px;
+    transition: border-color 0.2s, opacity 0.4s;
+    --focusColor: #ff7170;
+}
+
+#filesSpace[disabled] {
+    opacity: 0.7;
+}
+
+#filesSpace[disabled] div {
+    cursor: default;
+}
+
+#filesSpace[disabled] > #filesList > #filesContent > div > icon {
+    opacity: 0;
+    cursor: default;
+}
+
+#filesEmpty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 0.4s;
+}
+
+#filesEmpty > icon {
+    width: 45px;
+}
+
+#filesEmpty > p {
+    margin: 15px 0 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+#filesEmpty > span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#filesList {
+    width: 100%;
+    height: 415px;
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    opacity: 0;
+    overflow: hidden overlay;
+    transition: opacity 0.4s;
+}
+
+#filesContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#filesContent > div {
+    height: 43px;
+    margin-bottom: 10px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--littleOverlay);
+    border-radius: 5px;
+    opacity: 1;
+    font-size: 14px;
+    font-weight: 700;
+    transition: opacity 0.2s, margin 0.2s, padding 0.2s, height 0.2s;
+}
+
+#filesContent > div > div {
+    display: flex;
+    flex-direction: column;
+}
+
+#filesContent > div > div > span:first-of-type {
+    max-width: 232px;
+    transition: max-width 0.2s 0.4s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#filesContent > div:hover > div > span:first-of-type {
+    max-width: 192px;
+    transition: max-width 0.2s;
+}
+
+#filesSpace[disabled] > #filesList > #filesContent > div:hover > div > span:first-of-type {
+    max-width: 232px;
+}
+
+#filesContent > div > div > span:last-of-type {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#filesContent > div > icon {
+    height: 20px;
+    margin-right: 5px;
+    opacity: 0;
+    fill: var(--foreground);
+    transition: opacity 0.4s, fill 0.2s;
+    cursor: pointer;
+}
+
+#filesContent > div:hover > icon {
+    opacity: 1;
+}
+
+#filesContent > div > icon:hover {
+    fill: var(--red);
+}
+
+#addFiles {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    background-color: var(--littleOverlay);
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#addFiles > icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+#sendDetails > div > div > input {
+    --focusColor: #ffe57f;
+}
+
+#filesUploading > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#uploadProgress {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#uploadProgress > svg {
+    width: 250px;
+    height: 250px;
+    stroke: white;
+    stroke-dasharray: 75 100;
+    stroke-linecap: round;
+    transform: rotate(-225deg);
+    fill: none;
+    --value: 0;
+}
+
+#uploadProgress > svg > linearGradient > stop:first-of-type {
+    stop-color: #ff7170;
+}
+
+#uploadProgress > svg > linearGradient > stop:last-of-type {
+    stop-color: #ffe57f;
+}
+
+#uploadProgress > svg > circle:first-of-type {
+    stroke: var(--overlay);
+    stroke-width: 4px;
+    stroke-dasharray: 75 100;
+    stroke-linecap: round;
+    fill: none;
+}
+
+#uploadProgress > svg > circle:last-of-type {
+    stroke-linecap: round;
+    stroke: url(#uploadGradient);
+    stroke-dasharray: 75 100;
+    stroke-linecap: round;
+    stroke-width: 4px;
+    stroke-dashoffset: calc(75 - calc(calc(var(--value) / 100) * 75));
+    transition: stroke-dashoffset 0.75s;
+    fill: none;
+}
+
+#uploadProgress > p {
+    margin: 0;
+    position: absolute;
+    font-size: 80px;
+    font-weight: bold;
+}
+
+#uploadDetails {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#doneInfo {
+    justify-content: center;
+}
+
+#transferCode {
+    text-align: center;
+    text-shadow: 2px 3px var(--codeShadow);
+    font-size: 60px;
+    font-weight: 800;
+    letter-spacing: 5px;
+}
+
+#doneDetails > .spaceAlign > div:last-child {
+    margin-top: 25px;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#doneDetails > .spaceAlign > div:last-child > icon:hover {
+    fill: #ff7170;
+}
+
+/* #endregion */
+
+/* #region Receive Panel */
+
+#receivePanel button::before {
+    background-image: var(--gradient-3);
+}
+
+#receivePanel > div {
+    display: flex;
+}
+
+#receiveCode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#receiveCode > p {
+    margin: 0 0 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#receiveCode > div {
+    display: flex;
+}
+
+#receiveCode > div > input {
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    --focusColor: #3bf0e4;
+}
+
+#receiveCode > div > input:last-of-type {
+    margin: 0;
+}
+
+#receiveSide {
+    justify-content: space-between;
+}
+
+#receiveSide > hr {
+    height: 5px;
+    margin: 0;
+    background-color: transparent;
+}
+
+#receiveSide > pbar {
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+#receiveInfo > .spaceAlign {
+    transition: opacity 0.4s;
+}
+
+#receiveInfo[disabled] > .spaceAlign {
+    opacity: 0.25;
+}
+
+#transferMessageSafe {
+    height: 19px;
+    position: relative;
+    overflow: hidden;
+}
+
+#transferMessageSafe.moving::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: linear-gradient(90deg, var(--background), transparent 5% 95%, var(--background));
+    z-index: 10;
+}
+
+#transferMessage {
+    width: max-content;
+    position: absolute;
+}
+
+/* #endregion */
+
+/* #region Login Panel */
+
+#loginPanel button::before {
+    background-image: var(--gradient-5);
+}
+
+#loginPanel button[alt]:hover {
+    color: #9867f0;
+}
+
+#loginUsername, #signupUsername, #signupPassword, #forgotUsername, #resetPassword {
+    --focusColor: #9867f0;
+}
+
+#loginPassword, #signupEmail, #signupPasswordRepeat, #forgotKey, #resetPasswordRepeat {
+    --focusColor: #ed4e50;
+}
+
+#loginForgot {
+    margin-bottom: 10px;
+}
+
+/* #endregion */
+
+/* #region Welcome Panel */
+
+#welcomePanel button::before {
+    background-image: var(--gradient-5);
+}
+
+#welcomeInitial > a {
+    display: none;
+}
+
+#welcomePanel .columns > div:last-of-type > div {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#welcomePanel .columns > div:last-of-type > div > hr {
+    height: 39px;
+    margin: 0;
+    background-color: transparent;
+}
+
+#welcomePanel .columns > div:last-of-type > div > p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#welcomeRecoveryKey {
+    font-family: "Cascadia Code", monospace;
+    user-select: text;
+}
+
+#welcomeFinal {
+    align-items: flex-end;
+}
+
+#welcomeFinal > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#welcomeFinal > div > imgx {
+    width: 150px;
+    height: 150px;
+    opacity: 0;
+    transform: scale(1.5);
+    transition: transform 1s, opacity 0.4s;
+}
+
+#welcomeFinal > div > h1 {
+    margin: 25px 0 0;
+    font-size: 1.5em;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+#welcomeFinal > div > h2 {
+    margin: 10px 0 0;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+#welcomeFinal > button {
+    opacity: 0;
+}
+
+/* #endregion */
+
+/* #region Account Panel */
+
+#accountPanel button::before {
+    background-image: var(--gradient-5);
+}
+
+#accountName {
+    margin: 20px 0 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#editUsername, #changePassword {
+    --focusColor: #9867f0;
+}
+
+#editEmail, #changePasswordRepeat {
+    --focusColor: #ed4e50;
+}
+
+#editProfilePic {
+    width: 100%;
+    margin-right: 5px;
+}
+
+#editProfilePic:hover {
+    color: #9867f0;
+}
+
+#editDelete:hover {
+    color: #ed4e50;
+}
+
+#accountDelete > div > div:last-of-type > div {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#accountDelete > div > div:last-of-type > div > hr {
+    height: 39px;
+    margin: 0;
+    background-color: transparent;
+}
+
+#accountDelete > div > div:last-of-type > div > p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#accountDeleteProgress > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#accountDeleteProgress > div > p {
+    font-weight: 700;
+}
+
+/* #endregion */
+
+/* #region Settings Panel */
+
+#settingsPanel > div p {
+    margin: 0;
+}
+
+#settingsPanel > div select {
+    --focusColor: #db469f;
+}
+
+#settingsPanel > div > div > div:first-child h2 {
+    margin-top: 0;
+}
+
+#settingsPanel > div > div > div > div {
+    height: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#settingsHistory {
+    display: none;
+}
+
+#settingsHistory.loggedOn {
+    display: unset;
+}
+
+#settingsAbout > div {
+    height: unset !important;
+    margin: 10px 0 0 !important;
+    justify-content: flex-start !important;
+}
+
+#settingsAbout > div > img {
+    width: 70px;
+    height: 70px;
+}
+
+#settingsAbout > div > div {
+    margin-left: 5px;
+}
+
+#settingsAbout > div > div > h2 {
+    margin: 0;
+}
+
+#settingsName {
+    margin: 0 0 5px !important;
+}
+
+/* #endregion */
+
+/* #region Offline Panel */
+
+#offlinePanel > div > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#offlinePanel > div > div > icon {
+    width: 150px;
+    height: 150px;
+    fill: var(--accent);
+}
+
+#offlinePanel > div > div > h1 {
+    margin: 25px 0 0;
+    font-size: 1.5em;
+}
+
+#offlinePanel > div > div > h2 {
+    margin: 10px 0 0;
+    font-weight: 600;
+}
+
+/* #endregion */
+
+/* #region Popups */
+
+#popups {
+    width: 100vw;
+    height: calc(100vh - 40px);
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(6px);
+    z-index: 10;
+}
+
+#popups button {
+    float: right;
+}
+
+#popups button::before {
+    background-image: var(--gradient-6);
+}
+
+#popups > div {
+    width: 40%;
+    max-height: 460px;
+    display: none;
+    padding: 20px;
+    background-color: var(--background);
+    border-radius: 15px;
+    opacity: 0;
+    filter: var(--dropShadow);
+    transform: scale(0.5);
+    transition: opacity 0.2s, transform 0.4s;
+}
+
+#popups > div > h1 {
+    margin: 0 0 10px;
+}
+
+#popups > div > div {
+    max-height: 300px;
+    margin: 15px 0 20px 0;
+    padding: 10px;
+    background-color: var(--overlay);
+    border-radius: 10px;
+    overflow: overlay;
+    user-select: text;
+}
+
+#boxPopup > div {
+    font-family: "Cascadia Code", monospace;
+}
+
+#popups > div > div :first-child {
+    margin-top: 0;
+}
+
+#popups > div > div :last-child {
+    margin-bottom: 0;
+}
+
+#popups > div > div h3 {
+    margin: 20px 0 10px;
+}
+
+#popups > div > div ul {
+    padding-left: 10px;
+    margin: 10px 0 25px 0;
+    list-style: none;
+}
+
+#popups > div > div ul:last-child {
+    margin-bottom: 0;
+}
+
+#popups > div > div ul > li {
+    margin: 5px 0;
+    font-size: 15px;
+}
+
+#popups > div > div ul > li:first-child {
+    margin-top: 0;
+}
+
+#popups > div > div ul > li:last-child {
+    margin-bottom: 0;
+}
+
+#popups > div > div ul > li:before {
+    content: "•";
+    font-size: 1.3em;
+    font-weight: 900;
+    margin-right: 10px;
+}
+
+#popups > div > div.buttons {
+    max-height: none;
+    padding: 0;
+    margin: 15px 0 0 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: unset;
+    border-radius: 0;
+    font-family: inherit;
+    overflow: unset;
+}
+
+#askPopupButtonYes {
+    margin-right: 10px;
+}
+
+/* #endregion */
+
+/* #region Splash */
+
+#splash {
+    width: 100vw;
+    height: 100vh;
+    padding: 25px;
+    -webkit-app-region: drag;
+}
+
+#splash > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#splash > div > div > img {
+    width: 50px;
+    margin-bottom: 20px;
+}
+
+#splash > div > p {
+    margin: 0;
+    font-weight: bold;
+}
+
+#splash > img {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* #endregion */
+
+/* #region Font */
+
+@font-face {
+    font-family: montserrat;
+    src: url("./montserrat.ttf");
+    font-weight: 1 999;
+    font-style: normal;
+}
+
+/* #endregion */
+
+/* #region Keyframes */
+
+@keyframes hueRotate {
+    from {
+        filter: hue-rotate(0deg);
+    }
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
+@keyframes progressFirstLine {
+    0% {
+        left: -35%;
+        right: 100%;
+    }
+
+    60%, 100% {
+        left: 100%;
+        right: -90%;
+    }
+}
+
+@keyframes progressLastLine {
+    0% {
+        left: -200%;
+        right: 100%;
+    }
+
+    60%, 100% {
+        left: 107%;
+        right: -8%;
+    }
+}
+
+/* #endregion */

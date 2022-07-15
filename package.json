@@ -1,0 +1,31 @@
+{
+    "name": "skyshare",
+    "productName": "SkyShare",
+    "version": "2.0.0",
+    "description": "Partilha os seus ficheiros!",
+    "author": "Daniel Nunes",
+    "main": "main.js",
+    "scripts": {
+        "start": "set DEBUG=true && electron .",
+        "release": "electron .",
+        "build": "node build/build.js"
+    },
+    "keywords": [],
+    "license": "Proprietary",
+    "url": "https://skyshare.pt/",
+    "api": "https://skyshare-api.herokuapp.com/",
+    "releases": "https://api.github.com/repos/D3W10/SkyShare/",
+    "dependencies": {
+        "axios": "^0.27.2",
+        "electron-log": "^4.4.7",
+        "electron-store": "^8.0.1",
+        "form-data": "^4.0.0",
+        "is-online": "9.0.1",
+        "progress-stream": "^2.0.0",
+        "showdown": "^2.1.0"
+    },
+    "devDependencies": {
+        "electron": "^19.0.5",
+        "electron-builder": "^23.0.3"
+    }
+}

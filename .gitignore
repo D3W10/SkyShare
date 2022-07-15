@@ -1,0 +1,4 @@
+.vscode
+build/setup
+build/updater
+node_modules
