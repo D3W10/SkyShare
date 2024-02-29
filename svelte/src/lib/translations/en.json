@@ -1,0 +1,56 @@
+{
+    "sidebar": {
+        "login": "Login",
+        "home": "Homepage",
+        "send": "Send",
+        "receive": "Receive",
+        "settings": "Settings"
+    },
+    "home": {
+        "morning_zero": "Good morning!",
+        "morning": "Good morning {{name}}!",
+        "afternoon_zero": "Good afternoon!",
+        "afternoon": "Good afternoon {{name}}!",
+        "evening_zero": "Good evening!",
+        "evening": "Good evening {{name}}!",
+        "send": "Send files",
+        "receive": "Receive files",
+        "settings": "Settings"
+    },
+    "send": {
+        "title": "Send files",
+        "chooseTitle": "Choose files",
+        "chooseSubtitle": "Or drop them here!",
+        "chooseAdd": "Add",
+        "chooseFilter": "All files",
+        "chooseAddFiles": "Add files",
+        "message": "Message",
+        "optional": "Optional",
+        "size": "Total Size",
+        "quantity": "Total Quantity",
+        "file_one": "file",
+        "file_other": "files",
+        "send": "Send"
+    },
+    "settings": {
+        "title": "Settings",
+        "appearance": "Appearance",
+        "theme": "Theme",
+        "themeDesc": "Change the application theme",
+        "themeLight": "Light",
+        "themeDark": "Dark",
+        "language": "Language",
+        "languageDesc": "Modify the application language",
+        "about": "About",
+        "version": "Version {{version}}"
+    },
+    "modal": {
+        "okay": "Okay",
+        "sizeLimitExceeded": "Limit exceeded",
+        "sizeLimitExceededDesc": "The total file size must not exceed 3 GB.",
+        "tooManyFiles": "Limit exceeded",
+        "tooManyFilesDesc": "The maximum number of files has been exceeded! You can only send a maximum of 20 files per transfer.",
+        "fileWithSameName": "Failed adding files",
+        "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names."
+    }
+}

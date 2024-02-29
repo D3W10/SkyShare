@@ -1,0 +1,56 @@
+{
+    "sidebar": {
+        "login": "Iniciar Sessão",
+        "home": "Página Inicial",
+        "send": "Enviar",
+        "receive": "Receber",
+        "settings": "Definições"
+    },
+    "home": {
+        "morning_zero": "Bom dia!",
+        "morning": "Bom dia {{name}}!",
+        "afternoon_zero": "Boa tarde!",
+        "afternoon": "Boa tarde {{name}}!",
+        "evening_zero": "Boa noite!",
+        "evening": "Boa noite {{name}}!",
+        "send": "Enviar ficheiros",
+        "receive": "Receber ficheiros",
+        "settings": "Definições"
+    },
+    "send": {
+        "title": "Enviar ficheiros",
+        "chooseTitle": "Escolher ficheiros",
+        "chooseSubtitle": "Ou arraste para aqui!",
+        "chooseAdd": "Addicionar",
+        "chooseFilter": "Todos os ficheiros",
+        "chooseAddFiles": "Adicionar ficheiros",
+        "message": "Mensagem",
+        "optional": "Opcional",
+        "size": "Tamanho Total",
+        "quantity": "Quantidade Total",
+        "file_one": "ficheiro",
+        "file_other": "ficheiros",
+        "send": "Enviar"
+    },
+    "settings": {
+        "title": "Definições",
+        "appearance": "Aparência",
+        "theme": "Tema",
+        "themeDesc": "Mudar o tema da aplicação",
+        "themeLight": "Claro",
+        "themeDark": "Escuro",
+        "language": "Linguagem",
+        "languageDesc": "Modifica a linguagem da aplicação",
+        "about": "Sobre",
+        "version": "Versão {{version}}"
+    },
+    "modal": {
+        "okay": "OK",
+        "sizeLimitExceeded": "Limite excedido",
+        "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 3 GB.",
+        "tooManyFiles": "Limite excedido",
+        "tooManyFilesDesc": "A quantidade máxima de ficheiros foi excedida! Apenas pode enviar, no máximo, 20 ficheiros por envio.",
+        "fileWithSameName": "Falha ao adicionar ficheiros",
+        "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome."
+    }
+}

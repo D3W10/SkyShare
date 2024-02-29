@@ -1,31 +1,45 @@
 {
     "name": "skyshare",
     "productName": "SkyShare",
-    "version": "2.0.0",
-    "description": "Partilha os seus ficheiros!",
-    "author": "Daniel Nunes",
-    "main": "main.js",
-    "scripts": {
-        "start": "set DEBUG=true && electron .",
-        "release": "electron .",
-        "build": "node build/build.js"
+    "version": "3.0.0",
+    "description": "Sharing, Simply Better",
+    "author": {
+        "name": "Daniel Nunes",
+        "url": "https://d3w10.netlify.app"
     },
-    "keywords": [],
-    "license": "Proprietary",
-    "url": "https://skyshare.pt/",
-    "api": "https://skyshare-api.herokuapp.com/",
-    "releases": "https://api.github.com/repos/D3W10/SkyShare/",
+    "scripts": {
+        "dev": "concurrently \"npm run svelte:dev\" \"npm run nodemon\"",
+        "start": "npm run compile && electron .",
+        "nodemon": "nodemon",
+        "svelte:dev": "cd svelte && npm run dev",
+        "svelte:build": "cd svelte && npm run build",
+        "compile": "tsc",
+        "out:win": "npm run svelte:build && npm run compile && electron-builder build --win --config ./build/build.js --publish never",
+        "out:mac": "npm run svelte:build && npm run compile && electron-builder build --mac --config ./build/build.js --publish never",
+        "publish:win": "npm run svelte:build && npm run compile && electron-builder build --win --config ./build/build.js --publish always",
+        "publish:mac": "npm run svelte:build && npm run compile && electron-builder build --mac --config ./build/build.js --publish always",
+        "check-updates": "npx npm-check-updates",
+        "check-updates:minor": "npx npm-check-updates --target minor",
+        "check-updates:patch": "npx npm-check-updates --target patch"
+    },
+    "main": "dist/index.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/D3W10/SkyShare"
+    },
+    "license": "MPL-2.0",
     "dependencies": {
-        "axios": "^0.27.2",
-        "electron-log": "^4.4.7",
-        "electron-store": "^8.0.1",
-        "form-data": "^4.0.0",
-        "is-online": "9.0.1",
-        "progress-stream": "^2.0.0",
-        "showdown": "^2.1.0"
+        "electron-log": "^5.1.1",
+        "electron-reload": "^2.0.0-alpha.1",
+        "electron-store": "^8.1.0",
+        "electron-updater": "^6.1.7"
     },
     "devDependencies": {
-        "electron": "^19.0.5",
-        "electron-builder": "^23.0.3"
+        "@types/node": "^20.11.16",
+        "concurrently": "^8.2.2",
+        "electron": "^28.2.2",
+        "electron-builder": "^24.12.0",
+        "nodemon": "^3.0.3",
+        "typescript": "^5.3.3"
     }
 }

@@ -1,4 +1,7 @@
-.vscode
-build/setup
-build/updater
+.DS_Store
 node_modules
+/dist
+/out
+.env
+.env.*
+!.env.example

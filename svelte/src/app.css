@@ -1,0 +1,73 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+    ::-webkit-scrollbar {
+        @apply w-1.5 h-1.5 bg-transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        @apply bg-shade/20 rounded-full;
+    }
+
+    html, body {
+        @apply flex relative w-full h-full flex-col select-none;
+    }
+
+    body {
+        @apply text-foreground bg-secondary font-medium select-none;
+        font-family: poppins;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+        @apply block;
+        -webkit-user-drag: none;
+    }
+
+    button {
+        @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+    }
+
+    input {
+        @apply w-full px-2 py-1.5 text-sm font-normal bg-transparent border-0 ring-0 outline-none focus:ring-0;
+    }
+
+    input::placeholder {
+        @apply text-shade/50 font-medium;
+    }
+
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        @apply m-0;
+        -webkit-appearance: none;
+    }
+
+    dialog {
+        @apply p-0 text-foreground bg-secondary rounded-2xl border-none select-none;
+    }
+
+    dialog::backdrop {
+        @apply bg-black/50;
+    }
+
+    /* #region Themes */
+
+    html, html[data-theme="light"] {
+        --color-foreground: 3 7 18; /* colors.gray.950 */
+        --color-background: 249 250 251 ; /* colors.gray.50 */
+        --color-secondary: 229 231 235; /* colors.gray.200 */
+        --color-tertiary: 209 213 219; /* colors.gray.300 */
+        --color-shade: 0 0 0; /* colors.black */
+    }
+
+    html[data-theme="dark"] {
+        --color-foreground: 249 250 251; /* colors.gray.50 */
+        --color-background: 3 7 18; /* colors.gray.950 */
+        --color-secondary: 17 24 39; /* colors.slate.900 */
+        --color-tertiary: 31 41 55; /* colors.slate.800 */
+        --color-shade: 255 255 255; /* colors.light */
+    }
+
+    /* #endregion */
+}

@@ -1,78 +1,78 @@
-const builder = require("electron-builder");
-const Platform = builder.Platform;
-
 /**
-* @type {import('electron-builder').Configuration}
-* @see https://www.electron.build/configuration/configuration
-*/
-
-var optionsSetup = {
-    appId: "com.daniel.nunes.skyshare",
+ * @type {import("electron-builder").Configuration)}
+ */
+module.exports = {
+    appId: "com.d3w10.cosmochamp",
     compression: "maximum",
-    icon: "./logo.ico",
-    files: [ "**/*", "!.git${/*}", "!.vscode${/*}*", "!build${/*}*", "!.gitignore" ],
-    removePackageScripts: true,
+    directories: {
+        output: "out"
+    },
+    files: [
+        "**/dist/**",
+        "**/LICENSE",
+        "**/package.json",
+        "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+        "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+        "!**/node_modules/*.d.ts",
+        "!**/node_modules/.bin",
+        "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+        "!.editorconfig",
+        "!**/._*",
+        "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+        "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+        "!**/{appveyor.yml,.travis.yml,circle.yml}",
+        "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    publish: [
+        {
+            provider: "github",
+            owner: "D3W10",
+            repo: "CosmoChamp"
+        }
+    ],
+    win: {
+        target: [
+            "nsis"
+        ],
+        icon: "./icon.ico"
+    },
     nsis: {
         oneClick: false,
-        perMachine: true,
+        perMachine: false,
+        selectPerMachineByDefault: true,
         allowToChangeInstallationDirectory: true,
+        installerIcon: "./icon.ico",
         installerSidebar: "./installerSidebar.bmp",
-        uninstallerSidebar: "./installerSidebar.bmp",
+        uninstallerIcon: "./icon.ico",
+        uninstallerSidebar: "./uninstallerSidebar.bmp",
         uninstallDisplayName: "${productName}",
-        artifactName: "${productName}-${version}-Setup.${ext}",
-        unicode: true,
-        runAfterFinish: true,
-        createDesktopShortcut: "always",
-        createStartMenuShortcut: true,
-        menuCategory: false
+        license: "LICENSE",
+        deleteAppDataOnUninstall: true
     },
-    asar: true,
-    directories: {
-        buildResources: "./assets/setup/",
-        output: "./build/setup/"
+    mac: {
+        target: {
+            target: "default",
+            arch: [
+                "arm64",
+                "x64"
+            ]
+        },
+        icon: "../svelte/static/logo.png",
+        type: "distribution",
+        hardenedRuntime: false
+    },
+    dmg: {
+        contents: [
+            {
+                x: 190,
+                y: 175
+            },
+            {
+                x: 365,
+                y: 175,
+                type: "link",
+                path: "/Applications"
+            }
+        ]
     }
 };
-
-var optionsUpdater = {
-    appId: "com.daniel.nunes.skyshare",
-    compression: "maximum",
-    icon: "./logo.ico",
-    files: [ "**/*", "!.git${/*}", "!.vscode${/*}*", "!build${/*}*", "!.gitignore" ],
-    removePackageScripts: true,
-    nsis: {
-        oneClick: true,
-        perMachine: true,
-        allowToChangeInstallationDirectory: false,
-        installerSidebar: "./installerSidebar.bmp",
-        uninstallerSidebar: "./installerSidebar.bmp",
-        uninstallDisplayName: "${productName}",
-        artifactName: "${productName}-${version}-Updater.${ext}",
-        unicode: true,
-        runAfterFinish: true,
-        createDesktopShortcut: "always",
-        createStartMenuShortcut: true,
-        menuCategory: false
-    },
-    asar: true,
-    directories: {
-        buildResources: "./assets/setup/",
-        output: "./build/updater/"
-    }
-};
-
-(async () => {
-    let package = require("../package.json");
-
-    await builder.build({
-        targets: Platform.WINDOWS.createTarget(),
-        config: optionsSetup
-    });
-    console.log("\x1b[32m%s\x1b[0m\x1b[4m%s\x1b[0m%s", "  • ", package.productName + " " + package.version + " Setup", " was successfully created!");
-    console.log("\n");
-
-    await builder.build({
-        targets: Platform.WINDOWS.createTarget(),
-        config: optionsUpdater
-    });
-    console.log("\x1b[32m%s\x1b[0m\x1b[4m%s\x1b[0m%s", "  • ", package.productName + " " + package.version + " Updater", " was successfully created!");
-})();

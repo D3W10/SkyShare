@@ -1,0 +1,1 @@
+export type IconType = "home" | "send" | "receive" | "settings" | "account" | "chevron" | "files" | "add";
