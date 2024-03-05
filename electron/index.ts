@@ -197,7 +197,7 @@ ipcMain.on("GetAppInfo", (event) => {
     }
 });
 
-ipcMain.handle("GetFileIcon", async (_event, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG());
+ipcMain.handle("GetFileIcon", async (_event, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);

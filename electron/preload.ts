@@ -101,6 +101,15 @@ export function getAppInfo() {
 }
 
 /**
+ * Obtains the icon of a file stored on the filesystem
+ * @param path The path to the file to get the icon from
+ * @returns The base64 encoded png icon
+ */
+export async function getFileIcon(path: string) {
+    return await ipcRenderer.invoke("GetFileIcon", path);
+}
+
+/**
  * Opens the system open file dialog
  * @param options The options for the open dialog
  * @returns An object containing the information of the selected file, if one was selected
@@ -174,6 +183,7 @@ contextBridge.exposeInMainWorld("app", {
     setSetting,
     resetSettings,
     getAppInfo,
+    getFileIcon,
     showOpenDialog,
     showSaveDialog,
     fileSizeFormat,

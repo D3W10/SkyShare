@@ -68,9 +68,14 @@
                             {:else}
                                 <div class="w-full h-full p-2 [overflow-y:overlay] space-y-2">
                                     {#each files as file}
-                                        <div class="w-full px-2 py-1.5 flex flex-col bg-secondary rounded-lg space-y-0.5">
-                                            <p class="text-sm">{file.name}</p>
-                                            <p class="text-xs">{$app?.fileSizeFormat(file.size)}</p>
+                                        <div class="w-full px-2 py-1.5 flex items-center bg-secondary rounded-lg space-x-2">
+                                            {#await $app?.getFileIcon(file.path) then icon}
+                                                <img src={`data:image/png;base64,${icon}`} class="h-6" alt="" />
+                                            {/await}
+                                            <div class="flex flex-col space-y-0.5">
+                                                <p class="text-sm">{file.name}</p>
+                                                <p class="text-xs text-foreground/70">{$app?.fileSizeFormat(file.size)}</p>
+                                            </div>
                                         </div>
                                     {/each}
                                     <button class="w-full p-2 flex items-center bg-secondary rounded-lg space-x-1.5" on:click={openFile}>
