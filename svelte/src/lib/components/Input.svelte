@@ -65,7 +65,7 @@
         <input class={`w-10 p-0 text-right text-base ${innerClassName}`} type="number" {value} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
     </div>
 {:else}
-    <div class={`bg-tertiary rounded-md transition-all duration-200 focus-visible:outline focus-within:ring-2 focus-within:ring-inset ${!error ? "focus-within:ring-primary" : "ring-2 ring-inset ring-red-600 focus-within:ring-red-600"} ${className}`}>
+    <div class={`bg-slate-900/10 rounded-md border-b-2 border-slate-900/15 transition-all duration-200 ${!error || "bg-red-100"} ${className}`}>
         {#if type == "text"}
             <input type="text" {placeholder} {maxlength} bind:value bind:this={inputElm} on:input={triggerEvent} />
         {:else if type == "number"}
@@ -93,7 +93,24 @@
     </div>
 {/if}
 
-<style type="text/postcss">
+<style lang="postcss">
+    input {
+        @apply w-full px-2 py-1.5 text-sm font-normal bg-transparent border-0 ring-0 outline-none;
+    }
+
+    input:focus {
+        @apply ring-0;
+    }
+
+    input::placeholder {
+        @apply text-shade/50 font-medium;
+    }
+
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        @apply m-0;
+        -webkit-appearance: none;
+    }
+
     input[type="range"]::-webkit-slider-thumb {
         @apply w-4 h-4 bg-primary rounded-full appearance-none cursor-ew-resize;
     }

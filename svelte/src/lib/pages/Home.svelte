@@ -40,19 +40,20 @@
     setInterval(updateGreeting, 3600000);
 </script>
 
-<div class="w-full h-full p-6 flex flex-col space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+<div class="w-full h-full p-6 flex flex-col relative space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: 0 })}</h1>
-    <div class="h-full p-5 flex space-x-8">
-        <div class="w-5/12 flex flex-col justify-center items-center space-y-2">
+    <div class="h-full p-5 flex space-x-8 z-10">
+        <div class="w-11/25 flex flex-col justify-center items-center space-y-2">
             <img class="w-3/6" src="./logo.png" alt="SkyShare Logo" />
             <p class="text-lg font-semibold">{$info.name}</p>
         </div>
-        <div class="w-7/12 flex flex-col justify-center space-y-4">
+        <div class="w-14/25 flex flex-col justify-center space-y-4">
             <BlockLink text={$i18n.t("home.send")} icon="send" on:click={() => page.set("send")} />
             <BlockLink text={$i18n.t("home.receive")} icon="receive" on:click={() => page.set("receive")} />
             <BlockLink text={$i18n.t("home.settings")} icon="settings" on:click={() => page.set("settings")} />
         </div>
     </div>
+    <img src="./wave.svg" class="absolute left-0 right-0 bottom-0 opacity-60" alt="SkyShare wave" />
 </div>
 <Modal bind:show={showChangesModal} title={`What's new on ${$info.version}`} button="Great" canCancel={false}>
     <div class="p-3 bg-tertiary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
@@ -76,7 +77,7 @@
     }
 
     .changelog :global(input[type="checkbox"]) {
-        @apply w-4 h-4 mr-2 bg-shade/15 rounded appearance-none;
+        @apply w-4 h-4 mr-2 bg-slate-900/15 rounded appearance-none;
     }
 
     .changelog :global(input[type="checkbox"]:checked) {
@@ -104,7 +105,7 @@
     }
 
     .changelog :global(code) {
-        @apply mx-0.5 p-0.5 bg-shade/15 rounded-md font-mono;
+        @apply mx-0.5 p-0.5 bg-slate-900/15 rounded-md font-mono;
     }
 
     .changelog :global(blockquote) {

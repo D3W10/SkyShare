@@ -52,6 +52,6 @@
             <img src="./logo.png" alt="Logo" class="w-1/5" />
             <h1 class="text-2xl font-semibold">CosmoChamp</h1>
         </div>
-        <p class="absolute bottom-4 text-shade/75 animate-pulse" in:fade={{ duration: 1000, delay: 500 }} on:introend={checkForUpdates}>{status}</p>
+        <p class="absolute bottom-4 text-foreground/70 animate-pulse" in:fade={{ duration: 1000, delay: 500 }} on:introend={checkForUpdates}>{status}</p>
     {/if}
 </div>

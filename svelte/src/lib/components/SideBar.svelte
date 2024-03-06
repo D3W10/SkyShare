@@ -11,7 +11,7 @@
         <Icon name="account" className="w-14" />
         <span>{$i18n.t("sidebar.login")}</span>
     </button>
-    <hr class="h-[3px] bg-shade/10 border-0 rounded-full">
+    <hr class="h-[3px] bg-slate-900/10 border-0 rounded-full">
     <div>
         <button {disabled} on:click={() => page.set("home")}>
             <Icon name="home" className="w-8" />

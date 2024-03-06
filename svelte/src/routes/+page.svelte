@@ -33,7 +33,7 @@
 <FrameBar />
 <div class="h-full flex">
     <SideBar />
-    <main class="w-full h-full bg-background rounded-tl-2xl overflow-hidden">
+    <main class="w-full h-full bg-background rounded-tl-2xl overflow-hidden shadow-md">
         {#if $page.current == "home"}
             <Home />
         {:else if $page.current == "send"}

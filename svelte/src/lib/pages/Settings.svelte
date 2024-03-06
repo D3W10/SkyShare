@@ -23,7 +23,7 @@
     <div class="h-full p-5 flex flex-col space-y-10 overflow-y-scroll">
         <div>
             <h2 class="mb-2 text-md font-semibold">{$i18n.t("settings.appearance")}</h2>
-            <hr class="h-[3px] mb-6 bg-shade/10 border-0 rounded-full" />
+            <hr class="h-[3px] mb-6 bg-slate-900/10 border-0 rounded-full" />
             <div class="space-y-6">
                 <div class="flex justify-between items-center">
                     <div>
@@ -43,7 +43,7 @@
         </div>
         <div>
             <h2 class="mb-2 text-md font-semibold">{$i18n.t("settings.about")}</h2>
-            <hr class="h-[3px] mb-6 bg-shade/10 border-0 rounded-full" />
+            <hr class="h-[3px] mb-6 bg-slate-900/10 border-0 rounded-full" />
             <div class="mb-10">
                 <div class="flex items-center space-x-4">
                     <img src="./logo.png" alt="Logo" class="w-16" />
