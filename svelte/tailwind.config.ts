@@ -10,12 +10,16 @@ export default {
                 check: "url(\"data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e\")"
             },
             colors: {
-                primary: "#888888",
+                primary: "rgb(var(--color-primary) / <alpha-value>)",
                 foreground: "rgb(var(--color-foreground) / <alpha-value>)",
                 background: "rgb(var(--color-background) / <alpha-value>)",
                 secondary: "rgb(var(--color-secondary) / <alpha-value>)",
-                tertiary: "rgb(var(--color-tertiary) / <alpha-value>)",
-                shade: "rgb(var(--color-shade) / <alpha-value>)"
+                home: "rgb(var(--color-home) / <alpha-value>)",
+                send: "rgb(var(--color-send) / <alpha-value>)",
+                receive: "rgb(var(--color-receive) / <alpha-value>)",
+                settings: "rgb(var(--color-settings) / <alpha-value>)",
+                account: "rgb(var(--color-account) / <alpha-value>)",
+                offline: "rgb(var(--color-offline) / <alpha-value>)"
             },
             spacing: {
                 "11/25": "44%",

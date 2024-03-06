@@ -65,7 +65,7 @@
         <input class={`w-10 p-0 text-right text-base ${innerClassName}`} type="number" {value} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
     </div>
 {:else}
-    <div class={`bg-slate-900/10 rounded-md border-b-2 border-slate-900/15 transition-all duration-200 ${!error || "bg-red-100"} ${className}`}>
+    <div class={`bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-all duration-200 ${!error || "bg-red-100"} ${className}`}>
         {#if type == "text"}
             <input type="text" {placeholder} {maxlength} bind:value bind:this={inputElm} on:input={triggerEvent} />
         {:else if type == "number"}
@@ -103,7 +103,7 @@
     }
 
     input::placeholder {
-        @apply text-shade/50 font-medium;
+        @apply text-foreground/50 font-medium;
     }
 
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {

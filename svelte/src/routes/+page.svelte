@@ -2,19 +2,27 @@
     import { onMount } from "svelte";
     import { i18n } from "$lib/stores/i18nStore";
     import { info } from "$lib/stores/infoStore";
-    import { page } from "$lib/stores/pageStore";
+    import { page, type pages } from "$lib/stores/pageStore";
     import { settings } from "$lib/stores/settingsStore";
     import { error } from "$lib/stores/errorStore";
     import FrameBar from "$lib/components/FrameBar.svelte";
     import SideBar from "$lib/components/SideBar.svelte";
+    import Modal from "$lib/components/Modal.svelte";
     import Home from "$lib/pages/Home.svelte";
     import Send from "$lib/pages/Send.svelte";
     import Receive from "$lib/pages/Receive.svelte";
     import Settings from "$lib/pages/Settings.svelte";
-    import Modal from "$lib/components/Modal.svelte";
-
+    
     onMount(() => setup());
     settings.subscribe(setup);
+
+    const colors: { [key in pages]: string } = {
+        home: "[--color-primary:--color-home]",
+        send: "[--color-primary:--color-send]",
+        receive: "[--color-primary:--color-receive]",
+        settings: "[--color-primary:--color-settings]",
+        offline: "[--color-primary:--color-offline]"
+    };
 
     function setup() {
         try {
@@ -33,7 +41,7 @@
 <FrameBar />
 <div class="h-full flex">
     <SideBar />
-    <main class="w-full h-full bg-background rounded-tl-2xl overflow-hidden shadow-md">
+    <main class={`w-full h-full bg-background rounded-tl-2xl overflow-hidden shadow-md ${colors[$page.current]}`}>
         {#if $page.current == "home"}
             <Home />
         {:else if $page.current == "send"}
