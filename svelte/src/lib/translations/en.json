@@ -15,7 +15,9 @@
         "evening": "Good evening {{name}}!",
         "send": "Send files",
         "receive": "Receive files",
-        "settings": "Settings"
+        "settings": "Settings",
+        "whatsNew": "What's new on {{version}}",
+        "awesome": "Awesome!"
     },
     "send": {
         "title": "Send files",

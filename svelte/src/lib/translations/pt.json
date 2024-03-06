@@ -15,7 +15,9 @@
         "evening": "Boa noite {{name}}!",
         "send": "Enviar ficheiros",
         "receive": "Receber ficheiros",
-        "settings": "Definições"
+        "settings": "Definições",
+        "whatsNew": "O que há de novo na {{version}}",
+        "awesome": "Incrível!"
     },
     "send": {
         "title": "Enviar ficheiros",

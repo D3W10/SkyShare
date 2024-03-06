@@ -53,9 +53,9 @@
             <BlockLink text={$i18n.t("home.settings")} icon="settings" on:click={() => page.set("settings")} />
         </div>
     </div>
-    <img src="./wave.svg" class="absolute left-0 right-0 bottom-0 opacity-60" alt="SkyShare wave" />
+    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="SkyShare wave" />
 </div>
-<Modal bind:show={showChangesModal} title={`What's new on ${$info.version}`} button="Great" canCancel={false}>
+<Modal bind:show={showChangesModal} title={$i18n.t("whatsnew", { version: $info.version })} button={$i18n.t("awesome")} canCancel={false}>
     <div class="p-3 bg-tertiary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
         {#await changelogLoad then changelog}
             {@html changelog}
