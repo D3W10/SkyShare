@@ -1,9 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { fade, scale } from "svelte/transition";
-    import { quintOut } from "svelte/easing";
+    import { fade } from "svelte/transition";
     import { app } from "$lib/stores/appStore";
-    import Blob from "$lib/components/Blob.svelte";
+    import { info } from "$lib/stores/infoStore";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
 
     const DEFAULT_STATUS = "Starting";
@@ -41,17 +40,18 @@
 <div class="w-full h-full flex flex-col items-center relative">
     {#if start}
         <div class="h-8 absolute top-0 left-0 right-0" style="-webkit-app-region: drag;" />
-        <Blob className="w-4/5 absolute top-0 left-0 -z-10" color="#3014ff" />
-        <Blob className="w-2/3 absolute bottom-0 right-0 rotate-180 -z-10" color="#b92dff" />
         {#if status != DEFAULT_STATUS}
-            <div class="w-1/3 mt-4 mr-4 absolute top-0 right-0" transition:fade={{ duration: 500 }}>
+            <div class="w-1/3 absolute top-4" transition:fade={{ duration: 500 }}>
                 <ProgressBar bind:value={dlPercent} />
             </div>
         {/if}
-        <div class="w-full h-full mb-6 flex flex-col justify-center items-center space-y-1" in:scale={{ duration: 1500, easing: quintOut }}>
-            <img src="./logo.png" alt="Logo" class="w-1/5" />
-            <h1 class="text-2xl font-semibold">CosmoChamp</h1>
+        <div class="w-full h-full flex flex-col justify-between p-6">
+            <div class="space-y-3">
+                <img src="./logoCompact.png" class="w-10" alt="Logo" />
+                <h1 class="text-2xl font-bold">{$info.name}</h1>
+            </div>
+            <p class="text-sm animate-pulse" in:fade={{ duration: 1000, delay: 500 }} on:introend={checkForUpdates}>{status}</p>
         </div>
-        <p class="absolute bottom-4 text-foreground/70 animate-pulse" in:fade={{ duration: 1000, delay: 500 }} on:introend={checkForUpdates}>{status}</p>
+        <img src="./mesh.png" class="absolute top-0 bottom-0 right-0" alt="SkyShare mesh" />
     {/if}
 </div>
