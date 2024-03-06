@@ -5,6 +5,7 @@
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
     import { error } from "$lib/stores/errorStore";
+    import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -52,9 +53,9 @@
     {#if $page.subPage == 0}
         <div class="w-full h-full flex flex-col" in:fly={$transition.pageIn} out:fly={$transition.pageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("send.title")}</h1>
-            <div class="h-full p-5 flex space-x-11">
-                <div class="w-11/25">
-                    <div class="w-full h-full flex justify-center items-center rounded-2xl border-[5px] border-slate-900/10">
+            <Columns>
+                <div slot="left">
+                    <div class="w-full h-full flex justify-center items-center rounded-2xl border-[5px] border-foreground/10">
                         {#key refresh}
                             {#if files.length == 0}
                                 <button class="w-full h-full flex justify-center items-center" on:click={openFile}>
@@ -88,7 +89,7 @@
                         {/key}
                     </div>
                 </div>
-                <div class="w-14/25 flex flex-col justify-between items-center">
+                <div slot="right" class="flex flex-col justify-between items-center">
                     <div class="w-full h-full flex justify-center items-center">
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
@@ -109,7 +110,7 @@
                     </div>
                     <Button className="w-fit">{$i18n.t("send.send")}</Button>
                 </div>
-            </div>
+            </Columns>
         </div>
     {:else if $page.subPage == 1}
         <div in:fly={$transition.pageIn} out:fly={$transition.pageOut}>

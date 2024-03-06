@@ -6,6 +6,7 @@
     import { info } from "$lib/stores/infoStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
+    import Columns from "$lib/components/layout/Columns.svelte";
     import Modal from "$lib/components/Modal.svelte";
     import BlockLink from "$lib/components/BlockLink.svelte";
 
@@ -42,17 +43,17 @@
 
 <div class="w-full h-full p-6 flex flex-col relative space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: 0 })}</h1>
-    <div class="h-full p-5 flex space-x-8 z-10">
-        <div class="w-11/25 flex flex-col justify-center items-center space-y-2">
+    <Columns className="z-10">
+        <div slot="left" class="flex flex-col justify-center items-center space-y-2">
             <img class="w-3/6" src="./logo.png" alt="SkyShare Logo" />
             <p class="text-lg font-semibold">{$info.name}</p>
         </div>
-        <div class="w-14/25 flex flex-col justify-center space-y-4">
+        <div slot="right" class="flex flex-col justify-center space-y-4">
             <BlockLink text={$i18n.t("home.send")} icon="send" on:click={() => page.set("send")} />
             <BlockLink text={$i18n.t("home.receive")} icon="receive" on:click={() => page.set("receive")} />
             <BlockLink text={$i18n.t("home.settings")} icon="settings" on:click={() => page.set("settings")} />
         </div>
-    </div>
+    </Columns>
     <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="SkyShare wave" />
 </div>
 <Modal bind:show={showChangesModal} title={$i18n.t("whatsnew", { version: $info.version })} button={$i18n.t("awesome")} canCancel={false}>
