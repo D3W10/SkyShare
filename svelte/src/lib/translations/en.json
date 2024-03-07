@@ -23,11 +23,12 @@
         "title": "Send files",
         "chooseTitle": "Choose files",
         "chooseSubtitle": "Or drop them here!",
+        "chooseHoverTitle": "Nearly there!",
+        "chooseHoverSubtitle": "Drop them now to add",
         "chooseAdd": "Add",
         "chooseFilter": "All files",
         "chooseAddFiles": "Add files",
         "message": "Message",
-        "optional": "Optional",
         "size": "Total Size",
         "quantity": "Total Quantity",
         "file_one": "file",
@@ -46,6 +47,14 @@
         "about": "About",
         "version": "Version {{version}}"
     },
+    "login": {
+        "title" : "Log In",
+        "username": "Username",
+        "password": "Password"
+    },
+    "account": {
+        "title" : ""
+    },
     "modal": {
         "okay": "Okay",
         "sizeLimitExceeded": "Limit exceeded",
@@ -54,5 +63,10 @@
         "tooManyFilesDesc": "The maximum number of files has been exceeded! You can only send a maximum of 20 files per transfer.",
         "fileWithSameName": "Failed adding files",
         "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names."
+    },
+    "common": {
+        "back": "Back",
+        "required": "Required",
+        "optional": "Optional"
     }
 }

@@ -6,9 +6,10 @@
 
     export let className: string = "";
     export let innerClassName: string = "";
-    export let type: "text" | "number" | "checkbox" | "range" | "ip" | "wheel" | "switch";
+    export let type: "text" | "number" | "checkbox" | "range" | "wheel" | "switch";
     export let value: any = null;
     export let placeholder: string = "";
+    export let disabled: boolean = false;
     export let maxlength: number | undefined = undefined;
     export let min: number = 0;
     export let max: number = 10;
@@ -34,8 +35,6 @@
         if (value !== null && value !== "") {
             if ((type == "text" || type == "number" || type == "checkbox" || type == "range") && inputElm != undefined)
                 error = !inputElm.checkValidity();
-            else if (type == "ip")
-                error = !/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/g.test(value);
         }
         else
             error = false;
@@ -54,24 +53,22 @@
 </script>
 
 {#if type == "switch"}
-    <Button type="invisible" className={`w-10 flex items-center p-1 rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${!value ? "bg-tertiary" : "bg-primary"}`} on:click={() => { value = !value; triggerEvent(); }}>
+    <Button type="invisible" className={`w-10 flex items-center p-1 rounded-full transition-colors duration-200 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${!value ? "bg-tertiary" : "bg-primary"}`} {disabled} on:click={() => { value = !value; triggerEvent(); }}>
         <div class={`w-3.5 h-3.5 bg-white rounded-full transition-all ${value ? "ml-[1.125rem]" : ""}`} />
     </Button>
 {:else if type == "checkbox"}
-    <input class="w-4 h-4 bg-tertiary rounded appearance-none checked:bg-primary checked:bg-check focus-visible:outline focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary" type="checkbox" {placeholder} {checked} bind:value bind:this={inputElm} on:click={() => value = !value} on:input={triggerEvent} />
+    <input class="w-4 h-4 bg-tertiary rounded appearance-none disabled:opacity-50 checked:bg-primary checked:bg-check focus-visible:outline focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary" type="checkbox" {placeholder} {disabled} {checked} bind:value bind:this={inputElm} on:click={() => value = !value} on:input={triggerEvent} />
 {:else if type == "range"}
     <div class={`flex items-center space-x-3 ${className}`}>
-        <input class="w-full h-2 p-0 bg-tertiary rounded-full appearance-none" type="range" {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
-        <input class={`w-10 p-0 text-right text-base ${innerClassName}`} type="number" {value} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
+        <input class="w-full h-2 p-0 bg-tertiary rounded-full appearance-none disabled:opacity-50" type="range" {disabled} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
+        <input class={`w-10 p-0 text-right text-base disabled:opacity-50 ${innerClassName}`} type="number" {value} {disabled} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
     </div>
 {:else}
-    <div class={`bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-all duration-200 ${!error || "bg-red-100"} ${className}`}>
+    <div class={`bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-all duration-200 focus-within:border-primary ${!disabled || "opacity-50"} ${!error || "bg-red-100"} ${className}`}>
         {#if type == "text"}
-            <input type="text" {placeholder} {maxlength} bind:value bind:this={inputElm} on:input={triggerEvent} />
+            <input type="text" {placeholder} {disabled} {maxlength} bind:value bind:this={inputElm} on:input={triggerEvent} />
         {:else if type == "number"}
-            <input type="number" {placeholder} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
-        {:else if type == "ip"}
-            <input type="text" {placeholder} maxlength={15} bind:value bind:this={inputElm} on:input={triggerEvent} />
+            <input type="number" {placeholder} {disabled} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
         {:else if type == "wheel"}
             <div class="flex">
                 <div class="w-full h-8 relative overflow-hidden">
@@ -81,10 +78,10 @@
                     </div>
                 </div>
                 <div class="h-8 px-1.5 flex flex-col justify-center">
-                    <Button type="invisible" className="rounded-sm overflow-hidden transition-opacity duration-200 disabled:opacity-50" disabled={value == max} on:click={() => { value = Math.min(Math.max(value + step, min), max); triggerEvent(); }}>
+                    <Button type="invisible" className="rounded-sm overflow-hidden transition-opacity duration-200 disabled:opacity-50" disabled={value == max || disabled} on:click={() => { value = Math.min(Math.max(value + step, min), max); triggerEvent(); }}>
                         <Icon name="chevron" className="h-4 -mb-1 fill-current -rotate-180" />
                     </Button>
-                    <Button type="invisible" className="rounded-sm overflow-hidden transition-opacity duration-200 disabled:opacity-50" disabled={value == min} on:click={() => { value = Math.min(Math.max(value - step, min), max); triggerEvent(); }}>
+                    <Button type="invisible" className="rounded-sm overflow-hidden transition-opacity duration-200 disabled:opacity-50" disabled={value == min || disabled} on:click={() => { value = Math.min(Math.max(value - step, min), max); triggerEvent(); }}>
                         <Icon name="chevron" className="h-4 -mt-1 fill-current" />
                     </Button>
                 </div>

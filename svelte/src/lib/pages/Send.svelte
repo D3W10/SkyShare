@@ -24,7 +24,7 @@
             filters: [{ name: $i18n.t("send.chooseFilter"), extensions: ["*"] }],
             properties: ["openFile", "multiSelections", "treatPackageAsDirectory"],
             message: $i18n.t("send.chooseTitle")
-        }), failedCount = 0;
+            });
 
         if (!chosenFiles || chosenFiles?.canceled)
             return;
@@ -64,7 +64,7 @@
 
 <div class="w-full h-full p-6 space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.pageIn} out:fly={$transition.pageOut}>
+        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("send.title")}</h1>
             <Columns>
                 <div slot="left">
@@ -126,12 +126,12 @@
             </Columns>
         </div>
     {:else if $page.subPage == 1}
-        <div in:fly={$transition.pageIn} out:fly={$transition.pageOut}>
+        <div in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">Haha</h1>
-                <Button type="invisible" className="h-fit flex items-center text-primary" on:click={() => page.set("home", 0)}>
+                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("send", 0)}>
                     <Icon name="chevron" className="w-5 h-5 mr-1 fill-current rotate-90" />
-                    Back
+                    {$i18n.t("common.back")}
                 </Button>
             </div>
         </div>

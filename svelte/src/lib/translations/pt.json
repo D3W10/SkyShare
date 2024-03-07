@@ -23,11 +23,12 @@
         "title": "Enviar ficheiros",
         "chooseTitle": "Escolher ficheiros",
         "chooseSubtitle": "Ou arraste para aqui!",
+        "chooseHoverTitle": "Quase lá!",
+        "chooseHoverSubtitle": "Largue-os agora para adicionar",
         "chooseAdd": "Addicionar",
         "chooseFilter": "Todos os ficheiros",
         "chooseAddFiles": "Adicionar ficheiros",
         "message": "Mensagem",
-        "optional": "Opcional",
         "size": "Tamanho Total",
         "quantity": "Quantidade Total",
         "file_one": "ficheiro",
@@ -46,6 +47,14 @@
         "about": "Sobre",
         "version": "Versão {{version}}"
     },
+    "login": {
+        "title" : "Iniciar Sessão",
+        "username": "Nome de Utilizador",
+        "password": "Palavra-Passe"
+    },
+    "account": {
+        "title" : ""
+    },
     "modal": {
         "okay": "OK",
         "sizeLimitExceeded": "Limite excedido",
@@ -54,5 +63,10 @@
         "tooManyFilesDesc": "A quantidade máxima de ficheiros foi excedida! Apenas pode enviar, no máximo, 20 ficheiros por envio.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
         "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome."
+    },
+    "common": {
+        "back": "Voltar",
+        "required": "Obrigatório",
+        "optional": "Opcional"
     }
 }
