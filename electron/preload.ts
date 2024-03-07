@@ -110,6 +110,15 @@ export async function getFileIcon(path: string) {
 }
 
 /**
+ * Checks if the provided path is a file or a folder
+ * @param path The path to the file or folder
+ * @returns A boolean indicating whether the provided path is a file or a folder
+ */
+export async function isDirectory(path: string) {
+    return await ipcRenderer.invoke("IsDirectory", path);
+}
+
+/**
  * Opens the system open file dialog
  * @param options The options for the open dialog
  * @returns An object containing the information of the selected file, if one was selected
@@ -184,6 +193,7 @@ contextBridge.exposeInMainWorld("app", {
     resetSettings,
     getAppInfo,
     getFileIcon,
+    isDirectory,
     showOpenDialog,
     showSaveDialog,
     fileSizeFormat,

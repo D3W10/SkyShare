@@ -12,9 +12,13 @@
     import type { File } from "$electron/lib/File.interface";
 
     let files: File[] = [], totalSize: number = 0, refresh: boolean = false;
+    let hovering: boolean = false;
     const MAX_FILES = 20, MAX_SIZE = 3221225472;
 
-    async function openFile() {
+    async function parseFiles(mode: "select" | "drop", e?: DragEvent) {
+        let failedCount: number = 0, fileList: File[] | FileList = [];
+
+        if (mode == "select") {
         let chosenFiles = await $app?.showOpenDialog({
             title: $i18n.t("send.chooseTitle"),
             filters: [{ name: $i18n.t("send.chooseFilter"), extensions: ["*"] }],
@@ -25,8 +29,17 @@
         if (!chosenFiles || chosenFiles?.canceled)
             return;
 
-        for (let file of chosenFiles.files) {
-            if (!files.every((f) => f.name != file.name)) {
+            fileList = chosenFiles.files;
+        }
+        else if (mode == "drop") {
+            hovering = false;
+            fileList = e?.dataTransfer?.files!;
+        }
+
+        for (let file of fileList) {
+            if (await $app?.isDirectory(file.path))
+                continue;
+            else if (!files.every((f) => f.name != file.name)) {
                 failedCount++;
                 continue;
             }
@@ -55,15 +68,15 @@
             <h1 class="w-full text-xl font-semibold">{$i18n.t("send.title")}</h1>
             <Columns>
                 <div slot="left">
-                    <div class="w-full h-full flex justify-center items-center rounded-2xl border-[5px] border-foreground/10">
+                    <div class={`w-full h-full flex justify-center items-center rounded-2xl border-[5px] ${!hovering ? "border-secondary" : "border-primary"} transition-colors`}>
                         {#key refresh}
                             {#if files.length == 0}
-                                <button class="w-full h-full flex justify-center items-center" on:click={openFile}>
-                                    <div class="flex flex-col items-center space-y-2">
+                                <button class="w-full h-full flex justify-center items-center" on:click={() => parseFiles("select")} on:dragenter={() => hovering = true} on:dragleave={() => hovering = false} on:dragover={(e) => e.preventDefault()} on:drop|preventDefault={(e) => parseFiles("drop", e)}>
+                                    <div class="flex flex-col items-center space-y-2 pointer-events-none">
                                         <Icon name="files" className="w-12" />
                                         <div class="text-center">
-                                            <p class="font-semibold">{$i18n.t("send.chooseTitle")}</p>
-                                            <p class="text-sm text-foreground/70">{$i18n.t("send.chooseSubtitle")}</p>
+                                            <p class="font-semibold">{!hovering ? $i18n.t("send.chooseTitle") : $i18n.t("send.chooseHoverTitle")}</p>
+                                            <p class="text-sm text-foreground/70">{!hovering ? $i18n.t("send.chooseSubtitle") : $i18n.t("send.chooseHoverSubtitle")}</p>
                                         </div>
                                     </div>
                                 </button>
@@ -80,7 +93,7 @@
                                             </div>
                                         </div>
                                     {/each}
-                                    <button class="w-full p-2 flex items-center bg-secondary rounded-lg space-x-1.5" on:click={openFile}>
+                                    <button class="w-full p-2 flex items-center bg-secondary rounded-lg space-x-1.5" on:click={() => parseFiles("select")}>
                                         <Icon name="add" className="h-6" />
                                         <p>{$i18n.t("send.chooseAddFiles")}</p>
                                     </button>
@@ -92,11 +105,11 @@
                 <div slot="right" class="flex flex-col justify-between items-center">
                     <div class="w-full h-full flex justify-center items-center">
                         <div class="w-3/5 space-y-8">
-                            <div class="space-y-1">
-                                <p class="font-semibold">{$i18n.t("send.message")}:</p>
-                                <Input type="text" placeholder={$i18n.t("send.optional")} maxlength={255} />
-                            </div>
                             {#key refresh}
+                                <div class="space-y-1">
+                                    <p class="font-semibold">{$i18n.t("send.message")}:</p>
+                                    <Input type="text" placeholder={$i18n.t("common.optional")} maxlength={255} disabled={files.length == 0} />
+                                </div>
                                 <div class="space-y-1">
                                     <p class="font-semibold">{$i18n.t("send.size")}:</p>
                                     <p class="text-foreground/70">{$app?.fileSizeFormat(files.reduce((previous, current) => previous + current.size, 0))}</p>
@@ -108,7 +121,7 @@
                             {/key}
                         </div>
                     </div>
-                    <Button className="w-fit">{$i18n.t("send.send")}</Button>
+                    <Button className="w-fit" on:click={() => page.set("send", 1)}>{$i18n.t("send.send")}</Button>
                 </div>
             </Columns>
         </div>
