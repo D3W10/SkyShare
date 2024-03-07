@@ -10,7 +10,7 @@
     import Modal from "$lib/components/Modal.svelte";
     import BlockLink from "$lib/components/BlockLink.svelte";
 
-    let showChangesModal: boolean = false, greetingKey: string;
+    let showChangesModal: boolean = false, greetingKey: string, waveAnimate: boolean = false;
 
     const changelogLoad = new Promise((resolve) => {
         onMount(() => {
@@ -26,7 +26,7 @@
         });
     });
 
-    const updateGreeting = () => {
+    function updateGreeting() {
         let currentHour = new Date().getHours();
 
         if (currentHour >= 6 && currentHour <= 12)
@@ -45,7 +45,9 @@
     <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: 0 })}</h1>
     <Columns className="z-10">
         <div slot="left" class="flex flex-col justify-center items-center space-y-2">
-            <img class="w-3/6" src="./logo.png" alt="SkyShare Logo" />
+            <button class="flex justify-center cursor-default" on:click={(e) => { if (e.ctrlKey || e.metaKey) waveAnimate = !waveAnimate; }}>
+                <img class="w-3/6" src="./logo.png" alt="SkyShare Logo" />
+            </button>
             <p class="text-lg font-semibold">{$info.name}</p>
         </div>
         <div slot="right" class="flex flex-col justify-center space-y-4">
@@ -54,7 +56,7 @@
             <BlockLink text={$i18n.t("home.settings")} icon="settings" on:click={() => page.set("settings")} />
         </div>
     </Columns>
-    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="SkyShare wave" />
+    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="SkyShare wave" style={!waveAnimate ? "" : "animation: hueRotate 5s linear infinite;"} />
 </div>
 <Modal bind:show={showChangesModal} title={$i18n.t("whatsnew", { version: $info.version })} button={$i18n.t("awesome")} canCancel={false}>
     <div class="p-3 bg-tertiary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
