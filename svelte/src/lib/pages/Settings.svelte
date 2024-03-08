@@ -7,13 +7,31 @@
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import ComboBox from "$lib/components/ComboBox.svelte";
+    import Input from "$lib/components/Input.svelte";
 
     type settingsPages = "appearance" | "updates" | "about";
 
-    let currentPage: settingsPages = "appearance", langs = [
+    let currentPage: settingsPages = "appearance", versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
+    let langs = [
         { id: "en", name: "English" },
         { id: "pt", name: "Português" }
     ];
+
+    function onVersionClick() {
+        versionClick++;
+
+        clearTimeout(versionClickTimeout);
+        versionClickTimeout = setTimeout(() => versionClick = 0, 400);
+
+        if (versionClick == 3) {
+            versionClick = 0;
+
+            if (!document.body.hasAttribute("style"))
+                document.body.style.transform = "rotateZ(180deg)";
+            else
+                document.body.removeAttribute("style");
+        }
+    }
 </script>
 
 <div class="w-full h-full p-6 flex flex-col space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -56,7 +74,20 @@
                 </div>
             {:else if currentPage == "updates"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                    <div class="flex justify-between items-center"></div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p>{$i18n.t("settings.autoUpdate")}</p>
+                            <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.autoUpdateDesc")}</p>
+                        </div>
+                        <Input type="switch" value={$settings.autoUpdate} on:input={(e) => settings.update("autoUpdate", e.detail.value)} />
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p>{$i18n.t("settings.betaUpdates")}</p>
+                            <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.betaUpdatesDesc")}</p>
+                        </div>
+                        <Input type="switch" value={$settings.betaUpdates} on:input={(e) => settings.update("betaUpdates", e.detail.value)} />
+                    </div>
                 </div>
             {:else if currentPage == "about"}
                 <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -64,7 +95,7 @@
                         <img src="./logo.png" alt={`${$info.name} Logo`} class="w-1/3" />
                         <div class="flex flex-col space-y-1">
                             <p class="text-2xl font-semibold">{$info.name}</p>
-                            <p class="text-foreground/70">{$i18n.t("settings.version", { version: $info.version })}</p>
+                            <p class="text-foreground/70" role="none" on:click={onVersionClick}>{$i18n.t("settings.version", { version: $info.version })}</p>
                         </div>
                     </div>
                 </div>

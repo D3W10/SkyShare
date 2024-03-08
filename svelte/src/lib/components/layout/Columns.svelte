@@ -4,6 +4,7 @@
 
 <div class={`h-full flex p-5 space-x-11 columns ${className}`}>
     <slot name="left" />
+    <slot name="middle" />
     <slot name="right" />
 </div>
 

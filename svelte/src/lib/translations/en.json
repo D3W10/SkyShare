@@ -45,6 +45,10 @@
         "language": "Language",
         "languageDesc": "Modify the application language",
         "updates": "Updates",
+        "autoUpdate": "Automatic updates",
+        "autoUpdateDesc": "Updates the application automatically",
+        "betaUpdates": "Beta updates",
+        "betaUpdatesDesc": "Get beta updates (unstable)",
         "about": "About",
         "version": "Version {{version}}"
     },
