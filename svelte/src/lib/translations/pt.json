@@ -44,6 +44,7 @@
         "themeDark": "Escuro",
         "language": "Linguagem",
         "languageDesc": "Modifica a linguagem da aplicação",
+        "updates": "Atualizações",
         "about": "Sobre",
         "version": "Versão {{version}}"
     },

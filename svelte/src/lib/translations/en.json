@@ -44,6 +44,7 @@
         "themeDark": "Dark",
         "language": "Language",
         "languageDesc": "Modify the application language",
+        "updates": "Updates",
         "about": "About",
         "version": "Version {{version}}"
     },
