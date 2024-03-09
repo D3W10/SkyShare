@@ -52,11 +52,21 @@
         "about": "About",
         "version": "Version {{version}}"
     },
-    "login": {
-        "title" : "Log In",
-        "username": "Username",
-        "password": "Password"
-    },
+    "login": [
+        {
+            "title" : "Log In",
+            "username": "Username",
+            "password": "Password",
+            "forgot": "Forgot my password",
+            "create": "Create account",
+            "login": "Log In"
+        },
+        {
+            "title": "Forgot my password",
+            "email": "Email",
+            "reset": "Reset Account"
+        }
+    ],
     "account": {
         "title" : ""
     },

@@ -12,6 +12,8 @@
     import Send from "$lib/pages/Send.svelte";
     import Receive from "$lib/pages/Receive.svelte";
     import Settings from "$lib/pages/Settings.svelte";
+    import Login from "$lib/pages/Login.svelte";
+    import Account from "$lib/pages/Account.svelte";
     
     onMount(() => setup());
     settings.subscribe(setup);
@@ -21,6 +23,8 @@
         send: "[--color-primary:--color-send]",
         receive: "[--color-primary:--color-receive]",
         settings: "[--color-primary:--color-settings]",
+        login: "[--color-primary:--color-account]",
+        account: "[--color-primary:--color-account]",
         offline: "[--color-primary:--color-offline]"
     };
 
@@ -39,9 +43,9 @@
 </svelte:head>
 
 <FrameBar />
-<div class="h-full flex">
+<div class={`h-full flex ${colors[$page.current]}`}>
     <SideBar />
-    <main class={`w-full h-full bg-background rounded-tl-2xl overflow-hidden shadow-md ${colors[$page.current]}`}>
+    <main class="w-full h-full bg-background rounded-tl-2xl overflow-hidden shadow-md">
         {#if $page.current == "home"}
             <Home />
         {:else if $page.current == "send"}
@@ -50,6 +54,10 @@
             <Receive />
         {:else if $page.current == "settings"}
             <Settings />
+        {:else if $page.current == "login"}
+            <Login />
+        {:else if $page.current == "account"}
+            <Account />
         {/if}
     </main>
 </div>

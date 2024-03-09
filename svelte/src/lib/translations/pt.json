@@ -52,11 +52,21 @@
         "about": "Sobre",
         "version": "Versão {{version}}"
     },
-    "login": {
-        "title" : "Iniciar Sessão",
-        "username": "Nome de Utilizador",
-        "password": "Palavra-Passe"
-    },
+    "login": [
+        {
+            "title" : "Iniciar Sessão",
+            "username": "Nome de Utilizador",
+            "password": "Palavra-Passe",
+            "forgot": "Esqueci-me da minha Palavra-Passe",
+            "create": "Criar conta",
+            "login": "Iniciar Sessão"
+        },
+        {
+            "title": "Esqueci-me da minha Palavra-Passe",
+            "email": "Email",
+            "reset": "Reset Account"
+        }
+    ],
     "account": {
         "title" : ""
     },

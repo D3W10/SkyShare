@@ -1,6 +1,7 @@
 <script lang="ts">
     import { i18n } from "$lib/stores/i18nStore";
     import { page } from "$lib/stores/pageStore";
+    import { disable } from "$lib/stores/disableStore";
     import Icon from "./Icon.svelte";
 
     export let disabled: boolean = false;

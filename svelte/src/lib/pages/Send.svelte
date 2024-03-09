@@ -5,6 +5,7 @@
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
     import { error } from "$lib/stores/errorStore";
+    import { disable } from "$lib/stores/disableStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
@@ -19,15 +20,15 @@
         let failedCount: number = 0, fileList: File[] | FileList = [];
 
         if (mode == "select") {
-        let chosenFiles = await $app?.showOpenDialog({
-            title: $i18n.t("send.chooseTitle"),
-            filters: [{ name: $i18n.t("send.chooseFilter"), extensions: ["*"] }],
-            properties: ["openFile", "multiSelections", "treatPackageAsDirectory"],
-            message: $i18n.t("send.chooseTitle")
+            let chosenFiles = await $app?.showOpenDialog({
+                title: $i18n.t("send.chooseTitle"),
+                filters: [{ name: $i18n.t("send.chooseFilter"), extensions: ["*"] }],
+                properties: ["openFile", "multiSelections", "treatPackageAsDirectory"],
+                message: $i18n.t("send.chooseTitle")
             });
 
-        if (!chosenFiles || chosenFiles?.canceled)
-            return;
+            if (!chosenFiles || chosenFiles?.canceled)
+                return;
 
             fileList = chosenFiles.files;
         }
@@ -88,12 +89,12 @@
                                                 <img src={`data:image/png;base64,${icon}`} class="h-6" alt="" />
                                             {/await}
                                             <div class="flex flex-col space-y-0.5">
-                                                <p class="text-sm">{file.name}</p>
+                                                <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
                                                 <p class="text-xs text-foreground/70">{$app?.fileSizeFormat(file.size)}</p>
                                             </div>
                                         </div>
                                     {/each}
-                                    <button class="w-full p-2 flex items-center bg-secondary rounded-lg space-x-1.5" on:click={() => parseFiles("select")}>
+                                    <button class="w-full p-2 flex items-center hover:text-primary bg-secondary rounded-lg space-x-1.5 transition-colors" on:click={() => parseFiles("select")}>
                                         <Icon name="add" className="h-6" />
                                         <p>{$i18n.t("send.chooseAddFiles")}</p>
                                     </button>

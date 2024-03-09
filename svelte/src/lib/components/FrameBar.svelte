@@ -1,13 +1,13 @@
 <script lang="ts">
     import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
-    import { page } from "$lib/stores/pageStore";
+    import { disable } from "$lib/stores/disableStore";
     import Modal from "$lib/components/Modal.svelte";
 
     let showModal: boolean = false;
 
     function onRedButtonClick() {
-        if (!["rules", "game"].includes($page.current))
+        if (!$disable)
             $app?.closeWindow();
         else
             showModal = true;
