@@ -9,6 +9,7 @@
     export let className: string = "";
     export let items: string[];
     export let selected: number = 0;
+    export let disabled: boolean = false;
     export let listClassName: string = "";
     export let listReverse: boolean = false;
 
@@ -26,8 +27,8 @@
 </script>
 
 <div use:outsideClick on:outclick={() => { if (open) open = !open; }}>
-    <Button type="invisible" className={`block relative rounded-md ${!open ? "z-10" : "z-20"} ${className}`} on:click={() => open = !open}>
-        <div class="px-2 py-1.5 flex justify-between items-center bg-secondary rounded-md border-b-2 border-foreground/15 shadow-sm">
+    <Button type="invisible" className={`block relative rounded-md ${!open ? "z-10" : "z-20"} ${className}`} {disabled} on:click={() => open = !open}>
+        <div class={`px-2 py-1.5 flex justify-between items-center bg-secondary rounded-md border-b-2 ${!open ? "border-foreground/15" : "border-primary"} shadow-sm transition-colors`}>
             <p class="text-sm">{selectedItem}</p>
             <Icon name="chevron" className={`w-5 h-5 ml-2 fill-current transition-transform duration-[400ms] ease-quint-out ${!open ? closedCss : openCss}`} />
         </div>
