@@ -2,7 +2,7 @@
     export let className: string = "";
 </script>
 
-<div class={`h-full flex p-5 space-x-11 columns ${className}`}>
+<div class="h-full flex p-5 space-x-11 columns {className}">
     <slot name="left" />
     <slot name="right" />
 </div>

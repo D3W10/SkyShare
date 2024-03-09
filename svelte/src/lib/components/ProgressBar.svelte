@@ -14,9 +14,9 @@
     $: progress.set(value);
 </script>
 
-<div class={`w-full h-1 relative bg-foreground/10 rounded-full overflow-hidden ${indeterminate ? "indeterminate" : ""} ${className}`}>
+<div class="w-full h-1 relative bg-foreground/10 rounded-full overflow-hidden {indeterminate ? "indeterminate" : ""} {className}">
     {#if !indeterminate}
-        <div class="h-full bg-primary rounded-full" style="width: {$progress}%;" />
+        <div class="h-full bg-primary rounded-full" style:width="{$progress}%" />
     {/if}
 </div>
 

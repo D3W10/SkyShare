@@ -20,7 +20,7 @@
 
 <div class="w-full h-10 p-2 flex justify-between drag">
     <div class="flex items-center space-x-2">
-        <img class="h-5 ml-0.5" src="./logo.png" alt={`${$info.name} logo`} />
+        <img class="h-5 ml-0.5" src="./logo.png" alt="{$info.name} Logo" />
         <span class="text-sm font-semibold">{$info.name}</span>
     </div>
     <div class="flex items-center p-1 space-x-2">

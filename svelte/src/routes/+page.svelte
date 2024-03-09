@@ -43,7 +43,7 @@
 </svelte:head>
 
 <FrameBar />
-<div class={`h-full flex overflow-hidden ${colors[$page.current]}`}>
+<div class="h-full flex overflow-hidden {colors[$page.current]}">
     <SideBar />
     <main class="w-full h-full bg-background rounded-tl-2xl overflow-hidden shadow-md">
         {#if $page.current == "home"}

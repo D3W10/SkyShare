@@ -52,6 +52,6 @@
             </div>
             <p class="text-sm animate-pulse" in:fade={{ duration: 1000, delay: 500 }} on:introend={checkForUpdates}>{status}</p>
         </div>
-        <img src="./mesh.png" class="absolute top-0 bottom-0 right-0" alt={`${$info.name} Mesh`} />
+        <img src="./mesh.png" class="absolute top-0 bottom-0 right-0" alt="{$info.name} Mesh" />
     {/if}
 </div>

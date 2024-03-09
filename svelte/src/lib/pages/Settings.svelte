@@ -5,6 +5,7 @@
     import { transition } from "$lib/stores/transitionStore";
     import { settings } from "$lib/stores/settingsStore";
     import Columns from "$lib/components/layout/Columns.svelte";
+    import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import ComboBox from "$lib/components/ComboBox.svelte";
     import Input from "$lib/components/Input.svelte";
@@ -39,18 +40,18 @@
     <Columns className="!space-x-0">
         <div slot="left" class="!w-1/3 pr-5">
             <div class="w-full h-full p-1 bg-foreground/5 rounded-xl space-y-1">
-                <button class={`w-full p-2 flex items-center ${currentPage == "appearance" ? "text-primary" : ""} hover:bg-foreground/5 rounded-lg transition-colors space-x-1.5`} on:click={() => currentPage = "appearance"}>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "appearance" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg space-x-1.5" on:click={() => currentPage = "appearance"}>
                     <Icon name="appearance" className="h-6" />
                     <p>{$i18n.t("settings.appearance")}</p>
-                </button>
-                <button class={`w-full p-2 flex items-center ${currentPage == "updates" ? "text-primary" : ""} hover:bg-foreground/5 rounded-lg transition-colors space-x-1.5`} on:click={() => currentPage = "updates"}>
+                </Button>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "updates" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg space-x-1.5" on:click={() => currentPage = "updates"}>
                     <Icon name="updates" className="h-6" />
                     <p>{$i18n.t("settings.updates")}</p>
-                </button>
-                <button class={`w-full p-2 flex items-center ${currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 rounded-lg transition-colors space-x-1.5`} on:click={() => currentPage = "about"}>
+                </Button>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg space-x-1.5" on:click={() => currentPage = "about"}>
                     <Icon name="about" className="h-6" />
                     <p>{$i18n.t("settings.about")}</p>
-                </button>
+                </Button>
             </div>
         </div>
         <div slot="right" class="!w-2/3 !ml-6 py-3.5 pl-5">
@@ -91,7 +92,7 @@
             {:else if currentPage == "about"}
                 <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                     <div class="flex flex-col items-center text-center space-y-5">
-                        <img src="./logo.png" alt={`${$info.name} Logo`} class="w-1/3" />
+                        <img src="./logo.png" alt="{$info.name} Logo" class="w-1/3" />
                         <div class="flex flex-col space-y-1">
                             <p class="text-2xl font-semibold">{$info.name}</p>
                             <p class="text-foreground/70" role="none" on:click={onVersionClick}>{$i18n.t("settings.version", { version: $info.version })}</p>

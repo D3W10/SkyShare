@@ -55,18 +55,18 @@
 </script>
 
 {#if type == "switch"}
-    <Button type="invisible" className={`w-10 flex items-center p-1 !rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${!value ? "bg-foreground/10" : "bg-primary"}`} {disabled} on:click={() => { value = !value; triggerEvent(); }}>
-        <div class={`w-3.5 h-3.5 bg-white rounded-full transition-all ${value ? "ml-[1.125rem]" : ""}`} />
+    <Button type="invisible" className="w-10 flex items-center p-1 !rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary {!value ? "bg-foreground/10" : "bg-primary"}" {disabled} on:click={() => { value = !value; triggerEvent(); }}>
+        <div class="w-3.5 h-3.5 bg-white rounded-full transition-all {value ? "ml-[1.125rem]" : ""}" />
     </Button>
 {:else if type == "checkbox"}
-    <input class={`w-auto h-4 bg-foreground/10 rounded-md appearance-none disabled:opacity-50 checked:bg-primary checked:bg-check checked:bg-no-repeat checked:bg-center focus-visible:outline focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary aspect-square transition-all ${className}`} type="checkbox" {placeholder} {disabled} {checked} bind:value bind:this={inputElm} on:click={() => value = !value} on:input={triggerEvent} />
+    <input class="w-auto h-4 bg-foreground/10 rounded-md appearance-none disabled:opacity-50 checked:bg-primary checked:bg-check checked:bg-no-repeat checked:bg-center focus-visible:outline focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary aspect-square transition-all {className}" type="checkbox" {placeholder} {disabled} {checked} bind:value bind:this={inputElm} on:click={() => value = !value} on:input={triggerEvent} />
 {:else if type == "range"}
-    <div class={`flex items-center space-x-3 ${className}`}>
+    <div class="flex items-center space-x-3 {className}">
         <input class="w-full h-2 p-0 bg-foreground/10 rounded-full appearance-none disabled:opacity-50" type="range" {disabled} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
-        <input class={`!w-10 !p-0 text-right !text-base disabled:opacity-50 ${innerClassName}`} type="number" {value} {disabled} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
+        <input class="!w-10 !p-0 text-right !text-base disabled:opacity-50 {innerClassName}" type="number" {value} {disabled} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
     </div>
 {:else}
-    <div class={`bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-all duration-200 focus-within:border-primary ${!disabled || "opacity-50"} ${!error || "bg-red-100"} ${className}`}>
+    <div class="bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-all duration-200 focus-within:border-primary {!disabled || "opacity-50"} {!error || "bg-red-500/30"} {className}">
         {#if type == "text" || type == "email"}
             <input type="text" {placeholder} {disabled} {maxlength} bind:value bind:this={inputElm} on:input={triggerEvent} />
         {:else if type == "number"}
@@ -74,7 +74,7 @@
         {:else if type == "wheel"}
             <div class="flex">
                 <div class="w-full h-8 relative overflow-hidden">
-                    <div class="w-full h-full absolute" style="transform: translate(0, {100 * offset}%)">
+                    <div class="w-full h-full absolute" style:transform="translate(0, {100 * offset}%)">
                         <p class="w-full h-full px-2 py-1.5 absolute text-sm -top-full">{Math.floor($displayed + 1) * step}</p>
                         <p class="w-full h-full px-2 py-1.5 absolute text-sm">{Math.floor($displayed) * step}</p>
                     </div>
