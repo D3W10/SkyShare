@@ -45,9 +45,7 @@
     <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: 0 })}</h1>
     <Columns className="z-10">
         <div slot="left" class="flex flex-col justify-center items-center space-y-2">
-            <button class="flex justify-center cursor-default" on:click={(e) => { if (e.ctrlKey || e.metaKey) waveAnimate = !waveAnimate; }}>
-                <img class="w-3/6" src="./logo.png" alt="SkyShare Logo" />
-            </button>
+            <img class="w-3/6" src="./logo.png" alt={`${$info.name} Logo`} role="none" on:click={(e) => { if (e.ctrlKey || e.metaKey) waveAnimate = !waveAnimate; }} />
             <p class="text-lg font-semibold">{$info.name}</p>
         </div>
         <div slot="right" class="flex flex-col justify-center space-y-4">
@@ -56,10 +54,10 @@
             <BlockLink text={$i18n.t("home.settings")} icon="settings" on:click={() => page.set("settings")} />
         </div>
     </Columns>
-    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="SkyShare wave" style={!waveAnimate ? "" : "animation: hueRotate 5s linear infinite;"} />
+    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt={`${$info.name} Wave`} style={!waveAnimate ? "" : "animation: hueRotate 5s linear infinite;"} />
 </div>
 <Modal bind:show={showChangesModal} title={$i18n.t("whatsnew", { version: $info.version })} button={$i18n.t("awesome")} canCancel={false}>
-    <div class="p-3 bg-tertiary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
+    <div class="p-3 bg-secondary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
         {#await changelogLoad then changelog}
             {@html changelog}
         {/await}
@@ -80,7 +78,7 @@
     }
 
     .changelog :global(input[type="checkbox"]) {
-        @apply w-4 h-4 mr-2 bg-slate-900/15 rounded appearance-none;
+        @apply w-4 h-4 mr-2 bg-foreground/10 rounded appearance-none;
     }
 
     .changelog :global(input[type="checkbox"]:checked) {
@@ -108,7 +106,7 @@
     }
 
     .changelog :global(code) {
-        @apply mx-0.5 p-0.5 bg-slate-900/15 rounded-md font-mono;
+        @apply mx-0.5 p-0.5 bg-foreground/10 rounded-md font-mono;
     }
 
     .changelog :global(blockquote) {
