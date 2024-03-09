@@ -69,7 +69,7 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.1.email")}:</p>
-                                <Input type="text" placeholder={$i18n.t("common.required")} maxlength={250} disabled={$disable} />
+                                <Input type="email" placeholder={$i18n.t("common.required")} maxlength={250} disabled={$disable} />
                             </div>
                         </div>
                     </div>

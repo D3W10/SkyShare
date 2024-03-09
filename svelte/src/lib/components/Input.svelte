@@ -6,7 +6,7 @@
 
     export let className: string = "";
     export let innerClassName: string = "";
-    export let type: "text" | "number" | "checkbox" | "range" | "wheel" | "switch";
+    export let type: "text" | "number" | "checkbox" | "email" | "range" | "wheel" | "switch";
     export let value: any = null;
     export let placeholder: string = "";
     export let disabled: boolean = false;
@@ -35,6 +35,8 @@
         if (value !== null && value !== "") {
             if ((type == "text" || type == "number" || type == "checkbox" || type == "range") && inputElm != undefined)
                 error = !inputElm.checkValidity();
+            else if (type == "email")
+                error = !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
         }
         else
             error = false;
@@ -53,7 +55,7 @@
 </script>
 
 {#if type == "switch"}
-    <Button type="invisible" className={`w-10 flex items-center p-1 rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${!value ? "bg-foreground/10" : "bg-primary"}`} {disabled} on:click={() => { value = !value; triggerEvent(); }}>
+    <Button type="invisible" className={`w-10 flex items-center p-1 !rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${!value ? "bg-foreground/10" : "bg-primary"}`} {disabled} on:click={() => { value = !value; triggerEvent(); }}>
         <div class={`w-3.5 h-3.5 bg-white rounded-full transition-all ${value ? "ml-[1.125rem]" : ""}`} />
     </Button>
 {:else if type == "checkbox"}
@@ -65,7 +67,7 @@
     </div>
 {:else}
     <div class={`bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-all duration-200 focus-within:border-primary ${!disabled || "opacity-50"} ${!error || "bg-red-100"} ${className}`}>
-        {#if type == "text"}
+        {#if type == "text" || type == "email"}
             <input type="text" {placeholder} {disabled} {maxlength} bind:value bind:this={inputElm} on:input={triggerEvent} />
         {:else if type == "number"}
             <input type="number" {placeholder} {disabled} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
