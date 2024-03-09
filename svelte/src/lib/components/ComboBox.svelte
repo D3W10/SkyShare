@@ -27,7 +27,7 @@
 </script>
 
 <div use:outsideClick on:outclick={() => { if (open) open = !open; }}>
-    <Button type="invisible" className={`block relative rounded-md ${!open ? "z-10" : "z-20"} ${className}`} {disabled} on:click={() => open = !open}>
+    <Button type="invisible" className={`block relative ${!open ? "z-10" : "z-20"} ${className}`} {disabled} on:click={() => open = !open}>
         <div class={`px-2 py-1.5 flex justify-between items-center bg-secondary rounded-md border-b-2 ${!open ? "border-foreground/15" : "border-primary"} shadow-sm transition-colors`}>
             <p class="text-sm">{selectedItem}</p>
             <Icon name="chevron" className={`w-5 h-5 ml-2 fill-current transition-transform duration-[400ms] ease-quint-out ${!open ? closedCss : openCss}`} />

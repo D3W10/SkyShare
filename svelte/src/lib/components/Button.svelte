@@ -10,11 +10,11 @@
         <slot />
     </button>
 {:else if type == "text"}
-    <button class={`flex justify-center items-center text-primary text-center font-semibold disabled:opacity-50 transition-colors ${className}`} {disabled} on:click>
+    <button class={`px-1 flex justify-center items-center text-primary text-center font-semibold rounded-md disabled:opacity-50 transition-colors ${className}`} {disabled} on:click>
         <slot />
     </button>
 {:else if type == "invisible"}
-    <button class={`disabled:opacity-50 transition-opacity ${className}`} {disabled} on:click>
+    <button class={`rounded-md disabled:opacity-50 transition-opacity ${className}`} {disabled} on:click>
         <slot />
     </button>
 {/if}
