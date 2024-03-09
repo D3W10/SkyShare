@@ -53,7 +53,6 @@
                 </button>
             </div>
         </div>
-        <hr slot="middle" class="w-[3px] h-full bg-foreground/10 border-0 rounded-full" />
         <div slot="right" class="!w-2/3 !ml-6 py-3.5 pl-5">
             {#if currentPage == "appearance"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
