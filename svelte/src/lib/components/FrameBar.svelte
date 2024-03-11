@@ -5,7 +5,23 @@
     import Button from "./Button.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    let showModal: boolean = false;
+    let showModal: boolean = false, logoClick: number = 0, logoClickTimeout: NodeJS.Timeout;;
+
+    function onLogoClick() {
+        logoClick++;
+
+        clearTimeout(logoClickTimeout);
+        logoClickTimeout = setTimeout(() => logoClick = 0, 400);
+
+        if (logoClick == 3) {
+            logoClick = 0;
+
+            if (!document.body.hasAttribute("style"))
+                document.body.style.animation = "hueRotate 5s linear infinite";
+            else
+                document.body.removeAttribute("style");
+        }
+    }
 
     function onRedButtonClick() {
         if (!$disable)
@@ -21,7 +37,7 @@
 
 <div class="w-full h-10 p-2 flex justify-between drag">
     <div class="flex items-center space-x-2">
-        <img class="h-5 ml-0.5" src="./logo.png" alt="{$info.name} Logo" />
+        <img class="h-5 ml-0.5" src="./logo.png" alt="{$info.name} Logo" role="none" on:click={onLogoClick} />
         <span class="text-sm font-semibold">{$info.name}</span>
     </div>
     <div class="flex items-center p-1 space-x-2">

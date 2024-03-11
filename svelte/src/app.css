@@ -72,4 +72,14 @@
             filter: hue-rotate(360deg);
         }
     }
+
+    @keyframes shrink {
+        from {
+            transform: scaleY(1);
+        }
+    
+        to {
+            transform: scaleY(0.5);
+        }
+    }
 }

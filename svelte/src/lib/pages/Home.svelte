@@ -54,7 +54,7 @@
             <BlockLink text={$i18n.t("home.settings")} icon="settings" on:click={() => page.set("settings")} />
         </div>
     </Columns>
-    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="{$info.name} Wave" style={!waveAnimate ? "" : "animation: hueRotate 5s linear infinite;"} />
+    <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="{$info.name} Wave" style={!waveAnimate ? "" : "animation: shrink 3s ease-in-out infinite alternate;"} />
 </div>
 <Modal bind:show={showChangesModal} title={$i18n.t("whatsnew", { version: $info.version })} button={$i18n.t("awesome")} canCancel={false}>
     <div class="p-3 bg-secondary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
