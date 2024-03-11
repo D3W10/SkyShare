@@ -9,7 +9,7 @@ export const transition = derived([page, settings], ($values) => {
     return {
         pageIn: { duration: duration, delay: duration, easing: sineOut },
         pageOut: { duration: duration, easing: sineIn },
-        subpageIn: { duration: subPageDuration, delay: duration, x: offset * -1, easing: cubicOut },
+        subpageIn: { duration: subPageDuration, delay: subPageDuration, x: -offset, easing: cubicOut },
         subpageOut: { duration: subPageDuration, x: offset, easing: cubicIn },
         iconJump: { duration: 800, delay: 700, easing: circOut, opacity: 1 },
         comboFlow: { duration: 400, easing: quintOut }
