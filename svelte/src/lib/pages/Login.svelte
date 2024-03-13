@@ -4,17 +4,24 @@
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
     import { disable } from "$lib/stores/disableStore";
+    import { account } from "$lib/stores/accountStore";
+    import { getVE } from "$lib/models/VEPair.type";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
 
-    function onLoginInput() {
+    let loginInfo = [getVE(""), getVE("")], loginDisable: boolean = true;
 
-    }
+    const onLoginInput = () => loginDisable = loginInfo[0][0] == "" || loginInfo[1][0] == "";
 
-    function onLogin() {
+    async function onLogin() {
+        disable.lock();
 
+        if (await account.login(loginInfo[0][0], loginInfo[1][0]))
+            page.set("home");
+
+        disable.unlock();
     }
 
     function onRecovery() {
@@ -24,7 +31,7 @@
 
 <div class="w-full h-full p-6 space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onLogin}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("login.0.title")}</h1>
             <Columns>
                 <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
@@ -35,22 +42,22 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.0.username")}:</p>
-                                <Input type="text" placeholder={$i18n.t("common.required")} maxlength={15} disabled={$disable} />
+                                <Input type="username" bind:value={loginInfo[0][0]} bind:error={loginInfo[0][1]} placeholder={$i18n.t("common.required")} on:input={onLoginInput} />
                             </div>
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.0.password")}:</p>
-                                <Input type="text" placeholder={$i18n.t("common.required")} maxlength={50} disabled={$disable} />
+                                <Input type="password" bind:value={loginInfo[1][0]} bind:error={loginInfo[1][1]} placeholder={$i18n.t("common.required")} errorChecking={false} on:input={onLoginInput} />
                             </div>
                             <div class="flex flex-col items-center space-y-3">
-                                <Button type="text" disabled={$disable} on:click={() => page.set("login", 1)}>{$i18n.t("login.0.forgot")}</Button>
-                                <Button type="text" disabled={$disable}>{$i18n.t("login.0.create")}</Button>
+                                <Button type="text" on:click={() => page.set("login", 1)}>{$i18n.t("login.0.forgot")}</Button>
+                                <Button type="text" on:click={() => page.set("login", 4)}>{$i18n.t("login.0.create")}</Button>
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={$disable} on:click={onLogin}>{$i18n.t("login.0.login")}</Button>
+                    <Button className="w-fit" disabled={loginDisable} submit>{$i18n.t("login.0.login")}</Button>
                 </div>
             </Columns>
-        </div>
+        </form>
     {:else if $page.subPage == 1}
         <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <div class="flex justify-between items-center">
@@ -69,11 +76,11 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.1.email")}:</p>
-                                <Input type="email" placeholder={$i18n.t("common.required")} maxlength={250} disabled={$disable} />
+                                <Input type="email" placeholder={$i18n.t("common.required")} maxlength={250} disabled={$disable.d} />
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={$disable} on:click={onRecovery}>{$i18n.t("login.1.reset")}</Button>
+                    <Button className="w-fit" disabled={$disable.d} on:click={onRecovery}>{$i18n.t("login.1.reset")}</Button>
                 </div>
             </Columns>
         </div>

@@ -1,1 +1,0 @@
-export type ModalError = "sizeLimitExceeded" | "tooManyFiles" | "fileWithSameName";

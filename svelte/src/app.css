@@ -82,4 +82,14 @@
             transform: scaleY(0.5);
         }
     }
+
+    @keyframes errorGlow {
+        0% {
+            @apply border-red-500/100;
+        }
+
+        100% {
+            @apply border-red-500/20;
+        }
+    }
 }

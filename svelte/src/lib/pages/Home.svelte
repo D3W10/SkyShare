@@ -6,6 +6,7 @@
     import { info } from "$lib/stores/infoStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
+    import { account } from "$lib/stores/accountStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Modal from "$lib/components/Modal.svelte";
     import BlockLink from "$lib/components/BlockLink.svelte";
@@ -42,7 +43,7 @@
 </script>
 
 <div class="w-full h-full p-6 flex flex-col relative space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-    <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: 0 })}</h1>
+    <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: !$account ? 0 : 1, name: $account?.username })}</h1>
     <Columns className="z-10">
         <div slot="left" class="flex flex-col justify-center items-center space-y-2">
             <img class="w-3/6" src="./logo.png" alt="{$info.name} Logo" role="none" on:click={(e) => { if (e.ctrlKey || e.metaKey) waveAnimate = !waveAnimate; }} />

@@ -1,13 +1,14 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
-let wReady = false, winReady: () => unknown, cfuProgress: (percent: number) => unknown;
+let wReady = false, winReady: () => unknown, cfuProgress: (percent: number) => unknown, errorHandler: (code: number) => unknown;
 const pLog = (msg: string) => ipcRenderer.send("LoggerPreload", "info", msg);
-const units = ["Bytes", "KB", "MB", "GB"];
+const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
 export interface AppInfo {
     name: string;
     version: string;
+    api: string;
 }
 
 /**
@@ -137,6 +138,24 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
 }
 
 /**
+ * Makes a call to the API
+ * @param options An object containing the endpoint to reach, the HTTP method and the parameters/body to send
+ * @returns A JSON containing the code, message and returned value
+ */
+export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }) {
+    const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
+        method,
+        body: body ? JSON.stringify(body) : undefined
+    });
+
+    const json = await apiResult.json() as { code: number, message: string, value?: any };
+    if (json.code != 0)
+        errorHandler(json.code);
+
+    return json;
+}
+
+/**
  * Formats a size in bytes to the closest unit
  * @param size The size in bytes
  * @returns The formatted size in human readable format
@@ -151,6 +170,32 @@ export function fileSizeFormat(size: number) {
     while (size > 1024);
 
     return size.toFixed(2) + " " + units[count];
+}
+
+/**
+ * Object containing functions regarding the account system
+ */
+export const account = {
+    /**
+     * Logs a user in if they have an account
+     * @param username The username of the user
+     * @param password The password of the user
+     * @returns A boolean indicating whether the login was successful or not
+     */
+    login: async (username: string, password: string) => {
+        const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
+
+        const api = await apiCall({
+            endpoint: "user/login",
+            method: "GET",
+            params: new URLSearchParams({ username, password: encodedPass })
+        });
+
+        if (api.code == 0)
+            setSetting("account", { username, password: encodedPass });
+
+        return api.code == 0;
+    }
 }
 
 /**
@@ -169,6 +214,15 @@ export function updateReadyCallback(callback: () => unknown) {
     winReady = callback;
     if (wReady)
         callback();
+}
+
+/**
+ * Updates the callback function reference to where the API errors should be sent
+ * 
+ * @param callback The function to receive the API error codes
+ */
+export function updateErrorCallback(callback: (code: number) => unknown) {
+    errorHandler = callback;
 }
 
 ipcRenderer.on("CFUProgress", (_, percent: number) => cfuProgress(percent));
@@ -196,7 +250,10 @@ contextBridge.exposeInMainWorld("app", {
     isDirectory,
     showOpenDialog,
     showSaveDialog,
+    apiCall,
     fileSizeFormat,
+    account,
     sleep,
-    updateReadyCallback
+    updateReadyCallback,
+    updateErrorCallback
 });

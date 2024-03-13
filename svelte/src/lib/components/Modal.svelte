@@ -26,7 +26,7 @@
     }
 </script>
 
-<dialog class="w-[26rem] max-h-112 transition-all ease-quint-out opacity-0 {show ? "open" : "closed"} duration-[400ms] scale-50 overflow-hidden" bind:this={dialog} on:close={() => error.hide()}>
+<dialog class="w-[26rem] max-h-112 transition-all ease-quint-out opacity-0 {show ? "open" : "closed"} duration-[400ms] scale-50 outline-0 overflow-hidden" bind:this={dialog} on:close={() => error.hide()}>
     <div class="max-h-112 p-5 flex flex-col space-y-5" role="alertdialog">
         {#if title != ""}
             <h1 class="text-2xl font-semibold">{title}</h1>
@@ -34,9 +34,9 @@
         <slot />
         <div class="flex justify-end items-center space-x-3">
             {#if canCancel}
-                <Button secondary on:click={() => closeModal(false)}>{cancelButton}</Button>
+                <Button type="small" secondary on:click={() => closeModal(false)}>{cancelButton}</Button>
             {/if}
-            <Button on:click={() => closeModal(true)}>{button}</Button>
+            <Button type="small" on:click={() => closeModal(true)}>{button}</Button>
         </div>
     </div>
 </dialog>

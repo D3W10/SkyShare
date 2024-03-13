@@ -2,6 +2,7 @@ import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import fs from "fs";
 import path from "path";
 import os from "os";
+import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import Logger from "./lib/logger";
@@ -24,7 +25,7 @@ const appConfig = new Store<IStore>({
             autoUpdate: true, // TODO
             betaUpdates: false // TODO
         },
-        account: { // TODO
+        account: {
             username: null,
             password: null
         }
@@ -193,13 +194,16 @@ ipcMain.on("ResetSettings", () => appConfig.clear());
 ipcMain.on("GetAppInfo", (event) => {
     event.returnValue = {
         name: packageData.productName,
-        version: packageData.version
+        version: packageData.version,
+        api: !isDev ? "https://skyshare.vercel.app/" : "http://localhost:5174/"
     }
 });
 
 ipcMain.handle("GetFileIcon", async (_event, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
 ipcMain.handle("IsDirectory", (_event, path: string) => fs.lstatSync(path).isDirectory());
+
+ipcMain.on("EncodePassword", (event, password: string) => event.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);
