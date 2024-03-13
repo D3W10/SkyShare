@@ -11,7 +11,7 @@
 	});
 
     function shineScroll() {
-        shine.set(200);
+        shine.set(-200);
         setTimeout(() => {
             shine.set(0, { duration: 0 });
             shineScroll();
