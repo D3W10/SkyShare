@@ -72,6 +72,7 @@
     },
     "modal": {
         "okay": "OK",
+        "cancel": "Cancelar",
         "miscommunication": "Erro desconhecido",
         "miscommunicationDesc": "Um erro desconhecido ocorreu a tentar conectar com o servidor, o mesmo provavelmente ocoreu se estiver a utilizar uma versão desatualizada da aplicação. Por favor verifique que está a usar a versão mais recente e tente novamente.",
         "invalidUsername": "Nome de utilizador inválido",
@@ -85,7 +86,12 @@
         "tooManyFiles": "Limite excedido",
         "tooManyFilesDesc": "A quantidade máxima de ficheiros foi excedida! Apenas pode enviar, no máximo, 20 ficheiros por envio.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
-        "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome."
+        "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
+        "betaUpdates": "Nota importante",
+        "betaUpdatesDesc": [
+            "Tem a certeza que quer ativar esta definição? Atualizações beta são instáveis e podem e pode prejudicar a sua experiência.",
+            "Terá de reiniciar o SkyShare para que esta definição seja aplicada."
+        ]
     },
     "common": {
         "back": "Voltar",

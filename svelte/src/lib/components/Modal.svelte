@@ -1,13 +1,13 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import { error } from "$lib/stores/errorStore";
+    import { i18n } from "$lib/stores/i18nStore";
     import Button from "./Button.svelte";
 
     export let show: boolean;
     export let title: string = "";
-    export let button: string = "Okay";
+    export let button: string = $i18n.t("modal.okay");
     export let canCancel: boolean = true;
-    export let cancelButton: string = "Cancel";
+    export let cancelButton: string = $i18n.t("modal.cancel");
 
     let dialog: HTMLDialogElement;
     const dispatch = createEventDispatcher<{ submit: undefined }>();
@@ -22,11 +22,11 @@
             setTimeout(() => dispatch("submit"), 0);
 
         setTimeout(() => dialog.close(), 400);
-        error.hide();
+        show = false;
     }
 </script>
 
-<dialog class="w-[26rem] max-h-112 transition-all ease-quint-out opacity-0 {show ? "open" : "closed"} duration-[400ms] scale-50 outline-0 overflow-hidden" bind:this={dialog} on:close={() => error.hide()}>
+<dialog class="w-[26rem] max-h-112 transition-all ease-quint-out opacity-0 {show ? "open" : "closed"} duration-[400ms] scale-50 outline-0 overflow-hidden" bind:this={dialog} on:close={() => show = false}>
     <div class="max-h-112 p-5 flex flex-col space-y-5" role="alertdialog">
         {#if title != ""}
             <h1 class="text-2xl font-semibold">{title}</h1>

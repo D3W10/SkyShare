@@ -22,8 +22,8 @@ const appConfig = new Store<IStore>({
             theme: 0,
             language: "en",
             nearbyShare: true, // TODO
-            autoUpdate: true, // TODO
-            betaUpdates: false // TODO
+            autoUpdate: true,
+            betaUpdates: false
         },
         account: {
             username: null,
@@ -37,6 +37,7 @@ logger.log(`Starting ${packageData.productName} ${packageData.version} on ${proc
 logger.log(`Running on Electron ${process.versions.electron} and NodeJS ${process.versions.node}`);
 autoUpdater.logger = logger;
 autoUpdater.disableWebInstaller = true;
+autoUpdater.channel = !appConfig.get("settings.betaUpdates") ? "stable" : "beta";
 
 if (isDev)
     logger.log("%cDevelopment mode enabled", "magenta");

@@ -4,6 +4,7 @@
 module.exports = {
     appId: "com.d3w10.cosmochamp",
     compression: "maximum",
+    generateUpdatesFilesForAllChannels: true,
     directories: {
         output: "out"
     },

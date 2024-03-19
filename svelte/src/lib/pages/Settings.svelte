@@ -9,10 +9,11 @@
     import Icon from "$lib/components/Icon.svelte";
     import ComboBox from "$lib/components/ComboBox.svelte";
     import Input from "$lib/components/Input.svelte";
+    import Modal from "$lib/components/Modal.svelte";
 
     type settingsPages = "appearance" | "updates" | "about";
 
-    let currentPage: settingsPages = "appearance", versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
+    let currentPage: settingsPages = "appearance", betaAlert: boolean = false, versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
     let langs = [
         { id: "en", name: "English" },
         { id: "pt", name: "Português" }
@@ -86,7 +87,7 @@
                             <p>{$i18n.t("settings.betaUpdates")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.betaUpdatesDesc")}</p>
                         </div>
-                        <Input type="switch" value={$settings.betaUpdates} on:input={(e) => settings.update("betaUpdates", e.detail.value)} />
+                        <Input type="switch" value={$settings.betaUpdates} on:input={(e) => { if (e.detail.value) { settings.update("betaUpdates", false); betaAlert = true; } else settings.update("betaUpdates", e.detail.value); }} />
                     </div>
                 </div>
             {:else if currentPage == "about"}
@@ -103,3 +104,7 @@
         </div>
     </Columns>
 </div>
+<Modal bind:show={betaAlert} title={$i18n.t("modal.betaUpdates")} on:submit={() => settings.update("betaUpdates", true)}>
+    <p>{$i18n.t("modal.betaUpdatesDesc.0")}</p>
+    <p>{$i18n.t("modal.betaUpdatesDesc.1")}</p>
+</Modal>

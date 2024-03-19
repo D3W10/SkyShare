@@ -72,6 +72,7 @@
     },
     "modal": {
         "okay": "Okay",
+        "cancel": "Cancel",
         "miscommunication": "Unknown error",
         "miscommunicationDesc": "An unknown error occurred while trying to reach the server, this likely happened cause you're running an outdated version of the application. Please make sure you're running the latest version and try again.",
         "invalidUsername": "Invalid username",
@@ -85,7 +86,12 @@
         "tooManyFiles": "Limit exceeded",
         "tooManyFilesDesc": "The maximum number of files has been exceeded! You can only send a maximum of 20 files per transfer.",
         "fileWithSameName": "Failed adding files",
-        "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names."
+        "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names.",
+        "betaUpdates": "Important note",
+        "betaUpdatesDesc": [
+            "Are you sure you want to enable this setting? Beta updates are unstable and can break your user experience.",
+            "You will have to restart SkyShare for this setting to be applied."
+        ]
     },
     "common": {
         "back": "Back",
