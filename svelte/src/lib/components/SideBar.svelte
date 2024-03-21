@@ -22,7 +22,7 @@
 </script>
 
 <div class="w-80 px-4 py-2 space-y-4">
-    <Button type="invisible" className="w-full flex items-center justify-start font-semibold space-x-3" on:click={() => page.set("login")}>
+    <Button type="invisible" className="w-full flex items-center justify-start font-semibold space-x-3" on:click={() => page.set(!$account ? "login" : "account")}>
         <Icon name="account" className="w-14 text-primary transition-colors" />
         <p class={$page.current == "login" || $page.current == "account" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors" : ""} style:background-image={$page.current == "login" || $page.current == "account" ? "linear-gradient(to right, #FFC847, rgb(var(--color-account)), #E09D00, rgb(var(--color-account)), #FFC847)" : ""} style:background-position="{$shine}%">{!$account ? $i18n.t("sidebar.login") : $account.username}</p>
     </Button>

@@ -1,1 +1,16 @@
-export type IconType = "home" | "send" | "receive" | "settings" | "account" | "chevron" | "files" | "add" | "accountRecovery" | "appearance" | "updates" | "about";
+export type IconType = 
+    "home" |
+    "send" |
+    "receive" |
+    "settings" |
+    "account" |
+    "chevron" |
+    "files" |
+    "add" |
+    "accountRecovery" |
+    "accountCreate" |
+    "editAccount" |
+    "logout" |
+    "appearance" |
+    "updates" |
+    "about";

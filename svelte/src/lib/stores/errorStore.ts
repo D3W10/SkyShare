@@ -1,22 +1,24 @@
 import { writable } from "svelte/store";
 
 interface IErrorStore {
+    code: ErrorCode | null;
     type: string | null;
     show: boolean;
     vars?: { [key: string]: string };
 }
 
 export const error = (() => {
-    const { subscribe, set } = writable<IErrorStore>({ type: null, show: false });
+    const { subscribe, set } = writable<IErrorStore>({ code: null, type: null, show: false });
 
     return {
         subscribe,
-        set: (type: ErrorCode, vars?: { [key: string]: any }) => set({ type: errorList[type], show: true, vars }),
-        hide: () => set({ type: null, show: false })
+        set: (code: ErrorCode, vars?: { [key: string]: any }) => set({ code, type: errorList[code], show: true, vars }),
+        hide: () => set({ code: null, type: null, show: false })
     }
 })();
 
 export enum ErrorCode {
+    SERVER_ERROR = -1,
     MISSING_PARAMETER = 1, NO_PARAMETERS,
     INVALID_USERNAME, INVALID_EMAIL,
     INVALID_PASSWORD,
@@ -30,6 +32,7 @@ export enum ErrorCode {
 }
 
 const errorList = {
+    [ErrorCode.SERVER_ERROR]: "miscommunication",
     [ErrorCode.MISSING_PARAMETER]: "miscommunication",
     [ErrorCode.NO_PARAMETERS]: "miscommunication",
     [ErrorCode.INVALID_USERNAME]: "invalidUsername",

@@ -5,6 +5,7 @@
     import { transition } from "$lib/stores/transitionStore";
     import { disable } from "$lib/stores/disableStore";
     import { account } from "$lib/stores/accountStore";
+    import { error, ErrorCode } from "$lib/stores/errorStore";
     import { getVE } from "$lib/models/VEPair.type";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -18,8 +19,10 @@
     async function onLogin() {
         disable.lock();
 
-        if (await account.login(loginInfo[0][0], loginInfo[1][0]))
-            page.set("home");
+        if (loginInfo[0][1])
+            error.set(ErrorCode.INVALID_USERNAME)
+        else if (await account.login(loginInfo[0][0], loginInfo[1][0]))
+            page.set("account");
 
         disable.unlock();
     }
@@ -81,6 +84,40 @@
                         </div>
                     </div>
                     <Button className="w-fit" disabled={$disable.d} on:click={onRecovery}>{$i18n.t("login.1.reset")}</Button>
+                </div>
+            </Columns>
+        </div>
+    {:else if $page.subPage == 4}
+        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+            <div class="flex justify-between items-center">
+                <h1 class="w-full text-xl font-semibold">{$i18n.t("login.4.title")}</h1>
+                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login", 0)}>
+                    <Icon name="chevron" className="w-5 h-5 mr-1 fill-current rotate-90" />
+                    {$i18n.t("common.back")}
+                </Button>
+            </div>
+            <Columns>
+                <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
+                    <Icon name="accountCreate" className="w-2/3 text-primary" />
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    <div class="w-full h-full flex justify-center items-center">
+                        <div class="w-3/5 space-y-8">
+                            <div class="space-y-1">
+                                <p class="font-semibold">{$i18n.t("login.4.username")}:</p>
+                                <Input type="username" placeholder={$i18n.t("common.required")} maxlength={15} disabled={$disable.d} />
+                            </div>
+                            <div class="space-y-1">
+                                <p class="font-semibold">{$i18n.t("login.4.email")}:</p>
+                                <Input type="email" placeholder={$i18n.t("common.required")} maxlength={250} disabled={$disable.d} />
+                            </div>
+                            <div class="space-y-1">
+                                <p class="font-semibold">{$i18n.t("login.4.password")}:</p>
+                                <Input type="password" placeholder={$i18n.t("common.required")} maxlength={50} disabled={$disable.d} />
+                            </div>
+                        </div>
+                    </div>
+                    <Button className="w-fit" disabled={$disable.d}>{$i18n.t("login.4.signup")}</Button>
                 </div>
             </Columns>
         </div>

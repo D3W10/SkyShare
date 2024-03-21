@@ -71,11 +71,25 @@
             "title": "Forgot my password",
             "email": "Email",
             "reset": "Reset Account"
+        },
+        {},
+        {},
+        {
+            "title" : "Create Account",
+            "username": "Username",
+            "email": "Email",
+            "password": "Password",
+            "repeatPass": "Repeat Password",
+            "signup": "Create account"
         }
     ],
-    "account": {
-        "title" : ""
-    },
+    "account": [
+        {
+            "title" : "Account",
+            "edit" : "Edit Account",
+            "logout": "Log Out"
+        }
+    ],
     "modal": {
         "okay": "Okay",
         "cancel": "Cancel",
@@ -99,7 +113,9 @@
         "betaUpdatesDesc": [
             "Are you sure you want to enable this setting? Beta updates are unstable and can break your user experience.",
             "You will have to restart SkyShare for this setting to be applied."
-        ]
+        ],
+        "logout": "Log Out",
+        "logoutDesc": "Are you sure you want to log out?"
     },
     "common": {
         "back": "Back",

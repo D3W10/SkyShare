@@ -71,11 +71,25 @@
             "title": "Esqueci-me da minha Palavra-Passe",
             "email": "Email",
             "reset": "Reset Account"
+        },
+        {},
+        {},
+        {
+            "title" : "Criar Conta",
+            "username": "Nome de Utilizador",
+            "email": "Email",
+            "password": "Palavra-Passe",
+            "repeatPass": "Repetir Palavra-Passe",
+            "signup": "Criar conta"
         }
     ],
-    "account": {
-        "title" : ""
-    },
+    "account": [
+        {
+            "title" : "Conta",
+            "edit" : "Editar Conta",
+            "logout": "Terminar Sessão"
+        }
+    ],
     "modal": {
         "okay": "OK",
         "cancel": "Cancelar",
@@ -99,7 +113,9 @@
         "betaUpdatesDesc": [
             "Tem a certeza que quer ativar esta definição? Atualizações beta são instáveis e podem e pode prejudicar a sua experiência.",
             "Terá de reiniciar o SkyShare para que esta definição seja aplicada."
-        ]
+        ],
+        "logout": "Terminar Sessão",
+        "logoutDesc": "Tem a certeza que pretende terminar sessão?"
     },
     "common": {
         "back": "Voltar",
