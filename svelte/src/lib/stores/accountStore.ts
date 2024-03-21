@@ -10,16 +10,22 @@ export const account = (() => {
 
     return {
         subscribe,
-        login: async (username: string, password: string) => {
+        login: async (username: string, password: string, encrypted: boolean = false) => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app!)));
 
-            if (await $app.account.login(username, password)) {
+            if (await $app.account.login(username, password, encrypted)) {
                 set({ username });
 
                 return true;
             }
 
             return false;
+        },
+        logout: async () => {
+            const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app!)));
+
+            $app.account.logout();
+            set(undefined);
         }
     }
 })();

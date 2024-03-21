@@ -1,4 +1,10 @@
 {
+    "splash": {
+        "starting": "Starting",
+        "offline": "Waiting for network",
+        "updating": "Updating",
+        "loggingIn": "Logging in"
+    },
     "sidebar": {
         "login": "Login",
         "home": "Homepage",

@@ -1,4 +1,10 @@
 {
+    "splash": {
+        "starting": "A iniciar",
+        "offline": "Aguardando internet",
+        "updating": "A atualizar",
+        "loggingIn": "A iniciar sessão"
+    },
     "sidebar": {
         "login": "Iniciar Sessão",
         "home": "Página Inicial",

@@ -1,9 +1,13 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
-let wReady = false, winReady: () => unknown, cfuProgress: (percent: number) => unknown, errorHandler: (code: number) => unknown;
-const pLog = (msg: string) => ipcRenderer.send("LoggerPreload", "info", msg);
+let wReady = false, winReady: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<boolean>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
+
+const logger =  {
+    log: (msg: string) => ipcRenderer.send("LoggerPreload", "info", msg),
+    error: (msg: string) => ipcRenderer.send("LoggerPreload", "error", msg)
+}
 
 export interface AppInfo {
     name: string;
@@ -34,7 +38,6 @@ export function error(msg: any) {
 
 /**
  * Checks if there's an update available for the app passing the result to the statusCallback, if there's an update available the progressCallback is called with the percentage of the download
- * 
  * @param statusCallback The function to receive the update status
  * @param progressCallback The function to receive the download progress
  */
@@ -50,7 +53,7 @@ export function checkForUpdates(statusCallback: (available: boolean) => unknown,
  */
 export function closeWindow() {
     ipcRenderer.send("CloseWindow");
-    pLog("Window Closed");
+    logger.log("Window Closed");
 }
 
 /**
@@ -58,7 +61,7 @@ export function closeWindow() {
  */
 export function minimizeWindow() {
     ipcRenderer.send("MinimizeWindow");
-    pLog("Window Minimized");
+    logger.log("Window Minimized");
 }
 
 /**
@@ -140,17 +143,21 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
 /**
  * Makes a call to the API
  * @param options An object containing the endpoint to reach, the HTTP method and the parameters/body to send
+ * @param error A boolean indicating whether the error should be handled by the native error system
  * @returns A JSON containing the code, message and returned value
  */
-export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }) {
+export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true) {
     const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
         method,
         body: body ? JSON.stringify(body) : undefined
     });
 
     const json = await apiResult.json() as { code: number, message: string, value?: any };
-    if (json.code != 0)
+    if (json.code != 0 && errorHandler) {
+        logger.error("API threw an error with code " + json.code);
+        if (error)
         errorHandler(json.code);
+    }
 
     return json;
 }
@@ -180,22 +187,42 @@ export const account = {
      * Logs a user in if they have an account
      * @param username The username of the user
      * @param password The password of the user
+     * @param encrypted Should be true if the password is already encrypted, false otherwise
      * @returns A boolean indicating whether the login was successful or not
      */
-    login: async (username: string, password: string) => {
-        const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
+    login: async (username: string, password: string, encrypted: boolean = false) => {
+        const encodedPass = !encrypted ? ipcRenderer.sendSync("EncodePassword", password) : password;
 
         const api = await apiCall({
             endpoint: "user/login",
             method: "GET",
             params: new URLSearchParams({ username, password: encodedPass })
-        });
+        }, !encrypted);
 
-        if (api.code == 0)
+        if (api.code == 0) {
             setSetting("account", { username, password: encodedPass });
+            logger.log("Log in successful");
+        }
 
         return api.code == 0;
+    },
+    logout: () => {
+        setSetting("account", { username: null, password: null });
+        logger.log("User logged out");
     }
+}
+
+/**
+ * Sends a login request to authenticate the user on the main window
+ * @param username The username of the user
+ * @param password The password of the user
+ * @returns A boolean if the authentication on the main window was successful
+ */
+export async function sendLoginRequest(username: string, password: string) {
+    logger.log("Startup logging in...");
+
+    ipcRenderer.send("LoginRequest", username, password);
+    return new Promise((resolve) => ipcRenderer.once("LoginRequestFulfilled", (_, result: boolean) => resolve(result)));
 }
 
 /**
@@ -207,13 +234,20 @@ export async function sleep(ms: number) {
 
 /**
  * Updates the callback function reference to where the main window status should be sent
- * 
  * @param callback The function to receive the window status
  */
 export function updateReadyCallback(callback: () => unknown) {
     winReady = callback;
     if (wReady)
         callback();
+}
+
+/**
+ * Updates the callback function reference to where the login result should be sent
+ * @param callback The function to receive the login result
+ */
+export function updateLoginCallback(callback: (username: string, password: string) => Promise<boolean>) {
+    loginHandler = callback;
 }
 
 /**
@@ -234,6 +268,8 @@ ipcRenderer.on("WindowReady", () => {
         wReady = true;
 });
 
+ipcRenderer.on("LoginRequest", async (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", await loginHandler(username, password)));
+
 contextBridge.exposeInMainWorld("app", {
     log,
     warn,
@@ -253,7 +289,9 @@ contextBridge.exposeInMainWorld("app", {
     apiCall,
     fileSizeFormat,
     account,
+    sendLoginRequest,
     sleep,
     updateReadyCallback,
+    updateLoginCallback,
     updateErrorCallback
 });

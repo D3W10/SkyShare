@@ -133,8 +133,10 @@ else
         win.restore();
     win.focus();
 
-    win.webContents.send("UriHandler", args);
-}*/
+
+ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
+
+ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
 
 //#region Updater
 

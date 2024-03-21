@@ -4,6 +4,7 @@
     import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
     import { page, type pages } from "$lib/stores/pageStore";
+    import { account } from "$lib/stores/accountStore";
     import { settings } from "$lib/stores/settingsStore";
     import { error } from "$lib/stores/errorStore";
     import { disable } from "$lib/stores/disableStore";
@@ -40,6 +41,7 @@
         catch {}
     }
 
+    $app?.updateLoginCallback((username, password) => account.login(username, password, true));
     $app?.updateErrorCallback((code: number) => error.set(code));
 </script>
 
