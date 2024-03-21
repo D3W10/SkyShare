@@ -1,7 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
-let wReady = false, winReady: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<boolean>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
+let wReady: boolean = false, wCompressed: boolean = false;
+let winReady: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<boolean>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
 const logger =  {
@@ -62,6 +63,16 @@ export function closeWindow() {
 export function minimizeWindow() {
     ipcRenderer.send("MinimizeWindow");
     logger.log("Window Minimized");
+}
+
+/**
+ * Compresses the current window
+ */
+export function compressWindow() {
+    ipcRenderer.send("ResizeWindow", -1, !wCompressed ? 40 : -1);
+    logger.log(`Window ${!wCompressed ? "Compressed" : "Decompressed"}`);
+
+    wCompressed = !wCompressed;
 }
 
 /**
@@ -277,6 +288,7 @@ contextBridge.exposeInMainWorld("app", {
     checkForUpdates,
     closeWindow,
     minimizeWindow,
+    compressWindow,
     openMain,
     getSetting,
     setSetting,

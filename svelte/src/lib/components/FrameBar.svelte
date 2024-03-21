@@ -23,6 +23,13 @@
         }
     }
 
+    function onYellowButtonClick(e: MouseEvent) {
+        if (!e.ctrlKey && !e.metaKey)
+            $app?.minimizeWindow();
+        else
+            $app?.compressWindow();
+    }
+
     function onRedButtonClick() {
         if (!$disable.d)
             $app?.closeWindow();
@@ -37,7 +44,7 @@
         <span class="text-sm font-semibold">{$info.name}</span>
     </div>
     <div class="flex items-center p-1 space-x-2">
-        <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full overflow-hidden before:w-0 before:h-0 before:absolute before:bg-amber-500 before:rounded-full before:transition-all before:duration-[400ms] before:ease-cubic-out hover:before:w-9 hover:before:h-9 focus-visible:outline-amber-500" on:click={$app?.minimizeWindow} />
+        <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full overflow-hidden before:w-0 before:h-0 before:absolute before:bg-amber-500 before:rounded-full before:transition-all before:duration-[400ms] before:ease-cubic-out hover:before:w-9 hover:before:h-9 focus-visible:outline-amber-500" on:click={onYellowButtonClick} />
         <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full overflow-hidden before:w-0 before:h-0 before:absolute before:bg-red-500 before:rounded-full before:transition-all before:duration-[400ms] before:ease-cubic-out hover:before:w-9 hover:before:h-9 focus-visible:outline-red-500" on:click={onRedButtonClick} />
     </div>
 </div>

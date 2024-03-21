@@ -11,6 +11,7 @@ import { IStore } from "./lib/Store.interface";
 require("electron-reload")(__dirname);
 
 var window: BrowserWindow, splash: BrowserWindow;
+const winWidth: number = 1000, winHeight: number = 600;
 const isDev: boolean = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
 const logger = new Logger("Main", "blue"), pLogger = new Logger("Prld", "cyan"), rLogger = new Logger("Rndr", "green");
@@ -47,8 +48,8 @@ else if (isDebug)
 async function createWindow() {
     window = new BrowserWindow({
         title: packageData.productName,
-        width: 1000,
-        height: 600,
+        width: winWidth,
+        height: winHeight,
         frame: false,
         resizable: false,
         fullscreen: false,
@@ -133,6 +134,7 @@ else
         win.restore();
     win.focus();
 
+*/
 
 ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
 
@@ -182,6 +184,8 @@ ipcMain.on("CheckForUpdates", () => {
 ipcMain.on("CloseWindow", () => BrowserWindow.getFocusedWindow()!.close());
 
 ipcMain.on("MinimizeWindow", () => BrowserWindow.getFocusedWindow()!.minimize());
+
+ipcMain.on("ResizeWindow", (_, width, height) => BrowserWindow.getAllWindows()[0].setBounds({ width: width != -1 ? width : winWidth, height: height != -1 ? height : winHeight }));
 
 ipcMain.on("OpenMain", () => {
     splash.close();
