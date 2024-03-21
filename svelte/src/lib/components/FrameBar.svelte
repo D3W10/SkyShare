@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { i18n } from "$lib/stores/i18nStore";
     import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
     import { disable } from "$lib/stores/disableStore";
@@ -28,10 +29,6 @@
         else
             showModal = true;
     }
-
-    function onModalSubmit() {
-        
-    }
 </script>
 
 <div class="w-full h-10 p-2 flex justify-between drag">
@@ -44,8 +41,8 @@
         <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full overflow-hidden before:w-0 before:h-0 before:absolute before:bg-red-500 before:rounded-full before:transition-all before:duration-[400ms] before:ease-cubic-out hover:before:w-9 hover:before:h-9 focus-visible:outline-red-500" on:click={onRedButtonClick} />
     </div>
 </div>
-<Modal bind:show={showModal} title="Leave to Lobby" button="Yes" cancelButton="No" on:submit={onModalSubmit}>
-    <p>Are</p>
+<Modal bind:show={showModal} title={$i18n.t("modal.disabled")} canCancel={false}>
+    <p>{$i18n.t("modal.disabledDesc")}</p>
 </Modal>
 
 <style lang="postcss">

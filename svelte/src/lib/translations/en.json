@@ -79,6 +79,8 @@
     "modal": {
         "okay": "Okay",
         "cancel": "Cancel",
+        "disabled": "Information",
+        "disabledDesc": "An operation is currently running, you may only close SkyShare once it's finished!",
         "miscommunication": "Unknown error",
         "miscommunicationDesc": "An unknown error occurred while trying to reach the server, this likely happened cause you're running an outdated version of the application. Please make sure you're running the latest version and try again.",
         "invalidUsername": "Invalid username",
