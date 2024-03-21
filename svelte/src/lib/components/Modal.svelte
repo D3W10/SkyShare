@@ -27,7 +27,7 @@
 </script>
 
 <dialog class="w-[28rem] max-h-112 transition-all ease-quint-out opacity-0 {show ? "open" : "closed"} duration-[400ms] scale-50 outline-0 overflow-hidden" bind:this={dialog} on:close={() => show = false}>
-    <div class="max-h-112 p-5 flex flex-col space-y-5" role="alertdialog">
+    <div class="max-h-112 p-5 flex flex-col space-y-3" role="alertdialog">
         {#if title != ""}
             <h1 class="text-2xl font-semibold">{title}</h1>
         {/if}
