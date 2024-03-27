@@ -18,7 +18,7 @@ export const error = (() => {
 })();
 
 export enum ErrorCode {
-    SERVER_ERROR = -1,
+    OFFLINE = -2, SERVER_ERROR = -1,
     MISSING_PARAMETER = 1, NO_PARAMETERS,
     INVALID_USERNAME, INVALID_EMAIL,
     INVALID_PASSWORD,
@@ -32,6 +32,7 @@ export enum ErrorCode {
 }
 
 const errorList = {
+    [ErrorCode.OFFLINE]: "offline",
     [ErrorCode.SERVER_ERROR]: "miscommunication",
     [ErrorCode.MISSING_PARAMETER]: "miscommunication",
     [ErrorCode.NO_PARAMETERS]: "miscommunication",

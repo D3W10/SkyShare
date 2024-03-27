@@ -95,6 +95,8 @@
         "cancel": "Cancelar",
         "disabled": "Informação",
         "disabledDesc": "Uma operação está atualmente em execução, só poderá fechar o SkyShare quando o mesmo estiver concluído!",
+        "offline": "Está offline",
+        "offlineDesc": "Ocorreu um erro ao tentar aceder à internet, verifique se está online e se tem uma ligação estável.",
         "miscommunication": "Erro desconhecido",
         "miscommunicationDesc": "Um erro desconhecido ocorreu a tentar conectar com o servidor, o mesmo provavelmente ocoreu se estiver a utilizar uma versão desatualizada da aplicação. Por favor verifique que está a usar a versão mais recente e tente novamente.",
         "invalidUsername": "Nome de utilizador inválido",

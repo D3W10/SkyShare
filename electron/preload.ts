@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false;
-let winReady: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<boolean>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
+let isOffline: () => boolean, winReady: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<boolean>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
 const logger =  {
@@ -14,6 +14,12 @@ export interface AppInfo {
     name: string;
     version: string;
     api: string;
+}
+
+export interface ApiResult {
+    code: number;
+    message: string;
+    value?: any;
 }
 
 /**
@@ -157,20 +163,33 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  * @param error A boolean indicating whether the error should be handled by the native error system
  * @returns A JSON containing the code, message and returned value
  */
-export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true) {
-    const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
-        method,
-        body: body ? JSON.stringify(body) : undefined
-    });
+export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true): Promise<ApiResult> {
+    try {
+        if (isOffline()) {
+            errorHandler(-2);
+            return {} as ApiResult;
+        }
 
-    const json = await apiResult.json() as { code: number, message: string, value?: any };
-    if (json.code != 0 && errorHandler) {
-        logger.error("API threw an error with code " + json.code);
-        if (error)
-        errorHandler(json.code);
+        const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
+            method,
+            body: body ? JSON.stringify(body) : undefined
+        });
+
+        const json = await apiResult.json() as ApiResult;
+        if (json.code != 0 && errorHandler) {
+            logger.error("API threw an error with code " + json.code);
+            if (error)
+                errorHandler(json.code);
+        }
+
+        return json;
     }
+    catch (err) {
+        logger.error(String(err));
+        errorHandler(-1);
 
-    return json;
+        return {} as ApiResult;
+    }
 }
 
 /**
@@ -244,6 +263,14 @@ export async function sleep(ms: number) {
 }
 
 /**
+ * Updates the callback function that allows preload to get the current offline status
+ * @param callback The function that returns the offline status
+ */
+export function updateOfflineCallback(callback: () => boolean) {
+    isOffline = callback;
+}
+
+/**
  * Updates the callback function reference to where the main window status should be sent
  * @param callback The function to receive the window status
  */
@@ -263,7 +290,6 @@ export function updateLoginCallback(callback: (username: string, password: strin
 
 /**
  * Updates the callback function reference to where the API errors should be sent
- * 
  * @param callback The function to receive the API error codes
  */
 export function updateErrorCallback(callback: (code: number) => unknown) {
@@ -303,6 +329,7 @@ contextBridge.exposeInMainWorld("app", {
     account,
     sendLoginRequest,
     sleep,
+    updateOfflineCallback,
     updateReadyCallback,
     updateLoginCallback,
     updateErrorCallback
