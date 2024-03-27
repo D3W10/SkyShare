@@ -18,7 +18,7 @@
     import Settings from "$lib/pages/Settings.svelte";
     import Login from "$lib/pages/Login.svelte";
     import Account from "$lib/pages/Account.svelte";
-    
+
     const colors: { [key in pages]: string } = {
         home: "[--color-primary:--color-home]",
         send: "[--color-primary:--color-send]",
@@ -49,30 +49,29 @@
 </svelte:head>
 
 <div class="contents {colors[$page.current]}">
-<FrameBar />
+    <FrameBar />
     <div class="h-full flex overflow-hidden">
-    <SideBar />
-    <main class="w-full h-full relative bg-background rounded-tl-2xl overflow-hidden shadow-md">
-        {#if $page.current == "home"}
-            <Home />
-        {:else if $page.current == "send"}
-            <Send />
-        {:else if $page.current == "receive"}
-            <Receive />
-        {:else if $page.current == "settings"}
-            <Settings />
-        {:else if $page.current == "login"}
-            <Login />
-        {:else if $page.current == "account"}
-            <Account />
-        {/if}
-        {#if $disable.loading}
-            <ProgressBar className="!absolute top-0 left-0 right-0 rounded-none transition-colors" indeterminate />
-        {/if}
-    </main>
-        
+        <SideBar />
+        <main class="w-full h-full relative bg-background rounded-tl-2xl overflow-hidden shadow-md">
+            {#if $page.current == "home"}
+                <Home />
+            {:else if $page.current == "send"}
+                <Send />
+            {:else if $page.current == "receive"}
+                <Receive />
+            {:else if $page.current == "settings"}
+                <Settings />
+            {:else if $page.current == "login"}
+                <Login />
+            {:else if $page.current == "account"}
+                <Account />
+            {/if}
+            {#if $disable.loading}
+                <ProgressBar className="!absolute top-0 left-0 right-0 rounded-none transition-colors" indeterminate />
+            {/if}
+        </main>
     </div>
-<Modal bind:show={$error.show} title={$i18n.t(`modal.${$error.type}`)} button={$i18n.t("modal.okay")} canCancel={false}>
-    <p>{$i18n.t(`modal.${$error.type}Desc`, $error.vars)}</p>
-</Modal>
+    <Modal bind:show={$error.show} title={$i18n.t(`modal.${$error.type}`)} button={$i18n.t("modal.okay")} canCancel={false}>
+        <p>{$i18n.t(`modal.${$error.type}Desc`, $error.vars)}</p>
+    </Modal>
 </div>
