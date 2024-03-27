@@ -68,40 +68,42 @@
             <h1 class="w-full text-xl font-semibold">{$i18n.t("send.title")}</h1>
             <Columns>
                 <div slot="left">
-                    <div class="w-full h-full flex justify-center items-center rounded-2xl border-[5px] {!hovering ? "border-secondary" : "border-primary"} transition-colors">
-                        {#key refresh}
-                            {#if files.length == 0}
-                                <Button type="invisible" className="w-full h-full !rounded-xl" on:click={() => parseFiles("select")}>
-                                    <div class="w-full h-full flex justify-center items-center" role="none" on:dragenter={() => hovering = true} on:dragleave={() => hovering = false} on:dragover={(e) => e.preventDefault()} on:drop|preventDefault={(e) => parseFiles("drop", e)}>
-                                        <div class="flex flex-col items-center space-y-2 pointer-events-none">
-                                            <Icon name="files" className="w-12" />
-                                            <div class="text-center">
-                                                <p class="font-semibold">{!hovering ? $i18n.t("send.chooseTitle") : $i18n.t("send.chooseHoverTitle")}</p>
-                                                <p class="text-sm text-foreground/70">{!hovering ? $i18n.t("send.chooseSubtitle") : $i18n.t("send.chooseHoverSubtitle")}</p>
+                    <div class="w-full h-full p-1 flex justify-center items-center relative rounded-2xl overflow-hidden z-0 before:w-[210%] before:h-[130%] before:absolute {!hovering ? "before:opacity-0" : "before:opacity-100"} before:-z-10 before:transition-opacity before:animate-[rotate_1s_linear_infinite] before:[background-image:conic-gradient(#ef4444,#f97316,#eab308,#22c55e,#0ea5e9,#3b82f6,#a855f7,#ef4444)]">
+                        <div class="w-full h-full flex justify-center items-center bg-background ring-4 {!hovering ? "ring-foreground/10" : "ring-foreground/0"} rounded-[12px] overflow-hidden">
+                            {#key refresh}
+                                {#if files.length == 0}
+                                    <Button type="invisible" className="w-full h-full !rounded-xl" on:click={() => parseFiles("select")}>
+                                        <div class="w-full h-full flex justify-center items-center" role="none" on:dragenter={() => hovering = true} on:dragleave={() => hovering = false} on:dragover={(e) => e.preventDefault()} on:drop|preventDefault={(e) => parseFiles("drop", e)}>
+                                            <div class="flex flex-col items-center space-y-2 pointer-events-none">
+                                                <Icon name="files" className="w-12" />
+                                                <div class="text-center">
+                                                    <p class="font-semibold">{!hovering ? $i18n.t("send.chooseTitle") : $i18n.t("send.chooseHoverTitle")}</p>
+                                                    <p class="text-sm text-foreground/70">{!hovering ? $i18n.t("send.chooseSubtitle") : $i18n.t("send.chooseHoverSubtitle")}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Button>
-                            {:else}
-                                <div class="w-full h-full p-2 [overflow-y:overlay] space-y-2">
-                                    {#each files as file}
-                                        <div class="w-full px-2 py-1.5 flex items-center bg-secondary rounded-lg space-x-2">
-                                            {#await $app?.getFileIcon(file.path) then icon}
-                                                <img src="data:image/png;base64,{icon}" class="h-6" alt="" />
-                                            {/await}
-                                            <div class="flex flex-col space-y-0.5">
-                                                <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
-                                                <p class="text-xs text-foreground/70">{$app?.fileSizeFormat(file.size)}</p>
-                                            </div>
-                                        </div>
-                                    {/each}
-                                    <Button type="invisible" className="w-full p-2 flex items-center hover:text-primary bg-secondary rounded-lg space-x-1.5 transition-colors" on:click={() => parseFiles("select")}>
-                                        <Icon name="add" className="h-6" />
-                                        <p>{$i18n.t("send.chooseAddFiles")}</p>
                                     </Button>
-                                </div>
-                            {/if}
-                        {/key}
+                                {:else}
+                                    <div class="w-full h-full p-2 overflow-y-auto space-y-2">
+                                        {#each files as file}
+                                            <div class="w-full px-2 py-1.5 flex items-center bg-secondary rounded-lg space-x-2">
+                                                {#await $app?.getFileIcon(file.path) then icon}
+                                                    <img src="data:image/png;base64,{icon}" class="h-6" alt={$i18n.t("send.fileIcon")} />
+                                                {/await}
+                                                <div class="flex flex-col space-y-0.5">
+                                                    <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
+                                                    <p class="text-xs text-foreground/70">{$app?.fileSizeFormat(file.size)}</p>
+                                                </div>
+                                            </div>
+                                        {/each}
+                                        <Button type="invisible" className="w-full p-2 flex items-center hover:text-primary bg-secondary rounded-lg space-x-1.5 transition-colors" on:click={() => parseFiles("select")}>
+                                            <Icon name="add" className="h-6" />
+                                            <p>{$i18n.t("send.chooseAddFiles")}</p>
+                                        </Button>
+                                    </div>
+                                {/if}
+                            {/key}
+                        </div>
                     </div>
                 </div>
                 <div slot="right" class="flex flex-col justify-between items-center">

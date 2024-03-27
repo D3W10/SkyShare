@@ -39,6 +39,7 @@
         "quantity": "Quantidade Total",
         "file_one": "ficheiro",
         "file_other": "ficheiros",
+        "fileIcon": "Icone do ficheiro",
         "send": "Enviar"
     },
     "settings": {

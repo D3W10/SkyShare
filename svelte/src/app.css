@@ -8,7 +8,7 @@
     }
     
     ::-webkit-scrollbar-thumb {
-        @apply bg-background/20 rounded-full;
+        @apply bg-foreground/20 rounded-full;
     }
 
     html, body {
@@ -99,6 +99,16 @@
 
         100% {
             @apply border-red-500/20;
+        }
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
         }
     }
 }

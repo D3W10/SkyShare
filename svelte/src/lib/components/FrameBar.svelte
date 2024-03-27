@@ -63,8 +63,8 @@
         </div>
     </div>
     <div class="w-32 flex justify-end items-center p-1 space-x-2">
-        <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full overflow-hidden before:w-0 before:h-0 before:absolute before:bg-amber-500 before:rounded-full before:transition-all before:duration-[400ms] before:ease-cubic-out hover:before:w-9 hover:before:h-9 focus-visible:outline-amber-500" on:click={onYellowButtonClick} />
-        <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full overflow-hidden before:w-0 before:h-0 before:absolute before:bg-red-500 before:rounded-full before:transition-all before:duration-[400ms] before:ease-cubic-out hover:before:w-9 hover:before:h-9 focus-visible:outline-red-500" on:click={onRedButtonClick} />
+        <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full hover:shadow-sm hover:shadow-amber-500 overflow-hidden transition-shadow duration-300 ease-cubic-out before:w-0 before:h-0 before:absolute before:bg-amber-500 before:rounded-full before:transition-all before:duration-300 before:ease-cubic-out hover:before:w-4 hover:before:h-4 focus-visible:outline-amber-500" on:click={onYellowButtonClick} />
+        <button class="w-4 h-4 flex justify-center items-center relative bg-foreground/10 rounded-full hover:shadow-sm hover:shadow-red-500 overflow-hidden transition-shadow duration-300 ease-cubic-out before:w-0 before:h-0 before:absolute before:bg-red-500 before:rounded-full before:transition-all before:duration-300 before:ease-cubic-out hover:before:w-4 hover:before:h-4 focus-visible:outline-red-500" on:click={onRedButtonClick} />
     </div>
 </div>
 <Modal bind:show={showModal} title={$i18n.t("modal.disabled")} canCancel={false}>

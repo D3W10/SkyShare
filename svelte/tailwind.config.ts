@@ -25,6 +25,7 @@ export default {
                 "14/25": "56%"
             },
             transitionTimingFunction: {
+                "cubic-out": "cubic-bezier(0.33, 1, 0.68, 1)",
                 "quint-out": "cubic-bezier(0.22, 1, 0.36, 1)"
             }
         }

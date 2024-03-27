@@ -40,16 +40,16 @@
     <h1 class="w-full text-xl font-semibold">{$i18n.t("settings.title")}</h1>
     <Columns className="!space-x-0">
         <div slot="left" class="!w-1/3 pr-5">
-            <div class="w-full h-full p-1 bg-foreground/5 rounded-xl space-y-1">
-                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "appearance" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg space-x-1.5" on:click={() => currentPage = "appearance"}>
+            <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1">
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "appearance" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "appearance"}>
                     <Icon name="appearance" className="h-6" />
                     <p>{$i18n.t("settings.appearance")}</p>
                 </Button>
-                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "updates" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg space-x-1.5" on:click={() => currentPage = "updates"}>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "updates" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "updates"}>
                     <Icon name="updates" className="h-6" />
                     <p>{$i18n.t("settings.updates")}</p>
                 </Button>
-                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg space-x-1.5" on:click={() => currentPage = "about"}>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "about"}>
                     <Icon name="about" className="h-6" />
                     <p>{$i18n.t("settings.about")}</p>
                 </Button>
