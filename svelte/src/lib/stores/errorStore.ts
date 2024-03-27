@@ -13,6 +13,7 @@ export const error = (() => {
     return {
         subscribe,
         set: (code: ErrorCode, vars?: { [key: string]: any }) => set({ code, type: errorList[code], show: true, vars }),
+        setLocal: (id: string, vars?: { [key: string]: any }) => set({ code: null, type: id, show: true, vars }),
         hide: () => set({ code: null, type: null, show: false })
     }
 })();
@@ -28,7 +29,9 @@ export enum ErrorCode {
     UNKNOWN_SIGNUP,
     // 10 EMPTY SLOT
     PHOTO_TOO_BIG, // 20
-    INVALID_PHOTO // 21
+    INVALID_PHOTO, // 21
+    TOO_MANY_FILES, // 24
+    SIZE_LIMIT_EXCEEDED // 25
 }
 
 const errorList = {
@@ -44,5 +47,7 @@ const errorList = {
     [ErrorCode.USERNAME_UNAVAILABLE]: "",
     [ErrorCode.UNKNOWN_SIGNUP]: "",
     [ErrorCode.PHOTO_TOO_BIG]: "",
-    [ErrorCode.INVALID_PHOTO]: ""
+    [ErrorCode.INVALID_PHOTO]: "",
+    [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
+    [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
 }

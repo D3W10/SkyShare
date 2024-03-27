@@ -4,8 +4,7 @@
     import { app } from "$lib/stores/appStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
-    import { error } from "$lib/stores/errorStore";
-    import { disable } from "$lib/stores/disableStore";
+    import { error, ErrorCode } from "$lib/stores/errorStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -44,12 +43,12 @@
                 failedCount++;
                 continue;
             }
-            else if (totalSize + file.size > MAX_SIZE) {
-                error.set("sizeLimitExceeded");
+            else if (files.length + 1 > MAX_FILES) {
+                error.set(ErrorCode.TOO_MANY_FILES);
                 break;
             }
-            else if (files.length + 1 > MAX_FILES) {
-                error.set("tooManyFiles");
+            else if (totalSize + file.size > MAX_SIZE) {
+                error.set(ErrorCode.SIZE_LIMIT_EXCEEDED);
                 break;
             }
 
@@ -57,7 +56,7 @@
         }
 
         if (failedCount > 0)
-            error.set("fileWithSameName", { num: failedCount });
+            error.setLocal("fileWithSameName", { num: failedCount });
 
         refresh = !refresh;
     }

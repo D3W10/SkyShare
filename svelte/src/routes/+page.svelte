@@ -42,6 +42,8 @@
 
     $app?.updateLoginCallback((username, password) => account.login(username, password, true));
     $app?.updateErrorCallback((code: number) => error.set(code));
+
+    $: showErrorModal = $error.show;
 </script>
 
 <svelte:head>
@@ -71,7 +73,7 @@
             {/if}
         </main>
     </div>
-    <Modal bind:show={$error.show} title={$i18n.t(`modal.${$error.type}`)} button={$i18n.t("modal.okay")} canCancel={false}>
+    <Modal bind:show={showErrorModal} title={$i18n.t(`modal.${$error.type}`)} button={$i18n.t("modal.okay")} canCancel={false} on:submit={() => error.hide()}>
         <p>{$i18n.t(`modal.${$error.type}Desc`, $error.vars)}</p>
     </Modal>
 </div>
