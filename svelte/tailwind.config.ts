@@ -18,8 +18,7 @@ export default {
                 send: "rgb(var(--color-send) / <alpha-value>)",
                 receive: "rgb(var(--color-receive) / <alpha-value>)",
                 settings: "rgb(var(--color-settings) / <alpha-value>)",
-                account: "rgb(var(--color-account) / <alpha-value>)",
-                offline: "rgb(var(--color-offline) / <alpha-value>)"
+                account: "rgb(var(--color-account) / <alpha-value>)"
             },
             spacing: {
                 "11/25": "44%",

@@ -120,6 +120,7 @@
     "common": {
         "back": "Back",
         "required": "Required",
-        "optional": "Optional"
+        "optional": "Optional",
+        "offline": "Offline"
     }
 }

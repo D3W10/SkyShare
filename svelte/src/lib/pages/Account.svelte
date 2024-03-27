@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fade, fly, scale } from "svelte/transition";
+    import { fade, fly } from "svelte/transition";
     import { i18n } from "$lib/stores/i18nStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
@@ -22,7 +22,7 @@
         <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("account.0.title")}</h1>
             <Columns>
-                <div slot="left" class="flex flex-col justify-center items-center space-y-2" in:scale|global={$transition.iconJump}>
+                <div slot="left" class="flex flex-col justify-center items-center space-y-2">
                     <Icon name="account" className="w-2/3 text-primary" />
                     <p class="text-lg font-semibold">{$account?.username}</p>
                 </div>

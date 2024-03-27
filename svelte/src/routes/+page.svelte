@@ -19,18 +19,17 @@
     import Login from "$lib/pages/Login.svelte";
     import Account from "$lib/pages/Account.svelte";
     
-    onMount(() => setup());
-    settings.subscribe(setup);
-
     const colors: { [key in pages]: string } = {
         home: "[--color-primary:--color-home]",
         send: "[--color-primary:--color-send]",
         receive: "[--color-primary:--color-receive]",
         settings: "[--color-primary:--color-settings]",
         login: "[--color-primary:--color-account]",
-        account: "[--color-primary:--color-account]",
-        offline: "[--color-primary:--color-offline]"
+        account: "[--color-primary:--color-account]"
     };
+    
+    onMount(setup);
+    settings.subscribe(setup);
 
     function setup() {
         try {
@@ -49,8 +48,9 @@
     <title>{$info.name}</title>
 </svelte:head>
 
+<div class="contents {colors[$page.current]}">
 <FrameBar />
-<div class="h-full flex overflow-hidden {colors[$page.current]}">
+    <div class="h-full flex overflow-hidden">
     <SideBar />
     <main class="w-full h-full relative bg-background rounded-tl-2xl overflow-hidden shadow-md">
         {#if $page.current == "home"}
@@ -70,6 +70,8 @@
             <ProgressBar className="!absolute top-0 left-0 right-0 rounded-none transition-colors" indeterminate />
         {/if}
     </main>
+        
+    </div>
 <Modal bind:show={$error.show} title={$i18n.t(`modal.${$error.type}`)} button={$i18n.t("modal.okay")} canCancel={false}>
     <p>{$i18n.t(`modal.${$error.type}Desc`, $error.vars)}</p>
 </Modal>

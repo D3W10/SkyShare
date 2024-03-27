@@ -24,7 +24,7 @@
 <div class="w-80 px-4 py-2 space-y-4">
     <Button type="invisible" className="w-full flex items-center justify-start font-semibold space-x-3" on:click={() => page.set(!$account ? "login" : "account")}>
         <Icon name="account" className="w-14 text-primary transition-colors" />
-        <p class={$page.current == "login" || $page.current == "account" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors" : ""} style:background-image={$page.current == "login" || $page.current == "account" ? "linear-gradient(to right, #FFC847, rgb(var(--color-account)), #E09D00, rgb(var(--color-account)), #FFC847)" : ""} style:background-position="{$shine}%">{!$account ? $i18n.t("sidebar.login") : $account.username}</p>
+        <p class={$page.current == "login" || $page.current == "account" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors" : ""} style:background-image={$page.current == "login" || $page.current == "account" ? "linear-gradient(to right, #F5933D, rgb(var(--color-account)), #D46A0D, rgb(var(--color-account)), #F5933D)" : ""} style:background-position="{$shine}%">{!$account ? $i18n.t("sidebar.login") : $account.username}</p>
     </Button>
     <hr class="w-full h-[3px] bg-foreground/10 border-0 rounded-full">
     <div>
@@ -42,7 +42,7 @@
         </Button>
         <Button type="invisible" className="w-full p-2 flex items-center justify-start font-semibold space-x-3" on:click={() => page.set("settings")}>
             <Icon name="settings" className="w-8 {$page.current == "settings" ? "text-[rgb(var(--color-settings))]" : ""} transition-colors" />
-            <p class={$page.current == "settings" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors" : ""} style:background-image={$page.current == "settings" ? "linear-gradient(to right, #F5933D, rgb(var(--color-settings)), #D46A0D, rgb(var(--color-settings)), #F5933D)" : ""} style:background-position="{$shine}%">{$i18n.t("sidebar.settings")}</p>
+            <p class={$page.current == "settings" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors" : ""} style:background-image={$page.current == "settings" ? "linear-gradient(to right, #776ED8, rgb(var(--color-settings)), #2A2281, rgb(var(--color-settings)), #776ED8)" : ""} style:background-position="{$shine}%">{$i18n.t("sidebar.settings")}</p>
         </Button>
     </div>
 </div>

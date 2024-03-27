@@ -48,8 +48,8 @@
         "themeDesc": "Mudar o tema da aplicação",
         "themeLight": "Claro",
         "themeDark": "Escuro",
-        "language": "Linguagem",
-        "languageDesc": "Modifica a linguagem da aplicação",
+        "language": "Idioma",
+        "languageDesc": "Altera o idoma da aplicação",
         "updates": "Atualizações",
         "autoUpdate": "Atualizações automáticas",
         "autoUpdateDesc": "Atualiza a aplicação automaticamente",
@@ -120,6 +120,7 @@
     "common": {
         "back": "Voltar",
         "required": "Obrigatório",
-        "optional": "Opcional"
+        "optional": "Opcional",
+        "offline": "Offline"
     }
 }
