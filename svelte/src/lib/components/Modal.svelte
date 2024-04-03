@@ -13,6 +13,11 @@
     const dispatch = createEventDispatcher<{ submit: undefined }>();
 
     $: {
+        button = $i18n.t("modal.okay");
+        cancelButton = $i18n.t("modal.cancel");
+    }
+
+    $: {
         if (dialog && show)
             dialog.showModal();
     }

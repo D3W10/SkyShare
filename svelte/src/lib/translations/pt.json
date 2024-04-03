@@ -45,18 +45,22 @@
     "settings": {
         "title": "Definições",
         "appearance": "Aparência",
+        "updates": "Atualizações",
+        "reset": "Repor",
+        "about": "Sobre",
         "theme": "Tema",
         "themeDesc": "Mudar o tema da aplicação",
         "themeLight": "Claro",
         "themeDark": "Escuro",
         "language": "Idioma",
         "languageDesc": "Altera o idoma da aplicação",
-        "updates": "Atualizações",
         "autoUpdate": "Atualizações automáticas",
         "autoUpdateDesc": "Atualiza a aplicação automaticamente",
         "betaUpdates": "Atualizações Beta",
         "betaUpdatesDesc": "Obter atualizações beta (instável)",
-        "about": "Sobre",
+        "resetSettings": "Repor Definições",
+        "resetSettingsDesc": "Repor definições para os valores padrão",
+        "resetButton": "Repor",
         "version": "Versão {{version}}"
     },
     "login": [
@@ -117,6 +121,8 @@
             "Tem a certeza que quer ativar esta definição? Atualizações beta são instáveis e podem e pode prejudicar a sua experiência.",
             "Terá de reiniciar o SkyShare para que esta definição seja aplicada."
         ],
+        "resetSettings": "Repor Definições",
+        "resetSettingsDesc": "Tem a certeza que quer repor todas as definições? Os valores padrão serão aplicados.",
         "logout": "Terminar Sessão",
         "logoutDesc": "Tem a certeza que pretende terminar sessão?"
     },

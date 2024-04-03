@@ -13,5 +13,6 @@ export type IconType =
     "logout" |
     "appearance" |
     "updates" |
+    "reset" |
     "about" |
     "offline";

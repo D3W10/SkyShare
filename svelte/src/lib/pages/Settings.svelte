@@ -11,9 +11,9 @@
     import Input from "$lib/components/Input.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    type settingsPages = "appearance" | "updates" | "about";
+    type settingsPages = "appearance" | "updates" | "reset" | "about";
 
-    let currentPage: settingsPages = "appearance", betaAlert: boolean = false, versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
+    let currentPage: settingsPages = "appearance", betaAlert: boolean = false, resetAlert: boolean = false, versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
     let langs = [
         { id: "en", name: "English" },
         { id: "pt", name: "Português" }
@@ -48,6 +48,10 @@
                 <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "updates" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "updates"}>
                     <Icon name="updates" className="h-6" />
                     <p>{$i18n.t("settings.updates")}</p>
+                </Button>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "reset" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "reset"}>
+                    <Icon name="reset" className="h-6" />
+                    <p>{$i18n.t("settings.reset")}</p>
                 </Button>
                 <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "about"}>
                     <Icon name="about" className="h-6" />
@@ -90,6 +94,16 @@
                         <Input type="switch" value={$settings.betaUpdates} on:input={(e) => { if (e.detail.value) { settings.update("betaUpdates", false); betaAlert = true; } else settings.update("betaUpdates", e.detail.value); }} />
                     </div>
                 </div>
+            {:else if currentPage == "reset"}
+                <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p>{$i18n.t("settings.resetSettings")}</p>
+                            <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.resetSettingsDesc")}</p>
+                        </div>
+                        <Button type="small" secondary on:click={() => resetAlert = true}>{$i18n.t("settings.resetButton")}</Button>
+                    </div>
+                </div>
             {:else if currentPage == "about"}
                 <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                     <div class="flex flex-col items-center text-center space-y-5">
@@ -107,4 +121,7 @@
 <Modal bind:show={betaAlert} title={$i18n.t("modal.betaUpdates")} on:submit={() => settings.update("betaUpdates", true)}>
     <p>{$i18n.t("modal.betaUpdatesDesc.0")}</p>
     <p>{$i18n.t("modal.betaUpdatesDesc.1")}</p>
+</Modal>
+<Modal bind:show={resetAlert} title={$i18n.t("modal.resetSettings")} on:submit={async () => { await settings.reset(); $i18n.changeLanguage($settings.language); }}>
+    <p>{$i18n.t("modal.resetSettingsDesc")}</p>
 </Modal>

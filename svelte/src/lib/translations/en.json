@@ -45,18 +45,22 @@
     "settings": {
         "title": "Settings",
         "appearance": "Appearance",
+        "updates": "Updates",
+        "reset": "Reset",
+        "about": "About",
         "theme": "Theme",
         "themeDesc": "Change the application theme",
         "themeLight": "Light",
         "themeDark": "Dark",
         "language": "Language",
         "languageDesc": "Modify the application language",
-        "updates": "Updates",
         "autoUpdate": "Automatic updates",
         "autoUpdateDesc": "Updates the application automatically",
         "betaUpdates": "Beta updates",
         "betaUpdatesDesc": "Get beta updates (unstable)",
-        "about": "About",
+        "resetSettings": "Reset Settings",
+        "resetSettingsDesc": "Reset settings to the default values",
+        "resetButton": "Reset",
         "version": "Version {{version}}"
     },
     "login": [
@@ -117,6 +121,8 @@
             "Are you sure you want to enable this setting? Beta updates are unstable and can break your user experience.",
             "You will have to restart SkyShare for this setting to be applied."
         ],
+        "resetSettings": "Reset Settings",
+        "resetSettingsDesc": "Are you sure you want to reset all settings? The default values will be applied.",
         "logout": "Log Out",
         "logoutDesc": "Are you sure you want to log out?"
     },

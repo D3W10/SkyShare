@@ -18,6 +18,15 @@ export const settings = (() => {
             });
 
             app.subscribe(($app) => $app?.setSetting(`settings.${property}`, value));
+        },
+        reset: () => {
+            return new Promise ((resolve) => {
+                app.subscribe(($app) => {
+                    $app?.resetSettings();
+                    set(($app ? $app?.getSetting("settings") : {}) as IStoreSettings);
+                    resolve(true);
+                });
+            });
         }
     }
 })();

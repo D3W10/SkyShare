@@ -10,7 +10,7 @@
 </script>
 
 {#if type == "normal" || type == "small"}
-    <button class="flex justify-center items-center relative {type == "normal" ? "px-6 py-2 font-semibold rounded-xl" : "px-4 py-1.5 text-sm rounded-lg"} {!secondary ? "text-white bg-primary" : "text-primary hover:text-background disabled:hover:text-primary bg-foreground/10"} disabled:opacity-50 transition duration-[400ms] overflow-hidden z-0 before:block disabled:before:hidden before:left-1/2 before:right-1/2 before:aspect-square before:absolute {!secondary ? "before:bg-foreground/10" : "before:bg-primary"} before:rounded-full before:transition-all before:duration-[400ms] before:-z-10 hover:before:-left-3 hover:before:-right-3 {className}" disabled={disabled || $disable.d && !modal} type={!submit ? "button" : "submit"} on:click>
+    <button class="flex justify-center items-center relative {type == "normal" ? "px-6 py-2 font-semibold rounded-xl" : "px-4 py-1.5 text-sm rounded-lg"} {!secondary ? "text-white bg-primary" : "text-primary hover:text-white disabled:hover:text-primary bg-foreground/10"} disabled:opacity-50 transition duration-[400ms] overflow-hidden z-0 before:block disabled:before:hidden before:left-1/2 before:right-1/2 before:aspect-square before:absolute {!secondary ? "before:bg-foreground/10" : "before:bg-primary"} before:rounded-full before:transition-all before:duration-[400ms] before:-z-10 hover:before:-left-3 hover:before:-right-3 {className}" disabled={disabled || $disable.d && !modal} type={!submit ? "button" : "submit"} on:click>
         <slot />
     </button>
 {:else if type == "text"}

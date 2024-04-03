@@ -196,7 +196,7 @@ ipcMain.on("GetSetting", (event, key: string) => event.returnValue = appConfig.g
 
 ipcMain.on("SetSetting", (_event, key: string, value: any) => appConfig.set(key, value));
 
-ipcMain.on("ResetSettings", () => appConfig.clear());
+ipcMain.on("ResetSettings", () => appConfig.reset("settings"));
 
 ipcMain.on("GetAppInfo", (event) => {
     event.returnValue = {
