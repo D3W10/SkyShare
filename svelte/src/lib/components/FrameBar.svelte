@@ -51,7 +51,7 @@
     }
 </script>
 
-<div class="w-full h-10 p-2 flex justify-between items-center drag">
+<div class="w-full h-10 min-h-10 p-2 flex justify-between items-center overflow-hidden drag">
     <div class="w-32 flex items-center space-x-2">
         <img class="h-5 ml-0.5" src="./logo.png" alt="{$info.name} Logo" role="none" on:click={onLogoClick} />
         <span class="text-sm font-semibold">{$info.name}</span>
