@@ -8,7 +8,11 @@
 
 <div class="w-80 px-4 py-2 space-y-4">
     <Button type="invisible" className="w-full flex items-center justify-start font-semibold space-x-3" on:click={() => page.set(!$account ? "login" : "account")}>
-        <Icon name="account" className="w-14 text-primary transition-colors" />
+        {#if !$account || !$account.photo}
+            <Icon name="account" className="w-14 text-primary transition-colors" />
+        {:else}
+            <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-14 h-14 rounded-full" />
+        {/if}
         <p class={$page.current == "login" || $page.current == "account" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors animate-[shine_2s_linear_infinite]" : ""} style:background-image={$page.current == "login" || $page.current == "account" ? "linear-gradient(to right, #F5933D, rgb(var(--color-account)), #D46A0D, rgb(var(--color-account)), #F5933D)" : ""}>{!$account ? $i18n.t("sidebar.login") : $account.username}</p>
     </Button>
     <hr class="w-full h-[3px] bg-foreground/10 border-0 rounded-full">

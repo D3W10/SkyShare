@@ -218,7 +218,7 @@ export const account = {
      * @param username The username of the user
      * @param password The password of the user
      * @param encrypted Should be true if the password is already encrypted, false otherwise
-     * @returns A boolean indicating whether the login was successful or not
+     * @returns An object containing one boolean with the success state and info about the user if it was successful
      */
     login: async (username: string, password: string, encrypted: boolean = false) => {
         const encodedPass = !encrypted ? ipcRenderer.sendSync("EncodePassword", password) : password;
@@ -234,7 +234,7 @@ export const account = {
             logger.log("Log in successful");
         }
 
-        return api.code == 0;
+        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
     },
     logout: () => {
         setSetting("account", { username: null, password: null });

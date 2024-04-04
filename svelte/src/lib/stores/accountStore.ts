@@ -3,6 +3,8 @@ import { app } from "./appStore";
 
 interface IAccountStore {
     username: string;
+    password: string;
+    photo?: string;
 }
 
 export const account = (() => {
@@ -12,14 +14,12 @@ export const account = (() => {
         subscribe,
         login: async (username: string, password: string, encrypted: boolean = false) => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app!)));
+            const loginAttempt = await $app.account.login(username, password, encrypted);
 
-            if (await $app.account.login(username, password, encrypted)) {
-                set({ username });
+            if (loginAttempt.success)
+                set(loginAttempt.data!);
 
-                return true;
-            }
-
-            return false;
+            return loginAttempt.success;
         },
         logout: async () => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app!)));
