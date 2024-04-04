@@ -13,11 +13,19 @@
     const offlineBubble = tweened(0, { duration: 1500, easing: quartOut }), MAX_SIZE = 105;
 
     onMount(() => {
-        if (!navigator.onLine)
+        const offlineAction = () => {
             offlineBubble.set(MAX_SIZE);
+            $app?.log("Offline mode");
+        }, onlineAction = () => {
+            offlineBubble.set(0);
+            $app?.log("Online mode");
+        }
 
-        window.addEventListener("offline", () => offlineBubble.set(MAX_SIZE));
-        window.addEventListener("online", () => offlineBubble.set(0));
+        if (!navigator.onLine)
+            offlineAction();
+
+        window.addEventListener("offline", offlineAction);
+        window.addEventListener("online", onlineAction);
     });
 
     function onLogoClick() {
