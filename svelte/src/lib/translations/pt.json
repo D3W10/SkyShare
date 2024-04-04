@@ -88,6 +88,19 @@
             "signup": "Criar conta"
         }
     ],
+    "welcome": [
+        {
+            "title": "Bem-vindo!",
+            "intro" : [
+                "A sua conta foi criada com sucesso!",
+                "Agora vamos ver o que a sua nova conta SkyShare oferece e algumas dicas para melhorar a sua experiência."
+            ]
+        },
+        {},
+        {
+            "continue": "Continuar"
+        }
+    ],
     "account": [
         {
             "title" : "Conta",
@@ -130,6 +143,7 @@
         "back": "Voltar",
         "required": "Obrigatório",
         "optional": "Opcional",
+        "next": "Próximo",
         "offline": "Offline"
     }
 }

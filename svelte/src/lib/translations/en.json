@@ -88,6 +88,19 @@
             "signup": "Create account"
         }
     ],
+    "welcome": [
+        {
+            "title": "Welcome!",
+            "intro" : [
+                "You're account was created successfully!",
+                "Let's check out what your new SkyShare account offers and some tips to improve your experience."
+            ]
+        },
+        {},
+        {
+            "continue": "Continue"
+        }
+    ],
     "account": [
         {
             "title" : "Account",
@@ -130,6 +143,7 @@
         "back": "Back",
         "required": "Required",
         "optional": "Optional",
+        "next": "Next",
         "offline": "Offline"
     }
 }

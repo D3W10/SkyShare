@@ -22,7 +22,7 @@
         if (loginInfo[0][1])
             error.set(ErrorCode.INVALID_USERNAME)
         else if (await account.login(loginInfo[0][0], loginInfo[1][0]))
-            page.set("account");
+            page.set("welcome", 2);
 
         disable.unlock();
     }

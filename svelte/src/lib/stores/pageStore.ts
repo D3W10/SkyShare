@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-export type pages = "home" | "send" | "receive" | "settings" | "login" | "account";
+export type pages = "home" | "send" | "receive" | "settings" | "login" | "welcome" | "account";
 
 interface IPageStore {
     current: pages;

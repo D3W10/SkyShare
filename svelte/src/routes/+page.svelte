@@ -17,6 +17,7 @@
     import Receive from "$lib/pages/Receive.svelte";
     import Settings from "$lib/pages/Settings.svelte";
     import Login from "$lib/pages/Login.svelte";
+    import Welcome from "$lib/pages/Welcome.svelte";
     import Account from "$lib/pages/Account.svelte";
 
     const colors: { [key in pages]: string } = {
@@ -25,6 +26,7 @@
         receive: "[--color-primary:--color-receive]",
         settings: "[--color-primary:--color-settings]",
         login: "[--color-primary:--color-account]",
+        welcome: "[--color-primary:--color-account]",
         account: "[--color-primary:--color-account]"
     };
     
@@ -65,6 +67,8 @@
                 <Settings />
             {:else if $page.current == "login"}
                 <Login />
+            {:else if $page.current == "welcome"}
+                <Welcome />
             {:else if $page.current == "account"}
                 <Account />
             {/if}
