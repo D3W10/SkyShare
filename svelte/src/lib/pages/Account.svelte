@@ -22,7 +22,7 @@
         <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("account.0.title")}</h1>
             <Columns>
-                <div slot="left" class="flex flex-col justify-center items-center space-y-2">
+                <div slot="left" class="flex flex-col justify-center items-center space-y-6">
                     {#if !$account || !$account.photo}
                         <Icon name="account" className="w-3/5 text-primary" />
                     {:else}
