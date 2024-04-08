@@ -5,16 +5,18 @@
 
     export let show: boolean;
     export let title: string = "";
-    export let button: string = $i18n.t("modal.okay");
+    export let button: string = "";
+    export let disabled: boolean = false;
     export let canCancel: boolean = true;
-    export let cancelButton: string = $i18n.t("modal.cancel");
+    export let cancelButton: string = "";
 
     let dialog: HTMLDialogElement;
+    let defaultButtonText = $i18n.t("modal.okay"), defaultCancelText = $i18n.t("modal.cancel");
     const dispatch = createEventDispatcher<{ submit: undefined }>();
 
     $: {
-        button = $i18n.t("modal.okay");
-        cancelButton = $i18n.t("modal.cancel");
+        defaultButtonText = $i18n.t("modal.okay");
+        defaultCancelText = $i18n.t("modal.cancel");
     }
 
     $: {
@@ -39,9 +41,9 @@
         <slot />
         <div class="flex justify-end items-center space-x-3">
             {#if canCancel}
-                <Button type="small" secondary modal on:click={() => closeModal(false)}>{cancelButton}</Button>
+                <Button type="small" secondary modal on:click={() => closeModal(false)}>{cancelButton || defaultCancelText}</Button>
             {/if}
-            <Button type="small" disabled={false} modal on:click={() => closeModal(true)}>{button}</Button>
+            <Button type="small" {disabled} modal on:click={() => closeModal(true)}>{button || defaultButtonText}</Button>
         </div>
     </div>
 </dialog>
