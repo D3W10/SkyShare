@@ -84,8 +84,9 @@
             "username": "Username",
             "email": "Email",
             "password": "Password",
-            "repeatPass": "Repeat Password",
-            "signup": "Create account"
+            "signup": "Create account",
+            "confirmModal": "Confirm password",
+            "confirmModalDesc": "Please confirm your password to finish creating your account"
         }
     ],
     "welcome": [
@@ -122,6 +123,8 @@
         "invalidUsernameDesc": "The username should only contain letters, numbers or \".\" \"-\" \"_\".",
         "invalidEmail": "Invalid email",
         "invalidEmailDesc": "The provided email address isn't valid, please check if you typed it correctly and try again.",
+        "invalidPassword": "Invalid password",
+        "invalidPasswordDesc": "The provided password should be at least 8 characters long and contain at least one number, one uppercase and one lowercase letter.",
         "wrongUserPass": "Invalid credentials",
         "wrongUserPassDesc": "The username or password entered is incorrect, please try again.",
         "tooManyFiles": "Limit exceeded",

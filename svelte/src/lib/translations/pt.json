@@ -84,8 +84,9 @@
             "username": "Nome de Utilizador",
             "email": "Email",
             "password": "Palavra-Passe",
-            "repeatPass": "Repetir Palavra-Passe",
-            "signup": "Criar conta"
+            "signup": "Criar conta",
+            "confirmModal": "Confirmar palavra-passw",
+            "confirmModalDesc": "Por favor confirme a sua palavra-passe para acabar de criar a sua conta"
         }
     ],
     "welcome": [
@@ -122,6 +123,8 @@
         "invalidUsernameDesc": "O nome de utilizador deve ser composto apenas por letras, números ou \".\" \"-\" \"_\".",
         "invalidEmail": "Email inválido",
         "invalidEmailDesc": "O email inserido não é válido, por favor verifique que o escreveu corretamente e tente novamente.",
+        "invalidPassword": "Palavra-passe inválida",
+        "invalidPasswordDesc": "A palavra-passe deve ter pelo menos 8 caracteres e conter pelo menos um número, uma letra maiúscula e uma minúscula.",
         "wrongUserPass": "Credenciais inválidas",
         "wrongUserPassDesc": "O nome de utilizador ou a palavra-passe inseridos estão incorretos, por favor tente novamente.",
         "tooManyFiles": "Limite excedido",

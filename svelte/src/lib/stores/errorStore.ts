@@ -41,7 +41,7 @@ const errorList = {
     [ErrorCode.NO_PARAMETERS]: "miscommunication",
     [ErrorCode.INVALID_USERNAME]: "invalidUsername",
     [ErrorCode.INVALID_EMAIL]: "invalidEmail",
-    [ErrorCode.INVALID_PASSWORD]: "",
+    [ErrorCode.INVALID_PASSWORD]: "invalidPassword",
     [ErrorCode.INVALID_NEW_PASSWORD]: "",
     [ErrorCode.WRONG_USERPASS]: "wrongUserPass",
     [ErrorCode.USERNAME_UNAVAILABLE]: "",
