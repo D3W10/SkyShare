@@ -21,6 +21,11 @@ export const account = (() => {
 
             return loginAttempt.success;
         },
+        check: async (username: string) => {
+            const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app!)));
+
+            return await $app.account.check(username);
+        },
         logout: async () => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app!)));
 

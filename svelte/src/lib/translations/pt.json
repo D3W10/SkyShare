@@ -87,6 +87,11 @@
             "signup": "Criar conta",
             "confirmModal": "Confirmar palavra-passw",
             "confirmModalDesc": "Por favor confirme a sua palavra-passe para acabar de criar a sua conta"
+        },
+        {
+            "title": "Personalizar conta",
+            "photo": "Foto de Perfil",
+            "photoChoose": "Escolher Imagem"
         }
     ],
     "welcome": [
@@ -127,6 +132,8 @@
         "invalidPasswordDesc": "A palavra-passe deve ter pelo menos 8 caracteres e conter pelo menos um número, uma letra maiúscula e uma minúscula.",
         "wrongUserPass": "Credenciais inválidas",
         "wrongUserPassDesc": "O nome de utilizador ou a palavra-passe inseridos estão incorretos, por favor tente novamente.",
+        "usernameUnavailable": "Nome de utilizador indisponível",
+        "usernameUnavailableDesc": "Este nome de utilizador já está em utilização, por favor escolha outro.",
         "tooManyFiles": "Limite excedido",
         "tooManyFilesDesc": "A quantidade máxima de ficheiros foi excedida! Apenas pode enviar, no máximo, 20 ficheiros por envio.",
         "sizeLimitExceeded": "Limite excedido",

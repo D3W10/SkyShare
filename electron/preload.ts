@@ -236,6 +236,23 @@ export const account = {
 
         return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
     },
+    /**
+     * Checks if a username is available to be picked
+     * @param username The pretended username
+     * @returns An object containing one boolean with the success state and the state if the username is available or not
+     */
+    check: async (username: string) => {
+        const api = await apiCall({
+            endpoint: "user/check",
+            method: "GET",
+            params: new URLSearchParams({ username })
+        });
+
+        return { success: api.code == 0, data: api.value };
+    },
+    /**
+     * Logs a user out
+     */
     logout: () => {
         setSetting("account", { username: null, password: null });
         logger.log("User logged out");

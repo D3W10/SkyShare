@@ -41,6 +41,14 @@
             error.set(ErrorCode.INVALID_EMAIL);
         else if (signupData.a[2][1])
             error.set(ErrorCode.INVALID_PASSWORD);
+        else {
+            let check = await account.check(signupData.a[0][0]);
+
+            if (check.success && !check.data)
+                error.set(ErrorCode.USERNAME_UNAVAILABLE);
+            else
+                page.set("login", 5);
+        }
 
         disable.unlock();
     }
@@ -132,6 +140,32 @@
                         </div>
                     </div>
                     <Button className="w-fit" disabled={!$signupData.isFilled()} submit>{$i18n.t("login.4.signup")}</Button>
+                </div>
+            </Columns>
+        </form>
+    {:else if $page.subPage == 5}
+        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => signupModal = true}>
+            <div class="flex justify-between items-center">
+                <h1 class="w-full text-xl font-semibold">{$i18n.t("login.5.title")}</h1>
+                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login", 4)}>
+                    <Icon name="chevron" className="w-5 h-5 mr-1 fill-current rotate-90" />
+                    {$i18n.t("common.back")}
+                </Button>
+            </div>
+            <Columns>
+                <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
+                    <Icon name="account" className="w-2/3 text-primary" />
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    <div class="w-full h-full flex justify-center items-center">
+                        <div class="w-3/5 space-y-8">
+                            <div class="space-y-1">
+                                <p class="font-semibold">{$i18n.t("login.5.photo")}:</p>
+                                <Button className="w-full" type="small" secondary>{$i18n.t("login.5.photoChoose")}</Button>
+                            </div>
+                        </div>
+                    </div>
+                    <Button className="w-fit" submit>{$i18n.t("login.4.signup")}</Button>
                 </div>
             </Columns>
         </form>

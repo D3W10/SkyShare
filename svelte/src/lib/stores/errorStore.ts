@@ -22,10 +22,8 @@ export enum ErrorCode {
     OFFLINE = -2, SERVER_ERROR = -1,
     MISSING_PARAMETER = 1, NO_PARAMETERS,
     INVALID_USERNAME, INVALID_EMAIL,
-    INVALID_PASSWORD,
-    INVALID_NEW_PASSWORD,
-    WRONG_USERPASS,
-    USERNAME_UNAVAILABLE,
+    INVALID_PASSWORD, INVALID_NEW_PASSWORD,
+    WRONG_USERPASS, USERNAME_UNAVAILABLE,
     UNKNOWN_SIGNUP,
     // 10 EMPTY SLOT
     PHOTO_TOO_BIG, // 20
@@ -44,7 +42,7 @@ const errorList = {
     [ErrorCode.INVALID_PASSWORD]: "invalidPassword",
     [ErrorCode.INVALID_NEW_PASSWORD]: "",
     [ErrorCode.WRONG_USERPASS]: "wrongUserPass",
-    [ErrorCode.USERNAME_UNAVAILABLE]: "",
+    [ErrorCode.USERNAME_UNAVAILABLE]: "usernameUnavailable",
     [ErrorCode.UNKNOWN_SIGNUP]: "",
     [ErrorCode.PHOTO_TOO_BIG]: "",
     [ErrorCode.INVALID_PHOTO]: "",
