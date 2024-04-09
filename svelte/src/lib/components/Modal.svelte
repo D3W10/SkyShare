@@ -34,7 +34,7 @@
 </script>
 
 <dialog class="w-[28rem] max-h-112 transition-all ease-quint-out opacity-0 {show ? "open" : "closed"} duration-[400ms] scale-50 outline-0 overflow-hidden" bind:this={dialog} on:close={() => show = false}>
-    <div class="max-h-112 p-5 flex flex-col space-y-3" role="alertdialog">
+    <form class="max-h-112 p-5 flex flex-col space-y-3" role="alertdialog" on:submit={() => closeModal(true)}>
         {#if title != ""}
             <h1 class="text-2xl font-semibold">{title}</h1>
         {/if}
@@ -43,9 +43,9 @@
             {#if canCancel}
                 <Button type="small" secondary modal on:click={() => closeModal(false)}>{cancelButton || defaultCancelText}</Button>
             {/if}
-            <Button type="small" {disabled} modal on:click={() => closeModal(true)}>{button || defaultButtonText}</Button>
+            <Button type="small" {disabled} modal submit>{button || defaultButtonText}</Button>
         </div>
-    </div>
+    </form>
 </dialog>
 
 <style lang="postcss">
