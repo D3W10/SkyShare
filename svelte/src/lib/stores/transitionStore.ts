@@ -4,7 +4,7 @@ import { settings } from "./settingsStore";
 import { circOut, cubicIn, cubicOut, quintOut, sineIn, sineOut } from "svelte/easing";
 
 export const transition = derived([page, settings], ($values) => {
-    const duration = 300, subPageDuration = 500, offset = 200 * (!$values[0].oldSubPage ? -1 : 1);
+    const duration = 300, subPageDuration = 500, offset = 200 * ($values[0].subPage > $values[0].oldSubPage ? -1 : 1);
 
     return {
         pageIn: { duration: duration, delay: duration, easing: sineOut },
