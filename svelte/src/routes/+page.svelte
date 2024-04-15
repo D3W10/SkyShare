@@ -43,6 +43,7 @@
     }
 
     if ($app) {
+        //$app.updateUriCallback((args: string[]) => $app.log(args));   TODO URI Handler
         $app.updateLoginCallback((username, password) => account.login(username, password, true));
         $app.updateErrorCallback((code: number) => error.set(code));
     }

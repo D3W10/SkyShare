@@ -305,6 +305,11 @@ export function updateLoginCallback(callback: (username: string, password: strin
     loginHandler = callback;
 }
 
+// TODO URI Handler
+export function updateUriCallback(callback: (args: string[]) => unknown) {
+    uriHandler = callback;
+}
+
 /**
  * Updates the callback function reference to where the API errors should be sent
  * @param callback The function to receive the API error codes
@@ -323,6 +328,9 @@ ipcRenderer.on("WindowReady", () => {
 });
 
 ipcRenderer.on("LoginRequest", async (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", await loginHandler(username, password)));
+
+// TODO URI Handler
+ipcRenderer.on("UriHandler", (_, args: string[]) => uriHandler(args));
 
 contextBridge.exposeInMainWorld("app", {
     log,
@@ -349,5 +357,6 @@ contextBridge.exposeInMainWorld("app", {
     updateOfflineCallback,
     updateReadyCallback,
     updateLoginCallback,
+    updateUriCallback, // TODO URI Handler
     updateErrorCallback
 });
