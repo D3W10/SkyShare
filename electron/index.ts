@@ -106,10 +106,8 @@ async function createWindow() {
 if (!app.requestSingleInstanceLock())
     app.quit();
 
-// TODO URI Handler
 app.on("second-instance", (_, argv) => {
     logger.log("New instance opened");
-    logger.log(argv);
     uriHandler(argv);
 });
 
@@ -131,13 +129,12 @@ if (process.defaultApp) {
 else
     app.setAsDefaultProtocolClient("skyshare");
 
-// TODO URI Handler
 function uriHandler(argv: string[]) {
-    let hasArgs = argv.find((arg) => arg.startsWith("skyshare://"));
-    if (!hasArgs)
+    let uriArg = argv.find((arg) => arg.startsWith("skyshare://"));
+    if (!uriArg)
         return;
 
-    const args = hasArgs.replace("skyshare://", "").split("/");
+    const args = uriArg.slice("skyshare://".length).split("/");
     
     logger.log("Handling arguments");
 
@@ -145,7 +142,7 @@ function uriHandler(argv: string[]) {
         window.restore();
     window.focus();
 
-    window.webContents.send("UriHandler", args);
+    window.webContents.send("UriHandler", args.filter(e => e));
 }
 
 ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));

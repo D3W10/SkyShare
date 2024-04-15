@@ -43,12 +43,24 @@
     }
 
     if ($app) {
-        //$app.updateUriCallback((args: string[]) => $app.log(args));   TODO URI Handler
+        $app.updateUriCallback(uriHandler);
         $app.updateLoginCallback((username, password) => account.login(username, password, true));
         $app.updateErrorCallback((code: number) => error.set(code));
     }
 
     $: showErrorModal = $error.show;
+
+    function uriHandler(argv: string[]) {
+        if (argv[0]) {
+            if (argv[0] == "login" && $account)
+                argv[0] = "account";
+            else if (argv[0] == "account" && !$account)
+                argv[0] = "login";
+
+            if (["home", "send", "receive", "settings", "login", "account"].includes(argv[0]))
+                page.set(argv[0] as pages);
+        }
+    }
 </script>
 
 <svelte:head>
