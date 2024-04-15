@@ -12,11 +12,13 @@
     const DEFAULT_STATUS = $i18n.t("splash.starting");
     let start = false, status = DEFAULT_STATUS, dlPercent = 0, splashReady = false, winReady = false;
 
-    $app?.updateReadyCallback(() => {
-        winReady = true;
-        $app?.log("Main window ready");
-        onReady();
-    });
+    if ($app) {
+        $app.updateReadyCallback(() => {
+            winReady = true;
+            $app.log("Main window ready");
+            onReady();
+        });
+    }
 
     async function checkConnection() {
         if (!navigator.onLine) {
@@ -32,7 +34,7 @@
     async function checkForUpdates() {
         if ($settings.autoUpdate) { // TODO - Test Auto Update feature
             await new Promise<void>((resolve) => {
-                $app?.checkForUpdates((available) => {
+                $app.checkForUpdates((available) => {
                     if (available)
                         status = $i18n.t("splash.updating");
                     else
@@ -45,24 +47,24 @@
     }
 
     async function accountLogIn() {
-        const storedInfo = $app?.getSetting("account") as IStoreAccount;
+        const storedInfo = $app.getSetting("account") as IStoreAccount;
 
         if (storedInfo.username && storedInfo.password) {
             status = $i18n.t("splash.loggingIn");
 
-            const loginSuccess = await $app?.sendLoginRequest(storedInfo.username, storedInfo.password);
+            const loginSuccess = await $app.sendLoginRequest(storedInfo.username, storedInfo.password);
             if (!loginSuccess)
                 account.logout();
         }
         
         splashReady = true;
-        $app?.log("Splash window ready");
+        $app.log("Splash window ready");
         onReady();
     }
 
     function onReady() {
         if (splashReady && winReady)
-            $app?.openMain();
+            $app.openMain();
     }
 
     onMount(() => {

@@ -42,8 +42,10 @@
         catch {}
     }
 
-    $app?.updateLoginCallback((username, password) => account.login(username, password, true));
-    $app?.updateErrorCallback((code: number) => error.set(code));
+    if ($app) {
+        $app.updateLoginCallback((username, password) => account.login(username, password, true));
+        $app.updateErrorCallback((code: number) => error.set(code));
+    }
 
     $: showErrorModal = $error.show;
 </script>

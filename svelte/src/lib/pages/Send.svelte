@@ -19,7 +19,7 @@
         let failedCount: number = 0, fileList: File[] | FileList = [];
 
         if (mode == "select") {
-            let chosenFiles = await $app?.showOpenDialog({
+            let chosenFiles = await $app.showOpenDialog({
                 title: $i18n.t("send.chooseTitle"),
                 filters: [{ name: $i18n.t("send.chooseFilter"), extensions: ["*"] }],
                 properties: ["openFile", "multiSelections", "treatPackageAsDirectory"],
@@ -37,7 +37,7 @@
         }
 
         for (let file of fileList) {
-            if (await $app?.isDirectory(file.path))
+            if (await $app.isDirectory(file.path))
                 continue;
             else if (!files.every((f) => f.name != file.name)) {
                 failedCount++;
@@ -87,12 +87,12 @@
                                     <div class="w-full h-full p-2 overflow-y-auto space-y-2">
                                         {#each files as file}
                                             <div class="w-full px-2 py-1.5 flex items-center bg-secondary rounded-lg space-x-2">
-                                                {#await $app?.getFileIcon(file.path) then icon}
+                                                {#await $app.getFileIcon(file.path) then icon}
                                                     <img src="data:image/png;base64,{icon}" class="h-6" alt={$i18n.t("send.fileIcon")} />
                                                 {/await}
                                                 <div class="flex flex-col space-y-0.5">
                                                     <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
-                                                    <p class="text-xs text-foreground/70">{$app?.fileSizeFormat(file.size)}</p>
+                                                    <p class="text-xs text-foreground/70">{$app.fileSizeFormat(file.size)}</p>
                                                 </div>
                                             </div>
                                         {/each}
@@ -116,7 +116,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <p class="font-semibold">{$i18n.t("send.size")}:</p>
-                                    <p class="text-foreground/70">{$app?.fileSizeFormat(files.reduce((previous, current) => previous + current.size, 0))}</p>
+                                    <p class="text-foreground/70">{$app.fileSizeFormat(files.reduce((previous, current) => previous + current.size, 0))}</p>
                                 </div>
                                 <div class="space-y-1">
                                     <p class="font-semibold">{$i18n.t("send.quantity")}:</p>

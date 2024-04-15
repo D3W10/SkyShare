@@ -15,12 +15,12 @@
 
     const changelogLoad = new Promise((resolve) => {
         onMount(() => {
-            let content = $app?.getSetting("changelog");
+            let content = $app.getSetting("changelog");
 
             if (content) {
                 resolve(content);
                 showChangesModal = true;
-                $app?.setSetting("changelog", null);
+                $app.setSetting("changelog", null);
             }
             else
                 resolve("");

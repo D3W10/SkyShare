@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import type * as preload from "$electron/preload";
 
 export const app = (() => {
-    const { subscribe, set } = writable<typeof preload | null>(null);
+    const { subscribe, set } = writable<typeof preload>();
 
     if (typeof window !== "undefined")
         set({ ...window.app });

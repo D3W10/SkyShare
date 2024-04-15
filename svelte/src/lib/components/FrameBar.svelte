@@ -15,10 +15,10 @@
     onMount(() => {
         const offlineAction = () => {
             offlineBubble.set(MAX_SIZE);
-            $app?.log("Offline mode");
+            $app.log("Offline mode");
         }, onlineAction = () => {
             offlineBubble.set(0);
-            $app?.log("Online mode");
+            $app.log("Online mode");
         }
 
         if (!navigator.onLine)
@@ -46,14 +46,14 @@
 
     function onYellowButtonClick(e: MouseEvent) {
         if (!e.ctrlKey && !e.metaKey)
-            $app?.minimizeWindow();
+            $app.minimizeWindow();
         else
-            $app?.compressWindow();
+            $app.compressWindow();
     }
 
     function onRedButtonClick() {
         if (!$disable.d)
-            $app?.closeWindow();
+            $app.closeWindow();
         else
             showModal = true;
     }

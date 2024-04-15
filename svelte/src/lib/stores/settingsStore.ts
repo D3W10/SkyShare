@@ -5,7 +5,7 @@ import type { IStoreSettings } from "$electron/lib/Store.interface";
 export const settings = (() => {
     const { subscribe, set, update } = writable<IStoreSettings>({} as IStoreSettings);
 
-    app.subscribe(($app) => set(($app ? $app?.getSetting("settings") : {}) as IStoreSettings));
+    app.subscribe(($app) => set(($app ? $app.getSetting("settings") : {}) as IStoreSettings));
 
     return {
         subscribe,
@@ -17,13 +17,13 @@ export const settings = (() => {
                 return n;
             });
 
-            app.subscribe(($app) => $app?.setSetting(`settings.${property}`, value));
+            app.subscribe(($app) => $app.setSetting(`settings.${property}`, value));
         },
         reset: () => {
             return new Promise ((resolve) => {
                 app.subscribe(($app) => {
-                    $app?.resetSettings();
-                    set(($app ? $app?.getSetting("settings") : {}) as IStoreSettings);
+                    $app.resetSettings();
+                    set(($app ? $app.getSetting("settings") : {}) as IStoreSettings);
                     resolve(true);
                 });
             });
