@@ -2,7 +2,7 @@
  * @type {import("electron-builder").Configuration)}
  */
 module.exports = {
-    appId: "com.d3w10.cosmochamp",
+    appId: "com.d3w10.skyshare",
     compression: "maximum",
     generateUpdatesFilesForAllChannels: true,
     directories: {
@@ -28,7 +28,7 @@ module.exports = {
         {
             provider: "github",
             owner: "D3W10",
-            repo: "CosmoChamp"
+            repo: "SkyShare"
         }
     ],
     win: {
@@ -74,6 +74,12 @@ module.exports = {
                 type: "link",
                 path: "/Applications"
             }
+        ]
+    },
+    protocols: {
+        name: "SkyShare Protocol",
+        schemes: [
+            "skyshare"
         ]
     }
 };
