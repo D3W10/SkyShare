@@ -250,6 +250,22 @@ export const account = {
 
         return { success: api.code == 0, data: api.value };
     },
+    signup: async (username: string, email: string, password: string, photo: string | null) => {
+        const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
+
+        const api = await apiCall({
+            endpoint: "user/signup",
+            method: "POST",
+            body: { username, email, password }
+        });
+
+        if (api.code == 0) {
+            setSetting("account", { username, password: encodedPass });
+            logger.log("Sign up successful");
+        }
+
+        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
+    },
     /**
      * Logs a user out
      */

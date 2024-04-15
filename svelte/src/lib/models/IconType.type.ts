@@ -9,6 +9,7 @@ export type IconType =
     "add" |
     "accountRecovery" |
     "accountCreate" |
+    "dismiss" |
     "editAccount" |
     "logout" |
     "appearance" |

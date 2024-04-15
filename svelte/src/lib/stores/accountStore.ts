@@ -26,6 +26,15 @@ export const account = (() => {
 
             return await $app.account.check(username);
         },
+        signup: async (username: string, email: string, password: string, photo: string | null) => {
+            const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));
+            const signupAttempt = await $app.account.signup(username, email, password, photo);
+
+            if (signupAttempt.success)
+                set(signupAttempt.data!);
+
+            return signupAttempt.success;
+        },
         logout: async () => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));
 

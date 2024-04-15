@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -113,7 +113,11 @@ app.on("second-instance", (_, argv) => {
     uriHandler(argv);
 });
 
-app.whenReady().then(() => createWindow());
+app.whenReady().then(() => {
+    createWindow();
+
+    protocol.handle("app", (request) => net.fetch("file://" + request.url.slice("app://".length)));
+});
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin")
