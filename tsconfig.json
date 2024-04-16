@@ -20,6 +20,6 @@
         "forceConsistentCasingInFileNames": true,
         "lib": [
             "es2020"
-        ],
+        ]
     }
 }

@@ -6,7 +6,7 @@ log.transports.console.format = "{h}:{i}:{s}.{ms}{scope} › {text}";
 log.transports.console.useStyles = true;
 log.transports.file.format = "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}]{scope} › {text}";
 
-class Logger {
+export class Logger {
     private readonly name: string;
     private readonly color: string;
     private readonly logger;
@@ -33,5 +33,3 @@ class Logger {
         this.logger.error(`color: ${this.color}`, "color: unset", `%c${msg}`, "color: red", ...(colors.map((e) => `color: ${e}`)));
     }
 }
-
-export default Logger;
