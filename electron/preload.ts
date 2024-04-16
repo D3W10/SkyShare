@@ -250,13 +250,25 @@ export const account = {
 
         return { success: api.code == 0, data: api.value };
     },
+    /**
+     * Creates a new user account
+     * @param username The username of the user
+     * @param email The email of the user
+     * @param password The password of the user
+     * @param photo The photo of the user or null if no photo should be set
+     * @returns An object containing one boolean with the success state and info about the newly created user if it was successful
+     */
     signup: async (username: string, email: string, password: string, photo: string | null) => {
+        let body = { username, email, password };
         const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
+
+        if (photo)
+            Object.assign(body, { photo: await ipcRenderer.invoke("GetFileAsBase64", photo) });
 
         const api = await apiCall({
             endpoint: "user/signup",
             method: "POST",
-            body: { username, email, password }
+            body
         });
 
         if (api.code == 0) {

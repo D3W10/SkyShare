@@ -178,12 +178,12 @@
             <Columns>
                 <div slot="left" class="relative" in:scale|global={$transition.iconJump}>
                     {#if signupPhoto == ""}
-                        <div class="flex justify-center items-center absolute inset-0" in:scale={{ duration: 1000, delay: 1000, easing: quartOut, opacity: 1 }} out:scale={{ duration: 1000, easing: quartIn, opacity: 1 }}>
+                        <div class="flex justify-center items-center absolute inset-0" in:scale={{ duration: 1000, delay: 750, easing: quartOut, opacity: 1 }} out:scale={{ duration: 750, easing: quartIn, opacity: 1 }}>
                             <Icon name="account" className="w-2/3 text-primary" />
                         </div>
                     {:else}
-                        <div class="flex justify-center items-center absolute inset-0" in:scale={{ duration: 1000, delay: 1000, easing: quartOut, opacity: 1 }} out:scale={{ duration: 1000, easing: quartIn, opacity: 1 }}>
-                            <img src={"app://" + signupPhoto} alt="{signupData.a[0][0]} Profile Picture" class="max-h-14 absolute rounded-full" />
+                        <div class="flex justify-center items-center absolute inset-0" in:scale={{ duration: 1000, delay: 750, easing: quartOut, opacity: 1 }} out:scale={{ duration: 750, easing: quartIn, opacity: 1 }}>
+                            <img src={"app://" + signupPhoto} alt="{signupData.a[0][0]} Profile Picture" class="w-2/3 absolute rounded-full aspect-square" />
                         </div>
                     {/if}
                 </div>

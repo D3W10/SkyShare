@@ -221,6 +221,8 @@ ipcMain.handle("IsDirectory", (_event, path: string) => fs.lstatSync(path).isDir
 
 ipcMain.on("EncodePassword", (event, password: string) => event.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 
+ipcMain.handle("GetFileAsBase64", async (_event, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
+
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);
 
