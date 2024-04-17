@@ -43,9 +43,9 @@ const errorList = {
     [ErrorCode.INVALID_NEW_PASSWORD]: "",
     [ErrorCode.WRONG_USERPASS]: "wrongUserPass",
     [ErrorCode.USERNAME_UNAVAILABLE]: "usernameUnavailable",
-    [ErrorCode.UNKNOWN_SIGNUP]: "",
-    [ErrorCode.PHOTO_TOO_BIG]: "",
-    [ErrorCode.INVALID_PHOTO]: "",
+    [ErrorCode.UNKNOWN_SIGNUP]: "unknownSignup",
+    [ErrorCode.PHOTO_TOO_BIG]: "photoTooBig",
+    [ErrorCode.INVALID_PHOTO]: "invalidPhoto",
     [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
     [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
 }
