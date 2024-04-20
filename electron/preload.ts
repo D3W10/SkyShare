@@ -237,18 +237,19 @@ export const account = {
         return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
     },
     /**
-     * Checks if a username is available to be picked
+     * Checks if a username and email are available to be picked
      * @param username The pretended username
-     * @returns An object containing one boolean with the success state and the state if the username is available or not
+     * @param username The pretended email
+     * @returns An object containing one boolean with the success state and the state if the username and email are available or not
      */
-    check: async (username: string) => {
+    check: async (username: string, email: string) => {
         const api = await apiCall({
             endpoint: "user/check",
             method: "GET",
-            params: new URLSearchParams({ username })
+            params: new URLSearchParams({ username, email })
         });
 
-        return { success: api.code == 0, data: api.value };
+        return { success: api.code == 0, data: { username: api.value.username, email: api.value.email } };
     },
     /**
      * Creates a new user account

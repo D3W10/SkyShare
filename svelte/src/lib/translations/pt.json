@@ -134,6 +134,8 @@
         "wrongUserPassDesc": "O nome de utilizador ou a palavra-passe inseridos estão incorretos, por favor tente novamente.",
         "usernameUnavailable": "Nome de utilizador indisponível",
         "usernameUnavailableDesc": "Este nome de utilizador já está em utilização, por favor escolha outro.",
+        "emailUnavailable": "Email indisponível",
+        "emailUnavailableDesc": "Este email já está em utilização, por favor use outro.",
         "unknownSignup": "Erro desconhecido",
         "unknownSignupDesc": "Um erro desconhecido ocorreu ao tentar criar a sua conta SkyShare, por favor volte a tentar mais tarde.",
         "photoTooBig": "Tamanho excedido",

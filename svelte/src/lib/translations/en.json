@@ -134,6 +134,8 @@
         "wrongUserPassDesc": "The username or password entered is incorrect, please try again.",
         "usernameUnavailable": "Username unavailable",
         "usernameUnavailableDesc": "This username is already in use, please choose another one.",
+        "emailUnavailable": "Email unavailable",
+        "emailUnavailableDesc": "This email is already in use, please use another one.",
         "unknownSignup": "Unknown error",
         "unknownSignupDesc": "An unknown error occurred while trying to create your SkyShare account, please try again later.",
         "photoTooBig": "File size exceeded",

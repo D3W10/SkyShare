@@ -45,12 +45,16 @@
         else if (signupData.a[2][1])
             error.set(ErrorCode.INVALID_PASSWORD);
         else {
-            let check = await account.check(signupData.a[0][0]);
+            let check = await account.check(signupData.a[0][0], signupData.a[1][0]);
 
-            if (check.success && !check.data)
-                error.set(ErrorCode.USERNAME_UNAVAILABLE);
-            else
-                page.set("login", 5);
+            if (check.success) {
+                if (!check.data.username)
+                    error.set(ErrorCode.USERNAME_UNAVAILABLE);
+                else if (!check.data.email)
+                    error.set(ErrorCode.EMAIL_UNAVAILABLE);
+                else
+                    page.set("login", 5);
+            }
         }
 
         disable.unlock();
