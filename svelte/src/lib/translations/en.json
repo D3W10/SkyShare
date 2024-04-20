@@ -111,6 +111,7 @@
     "account": [
         {
             "title" : "Account",
+            "history" : "History",
             "edit" : "Edit Account",
             "logout": "Log Out"
         }

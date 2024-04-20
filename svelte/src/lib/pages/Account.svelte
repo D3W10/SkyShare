@@ -31,6 +31,7 @@
                     <p class="text-lg font-semibold">{$account?.username}</p>
                 </div>
                 <div slot="right" class="flex flex-col justify-center space-y-4">
+                    <BlockLink text={$i18n.t("account.0.history")} icon="history" on:click={() => {}} />
                     <BlockLink text={$i18n.t("account.0.edit")} icon="editAccount" on:click={() => {}} />
                     <BlockLink text={$i18n.t("account.0.logout")} icon="logout" on:click={() => showModal = true} />
                 </div>

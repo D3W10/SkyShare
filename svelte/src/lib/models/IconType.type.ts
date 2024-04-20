@@ -10,6 +10,7 @@ export type IconType =
     "accountRecovery" |
     "accountCreate" |
     "dismiss" |
+    "history" |
     "editAccount" |
     "logout" |
     "appearance" |
