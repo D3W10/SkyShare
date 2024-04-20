@@ -8,7 +8,7 @@
     import Button from "./Button.svelte";
 </script>
 
-<div class="w-80 px-4 py-2 space-y-4">
+<div class="w-full max-w-64 px-4 py-2 space-y-4">
     <Button type="invisible" className="w-full flex items-center justify-start font-semibold space-x-3" on:click={() => page.set(!$account ? "login" : "account")}>
         <div class="w-14 flex justify-center items-center relative aspect-square">
             {#if !$account || !$account.photo}
