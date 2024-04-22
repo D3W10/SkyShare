@@ -280,6 +280,22 @@ export const account = {
         return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
     },
     /**
+     * Sends an email request from a specific user account
+     * @param type The type of request desired
+     * @param email The email of the user
+     * @param language The preferred email language
+     * @returns An object containing one boolean with the success state
+     */
+    request: async (type: "verify" | "recovery", email: string, language: string) => {
+        const api = await apiCall({
+            endpoint: "user/request",
+            method: "POST",
+            body: { type, email, language }
+        });
+
+        return { success: api.code == 0 };
+    },
+    /**
      * Logs a user out
      */
     logout: () => {

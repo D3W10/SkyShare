@@ -8,6 +8,7 @@
     import { disable } from "$lib/stores/disableStore";
     import { account } from "$lib/stores/accountStore";
     import { error, ErrorCode } from "$lib/stores/errorStore";
+    import { settings } from "$lib/stores/settingsStore";
     import { VEStore, validators } from "$lib/models/VEStore.class";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -16,6 +17,7 @@
     import Modal from "$lib/components/Modal.svelte";
 
     let loginData = new VEStore(2, "", validators.string);
+    let requestData = new VEStore(1, "", validators.string);
     let signupData = new VEStore(3, "", validators.string), signupModal: boolean = false, repeatPassword: string = "";
     let signupPhoto: string = "";
 
@@ -30,8 +32,19 @@
         disable.unlock();
     }
 
-    function onRecovery() {
+    async function onRequest() {
+        disable.lock();
 
+        if (requestData.a[0][1])
+            error.set(ErrorCode.INVALID_EMAIL);
+        else {
+            let check = await account.request("recovery", requestData.a[0][0], $settings.language);
+
+            if (check.success)
+                page.set("login", 2);
+        }
+
+        disable.unlock();
     }
 
     async function onSignup() {
@@ -111,7 +124,7 @@
             </Columns>
         </form>
     {:else if $page.subPage == 1}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onRequest}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">{$i18n.t("login.1.title")}</h1>
                 <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login", 0)}>
@@ -128,14 +141,14 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.1.email")}:</p>
-                                <Input type="email" placeholder={$i18n.t("common.required")} />
+                                <Input type="email" bind:value={requestData.a[0][0]} bind:error={requestData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => requestData.announceChange()} />
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={$disable.d} on:click={onRecovery}>{$i18n.t("login.1.reset")}</Button>
+                    <Button className="w-fit" disabled={!$requestData.isFilled()} submit>{$i18n.t("login.1.reset")}</Button>
                 </div>
             </Columns>
-        </div>
+        </form>
     {:else if $page.subPage == 4}
         <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => signupModal = true}>
             <div class="flex justify-between items-center">

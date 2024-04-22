@@ -35,6 +35,11 @@ export const account = (() => {
 
             return signupAttempt.success;
         },
+        request: async (type: "verify" | "recovery", email: string, language: string) => {
+            const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));
+
+            return await $app.account.request(type, email, language);
+        },
         logout: async () => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));
 
