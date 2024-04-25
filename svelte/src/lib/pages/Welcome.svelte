@@ -34,13 +34,32 @@
         </div>
     {:else if $page.subPage == 1}
         <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
-            <h1 class="w-full text-xl font-semibold">{$i18n.t("welcome")}</h1>
-            <div class="w-full h-full p-5 grid grid-rows-3 gap-5">
-                <!-- TODO: Finish welcome features list-->
-                <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1"></div>
-                <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1"></div>
-                <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1"></div>
-                <Button className="w-fit mx-auto mt-2" on:click={() => page.set("welcome", 1)}>{$i18n.t("common.next")}</Button>
+            <h1 class="w-full text-xl font-semibold">{$i18n.t("welcome.1.title")}</h1>
+            <div class="w-full h-full flex flex-col justify-between items-center p-5 pb-0">
+                <div class="w-full h-[25rem] grid grid-rows-3 gap-5">
+                    <div class="w-full h-full flex items-center p-6 hover:text-send bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-x-5 group">
+                        <Icon name="history" className="min-w-16 h-16 transition-colors duration-300 ease-in-out" />
+                        <div>
+                            <h2 class="w-fit mb-1 text-foreground text-lg font-semibold underline decoration-transparent group-hover:decoration-send decoration-2 duration-300 ease-in-out">{$i18n.t("welcome.1.history")}</h2>
+                            <p class="text-foreground">{$i18n.t("welcome.1.historyDesc")}</p>
+                        </div>
+                    </div>
+                    <div class="w-full h-full flex items-center p-6 hover:text-receive bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-x-5 group">
+                        <Icon name="sync" className="min-w-16 h-16 transition-colors duration-300 ease-in-out" />
+                        <div>
+                            <h2 class="w-fit mb-1 text-foreground text-lg font-semibold underline decoration-transparent group-hover:decoration-receive decoration-2 duration-300 ease-in-out">{$i18n.t("welcome.1.sync")}</h2>
+                            <p class="text-foreground">{$i18n.t("welcome.1.syncDesc")}</p>
+                        </div>
+                    </div>
+                    <div class="w-full h-full flex items-center p-6 hover:text-settings bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-x-5 group">
+                        <Icon name="files" className="min-w-16 h-16 transition-colors duration-300 ease-in-out" />
+                        <div>
+                            <h2 class="w-fit mb-1 text-foreground text-lg font-semibold underline decoration-transparent group-hover:decoration-settings decoration-2 duration-300 ease-in-out">{$i18n.t("welcome.1.identification")}</h2>
+                            <p class="text-foreground">{$i18n.t("welcome.1.identificationDesc")}</p>
+                        </div>
+                    </div>
+                </div>
+                <Button className="w-fit mt-2" on:click={() => page.set("welcome", 2)}>{$i18n.t("common.next")}</Button>
             </div>
         </div>
     {:else if $page.subPage == 2}

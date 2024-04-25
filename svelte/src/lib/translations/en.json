@@ -102,7 +102,15 @@
                 "Let's check out what your new SkyShare account offers and some tips to improve your experience."
             ]
         },
-        {},
+        {
+            "title": "Unlocked features",
+            "history": "Transfer history",
+            "historyDesc": "All the files you send and receive will be saved on the history for one month",
+            "sync": "Syncronization",
+            "syncDesc": "SkyShare will sync your transfer history across all the devices using your account",
+            "identification": "Identification on send",
+            "identificationDesc": "When people receive files from you, your name will be displayed (can be disabled on settings)"
+        },
         {
             "welcome": "Welcome",
             "continue": "Continue"

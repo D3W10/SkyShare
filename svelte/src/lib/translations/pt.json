@@ -102,7 +102,15 @@
                 "Agora vamos ver o que a sua nova conta SkyShare oferece e algumas dicas para melhorar a sua experiência."
             ]
         },
-        {},
+        {
+            "title": "Funcionalidades desbloqueadas",
+            "history": "Histórico de Transferências",
+            "historyDesc": "Todos os ficheiros que enviar e receber serão guardados no histórico por um mês",
+            "sync": "Sincronização",
+            "syncDesc": "O SkyShare vai sincronizar o seu histórico por todos os dispositivos que utilizam a sua conta",
+            "identification": "Identificação no envio",
+            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será exibido (pode ser desligado nas definições)"
+        },
         {
             "welcome": "Bem-vindo",
             "continue": "Continuar"
