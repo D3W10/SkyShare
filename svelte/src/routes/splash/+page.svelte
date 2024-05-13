@@ -32,7 +32,7 @@
     }
 
     async function checkForUpdates() {
-        if ($settings.autoUpdate) { // TODO - Test Auto Update feature
+        if ($settings.autoUpdate) {
             await new Promise<void>((resolve) => {
                 $app.checkForUpdates((available) => {
                     if (available)

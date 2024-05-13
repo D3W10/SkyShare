@@ -54,6 +54,9 @@
         "themeDark": "Dark",
         "language": "Language",
         "languageDesc": "Modify the application language",
+        "checkForUpdates": "Check for updates",
+        "checkForUpdatesDesc": "Manually check for updates",
+        "check": "Check",
         "autoUpdate": "Automatic updates",
         "autoUpdateDesc": "Updates the application automatically",
         "betaUpdates": "Beta updates",
@@ -157,6 +160,8 @@
         "sizeLimitExceededDesc": "The total file size must not exceed 3 GB.",
         "fileWithSameName": "Failed to add files",
         "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names.",
+        "noUpdates": "All good!",
+        "noUpdatesDesc": "You already have the latest version of SkyShare. That's great news!",
         "betaUpdates": "Important note",
         "betaUpdatesDesc": [
             "Are you sure you want to enable this setting? Beta updates are unstable and can break your user experience.",

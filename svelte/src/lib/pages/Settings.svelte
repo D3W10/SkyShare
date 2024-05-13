@@ -1,6 +1,7 @@
 <script lang="ts">
     import { fade } from "svelte/transition";
     import { i18n } from "$lib/stores/i18nStore";
+    import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
     import { transition } from "$lib/stores/transitionStore";
     import { settings } from "$lib/stores/settingsStore";
@@ -9,15 +10,29 @@
     import Icon from "$lib/components/Icon.svelte";
     import ComboBox from "$lib/components/ComboBox.svelte";
     import Input from "$lib/components/Input.svelte";
+    import ProgressBar from "$lib/components/ProgressBar.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
     type settingsPages = "appearance" | "updates" | "reset" | "about";
 
-    let currentPage: settingsPages = "appearance", betaAlert: boolean = false, resetAlert: boolean = false, versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
+    let currentPage: settingsPages = "appearance", updating: 0 | 1 | 2 = 0, versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
+    let updatedAlert: boolean = false, betaAlert: boolean = false, resetAlert: boolean = false;
     let langs = [
         { id: "en", name: "English" },
         { id: "pt", name: "Português" }
-    ];
+    ], dlPercent = 0;
+
+    function checkForUpdates() {
+        const statusCallback = (available: boolean) => {
+            updating = available ? 2 : 0;
+
+            if (!available)
+                updatedAlert = true;
+        };
+
+        updating = 1;
+        $app.checkForUpdates(statusCallback, (progress: number) => dlPercent = progress);
+    }
 
     function onVersionClick() {
         versionClick++;
@@ -37,7 +52,14 @@
 </script>
 
 <div class="w-full h-full p-6 flex flex-col space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-    <h1 class="w-full text-xl font-semibold">{$i18n.t("settings.title")}</h1>
+    <div class="flex justify-between items-center">
+        <h1 class="w-full text-xl font-semibold">{$i18n.t("settings.title")}</h1>
+        {#if updating != 0}
+            <div class="w-1/3" transition:fade={{ duration: 500 }}>
+                <ProgressBar indeterminate={updating == 1} bind:value={dlPercent} />
+            </div>
+        {/if}
+    </div>
     <Columns className="!space-x-0">
         <div slot="left" class="!w-1/3 pr-5">
             <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1">
@@ -81,6 +103,13 @@
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                     <div class="flex justify-between items-center">
                         <div>
+                            <p>{$i18n.t("settings.checkForUpdates")}</p>
+                            <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.checkForUpdatesDesc")}</p>
+                        </div>
+                        <Button type="small" secondary disabled={updating != 0} on:click={checkForUpdates}>{$i18n.t("settings.check")}</Button>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
                             <p>{$i18n.t("settings.autoUpdate")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.autoUpdateDesc")}</p>
                         </div>
@@ -118,6 +147,9 @@
         </div>
     </Columns>
 </div>
+<Modal bind:show={updatedAlert} title={$i18n.t("modal.noUpdates")} canCancel={false}>
+    <p>{$i18n.t("modal.noUpdatesDesc")}</p>
+</Modal>
 <Modal bind:show={betaAlert} title={$i18n.t("modal.betaUpdates")} on:submit={() => settings.update("betaUpdates", true)}>
     <p>{$i18n.t("modal.betaUpdatesDesc.0")}</p>
     <p>{$i18n.t("modal.betaUpdatesDesc.1")}</p>

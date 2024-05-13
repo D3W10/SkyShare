@@ -54,6 +54,9 @@
         "themeDark": "Escuro",
         "language": "Idioma",
         "languageDesc": "Altera o idoma da aplicação",
+        "checkForUpdates": "Procurar por atualizações",
+        "checkForUpdatesDesc": "Procurar por atualizações manualmente",
+        "check": "Procurar",
         "autoUpdate": "Atualizações automáticas",
         "autoUpdateDesc": "Atualiza a aplicação automaticamente",
         "betaUpdates": "Atualizações Beta",
@@ -157,6 +160,8 @@
         "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 3 GB.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
         "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
+        "noUpdates": "Tudo em ordem!",
+        "noUpdatesDesc": "Já tens a versão mais recente do SkyShare. São ótimas notícias!",
         "betaUpdates": "Nota importante",
         "betaUpdatesDesc": [
             "Tem a certeza que quer ativar esta definição? Atualizações beta são instáveis e podem e pode prejudicar a sua experiência.",

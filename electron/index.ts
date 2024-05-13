@@ -153,7 +153,7 @@ ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.s
 
 //#region Updater
 
-autoUpdater.on("download-progress", (info) => splash.webContents.send("CFUProgress", info.percent));
+autoUpdater.on("download-progress", (info) => (!splash.isDestroyed() ? splash : window).webContents.send("CFUProgress", info.percent));
 
 autoUpdater.on("update-downloaded", () => autoUpdater.quitAndInstall());
 
@@ -177,18 +177,20 @@ function log(logger: Logger, type: "info" | "warn" | "error", msg: string) {
 ipcMain.on("CheckForUpdates", () => {
     autoUpdater.checkForUpdates();
 
+    const win = !splash.isDestroyed() ? splash : window;
+
     if (isDev)
-        splash.webContents.send("CFUStatus", false);
+        win.webContents.send("CFUStatus", false);
     
     autoUpdater.once("update-available", (e) => {
         appConfig.set("changelog", e.releaseNotes);
-        splash.webContents.send("CFUStatus", true);
+        win.webContents.send("CFUStatus", true);
     });
-    autoUpdater.once("update-not-available", () => splash.webContents.send("CFUStatus", false));
-    autoUpdater.once("update-cancelled", () => splash.webContents.send("CFUStatus", false));
+    autoUpdater.once("update-not-available", () => win.webContents.send("CFUStatus", false));
+    autoUpdater.once("update-cancelled", () => win.webContents.send("CFUStatus", false));
     autoUpdater.once("error", (error) => {
         logger.error(error.message);
-        splash.webContents.send("CFUStatus", false);
+        win.webContents.send("CFUStatus", false);
     });
 });
 
