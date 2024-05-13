@@ -122,6 +122,14 @@ export function getAppInfo() {
 }
 
 /**
+ * Obtains the platform the app is running on
+ * @returns The platform the app is running on
+ */
+export function getPlatform() {
+    return ipcRenderer.sendSync("GetPlatform") as NodeJS.Platform;
+}
+
+/**
  * Obtains the icon of a file stored on the filesystem
  * @param path The path to the file to get the icon from
  * @returns The base64 encoded png icon
@@ -392,6 +400,7 @@ contextBridge.exposeInMainWorld("app", {
     setSetting,
     resetSettings,
     getAppInfo,
+    getPlatform,
     getFileIcon,
     isDirectory,
     showOpenDialog,

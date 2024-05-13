@@ -57,6 +57,8 @@ async function createWindow() {
         maximizable: false,
         show: false,
         icon: !isDev ? path.join(__dirname, "./dist/www/logo.png") : path.join(__dirname, "../svelte/static/logo.png"),
+        titleBarStyle: "hiddenInset",
+        trafficLightPosition: { x: 13, y: 13 },
         webPreferences: {
             devTools: isDebug,
             preload: path.join(__dirname, "preload.js")
@@ -214,6 +216,8 @@ ipcMain.on("GetAppInfo", (event) => {
         api: !isDev ? "https://skyshare.vercel.app/" : "http://localhost:5174/"
     }
 });
+
+ipcMain.on("GetPlatform", (event) => event.returnValue = process.platform);
 
 ipcMain.handle("GetFileIcon", async (_event, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
