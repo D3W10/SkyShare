@@ -23,12 +23,12 @@
             <h1 class="w-full text-xl font-semibold">{$i18n.t("account.0.title")}</h1>
             <Columns>
                 <div slot="left" class="flex flex-col justify-center items-center space-y-6">
-                    {#if !$account || !$account.photo}
+                    {#if !$account.loggedIn || !$account.photo}
                         <Icon name="account" className="w-3/5 text-primary" />
                     {:else}
                         <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-3/5 rounded-full aspect-square" />
                     {/if}
-                    <p class="text-lg font-semibold">{$account?.username}</p>
+                    <p class="text-lg font-semibold">{$account.username}</p>
                 </div>
                 <div slot="right" class="flex flex-col justify-center space-y-4">
                     <BlockLink text={$i18n.t("account.0.history")} icon="history-bold" on:click={() => {}} />

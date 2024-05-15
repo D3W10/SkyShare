@@ -68,14 +68,14 @@
                 {#if loginAnimate}
                     <div class="h-full flex flex-col justify-center items-center">
                         <div class="w-40 h-40" in:scale={{ duration: 1000, delay: 400, start: 1.5 }}>
-                            {#if !$account || !$account.photo}
+                            {#if !$account.loggedIn || !$account.photo}
                                 <Icon name="account" className="w-full text-primary transition-colors" />
                             {:else}
                                 <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-full h-full rounded-full" />
                             {/if}
                         </div>
                         <h1 class="mt-6 text-3xl font-semibold" in:fade={{ duration: 400, delay: 1800 }}>{$i18n.t("welcome.2.welcome")}</h1>
-                        <h2 class="mt-2 text-lg font-medium" in:fade={{ duration: 400, delay: 2100 }}>{$account?.username}</h2>
+                        <h2 class="mt-2 text-lg font-medium" in:fade={{ duration: 400, delay: 2100 }}>{$account.username}</h2>
                     </div>
                     <div class="ml-auto" in:fade={{ duration: 800, delay: 3000 }}>
                         <Button className="w-fit" on:click={() => page.set("account")}>{$i18n.t("welcome.2.continue")}</Button>

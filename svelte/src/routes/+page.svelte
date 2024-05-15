@@ -52,9 +52,9 @@
 
     function uriHandler(argv: string[]) {
         if (argv[0]) {
-            if (argv[0] == "login" && $account)
+            if (argv[0] == "login" && $account.loggedIn)
                 argv[0] = "account";
-            else if (argv[0] == "account" && !$account)
+            else if (argv[0] == "account" && !$account.loggedIn)
                 argv[0] = "login";
 
             if (["home", "send", "receive", "settings", "login", "account"].includes(argv[0]))
