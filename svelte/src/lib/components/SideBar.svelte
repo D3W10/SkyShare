@@ -37,7 +37,7 @@
         </Button>
         <Button type="invisible" className="w-full p-2 flex items-center justify-start font-semibold space-x-3" on:click={() => page.set("settings")}>
             <Icon name="settings" className="w-8 {$page.current == "settings" ? "text-[rgb(var(--color-settings))]" : ""} transition-colors" />
-            <p class={$page.current == "settings" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors animate-[shine_2s_linear_infinite]" : ""} style:background-image={$page.current == "settings" ? "linear-gradient(to right, #776ED8, rgb(var(--color-settings)), #2A2281, rgb(var(--color-settings)), #776ED8)" : ""}>{$i18n.t("sidebar.settings")}</p>
+            <p class={$page.current == "settings" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors animate-[shine_2s_linear_infinite]" : ""} style:background-image={$page.current == "settings" ? "linear-gradient(to right, #594ED0, rgb(var(--color-settings)), #2F2791, rgb(var(--color-settings)), #594ED0)" : ""}>{$i18n.t("sidebar.settings")}</p>
         </Button>
     </div>
 </div>
