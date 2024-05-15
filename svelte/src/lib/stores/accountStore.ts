@@ -47,8 +47,15 @@ export const account = (() => {
             return req;
         },
         setRecoveryToken: (token: string) => update(n => { n.recoveryToken = token; return n; }),
-        recovery: () => {
-            update(n => { n.recoveryToken = undefined; return n; });
+        recovery: async (email: string, password: string) => {
+            const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));
+            const $account = await new Promise<IAccountStore>((resolve) => account.subscribe(($account) => resolve($account)));
+            const req = await $app.account.recovery(email, password, $account.recoveryToken!);
+
+            if (req.success)
+                update(n => { n.recoveryToken = undefined; return n; });
+
+            return req;
         },
         logout: async () => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));

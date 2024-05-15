@@ -80,12 +80,24 @@
             "email": "Email",
             "recover": "Recover Account"
         },
-        {},
+        {
+            "title": "Email sent",
+            "sent": "Email sent!",
+            "sentDesc": "An email has been sent to the provided address!",
+            "notes": [
+                "Open the email you received and follow the link to reset your password.",
+                "If you did not receive an email, either it has been marked as spam or no account exists with this email address."
+            ]
+        },
         {
             "title" : "Recover Account",
             "password": "Password",
             "repeatPassword": "Repeat Password",
-            "recover": "Recover"
+            "recover": "Recover",
+            "confirmModal": "Confirm password",
+            "confirmModalDesc": "Please confirm your password to finish recovering your account",
+            "recoveredModal": "Account recovered",
+            "recoveredModalDesc": "Your account has successfully been recovered! You may now log in with your new password."
         },
         {
             "title" : "Create Account",
@@ -155,6 +167,8 @@
         "emailUnavailableDesc": "This email is already in use, please use another one.",
         "unknownSignup": "Unknown error",
         "unknownSignupDesc": "An unknown error occurred while trying to create your SkyShare account, please try again later.",
+        "invalidRecoveryToken": "Invalid recovery token",
+        "invalidRecoveryTokenDesc": "It appears that the recovery token from the email you received does not match the one stored, please request a new password reset.",
         "photoTooBig": "File size exceeded",
         "photoTooBigDesc": "The selected photo is bigger than 3 MB, please choose a smaller one.",
         "invalidPhoto": "Invalid photo",

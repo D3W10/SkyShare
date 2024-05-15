@@ -80,12 +80,24 @@
             "email": "Email",
             "recover": "Recuperar Conta"
         },
-        {},
+        {
+            "title": "Email enviado",
+            "sent": "Email enviado!",
+            "sentDesc": "Um email foi enviado para o endereço especificado!",
+            "notes": [
+                "Abra o email que recebeu e siga o link para repor a sua palavra-passe.",
+                "Se não recebeu um email, ou o mesmo foi marcado como spam ou não existe nenhuma conta com este endereço de email."
+            ]
+        },
         {
             "title" : "Recuperar Conta",
             "password": "Palavra-Passe",
             "repeatPassword": "Repetir Palavra-Passe",
-            "recover": "Recuperar"
+            "recover": "Recuperar",
+            "confirmModal": "Confirmar palavra-passe",
+            "confirmModalDesc": "Por favor confirme a sua palavra-passe para acabar de recuperar a sua conta",
+            "recoveredModal": "Conta recuperada",
+            "recoveredModalDesc": "A sua conta foi recuperada com sucesso! Pode agora iniciar sessão com a sua nova palavra-passe."
         },
         {
             "title" : "Criar Conta",
@@ -93,7 +105,7 @@
             "email": "Email",
             "password": "Palavra-Passe",
             "signup": "Criar conta",
-            "confirmModal": "Confirmar palavra-passw",
+            "confirmModal": "Confirmar palavra-passe",
             "confirmModalDesc": "Por favor confirme a sua palavra-passe para acabar de criar a sua conta"
         },
         {
@@ -155,6 +167,8 @@
         "emailUnavailableDesc": "Este email já está em utilização, por favor use outro.",
         "unknownSignup": "Erro desconhecido",
         "unknownSignupDesc": "Um erro desconhecido ocorreu ao tentar criar a sua conta SkyShare, por favor volte a tentar mais tarde.",
+        "invalidRecoveryToken": "Token de recuperação inválido",
+        "invalidRecoveryTokenDesc": "Parece que o token de recuperação do email recebido não coincide com o guardado, por favor peça um novo pedido de recuperação.",
         "photoTooBig": "Tamanho excedido",
         "photoTooBigDesc": "A foto de perfil selecionada é maior que 3 MB, por favor escolha uma com tamanho menor.",
         "invalidPhoto": "Foto de perfil inválida",

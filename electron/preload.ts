@@ -304,6 +304,22 @@ export const account = {
         return { success: api.code == 0 };
     },
     /**
+     * Recovers an account by setting a new password using a recovery token
+     * @param email The email of the account to recover
+     * @param password The new password to be set
+     * @param recoveryToken The recovery token sent to the email
+     * @returns An object containing one boolean with the success state
+     */
+    recovery: async (email: string, password: string, recoveryToken: string) => {
+        const api = await apiCall({
+            endpoint: "user/recovery",
+            method: "POST",
+            body: { email, password, recoveryToken }
+        });
+
+        return { success: api.code == 0 };
+    },
+    /**
      * Logs a user out
      */
     logout: () => {

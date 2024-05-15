@@ -14,12 +14,13 @@
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
+    import ProgressBar from "$lib/components/ProgressBar.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    let loginData = new VEStore(2, "", validators.string);
-    let requestData = new VEStore(1, "", validators.string);
-    let recoveryData = new VEStore(2, "", validators.string);
-    let signupData = new VEStore(3, "", validators.string), signupModal: boolean = false, repeatPassword: string = "";
+    let loginData = new VEStore<string>(2, "", validators.string);
+    let requestData = new VEStore<string>(1, "", validators.string);
+    let recoveryData = new VEStore<string>(1, "", validators.string), recoveryModal: boolean = false, recoveryRepPassword: string = "", recoveredModal: boolean = false;
+    let signupData = new VEStore<string>(3, "", validators.string), signupModal: boolean = false, signupRepPassword: string = "";
     let signupPhoto: string = "";
 
     async function onLogin() {
@@ -51,13 +52,22 @@
     async function onRecovery() {
         disable.lock();
 
+        if (recoveryData.a[0][1])
+            error.set(ErrorCode.INVALID_PASSWORD);
+        else {
+            let check = await account.recovery(requestData.a[0][0], recoveryData.a[0][0]);
+
+            if (check.success)
+                recoveredModal = true;
+        }
+
         disable.unlock();
     }
 
     async function onSignup() {
         disable.lock();
 
-        repeatPassword = "";
+        signupRepPassword = "";
         if (signupData.a[0][1])
             error.set(ErrorCode.INVALID_USERNAME);
         else if (signupData.a[1][1])
@@ -158,10 +168,30 @@
         </form>
     {:else if $page.subPage == 2}
         <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
-            <h1 class="w-full text-xl font-semibold"></h1>
+            <h1 class="w-full text-xl font-semibold">{$i18n.t("login.2.title")}</h1>
+            <Columns>
+                <div slot="left">
+                    <div class="w-full h-full flex justify-center items-center relative p-5 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 overflow-hidden space-y-1">
+                        <ProgressBar className="!absolute top-0 left-0 right-0 rounded-none" indeterminate />
+                        <div class="flex flex-col items-center space-y-1.5">
+                            <Icon name="email" className="w-1/3 text-account mb-2" />
+                            <p class="text-center font-semibold">{$i18n.t("login.2.sent")}</p>
+                            <p class="text-sm text-center">{$i18n.t("login.2.sentDesc")}</p>
+                        </div>
+                    </div>
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    <div class="w-full h-full flex justify-center items-center">
+                        <div class="w-3/5 space-y-8">
+                            <p class="text-center font-semibold">{$i18n.t("login.2.notes.0")}</p>
+                            <p class="text-center font-semibold">{$i18n.t("login.2.notes.1")}</p>
+                        </div>
+                    </div>
+                </div>
+            </Columns>
         </div>
     {:else if $page.subPage == 3}
-        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onRecovery}>
+        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => recoveryModal = true}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("login.3.title")}</h1>
             <Columns>
                 <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
@@ -173,10 +203,6 @@
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.3.password")}:</p>
                                 <Input type="password" bind:value={recoveryData.a[0][0]} bind:error={recoveryData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => recoveryData.announceChange()} />
-                            </div>
-                            <div class="space-y-1">
-                                <p class="font-semibold">{$i18n.t("login.3.repeatPassword")}:</p>
-                                <Input type="password" bind:value={recoveryData.a[1][0]} bind:error={recoveryData.a[1][1]} placeholder={$i18n.t("common.required")} on:input={() => recoveryData.announceChange()} />
                             </div>
                         </div>
                     </div>
@@ -259,7 +285,14 @@
         </form>
     {/if}
 </div>
-<Modal bind:show={signupModal} title={$i18n.t("login.4.confirmModal")} disabled={signupData.a[2][0] != repeatPassword} on:submit={onSignup}>
+<Modal bind:show={recoveryModal} title={$i18n.t("login.3.confirmModal")} disabled={recoveryData.a[0][0] != recoveryRepPassword} on:submit={onRecovery}>
+    <p>{$i18n.t("login.3.confirmModalDesc")}</p>
+    <Input type="password" bind:value={recoveryRepPassword} placeholder={$i18n.t("common.required")} />
+</Modal>
+<Modal bind:show={recoveredModal} title={$i18n.t("login.3.recoveredModal")} canCancel={false} on:submit={() => page.set("login")}>
+    <p>{$i18n.t("login.3.recoveredModalDesc")}</p>
+</Modal>
+<Modal bind:show={signupModal} title={$i18n.t("login.4.confirmModal")} disabled={signupData.a[2][0] != signupRepPassword} on:submit={onSignup}>
     <p>{$i18n.t("login.4.confirmModalDesc")}</p>
-    <Input type="password" bind:value={repeatPassword} placeholder={$i18n.t("common.required")} />
+    <Input type="password" bind:value={signupRepPassword} placeholder={$i18n.t("common.required")} />
 </Modal>

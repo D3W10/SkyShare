@@ -40,13 +40,13 @@ const errorList = {
     [ErrorCode.INVALID_USERNAME]: "invalidUsername",
     [ErrorCode.INVALID_EMAIL]: "invalidEmail",
     [ErrorCode.INVALID_PASSWORD]: "invalidPassword",
-    [ErrorCode.INVALID_NEW_PASSWORD]: "",
+    [ErrorCode.INVALID_NEW_PASSWORD]: "", // TODO - Msg missing
     [ErrorCode.WRONG_USERPASS]: "wrongUserPass",
     [ErrorCode.USERNAME_UNAVAILABLE]: "usernameUnavailable",
     [ErrorCode.EMAIL_UNAVAILABLE]: "emailUnavailable",
     [ErrorCode.UNKNOWN_SIGNUP]: "unknownSignup",
     [ErrorCode.INVALID_REQUEST_TYPE]: "miscommunication",
-    [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken", // TODO - Msg missing
+    [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken",
     [ErrorCode.PHOTO_TOO_BIG]: "photoTooBig",
     [ErrorCode.INVALID_PHOTO]: "invalidPhoto",
     [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
