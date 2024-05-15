@@ -59,6 +59,10 @@
 
             if (["home", "send", "receive", "settings", "login", "account"].includes(argv[0]))
                 page.set(argv[0] as pages);
+            else if (argv[0] == "recovery" && argv[1] && $account.recoveryToken == "") {
+                account.setRecoveryToken(argv[1]);
+                page.set("login", 3);
+            }
         }
     }
 </script>

@@ -78,10 +78,15 @@
         {
             "title": "Esqueci-me da minha Palavra-Passe",
             "email": "Email",
-            "reset": "Reset Account"
+            "recover": "Recuperar Conta"
         },
         {},
-        {},
+        {
+            "title" : "Recuperar Conta",
+            "password": "Palavra-Passe",
+            "repeatPassword": "Repetir Palavra-Passe",
+            "recover": "Recuperar"
+        },
         {
             "title" : "Criar Conta",
             "username": "Nome de Utilizador",

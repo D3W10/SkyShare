@@ -18,6 +18,7 @@
 
     let loginData = new VEStore(2, "", validators.string);
     let requestData = new VEStore(1, "", validators.string);
+    let recoveryData = new VEStore(2, "", validators.string);
     let signupData = new VEStore(3, "", validators.string), signupModal: boolean = false, repeatPassword: string = "";
     let signupPhoto: string = "";
 
@@ -43,6 +44,12 @@
             if (check.success)
                 page.set("login", 2);
         }
+
+        disable.unlock();
+    }
+
+    async function onRecovery() {
+        disable.lock();
 
         disable.unlock();
     }
@@ -145,7 +152,35 @@
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={!$requestData.isFilled()} submit>{$i18n.t("login.1.reset")}</Button>
+                    <Button className="w-fit" disabled={!$requestData.isFilled()} submit>{$i18n.t("login.1.recover")}</Button>
+                </div>
+            </Columns>
+        </form>
+    {:else if $page.subPage == 2}
+        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+            <h1 class="w-full text-xl font-semibold"></h1>
+        </div>
+    {:else if $page.subPage == 3}
+        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onRecovery}>
+            <h1 class="w-full text-xl font-semibold">{$i18n.t("login.3.title")}</h1>
+            <Columns>
+                <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
+                    <Icon name="accountRecovery" className="w-2/3 text-primary" />
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    <div class="w-full h-full flex justify-center items-center">
+                        <div class="w-3/5 space-y-8">
+                            <div class="space-y-1">
+                                <p class="font-semibold">{$i18n.t("login.3.password")}:</p>
+                                <Input type="password" bind:value={recoveryData.a[0][0]} bind:error={recoveryData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => recoveryData.announceChange()} />
+                            </div>
+                            <div class="space-y-1">
+                                <p class="font-semibold">{$i18n.t("login.3.repeatPassword")}:</p>
+                                <Input type="password" bind:value={recoveryData.a[1][0]} bind:error={recoveryData.a[1][1]} placeholder={$i18n.t("common.required")} on:input={() => recoveryData.announceChange()} />
+                            </div>
+                        </div>
+                    </div>
+                    <Button className="w-fit" disabled={!$recoveryData.isFilled()} submit>{$i18n.t("login.3.recover")}</Button>
                 </div>
             </Columns>
         </form>

@@ -10,7 +10,7 @@ interface IAccountStore {
 }
 
 export const account = (() => {
-    const { subscribe, set } = writable<IAccountStore>({ loggedIn: false } as IAccountStore);
+    const { subscribe, set, update } = writable<IAccountStore>({ loggedIn: false } as IAccountStore);
 
     return {
         subscribe,
@@ -42,12 +42,13 @@ export const account = (() => {
             const req = await $app.account.request(type, email, language);
 
             if (req.success && type == "recovery")
-                set({ loggedIn: false, recoveryToken: "" } as IAccountStore);
+                update(n => { n.recoveryToken = ""; return n; });
 
             return req;
         },
+        setRecoveryToken: (token: string) => update(n => { n.recoveryToken = token; return n; }),
         recovery: () => {
-            set({ loggedIn: false, recoveryToken: undefined } as IAccountStore);
+            update(n => { n.recoveryToken = undefined; return n; });
         },
         logout: async () => {
             const $app = await new Promise<typeof import("$electron/preload")>((resolve) => app.subscribe(($app) => resolve($app)));

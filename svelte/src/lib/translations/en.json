@@ -78,10 +78,15 @@
         {
             "title": "Forgot my password",
             "email": "Email",
-            "reset": "Reset Account"
+            "recover": "Recover Account"
         },
         {},
-        {},
+        {
+            "title" : "Recover Account",
+            "password": "Password",
+            "repeatPassword": "Repeat Password",
+            "recover": "Recover"
+        },
         {
             "title" : "Create Account",
             "username": "Username",

@@ -139,6 +139,7 @@ function uriHandler(argv: string[]) {
     const args = uriArg.slice("skyshare://".length).split("/");
     
     logger.log("Handling arguments");
+    logger.log(`Arguments: [${args}]`);
 
     if (window.isMinimized())
         window.restore();
