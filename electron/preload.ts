@@ -242,7 +242,7 @@ export const account = {
             logger.log("Log in successful");
         }
 
-        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
+        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
     },
     /**
      * Checks if a username and email are available to be picked
@@ -285,7 +285,7 @@ export const account = {
             logger.log("Sign up successful");
         }
 
-        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo } : null };
+        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
     },
     /**
      * Sends an email request from a specific user account

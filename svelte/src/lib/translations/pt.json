@@ -42,6 +42,9 @@
         "fileIcon": "Icone do ficheiro",
         "send": "Enviar"
     },
+    "receive": {
+        "title": "Receber ficheiros"
+    },
     "settings": {
         "title": "Definições",
         "appearance": "Aparência",
@@ -142,11 +145,30 @@
             "history" : "Histórico",
             "edit" : "Editar Conta",
             "logout": "Terminar Sessão"
+        },
+        {
+            "title": "Histórico"
+        },
+        {
+            "title": "Editar Conta",
+            "informations": "Informações",
+            "password": "Palavra-Passe",
+            "personalization": "Personalização",
+            "history": "Histórico",
+            "about": "Sobre",
+            "enableHistory": "Ativar histórico",
+            "enableHistoryDesc": "Guardar itens no histórico de transferências",
+            "clearHistory": "Limpar histórico",
+            "clearHistoryDesc": "Limpa todo o histórico de transferências",
+            "clearHistoryButton": "Limpar",
+            "memberSince": "Membro desde {{date}}"
         }
     ],
     "modal": {
         "okay": "OK",
         "cancel": "Cancelar",
+        "yes": "Sim",
+        "no": "Não",
         "disabled": "Informação",
         "disabledDesc": "Uma operação está atualmente em execução, só poderá fechar o SkyShare quando o mesmo estiver concluído!",
         "offline": "Está offline",

@@ -6,6 +6,7 @@ interface IAccountStore {
     username: string;
     password: string;
     photo?: string;
+    createdAt: Date;
     recoveryToken?: string;
 }
 

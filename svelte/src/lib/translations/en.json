@@ -42,6 +42,9 @@
         "fileIcon": "File icon",
         "send": "Send"
     },
+    "receive": {
+        "title": "Receive files"
+    },
     "settings": {
         "title": "Settings",
         "appearance": "Appearance",
@@ -142,11 +145,30 @@
             "history" : "History",
             "edit" : "Edit Account",
             "logout": "Log Out"
+        },
+        {
+            "title": "History"
+        },
+        {
+            "title": "Edit Account",
+            "informations": "Informations",
+            "password": "Password",
+            "personalization": "Personalization",
+            "history": "History",
+            "about": "About",
+            "enableHistory": "Enable history",
+            "enableHistoryDesc": "Save new entries to the transfer history",
+            "clearHistory": "Clear history",
+            "clearHistoryDesc": "Clear all transfer history entries",
+            "clearHistoryButton": "Clear",
+            "memberSince": "Membed since {{date}}"
         }
     ],
     "modal": {
         "okay": "Okay",
         "cancel": "Cancel",
+        "yes": "Yes",
+        "no": "No",
         "disabled": "Information",
         "disabledDesc": "An operation is currently running, you may only close SkyShare once it's finished!",
         "offline": "You're offline",
