@@ -21,7 +21,7 @@
     $: setTimeout(() => loginAnimate = $page.subPage == 3, $page.subPage == 3 ? 400 : 0);
 </script>
 
-<div class="w-full h-full p-6 space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+<div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
         <div class="w-full h-full" in:fly={$transition.subpageIn} out:fade={$transition.subpageOut}>
             <video bind:this={welcomeMovie} class="absolute inset-0" src={$settings.theme == 0 ? "./introLight.mp4" : "./introDark.mp4"} on:ended={() => { page.set("welcome", 1); disable.unlock(); }}>
@@ -29,7 +29,7 @@
             </video>
         </div>
     {:else if $page.subPage == 1}
-        <div class="w-full h-full flex flex-col" in:fade={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="w-full h-full flex flex-col space-y-4" in:fade={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("welcome.0.title")}</h1>
             <Columns>
                 <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
@@ -47,7 +47,7 @@
             </Columns>
         </div>
     {:else if $page.subPage == 2}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("welcome.1.title")}</h1>
             <div class="w-full h-full flex flex-col justify-between items-center p-5 pb-0">
                 <div class="w-full h-[25rem] grid grid-rows-3 gap-5">

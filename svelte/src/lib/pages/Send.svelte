@@ -62,9 +62,9 @@
     }
 </script>
 
-<div class="w-full h-full p-6 space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+<div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("send.title")}</h1>
             <Columns>
                 <div slot="left">
@@ -130,7 +130,7 @@
             </Columns>
         </div>
     {:else if $page.subPage == 1}
-        <div in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">Haha</h1>
                 <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("send", 0)}>

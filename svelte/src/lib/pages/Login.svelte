@@ -111,9 +111,9 @@
     }
 </script>
 
-<div class="w-full h-full p-6 space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+<div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
-        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onLogin}>
+        <form class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onLogin}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("login.0.title")}</h1>
             <Columns>
                 <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
@@ -141,10 +141,10 @@
             </Columns>
         </form>
     {:else if $page.subPage == 1}
-        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onRequest}>
+        <form class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onRequest}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">{$i18n.t("login.1.title")}</h1>
-                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login", 0)}>
+                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login")}>
                     <Icon name="chevron" className="w-5 h-5 mr-1 fill-current rotate-90" />
                     {$i18n.t("common.back")}
                 </Button>
@@ -167,7 +167,7 @@
             </Columns>
         </form>
     {:else if $page.subPage == 2}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("login.2.title")}</h1>
             <Columns>
                 <div slot="left">
@@ -191,7 +191,7 @@
             </Columns>
         </div>
     {:else if $page.subPage == 3}
-        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => recoveryModal = true}>
+        <form class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => recoveryModal = true}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("login.3.title")}</h1>
             <Columns>
                 <div slot="left" class="flex justify-center items-center" in:scale|global={$transition.iconJump}>
@@ -211,10 +211,10 @@
             </Columns>
         </form>
     {:else if $page.subPage == 4}
-        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => signupModal = true}>
+        <form class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={() => signupModal = true}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">{$i18n.t("login.4.title")}</h1>
-                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login", 0)}>
+                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login")}>
                     <Icon name="chevron" className="w-5 h-5 mr-1 fill-current rotate-90" />
                     {$i18n.t("common.back")}
                 </Button>
@@ -245,7 +245,7 @@
             </Columns>
         </form>
     {:else if $page.subPage == 5}
-        <form class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onSignupComplete}>
+        <form class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut} on:submit|preventDefault={onSignupComplete}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">{$i18n.t("login.5.title")}</h1>
                 <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("login", 4)}>

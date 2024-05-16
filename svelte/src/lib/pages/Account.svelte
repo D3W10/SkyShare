@@ -17,9 +17,9 @@
     }
 </script>
 
-<div class="w-full h-full p-6 space-y-4" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+<div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
-        <div class="w-full h-full flex flex-col" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("account.0.title")}</h1>
             <Columns>
                 <div slot="left" class="flex flex-col justify-center items-center space-y-6">
