@@ -19,7 +19,7 @@
     export let error: boolean = false;
     export let errorChecking: boolean = true;
     
-    let inputElm: HTMLInputElement;
+    export let inputElm: HTMLInputElement | undefined = undefined;
     const displayed = spring(), dispatch = createEventDispatcher<{ input: { value: any } }>();
 
     $: {
@@ -75,11 +75,11 @@
 {:else}
     <div class="bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm transition-colors duration-200 focus-within:border-primary {disabled || $disable.d ? "opacity-50" : ""} {!error || "animate-[errorGlow_0.5s_linear_infinite_alternate]"} {className}">
         {#if type == "text" || type == "email" || type == "username"}
-            <input type="text" {placeholder} disabled={disabled || $disable.d} maxlength={type == "email" ? 250 : (type == "username" ? 15 : maxlength)} bind:value bind:this={inputElm} on:input={triggerEvent} />
+            <input class={innerClassName} type="text" {placeholder} disabled={disabled || $disable.d} maxlength={type == "email" ? 250 : (type == "username" ? 15 : maxlength)} bind:value bind:this={inputElm} on:input={triggerEvent} on:keydown />
         {:else if type == "number"}
-            <input type="number" {placeholder} disabled={disabled || $disable.d} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
+            <input class={innerClassName} type="number" {placeholder} disabled={disabled || $disable.d} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} on:keydown />
         {:else if type == "password"}
-            <input type="password" {placeholder} disabled={disabled || $disable.d} maxlength={50} bind:value bind:this={inputElm} on:input={triggerEvent} />
+            <input class={innerClassName} type="password" {placeholder} disabled={disabled || $disable.d} maxlength={50} bind:value bind:this={inputElm} on:input={triggerEvent} on:keydown />
         {:else if type == "wheel"}
             <div class="flex">
                 <div class="w-full h-8 relative overflow-hidden">
@@ -120,7 +120,7 @@
     }
 
     input[type="text"], input[type="number"], input[type="password"] {
-        @apply w-full px-2 py-1.5 bg-transparent;
+        @apply w-full h-full px-2 py-1.5 bg-transparent;
     }
 
     input[type="range"]::-webkit-slider-thumb {

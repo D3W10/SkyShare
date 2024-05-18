@@ -43,7 +43,9 @@
         "send": "Enviar"
     },
     "receive": {
-        "title": "Receber ficheiros"
+        "title": "Receber ficheiros",
+        "code": "Código de transferência",
+        "nearbyShare": "Ativar NearbyShare"
     },
     "settings": {
         "title": "Definições",
