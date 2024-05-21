@@ -3,15 +3,17 @@ import { app } from "./appStore";
 
 interface IAccountStore {
     loggedIn: boolean;
+    startup: boolean;
     username: string;
     password: string;
+    email: string;
     photo?: string;
     createdAt: Date;
     recoveryToken?: string;
 }
 
 export const account = (() => {
-    const { subscribe, set, update } = writable<IAccountStore>({ loggedIn: false } as IAccountStore);
+    const { subscribe, set, update } = writable<IAccountStore>({ loggedIn: false, startup: true } as IAccountStore);
 
     return {
         subscribe,
@@ -20,7 +22,7 @@ export const account = (() => {
             const loginAttempt = await $app.account.login(username, password, encrypted);
 
             if (loginAttempt.success)
-                set({ loggedIn: true, ...loginAttempt.data! });
+                set({ loggedIn: true, startup: encrypted, ...loginAttempt.data! });
 
             return loginAttempt.success;
         },
@@ -34,7 +36,7 @@ export const account = (() => {
             const signupAttempt = await $app.account.signup(username, email, password, photo);
 
             if (signupAttempt.success)
-                set({ loggedIn: true, ...signupAttempt.data! });
+                set({ loggedIn: true, startup: false, ...signupAttempt.data! });
 
             return signupAttempt.success;
         },
