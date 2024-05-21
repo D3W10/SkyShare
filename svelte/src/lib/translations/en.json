@@ -158,12 +158,19 @@
             "personalization": "Personalization",
             "history": "History",
             "about": "About",
+            "username": "Username",
+            "usernameDesc": "Change your account username",
+            "email": "Email",
+            "emailDesc": "Change your account email",
+            "delete": "Delete Account",
+            "deleteDesc": "Delete your SkyShare account",
+            "deleteButton": "Delete",
             "enableHistory": "Enable history",
             "enableHistoryDesc": "Save new entries to the transfer history",
             "clearHistory": "Clear history",
             "clearHistoryDesc": "Clear all transfer history entries",
             "clearHistoryButton": "Clear",
-            "memberSince": "Membed since {{date}}"
+            "memberSince": "Member since {{date}}"
         }
     ],
     "modal": {

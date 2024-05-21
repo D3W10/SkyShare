@@ -15,6 +15,7 @@
     type settingsPages = "informations" | "password" | "personalization" | "history" | "about";
 
     let currentPage: settingsPages = "informations", showModal = false;
+    let editUsername: string = "", editEmail: string = "";
 
     // TODO Temp
     let historyEnabled: boolean = true;
@@ -92,6 +93,27 @@
                 <div slot="right" class="!w-2/3 !ml-6 py-3.5 pl-5">
                     {#if currentPage == "informations"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p>{$i18n.t("account.2.username")}</p>
+                                    <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.usernameDesc")}</p>
+                                </div>
+                                <Input type="username" value={editUsername} placeholder={$account.username} />
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p>{$i18n.t("account.2.email")}</p>
+                                    <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.emailDesc")}</p>
+                                </div>
+                                <Input type="email" value={editEmail} placeholder={$account.email} />
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p>{$i18n.t("account.2.delete")}</p>
+                                    <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.deleteDesc")}</p>
+                                </div>
+                                <Button type="small" secondary on:click={() => {/* TODO */}}>{$i18n.t("account.2.deleteButton")}</Button>
+                            </div>
                         </div>
                     {:else if currentPage == "password"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -113,7 +135,7 @@
                                     <p>{$i18n.t("account.2.clearHistory")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.clearHistoryDesc")}</p>
                                 </div>
-                                <Button type="small" secondary on:click={() => {}}>{$i18n.t("account.2.clearHistoryButton")}</Button>
+                                <Button type="small" secondary on:click={() => {/* TODO */}}>{$i18n.t("account.2.clearHistoryButton")}</Button>
                             </div>
                         </div>
                     {:else if currentPage == "about"}

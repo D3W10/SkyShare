@@ -22,12 +22,14 @@ export enum ErrorCode {
     OFFLINE = -2, SERVER_ERROR = -1,
     MISSING_PARAMETER = 1, NO_PARAMETERS,
     INVALID_USERNAME, INVALID_EMAIL,
-    INVALID_PASSWORD, INVALID_NEW_PASSWORD,
+    INVALID_PASSWORD, INVALID_NEW_USERNAME,
+    INVALID_NEW_EMAIL, INVALID_NEW_PASSWORD,
     WRONG_USERPASS, USERNAME_UNAVAILABLE,
-    EMAIL_UNAVAILABLE, UNKNOWN_SIGNUP,
-    INVALID_REQUEST_TYPE, INVALID_RECOVERY_TOKEN, // 14
-    PHOTO_TOO_BIG, // 20
-    INVALID_PHOTO, // 21
+    EMAIL_UNAVAILABLE, PHOTO_TOO_BIG,
+    INVALID_PHOTO, UNKNOWN_SIGNUP,
+    INVALID_REQUEST_TYPE, INVALID_RECOVERY_TOKEN,
+    UNKNOWN_EDIT,
+
     TOO_MANY_FILES, // 24
     SIZE_LIMIT_EXCEEDED // 25
 }
@@ -40,15 +42,18 @@ const errorList = {
     [ErrorCode.INVALID_USERNAME]: "invalidUsername",
     [ErrorCode.INVALID_EMAIL]: "invalidEmail",
     [ErrorCode.INVALID_PASSWORD]: "invalidPassword",
+    [ErrorCode.INVALID_NEW_USERNAME]: "", // TODO - Msg missing
+    [ErrorCode.INVALID_NEW_EMAIL]: "", // TODO - Msg missing
     [ErrorCode.INVALID_NEW_PASSWORD]: "", // TODO - Msg missing
     [ErrorCode.WRONG_USERPASS]: "wrongUserPass",
     [ErrorCode.USERNAME_UNAVAILABLE]: "usernameUnavailable",
     [ErrorCode.EMAIL_UNAVAILABLE]: "emailUnavailable",
+    [ErrorCode.PHOTO_TOO_BIG]: "photoTooBig",
+    [ErrorCode.INVALID_PHOTO]: "invalidPhoto",
     [ErrorCode.UNKNOWN_SIGNUP]: "unknownSignup",
     [ErrorCode.INVALID_REQUEST_TYPE]: "miscommunication",
     [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken",
-    [ErrorCode.PHOTO_TOO_BIG]: "photoTooBig",
-    [ErrorCode.INVALID_PHOTO]: "invalidPhoto",
+    [ErrorCode.UNKNOWN_EDIT]: "", // TODO - Msg missing
     [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
     [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
 }
