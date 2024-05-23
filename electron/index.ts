@@ -58,7 +58,7 @@ async function createWindow() {
         show: false,
         icon: !isDev ? path.join(__dirname, "./dist/www/logo.png") : path.join(__dirname, "../svelte/static/logo.png"),
         titleBarStyle: "hiddenInset",
-        trafficLightPosition: { x: 13, y: 13 },
+        trafficLightPosition: { x: 12, y: 12 },
         webPreferences: {
             devTools: isDebug,
             preload: path.join(__dirname, "preload.js")
