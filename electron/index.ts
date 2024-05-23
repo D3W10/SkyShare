@@ -10,7 +10,7 @@ import { IStore } from "./lib/Store.interface";
 
 require("electron-reload")(__dirname);
 
-var window: BrowserWindow, splash: BrowserWindow;
+var window: BrowserWindow, splash: BrowserWindow, closeLock: boolean = true;
 const winWidth: number = 1000, winHeight: number = 600;
 const isDev: boolean = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
@@ -67,6 +67,15 @@ async function createWindow() {
 
     window.loadURL(!isDev ? `file:///${path.join(__dirname, "www", "index.html")}` : "http://localhost:5173/");
     window.once("ready-to-show", () => splash.webContents.send("WindowReady"));
+    if (process.platform == "darwin") {
+        window.on("close", (e) => {
+            if (closeLock) {
+                e.preventDefault();
+                window.webContents.send("WindowClose");
+            }
+        });
+    }
+
     window.webContents.setWindowOpenHandler(({ url }) => {
         try {
             let { protocol } = new URL(url);
@@ -195,7 +204,10 @@ ipcMain.on("CheckForUpdates", () => {
     });
 });
 
-ipcMain.on("CloseWindow", () => BrowserWindow.getFocusedWindow()!.close());
+ipcMain.on("CloseWindow", () => {
+    closeLock = false;
+    BrowserWindow.getFocusedWindow()!.close();
+});
 
 ipcMain.on("MinimizeWindow", () => BrowserWindow.getFocusedWindow()!.minimize());
 

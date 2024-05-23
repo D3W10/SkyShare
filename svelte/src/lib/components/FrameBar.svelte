@@ -12,6 +12,8 @@
     let showModal: boolean = false, logoClick: number = 0, logoClickTimeout: NodeJS.Timeout;
     const offlineBubble = tweened(0, { duration: 1500, easing: quartOut }), MAX_SIZE = 105;
 
+    $app?.updateCloseCallback(() => onRedButtonClick());
+
     onMount(() => {
         const offlineAction = () => {
             offlineBubble.set(MAX_SIZE);

@@ -12,13 +12,11 @@
     const DEFAULT_STATUS = $i18n.t("splash.starting");
     let start = false, status = DEFAULT_STATUS, dlPercent = 0, splashReady = false, winReady = false;
 
-    if ($app) {
-        $app.updateReadyCallback(() => {
-            winReady = true;
-            $app.log("Main window ready");
-            onReady();
-        });
-    }
+    $app?.updateReadyCallback(() => {
+        winReady = true;
+        $app.log("Main window ready");
+        onReady();
+    });
 
     async function checkConnection() {
         if (!navigator.onLine) {

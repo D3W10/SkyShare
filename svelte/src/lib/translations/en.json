@@ -178,7 +178,7 @@
         "cancel": "Cancel",
         "yes": "Yes",
         "no": "No",
-        "disabled": "Information",
+        "disabled": "Hold on",
         "disabledDesc": "An operation is currently running, you may only close SkyShare once it's finished!",
         "offline": "You're offline",
         "offlineDesc": "There was an error while trying to reach the internet, make sure you're online and you have a stable connection.",

@@ -42,11 +42,9 @@
         catch {}
     }
 
-    if ($app) {
-        $app.updateUriCallback(uriHandler);
-        $app.updateLoginCallback((username, password) => account.login(username, password, true));
-        $app.updateErrorCallback((code: number) => error.set(code));
-    }
+    $app?.updateUriCallback(uriHandler);
+    $app?.updateLoginCallback((username, password) => account.login(username, password, true));
+    $app?.updateErrorCallback((code: number) => error.set(code));
 
     $: showErrorModal = $error.show;
 

@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false;
-let isOffline: () => boolean, winReady: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
+let isOffline: () => boolean, winReady: () => unknown, winClose: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
 const logger =  {
@@ -367,6 +367,15 @@ export function updateReadyCallback(callback: () => unknown) {
 }
 
 /**
+ * Updates the callback function reference to where the main window close event should be sent
+ * 
+ * @param callback The function to call when the window is about to close
+ */
+export function updateCloseCallback(callback: () => unknown) {
+    winClose = callback;
+}
+
+/**
  * Updates the callback function reference to where the login result should be sent
  * @param callback The function to receive the login result
  */
@@ -399,6 +408,8 @@ ipcRenderer.on("WindowReady", () => {
         wReady = true;
 });
 
+ipcRenderer.on("WindowClose", () => winClose());
+
 ipcRenderer.on("LoginRequest", async (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", await loginHandler(username, password)));
 
 ipcRenderer.on("UriHandler", (_, args: string[]) => uriHandler(args));
@@ -428,6 +439,7 @@ contextBridge.exposeInMainWorld("app", {
     sleep,
     updateOfflineCallback,
     updateReadyCallback,
+    updateCloseCallback,
     updateLoginCallback,
     updateUriCallback,
     updateErrorCallback

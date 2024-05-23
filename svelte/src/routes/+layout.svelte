@@ -2,8 +2,7 @@
     import "../app.css";
     import { app } from "$lib/stores/appStore";
 
-    if ($app)
-        $app.updateOfflineCallback(() => !navigator.onLine);
+    $app?.updateOfflineCallback(() => !navigator.onLine);
 </script>
 
 <slot />
