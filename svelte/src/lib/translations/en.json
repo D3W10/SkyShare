@@ -50,6 +50,7 @@
     "settings": {
         "title": "Settings",
         "appearance": "Appearance",
+        "nearbyShare": "NearbyShare",
         "updates": "Updates",
         "reset": "Reset",
         "about": "About",
@@ -59,6 +60,10 @@
         "themeDark": "Dark",
         "language": "Language",
         "languageDesc": "Modify the application language",
+        "nearbyShareEnabled": "Enable NearbyShare",
+        "nearbyShareEnabledDesc": "Enable quick file sharing on this network",
+        "nearbyShareAnnon": "Show my info",
+        "nearbyShareAnnonDesc": "Display my name and photo when using NearbyShare",
         "checkForUpdates": "Check for updates",
         "checkForUpdatesDesc": "Manually check for updates",
         "check": "Check",
@@ -211,6 +216,12 @@
         "sizeLimitExceededDesc": "The total file size must not exceed 3 GB.",
         "fileWithSameName": "Failed to add files",
         "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names.",
+        "nearbyShare": "Quick Note",
+        "nearbyShareDesc": [
+            "With this feature enabled, when you have the receive page open, your device will be discovered by other people on the same network.",
+            "When someone on your network is sending files, a list of people with the NearbyShare feature on will be shown providing quick transfers without the need of sharing the transfer code.",
+            "Your info will not be shared on the network unless you have a SkyShare account and you opt-in using the \"Show my info\" switch."
+        ],
         "noUpdates": "All good!",
         "noUpdatesDesc": "You already have the latest version of SkyShare. That's great news!",
         "betaUpdates": "Important note",

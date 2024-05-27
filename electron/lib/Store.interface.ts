@@ -8,6 +8,7 @@ export interface IStoreSettings {
     theme: number;
     language: string;
     nearbyShare: boolean;
+    nearbyShareReveal: boolean;
     autoUpdate: boolean;
     betaUpdates: boolean;
 }

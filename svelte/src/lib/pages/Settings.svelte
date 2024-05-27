@@ -4,6 +4,7 @@
     import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
     import { transition } from "$lib/stores/transitionStore";
+    import { account } from "$lib/stores/accountStore";
     import { settings } from "$lib/stores/settingsStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -13,10 +14,10 @@
     import ProgressBar from "$lib/components/ProgressBar.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    type settingsPages = "appearance" | "updates" | "reset" | "about";
+    type settingsPages = "appearance" | "nearbyShare" | "updates" | "reset" | "about";
 
     let currentPage: settingsPages = "appearance", updating: 0 | 1 | 2 = 0, versionClick: number = 0, versionClickTimeout: NodeJS.Timeout;
-    let updatedAlert: boolean = false, betaAlert: boolean = false, resetAlert: boolean = false;
+    let nearbyShareAlert: boolean = false, updatedAlert: boolean = false, betaAlert: boolean = false, resetAlert: boolean = false;
     let langs = [
         { id: "en", name: "English" },
         { id: "pt", name: "Português" }
@@ -67,6 +68,10 @@
                     <Icon name="appearance" className="h-6" />
                     <p>{$i18n.t("settings.appearance")}</p>
                 </Button>
+                <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "nearbyShare" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "nearbyShare"}>
+                    <Icon name="nearbyShare" className="h-6" />
+                    <p>{$i18n.t("settings.nearbyShare")}</p>
+                </Button>
                 <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "updates" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "updates"}>
                     <Icon name="updates" className="h-6" />
                     <p>{$i18n.t("settings.updates")}</p>
@@ -98,6 +103,25 @@
                         </div>
                         <ComboBox className="w-32" items={langs.map((value) => value.name)} selected={langs.findIndex((value) => value.id == $settings.language)} on:change={(e) => { settings.update("language", langs[e.detail.selected].id); $i18n.changeLanguage(langs[e.detail.selected].id)}} />
                     </div>
+                </div>
+            {:else if currentPage == "nearbyShare"}
+                <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p>{$i18n.t("settings.nearbyShareEnabled")}</p>
+                            <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.nearbyShareEnabledDesc")}</p>
+                        </div>
+                        <Input type="switch" value={$settings.nearbyShare} on:input={(e) => { settings.update("nearbyShare", e.detail.value); if (e.detail.value) nearbyShareAlert = true; }} />
+                    </div>
+                    {#if $account.loggedIn}
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p>{$i18n.t("settings.nearbyShareAnnon")}</p>
+                                <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.nearbyShareAnnonDesc")}</p>
+                            </div>
+                            <Input type="switch" value={$settings.nearbyShareReveal} on:input={(e) => settings.update("nearbyShareReveal", e.detail.value)} />
+                        </div>
+                    {/if}
                 </div>
             {:else if currentPage == "updates"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -147,6 +171,11 @@
         </div>
     </Columns>
 </div>
+<Modal bind:show={nearbyShareAlert} title={$i18n.t("modal.nearbyShare")} canCancel={false}>
+    <p>{$i18n.t("modal.nearbyShareDesc.0")}</p>
+    <p>{$i18n.t("modal.nearbyShareDesc.1")}</p>
+    <p>{$i18n.t("modal.nearbyShareDesc.2")}</p>
+</Modal>
 <Modal bind:show={updatedAlert} title={$i18n.t("modal.noUpdates")} canCancel={false}>
     <p>{$i18n.t("modal.noUpdatesDesc")}</p>
 </Modal>

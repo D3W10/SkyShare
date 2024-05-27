@@ -50,6 +50,7 @@
     "settings": {
         "title": "Definições",
         "appearance": "Aparência",
+        "nearbyShare": "NearbyShare",
         "updates": "Atualizações",
         "reset": "Repor",
         "about": "Sobre",
@@ -59,6 +60,10 @@
         "themeDark": "Escuro",
         "language": "Idioma",
         "languageDesc": "Altera o idoma da aplicação",
+        "nearbyShareEnabled": "Ativar NearbyShare",
+        "nearbyShareEnabledDesc": "Ativar partilha rápida de ficheiros nesta rede",
+        "nearbyShareAnnon": "Mostrar as minhas informações",
+        "nearbyShareAnnonDesc": "Mostrar o meu nome e foto no NearbyShare",
         "checkForUpdates": "Procurar por atualizações",
         "checkForUpdatesDesc": "Procurar por atualizações manualmente",
         "check": "Procurar",
@@ -211,6 +216,12 @@
         "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 3 GB.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
         "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
+        "nearbyShare": "Nota Rápida",
+        "nearbyShareDesc": [
+            "Com esta funcionalidade ativa, quando tiver a página receber aberta, o seu dispositivo será descoberto por outras pessoas na mesma rede.",
+            "Quando alguém na sua rede está a enviar ficheiros, uma lista de pessoa com a funcionalidade NeabyShare ativa será mostrada facilitando a transferência de ficheiros e removendo a necessidade de partilhar o código de transferência.",
+            "As suas informações não serão partilhadas a não ser que tenha uma conta SkyShare e tenha optado por ativar a opção \"Mostrar as minhas informações\"."
+        ],
         "noUpdates": "Tudo em ordem!",
         "noUpdatesDesc": "Já tens a versão mais recente do SkyShare. São ótimas notícias!",
         "betaUpdates": "Nota importante",

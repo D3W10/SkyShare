@@ -20,6 +20,7 @@ export type IconType =
     "user" |
     "password" |
     "appearance" |
+    "nearbyShare" |
     "updates" |
     "reset" |
     "about" |

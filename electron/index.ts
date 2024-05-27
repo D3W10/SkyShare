@@ -22,7 +22,8 @@ const appConfig = new Store<IStore>({
         settings: {
             theme: 0,
             language: "en",
-            nearbyShare: true, // TODO
+            nearbyShare: true,
+            nearbyShareReveal: false,
             autoUpdate: true,
             betaUpdates: false
         },

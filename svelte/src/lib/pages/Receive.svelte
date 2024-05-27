@@ -3,6 +3,7 @@
     import { i18n } from "$lib/stores/i18nStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
+    import { settings } from "$lib/stores/settingsStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Input from "$lib/components/Input.svelte";
 
@@ -41,8 +42,8 @@
                         </div>
                     </div>
                     <div class="flex space-x-4">
-                        <Input type="switch" />
                         <p class="font-semibold">{$i18n.t("receive.nearbyShare")}</p>
+                        <Input type="switch" value={$settings.nearbyShare} on:input={(e) => settings.update("nearbyShare", e.detail.value)} />
                     </div>
                 </div>
                 <div class="!w-[40%]" slot="right">
