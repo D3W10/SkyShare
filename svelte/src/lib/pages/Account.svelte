@@ -24,6 +24,12 @@
         account.logout();
         page.set("home");
     }
+
+    $: saveEnable = currentPage == "informations" && (editUsername.length > 0 || editEmail.length > 0);
+
+    function onSave() {
+        // TODO
+    }
 </script>
 
 <div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -67,27 +73,30 @@
             </div>
             <Columns className="!space-x-0">
                 <div slot="left" class="!w-1/3 pr-5">
-                    <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1">
-                        <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "informations" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "informations"}>
-                            <Icon name="user" className="h-6" />
-                            <p>{$i18n.t("account.2.informations")}</p>
-                        </Button>
-                        <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "password" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "password"}>
-                            <Icon name="password" className="h-6" />
-                            <p>{$i18n.t("account.2.password")}</p>
-                        </Button>
-                        <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "personalization" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "personalization"}>
-                            <Icon name="appearance" className="h-6" />
-                            <p>{$i18n.t("account.2.personalization")}</p>
-                        </Button>
-                        <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "history" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "history"}>
-                            <Icon name="history-bold" className="h-6" />
-                            <p>{$i18n.t("account.2.history")}</p>
-                        </Button>
-                        <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "about"}>
-                            <Icon name="about" className="h-6" />
-                            <p>{$i18n.t("account.2.about")}</p>
-                        </Button>
+                    <div class="w-full h-full p-1 flex flex-col justify-between bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1">
+                        <div>
+                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "informations" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "informations"}>
+                                <Icon name="user" className="h-6" />
+                                <p>{$i18n.t("account.2.informations")}</p>
+                            </Button>
+                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "password" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "password"}>
+                                <Icon name="password" className="h-6" />
+                                <p>{$i18n.t("account.2.password")}</p>
+                            </Button>
+                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "personalization" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "personalization"}>
+                                <Icon name="appearance" className="h-6" />
+                                <p>{$i18n.t("account.2.personalization")}</p>
+                            </Button>
+                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "history" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "history"}>
+                                <Icon name="history-bold" className="h-6" />
+                                <p>{$i18n.t("account.2.history")}</p>
+                            </Button>
+                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "about"}>
+                                <Icon name="about" className="h-6" />
+                                <p>{$i18n.t("account.2.about")}</p>
+                            </Button>
+                        </div>
+                        <Button className="w-full !py-1.5 flex items-center disabled:text-foreground/50 disabled:bg-foreground/10 !rounded-lg shadow-sm ring-1 ring-transparent disabled:ring-foreground/20 !duration-200" disabled={!saveEnable} on:click={onSave}>{$i18n.t("account.2.save")}</Button>
                     </div>
                 </div>
                 <div slot="right" class="!w-2/3 !ml-6 py-3.5 pl-5">
@@ -98,14 +107,14 @@
                                     <p>{$i18n.t("account.2.username")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.usernameDesc")}</p>
                                 </div>
-                                <Input type="username" value={editUsername} placeholder={$account.username} />
+                                <Input type="username" bind:value={editUsername} placeholder={$account.username} />
                             </div>
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p>{$i18n.t("account.2.email")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.emailDesc")}</p>
                                 </div>
-                                <Input type="email" value={editEmail} placeholder={$account.email} />
+                                <Input type="email" bind:value={editEmail} placeholder={$account.email} />
                             </div>
                             <div class="flex justify-between items-center">
                                 <div>
