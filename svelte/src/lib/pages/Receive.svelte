@@ -6,8 +6,10 @@
     import { settings } from "$lib/stores/settingsStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Input from "$lib/components/Input.svelte";
+    import Modal from "$lib/components/Modal.svelte";
 
     let code: number[] = [], elms: HTMLInputElement[] = [];
+    let nearbyShareAlert: boolean = false
 
     function onKeydown(i: number, e: KeyboardEvent) {
         const isNum = !isNaN(+e.key);
@@ -43,7 +45,7 @@
                     </div>
                     <div class="flex space-x-4">
                         <p class="font-semibold">{$i18n.t("receive.nearbyShare")}</p>
-                        <Input type="switch" value={$settings.nearbyShare} on:input={(e) => settings.update("nearbyShare", e.detail.value)} />
+                        <Input type="switch" value={$settings.nearbyShare} on:input={(e) => { settings.update("nearbyShare", e.detail.value); if (e.detail.value) nearbyShareAlert = true; }} />
                     </div>
                 </div>
                 <div class="!w-[40%]" slot="right">
@@ -55,3 +57,8 @@
         </div>
     {/if}
 </div>
+<Modal bind:show={nearbyShareAlert} title={$i18n.t("modal.nearbyShare")} canCancel={false}>
+    <p>{$i18n.t("modal.nearbyShareDesc.0")}</p>
+    <p>{$i18n.t("modal.nearbyShareDesc.1")}</p>
+    <p>{$i18n.t("modal.nearbyShareDesc.2")}</p>
+</Modal>
