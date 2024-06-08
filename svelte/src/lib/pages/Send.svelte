@@ -84,7 +84,7 @@
                                         </div>
                                     </Button>
                                 {:else}
-                                    <div class="w-full h-full p-2 absolute overflow-y-auto space-y-2">
+                                    <div class="w-full h-full p-2 absolute overflow-y-auto space-y-2" role="none" on:dragenter={() => hovering = true} on:dragleave={() => hovering = false} on:dragover={(e) => e.preventDefault()} on:drop|preventDefault={(e) => parseFiles("drop", e)}>
                                         {#each files as file}
                                             <div class="w-full px-2 py-1.5 flex items-center bg-secondary rounded-lg space-x-2">
                                                 {#await $app.getFileIcon(file.path) then icon}

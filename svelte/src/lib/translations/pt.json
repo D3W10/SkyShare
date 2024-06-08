@@ -30,7 +30,7 @@
         "chooseTitle": "Escolher ficheiros",
         "chooseSubtitle": "Ou arraste para aqui!",
         "chooseHoverTitle": "Quase lá!",
-        "chooseHoverSubtitle": "Largue-os agora para adicionar",
+        "chooseHoverSubtitle": "Largue-os aqui para adicionar",
         "chooseAdd": "Addicionar",
         "chooseFilter": "Todos os ficheiros",
         "chooseAddFiles": "Adicionar ficheiros",
@@ -215,7 +215,7 @@
         "sizeLimitExceeded": "Limite excedido",
         "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 3 GB.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
-        "fileWithSameNameDesc": "Houve um erro a adicionar {{count}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
+        "fileWithSameNameDesc": "Houve um erro a adicionar {{num}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
         "nearbyShare": "Nota Rápida",
         "nearbyShareDesc": [
             "Com esta funcionalidade ativa, quando tiver a página receber aberta, o seu dispositivo será descoberto por outras pessoas na mesma rede.",
