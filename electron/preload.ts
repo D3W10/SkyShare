@@ -178,6 +178,8 @@ export async function apiCall({ endpoint, method, params, body }: { endpoint: st
             return {} as ApiResult;
         }
 
+        logger.log("API call made: " + apiUrl + endpoint + (params ? "?" + params : ""));
+
         const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
             method,
             body: body ? JSON.stringify(body) : undefined
@@ -286,6 +288,40 @@ export const account = {
         }
 
         return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, email: api.value.email, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
+    },
+    /**
+     * Edits the information of a user account
+     * @param username The username of the user
+     * @param password The password of the user
+     * @param editUsername The new username of the user or undefined to leave as is
+     * @param email The new email of the user or undefined to leave as is
+     * @param photo The new photo of the user, null to remove the photo or undefined to leave as is
+     * @returns An object containing one boolean with the success state
+     */
+    edit: async (username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined) => {
+        let body = { password }; // TODO: Test all options with the API
+
+        if (editUsername)
+            Object.assign(body, { username: editUsername });
+        if (email)
+            Object.assign(body, { email });
+        if (photo)
+            Object.assign(body, { photo: await ipcRenderer.invoke("GetFileAsBase64", photo) });
+        else if (photo === null)
+            Object.assign(body, { photo: null });
+        
+        const api = await apiCall({
+            endpoint: "user/" + username,
+            method: "PUT",
+            body
+        });
+
+        if (api.code == 0) {
+            setSetting("account", { username: api.value.username, password });
+            logger.log("Edit account successful");
+        }
+
+        return { success: api.code == 0, data: api.code == 0 ? { username: api.value.username, email: api.value.email, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
     },
     /**
      * Sends an email request from a specific user account

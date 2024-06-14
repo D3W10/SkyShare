@@ -20,7 +20,7 @@
     export let errorChecking: boolean = true;
     
     export let inputElm: HTMLInputElement | undefined = undefined;
-    const displayed = spring(), dispatch = createEventDispatcher<{ input: { value: any } }>();
+    const displayed = spring(), dispatch = createEventDispatcher<{ input: { value: any, error: boolean } }>();
 
     $: {
         if (type == "range" && value === null)
@@ -34,7 +34,7 @@
     $: displayed.set(value / step);
     $: offset = ((n: number, m: number) => ((n % m) + m) % m)($displayed, 1);
 
-    $: {
+    function triggerEvent() {
         if (value !== null && value !== "" && errorChecking) {
             if ((type == "text" || type == "number" || type == "checkbox" || type == "range") && inputElm != undefined)
                 error = !inputElm.checkValidity();
@@ -47,10 +47,8 @@
         }
         else
             error = false;
-    }
 
-    function triggerEvent() {
-        dispatch("input", { value });
+        dispatch("input", { value, error });
     }
 
     function rangeCheck(e: Event & { currentTarget: EventTarget & HTMLInputElement; }) {

@@ -3,8 +3,11 @@
     import { i18n } from "$lib/stores/i18nStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
+    import { disable } from "$lib/stores/disableStore";
     import { account } from "$lib/stores/accountStore";
+    import { error, ErrorCode } from "$lib/stores/errorStore";
     import { settings } from "$lib/stores/settingsStore";
+    import { FValid } from "$lib/models/FValid.class";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import BlockLink from "$lib/components/BlockLink.svelte";
@@ -15,7 +18,7 @@
     type settingsPages = "informations" | "password" | "personalization" | "history" | "about";
 
     let currentPage: settingsPages = "informations", showModal = false;
-    let editUsername: string = "", editEmail: string = "";
+    let editData = new FValid<[string, string]>(["", ""]);
 
     // TODO Temp
     let historyEnabled: boolean = true;
@@ -25,10 +28,23 @@
         page.set("home");
     }
 
-    $: saveEnable = currentPage == "informations" && (editUsername.length > 0 || editEmail.length > 0);
+    $: saveEnable = currentPage == "informations" && $editData.some(editData.verifier);
 
-    function onSave() {
-        // TODO
+    async function onSave() {
+        disable.lock();
+
+        if ($editData[0].v && $editData[0].e)
+            error.set(ErrorCode.INVALID_USERNAME);
+        else if ($editData[1].v && $editData[1].e)
+            error.set(ErrorCode.INVALID_EMAIL);
+        else {
+            let edit = await account.edit($editData[0].v, $editData[1].v, undefined);
+
+            if (edit.success)
+                $editData[0].v = $editData[1].v = "";
+        }
+
+        disable.unlock();
     }
 </script>
 
@@ -107,14 +123,14 @@
                                     <p>{$i18n.t("account.2.username")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.usernameDesc")}</p>
                                 </div>
-                                <Input type="username" bind:value={editUsername} placeholder={$account.username} />
+                                <Input type="username" value={$editData[0].v} error={$editData[0].e} placeholder={$account.username} on:input={e => editData.update(0, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p>{$i18n.t("account.2.email")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.emailDesc")}</p>
                                 </div>
-                                <Input type="email" bind:value={editEmail} placeholder={$account.email} />
+                                <Input type="email" value={$editData[1].v} error={$editData[1].e} placeholder={$account.email} on:input={e => editData.update(1, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="flex justify-between items-center">
                                 <div>

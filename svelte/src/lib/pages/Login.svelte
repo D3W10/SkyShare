@@ -9,7 +9,7 @@
     import { account } from "$lib/stores/accountStore";
     import { error, ErrorCode } from "$lib/stores/errorStore";
     import { settings } from "$lib/stores/settingsStore";
-    import { VEStore, validators } from "$lib/models/VEStore.class";
+    import { FValid } from "$lib/models/FValid.class";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
@@ -17,18 +17,17 @@
     import ProgressBar from "$lib/components/ProgressBar.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    let loginData = new VEStore<string>(2, "", validators.string);
-    let requestData = new VEStore<string>(1, "", validators.string);
-    let recoveryData = new VEStore<string>(1, "", validators.string), recoveryModal: boolean = false, recoveryRepPassword: string = "", recoveredModal: boolean = false;
-    let signupData = new VEStore<string>(3, "", validators.string), signupModal: boolean = false, signupRepPassword: string = "";
-    let signupPhoto: string = "";
+    let loginData = new FValid<[string, string]>(["", ""]);
+    let requestData = new FValid<[string]>([""]);
+    let recoveryData = new FValid<[string]>([""]), recoveryModal: boolean = false, recoveryRepPassword: string = "", recoveredModal: boolean = false;
+    let signupData = new FValid<[string, string, string]>(["", "", ""]), signupModal: boolean = false, signupRepPassword: string = "", signupPhoto: string = "";
 
     async function onLogin() {
         disable.lock();
 
-        if (loginData.a[0][1])
+        if ($loginData[0].e)
             error.set(ErrorCode.INVALID_USERNAME);
-        else if (await account.login(loginData.a[0][0], loginData.a[1][0]))
+        else if (await account.login($loginData[0].v, $loginData[1].v))
             page.set("welcome", 3);
 
         disable.unlock();
@@ -37,10 +36,10 @@
     async function onRequest() {
         disable.lock();
 
-        if (requestData.a[0][1])
+        if ($requestData[0].e)
             error.set(ErrorCode.INVALID_EMAIL);
         else {
-            let check = await account.request("recovery", requestData.a[0][0], $settings.language);
+            let check = await account.request("recovery", $requestData[0].v, $settings.language);
 
             if (check.success)
                 page.set("login", 2);
@@ -52,10 +51,10 @@
     async function onRecovery() {
         disable.lock();
 
-        if (recoveryData.a[0][1])
+        if ($recoveryData[0].e)
             error.set(ErrorCode.INVALID_PASSWORD);
         else {
-            let check = await account.recovery(requestData.a[0][0], recoveryData.a[0][0]);
+            let check = await account.recovery($requestData[0].v, $recoveryData[0].v);
 
             if (check.success)
                 recoveredModal = true;
@@ -68,14 +67,14 @@
         disable.lock();
 
         signupRepPassword = "";
-        if (signupData.a[0][1])
+        if ($signupData[0].e)
             error.set(ErrorCode.INVALID_USERNAME);
-        else if (signupData.a[1][1])
+        else if ($signupData[1].e)
             error.set(ErrorCode.INVALID_EMAIL);
-        else if (signupData.a[2][1])
+        else if ($signupData[2].e)
             error.set(ErrorCode.INVALID_PASSWORD);
         else {
-            let check = await account.check(signupData.a[0][0], signupData.a[1][0]);
+            let check = await account.check($signupData[0].v, $signupData[1].v);
 
             if (check.success) {
                 if (!check.data.username)
@@ -104,7 +103,7 @@
     async function onSignupComplete() {
         disable.lock();
 
-        if (await account.signup(signupData.a[0][0], signupData.a[1][0], signupData.a[2][0], signupPhoto))
+        if (await account.signup($signupData[0].v, $signupData[1].v, $signupData[2].v, signupPhoto))
             page.set("welcome");
 
         disable.unlock();
@@ -124,11 +123,11 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.0.username")}:</p>
-                                <Input type="username" bind:value={loginData.a[0][0]} bind:error={loginData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => loginData.announceChange()} />
+                                <Input type="username" value={$loginData[0].v} error={$loginData[0].e} placeholder={$i18n.t("common.required")} on:input={e => loginData.update(0, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.0.password")}:</p>
-                                <Input type="password" bind:value={loginData.a[1][0]} bind:error={loginData.a[1][1]} placeholder={$i18n.t("common.required")} errorChecking={false} on:input={() => loginData.announceChange()} />
+                                <Input type="password" value={$loginData[1].v} error={$loginData[1].e} placeholder={$i18n.t("common.required")} errorChecking={false} on:input={e => loginData.update(1, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="flex flex-col items-center space-y-3">
                                 <Button type="text" on:click={() => page.set("login", 1)}>{$i18n.t("login.0.forgot")}</Button>
@@ -136,7 +135,7 @@
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={!$loginData.isFilled()} submit>{$i18n.t("login.0.login")}</Button>
+                    <Button className="w-fit" disabled={!$loginData.every(loginData.verifier)} submit>{$i18n.t("login.0.login")}</Button>
                 </div>
             </Columns>
         </form>
@@ -158,11 +157,11 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.1.email")}:</p>
-                                <Input type="email" bind:value={requestData.a[0][0]} bind:error={requestData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => requestData.announceChange()} />
+                                <Input type="email" value={$requestData[0].v} error={$requestData[0].e} placeholder={$i18n.t("common.required")} on:input={e => requestData.update(0, e.detail.value, e.detail.error)} />
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={!$requestData.isFilled()} submit>{$i18n.t("login.1.recover")}</Button>
+                    <Button className="w-fit" disabled={!$requestData.every(requestData.verifier)} submit>{$i18n.t("login.1.recover")}</Button>
                 </div>
             </Columns>
         </form>
@@ -202,11 +201,11 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.3.password")}:</p>
-                                <Input type="password" bind:value={recoveryData.a[0][0]} bind:error={recoveryData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => recoveryData.announceChange()} />
+                                <Input type="password" value={$recoveryData[0].v} error={$recoveryData[0].e} placeholder={$i18n.t("common.required")} on:input={e => recoveryData.update(0, e.detail.value, e.detail.error)} />
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={!$recoveryData.isFilled()} submit>{$i18n.t("login.3.recover")}</Button>
+                    <Button className="w-fit" disabled={!$recoveryData.every(recoveryData.verifier)} submit>{$i18n.t("login.3.recover")}</Button>
                 </div>
             </Columns>
         </form>
@@ -228,19 +227,19 @@
                         <div class="w-3/5 space-y-8">
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.4.username")}:</p>
-                                <Input type="username" bind:value={signupData.a[0][0]} bind:error={signupData.a[0][1]} placeholder={$i18n.t("common.required")} on:input={() => signupData.announceChange()} />
+                                <Input type="username" value={$signupData[0].v} error={$signupData[0].e} placeholder={$i18n.t("common.required")} on:input={e => signupData.update(0, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.4.email")}:</p>
-                                <Input type="email" bind:value={signupData.a[1][0]} bind:error={signupData.a[1][1]} placeholder={$i18n.t("common.required")} on:input={() => signupData.announceChange()} />
+                                <Input type="email" value={$signupData[1].v} error={$signupData[1].e} placeholder={$i18n.t("common.required")} on:input={e => signupData.update(1, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="space-y-1">
                                 <p class="font-semibold">{$i18n.t("login.4.password")}:</p>
-                                <Input type="password" bind:value={signupData.a[2][0]} bind:error={signupData.a[2][1]} placeholder={$i18n.t("common.required")} on:input={() => signupData.announceChange()} />
+                                <Input type="password" value={$signupData[2].v} error={$signupData[2].e} placeholder={$i18n.t("common.required")} on:input={e => signupData.update(2, e.detail.value, e.detail.error)} />
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={!$signupData.isFilled()} submit>{$i18n.t("login.4.signup")}</Button>
+                    <Button className="w-fit" disabled={!$signupData.every(signupData.verifier)} submit>{$i18n.t("login.4.signup")}</Button>
                 </div>
             </Columns>
         </form>
@@ -261,7 +260,7 @@
                         </div>
                     {:else}
                         <div class="flex justify-center items-center absolute inset-0" in:scale={{ duration: 1000, delay: 750, easing: quartOut, opacity: 1 }} out:scale={{ duration: 750, easing: quartIn, opacity: 1 }}>
-                            <img src={"app://" + signupPhoto} alt="{signupData.a[0][0]} Profile Picture" class="w-2/3 absolute rounded-full aspect-square" />
+                            <img src={"app://" + signupPhoto} alt="{$signupData[0].v} Profile Picture" class="w-2/3 absolute rounded-full aspect-square" />
                         </div>
                     {/if}
                 </div>
@@ -285,14 +284,14 @@
         </form>
     {/if}
 </div>
-<Modal bind:show={recoveryModal} title={$i18n.t("login.3.confirmModal")} disabled={recoveryData.a[0][0] != recoveryRepPassword} on:submit={onRecovery}>
+<Modal bind:show={recoveryModal} title={$i18n.t("login.3.confirmModal")} disabled={$recoveryData[0].v != recoveryRepPassword} on:submit={onRecovery}>
     <p>{$i18n.t("login.3.confirmModalDesc")}</p>
     <Input type="password" bind:value={recoveryRepPassword} placeholder={$i18n.t("common.required")} />
 </Modal>
 <Modal bind:show={recoveredModal} title={$i18n.t("login.3.recoveredModal")} canCancel={false} on:submit={() => page.set("login")}>
     <p>{$i18n.t("login.3.recoveredModalDesc")}</p>
 </Modal>
-<Modal bind:show={signupModal} title={$i18n.t("login.4.confirmModal")} disabled={signupData.a[2][0] != signupRepPassword} on:submit={onSignup}>
+<Modal bind:show={signupModal} title={$i18n.t("login.4.confirmModal")} disabled={$signupData[2].v != signupRepPassword} on:submit={onSignup}>
     <p>{$i18n.t("login.4.confirmModalDesc")}</p>
     <Input type="password" bind:value={signupRepPassword} placeholder={$i18n.t("common.required")} />
 </Modal>
