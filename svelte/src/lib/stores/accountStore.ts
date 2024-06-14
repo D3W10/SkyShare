@@ -47,6 +47,7 @@ export const account = (() => {
 
             if (req.success)
                 update(n => {
+                    n.startup = false;
                     n.username = req.data?.username!;
                     n.email = req.data?.email!;
                     n.photo = req.data?.photo!;

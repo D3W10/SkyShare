@@ -121,7 +121,7 @@
         {
             "title": "Personalizar conta",
             "photo": "Foto de Perfil",
-            "photoChoose": "Escolher Imagem"
+            "photoChoose": "Escolher uma foto"
         }
     ],
     "welcome": [
@@ -171,6 +171,8 @@
             "delete": "Apagar Conta",
             "deleteDesc": "Apagar a sua conta SkyShare",
             "deleteButton": "Apagar",
+            "photo": "Foto de Perfil",
+            "photoChoose": "Escolher uma foto",
             "enableHistory": "Ativar histórico",
             "enableHistoryDesc": "Guardar itens no histórico de transferências",
             "clearHistory": "Limpar histórico",

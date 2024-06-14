@@ -260,7 +260,7 @@
                         </div>
                     {:else}
                         <div class="flex justify-center items-center absolute inset-0" in:scale={{ duration: 1000, delay: 750, easing: quartOut, opacity: 1 }} out:scale={{ duration: 750, easing: quartIn, opacity: 1 }}>
-                            <img src={"app://" + signupPhoto} alt="{$signupData[0].v} Profile Picture" class="w-2/3 absolute rounded-full aspect-square" />
+                            <img src="app://{signupPhoto}" alt="{$signupData[0].v} Profile Picture" class="w-2/3 absolute rounded-full aspect-square" />
                         </div>
                     {/if}
                 </div>

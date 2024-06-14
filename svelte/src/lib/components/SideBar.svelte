@@ -11,13 +11,15 @@
 <div class="w-full max-w-64 px-4 py-2 space-y-4">
     <Button type="invisible" className="w-full flex items-center justify-start font-semibold space-x-3" on:click={() => page.set(!$account.loggedIn ? "login" : "account")}>
         <div class="w-14 flex justify-center items-center relative aspect-square">
-            {#if !$account.loggedIn || !$account.photo}
-                <div class="w-full h-full" in:scale={{ duration: !$account.startup ? 1000 : 0, delay: !$account.startup ? 1000 : 0, easing: quartOut, opacity: 1 }} out:scale={{ duration: !$account.startup ? 1000 : 0, easing: quartIn, opacity: 1 }}>
-                    <Icon name="account" className="absolute text-primary transition-colors" />
-                </div>
-            {:else}
-                <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-full max-h-14 absolute rounded-full aspect-square" in:scale={{ duration: !$account.startup ? 1000 : 0, delay: !$account.startup ? 1000 : 0, easing: quartOut, opacity: 1 }} out:scale={{ duration: !$account.startup ? 1000 : 0, easing: quartIn, opacity: 1 }} />
-            {/if}
+            {#key $account.photo}
+                {#if !$account.photo}
+                    <div class="w-full h-full" in:scale|global={{ duration: !$account.startup ? 1000 : 0, delay: !$account.startup ? 1000 : 0, easing: quartOut, opacity: 1 }} out:scale|global={{ duration: !$account.startup ? 1000 : 0, easing: quartIn, opacity: 1 }}>
+                        <Icon name="account" className="absolute text-primary transition-colors" />
+                    </div>
+                {:else}
+                    <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-full max-h-14 absolute rounded-full aspect-square" in:scale|global={{ duration: !$account.startup ? 1000 : 0, delay: !$account.startup ? 1000 : 0, easing: quartOut, opacity: 1 }} out:scale|global={{ duration: !$account.startup ? 1000 : 0, easing: quartIn, opacity: 1 }} />
+                {/if}
+            {/key}
         </div>
         <p class={$page.current == "login" || $page.current == "account" ? "text-transparent bg-[length:200%] bg-clip-text transition-colors animate-[shine_2s_linear_infinite]" : ""} style:background-image={$page.current == "login" || $page.current == "account" ? "linear-gradient(to right, #F5933D, rgb(var(--color-account)), #D46A0D, rgb(var(--color-account)), #F5933D)" : ""}>{!$account.loggedIn ? $i18n.t("sidebar.login") : $account.username}</p>
     </Button>

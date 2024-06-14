@@ -1,6 +1,9 @@
 <script lang="ts">
     import { fade, fly } from "svelte/transition";
+    import { scale } from "svelte/transition";
+    import { quartIn, quartOut } from "svelte/easing";
     import { i18n } from "$lib/stores/i18nStore";
+    import { app } from "$lib/stores/appStore";
     import { page } from "$lib/stores/pageStore";
     import { transition } from "$lib/stores/transitionStore";
     import { disable } from "$lib/stores/disableStore";
@@ -18,7 +21,7 @@
     type settingsPages = "informations" | "password" | "personalization" | "history" | "about";
 
     let currentPage: settingsPages = "informations", showModal = false;
-    let editData = new FValid<[string, string]>(["", ""]);
+    let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
 
     // TODO Temp
     let historyEnabled: boolean = true;
@@ -28,7 +31,18 @@
         page.set("home");
     }
 
-    $: saveEnable = currentPage == "informations" && $editData.some(editData.verifier);
+    $: saveEnable = ["informations", "personalization"].includes(currentPage) && ($editData[0].v != "" || $editData[1].v != "" || $editData[2].v != $account.photo);
+
+    async function choosePhoto() {
+        let photoDialog = await $app.showOpenDialog({
+            title: $i18n.t("account.2.photoChoose"),
+            properties: ["openFile"],
+            filters: [{ name: "Imagens (*.png, *.jpg, *.jpeg, *.jpe, *.jif, *.jfif, *.gif)", extensions: ["png", "jpg", "jpeg", "jpe", "jif", "jfif", "gif"] }]
+        })!;
+
+        if (!photoDialog.canceled)
+            $editData[2].v = photoDialog.files[0].path.replace(/\\/g, "/");
+    }
 
     async function onSave() {
         disable.lock();
@@ -38,10 +52,12 @@
         else if ($editData[1].v && $editData[1].e)
             error.set(ErrorCode.INVALID_EMAIL);
         else {
-            let edit = await account.edit($editData[0].v, $editData[1].v, undefined);
+            let edit = await account.edit($editData[0].v, $editData[1].v, $editData[2].v == $account.photo ? undefined : $editData[2].v == undefined ? null : $editData[2].v);
 
-            if (edit.success)
+            if (edit.success) {
                 $editData[0].v = $editData[1].v = "";
+                $editData[2].v = $account.photo;
+            }
         }
 
         disable.unlock();
@@ -144,7 +160,31 @@
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                         </div>
                     {:else if currentPage == "personalization"}
-                        <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                        <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                            <div class="flex flex-col items-center text-center space-y-5">
+                                <div class="w-32 h-32 relative">
+                                    {#key $editData[2].v}
+                                        {#if $editData[2].v == undefined}
+                                            <div class="flex justify-center items-center absolute inset-0" in:scale|global={{ duration: 1000, delay: 750, easing: quartOut, opacity: 1 }} out:scale|global={{ duration: 750, easing: quartIn, opacity: 1 }}>
+                                                <Icon name="account" className="w-full text-primary" />
+                                            </div>
+                                        {:else}
+                                            <div class="flex justify-center items-center absolute inset-0" in:scale|global={{ duration: 1000, delay: 750, easing: quartOut, opacity: 1 }} out:scale|global={{ duration: 750, easing: quartIn, opacity: 1 }}>
+                                                <img src={($editData[2].v != $account.photo ? "app://" : "") + $editData[2].v} alt="{$account.username} Profile Picture" class="w-full absolute rounded-full aspect-square" />
+                                            </div>
+                                        {/if}
+                                    {/key}
+                                </div>
+                                <div class="flex space-x-2">
+                                    <Button className="min-w-8 min-h-8 !p-1" type="small" secondary disabled={$account.photo == undefined || $editData[2].v == $account.photo} on:click={() => $editData[2].v = $account.photo}>
+                                        <Icon name="reset" className="w-6 aspect-square" />
+                                    </Button>
+                                    <Button className="w-full" type="small" secondary on:click={choosePhoto}>{$i18n.t("account.2.photoChoose")}</Button>
+                                    <Button className="min-w-8 min-h-8 !p-1" type="small" secondary disabled={$editData[2].v == undefined} on:click={() => $editData[2].v = undefined}>
+                                        <Icon name="dismiss" className="w-6 aspect-square" />
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     {:else if currentPage == "history"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -167,9 +207,9 @@
                         <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                             <div class="flex flex-col items-center text-center space-y-5">
                                 {#if !$account.photo}
-                                    <Icon name="account" className="w-1/3 text-primary" />
+                                    <Icon name="account" className="w-32 text-primary" />
                                 {:else}
-                                    <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-1/3 rounded-full aspect-square" />
+                                    <img src={$account.photo} alt="{$account.username} Profile Picture" class="w-32 rounded-full aspect-square" />
                                 {/if}
                                 <div class="flex flex-col space-y-1">
                                     <p class="text-2xl font-semibold">{$account.username}</p>
