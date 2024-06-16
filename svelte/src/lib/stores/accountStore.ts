@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { app } from "./appStore";
 
 interface IAccountStore {
@@ -18,8 +18,7 @@ export const account = (() => {
     return {
         subscribe,
         login: async (username: string, password: string, encrypted: boolean = false) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-            const loginAttempt = await $app.account.login(username, password, encrypted);
+            const loginAttempt = await get(app).account.login(username, password, encrypted);
 
             if (loginAttempt.success)
                 set({ loggedIn: true, startup: encrypted, ...loginAttempt.data! });
@@ -27,13 +26,10 @@ export const account = (() => {
             return loginAttempt.success;
         },
         check: async (username: string, email: string) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-
-            return await $app.account.check(username, email);
+            return await get(app).account.check(username, email);
         },
         signup: async (username: string, email: string, password: string, photo: string | null) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-            const signupAttempt = await $app.account.signup(username, email, password, photo);
+            const signupAttempt = await get(app).account.signup(username, email, password, photo);
 
             if (signupAttempt.success)
                 set({ loggedIn: true, startup: false, ...signupAttempt.data! });
@@ -41,9 +37,8 @@ export const account = (() => {
             return signupAttempt.success;
         },
         edit: async (username: string | undefined, email: string | undefined, photo: string | null | undefined) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-            const $account = await new Promise<IAccountStore>(resolve => account.subscribe($account => resolve($account)));
-            const req = await $app.account.edit($account.username, $account.password, username, email, photo);
+            const acc = get(account);
+            const req = await get(app).account.edit(acc.username, acc.password, username, email, photo);
 
             if (req.success)
                 update(n => {
@@ -58,8 +53,7 @@ export const account = (() => {
             return req;
         },
         request: async (type: "verify" | "recovery", email: string, language: string) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-            const req = await $app.account.request(type, email, language);
+            const req = await get(app).account.request(type, email, language);
 
             if (req.success && type == "recovery")
                 update(n => { n.recoveryToken = ""; return n; });
@@ -68,9 +62,7 @@ export const account = (() => {
         },
         setRecoveryToken: (token: string) => update(n => { n.recoveryToken = token; return n; }),
         recovery: async (email: string, password: string) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-            const $account = await new Promise<IAccountStore>(resolve => account.subscribe($account => resolve($account)));
-            const req = await $app.account.recovery(email, password, $account.recoveryToken!);
+            const req = await get(app).account.recovery(email, password, get(account).recoveryToken!);
 
             if (req.success)
                 update(n => { n.recoveryToken = undefined; return n; });
@@ -78,15 +70,11 @@ export const account = (() => {
             return req;
         },
         logout: async () => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-
-            $app.account.logout();
+            get(app).account.logout();
             set({ loggedIn: false } as IAccountStore);
         },
         delete: async (password: string) => {
-            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
-            const $account = await new Promise<IAccountStore>(resolve => account.subscribe($account => resolve($account)));
-            const req = await $app.account.delete($account.username, password);
+            const req = await get(app).account.delete(get(account).username, password);
 
             if (req.success)
                 set({ loggedIn: false } as IAccountStore);
