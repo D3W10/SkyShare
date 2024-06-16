@@ -20,8 +20,9 @@
 
     type settingsPages = "informations" | "password" | "personalization" | "history" | "about";
 
-    let currentPage: settingsPages = "informations", showModal = false;
+    let currentPage: settingsPages = "informations", showLogoutModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
     let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
+    let deleteInfo: [string, boolean] = ["", true];
 
     // TODO Temp
     let historyEnabled: boolean = true;
@@ -34,7 +35,7 @@
     $: saveEnable = ["informations", "personalization"].includes(currentPage) && ($editData[0].v != "" || $editData[1].v != "" || $editData[2].v != $account.photo);
 
     async function choosePhoto() {
-        let photoDialog = await $app.showOpenDialog({
+        const photoDialog = await $app.showOpenDialog({
             title: $i18n.t("account.2.photoChoose"),
             properties: ["openFile"],
             filters: [{ name: "Imagens (*.png, *.jpg, *.jpeg, *.jpe, *.jif, *.jfif, *.gif)", extensions: ["png", "jpg", "jpeg", "jpe", "jif", "jfif", "gif"] }]
@@ -52,7 +53,7 @@
         else if ($editData[1].v && $editData[1].e)
             error.set(ErrorCode.INVALID_EMAIL);
         else {
-            let edit = await account.edit($editData[0].v, $editData[1].v, $editData[2].v == $account.photo ? undefined : $editData[2].v == undefined ? null : $editData[2].v);
+            const edit = await account.edit($editData[0].v, $editData[1].v, $editData[2].v == $account.photo ? undefined : $editData[2].v == undefined ? null : $editData[2].v);
 
             if (edit.success) {
                 $editData[0].v = $editData[1].v = "";
@@ -61,6 +62,23 @@
         }
 
         disable.unlock();
+    }
+
+    function onDelete() {
+        page.set("account", 4);
+
+        setTimeout(async () => {
+            disable.lock();
+
+            const deleted = await account.delete(deleteInfo[0]);
+
+            disable.unlock();
+
+            if (deleted.success)
+                showSuccessModal = true;
+            else
+                page.set("account", 3);
+        }, 600);
     }
 </script>
 
@@ -80,7 +98,7 @@
                 <div slot="right" class="flex flex-col justify-center space-y-4">
                     <BlockLink text={$i18n.t("account.0.history")} icon="history-bold" on:click={() => page.set("account", 1)} />
                     <BlockLink text={$i18n.t("account.0.edit")} icon="editAccount" on:click={() => page.set("account", 2)} />
-                    <BlockLink text={$i18n.t("account.0.logout")} icon="logout" on:click={() => showModal = true} />
+                    <BlockLink text={$i18n.t("account.0.logout")} icon="logout" on:click={() => showLogoutModal = true} />
                 </div>
             </Columns>
         </div>
@@ -131,7 +149,7 @@
                         <Button className="w-full !py-1.5 flex items-center disabled:text-foreground/50 disabled:bg-foreground/10 !rounded-lg shadow-sm ring-1 ring-transparent disabled:ring-foreground/20 !duration-200" disabled={!saveEnable} on:click={onSave}>{$i18n.t("account.2.save")}</Button>
                     </div>
                 </div>
-                <div slot="right" class="!w-2/3 !ml-6 py-3.5 pl-5">
+                <div slot="right" class="!w-2/3 !ml-6 relative *:absolute *:left-5 *:top-3.5 *:bottom-3.5 *:right-0">
                     {#if currentPage == "informations"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                             <div class="flex justify-between items-center">
@@ -153,14 +171,14 @@
                                     <p>{$i18n.t("account.2.delete")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.deleteDesc")}</p>
                                 </div>
-                                <Button type="small" secondary on:click={() => {/* TODO */}}>{$i18n.t("account.2.deleteButton")}</Button>
+                                <Button type="small" secondary on:click={() => page.set("account", 3)}>{$i18n.t("account.2.deleteButton")}</Button>
                             </div>
                         </div>
                     {:else if currentPage == "password"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                         </div>
                     {:else if currentPage == "personalization"}
-                        <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                        <div class="flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                             <div class="flex flex-col items-center text-center space-y-5">
                                 <div class="w-32 h-32 relative">
                                     {#key $editData[2].v}
@@ -204,7 +222,7 @@
                             </div>
                         </div>
                     {:else if currentPage == "about"}
-                        <div class="w-full h-full flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                        <div class="flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                             <div class="flex flex-col items-center text-center space-y-5">
                                 {#if !$account.photo}
                                     <Icon name="account" className="w-32 text-primary" />
@@ -221,8 +239,54 @@
                 </div>
             </Columns>
         </div>
+    {:else if $page.subPage == 3}
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+            <div class="flex justify-between items-center">
+                <h1 class="w-full text-xl font-semibold">{$i18n.t("account.3.title")}</h1>
+                <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("account", 2)}>
+                    <Icon name="chevron" className="w-5 h-5 mr-1 fill-current rotate-90" />
+                    {$i18n.t("common.back")}
+                </Button>
+            </div>
+            <Columns>
+                <div slot="left">
+                    <div class="w-full h-full flex justify-center items-center relative p-5 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 overflow-hidden space-y-1">
+                        <div class="flex flex-col items-center space-y-1.5">
+                            <Icon name="accountDelete" className="w-1/3 text-account mb-2" />
+                            <p class="text-center font-semibold">{$i18n.t("account.3.confirm")}</p>
+                            <p class="text-sm text-center">{$i18n.t("account.3.confirmDesc")}</p>
+                        </div>
+                    </div>
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    <div class="w-full h-full flex justify-center items-center">
+                        <div class="w-3/5 space-y-8">
+                            <p class="text-center font-semibold">{$i18n.t("account.3.list.0")}</p>
+                            <p class="text-center font-semibold">{$i18n.t("account.3.list.1")}</p>
+                        </div>
+                    </div>
+                    <Button className="w-fit" on:click={() => showDeleteModal = true}>{$i18n.t("account.3.continue")}</Button>
+                </div>
+            </Columns>
+        </div>
+    {:else if $page.subPage == 4}
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+            <div class="w-full h-full flex justify-center items-center">
+                <p class="text-center font-semibold animate-pulse">{$i18n.t("account.4.deleting")}</p>
+            </div>
+        </div>
     {/if}
 </div>
-<Modal bind:show={showModal} title={$i18n.t("modal.logout")} button={$i18n.t("modal.yes")} cancelButton={$i18n.t("modal.no")} on:submit={onLogout}>
+<Modal bind:show={showLogoutModal} title={$i18n.t("modal.logout")} button={$i18n.t("modal.yes")} cancelButton={$i18n.t("modal.no")} on:submit={onLogout}>
     <p>{$i18n.t("modal.logoutDesc")}</p>
+</Modal>
+<Modal bind:show={showDeleteModal} title={$i18n.t("modal.accountDelete")} button={$i18n.t("modal.confirm")} disabled={deleteInfo[1]} on:submit={() => showDeleteConfirmModal = true}>
+    <p>{$i18n.t("modal.accountDeleteDesc")}</p>
+    <Input type="password" bind:value={deleteInfo[0]} bind:error={deleteInfo[1]} placeholder={$i18n.t("common.required")} />
+</Modal>
+<Modal bind:show={showDeleteConfirmModal} title={$i18n.t("modal.accountDeleteConfirm")} button={$i18n.t("modal.delete")} on:submit={onDelete}>
+    <p>{$i18n.t("modal.accountDeleteConfirmDesc")}</p>
+</Modal>
+<Modal bind:show={showSuccessModal} title={$i18n.t("modal.deleteSuccess")} canCancel={false} on:submit={() => page.set("home")}>
+    <p>{$i18n.t("modal.deleteSuccessDesc")}</p>
 </Modal>

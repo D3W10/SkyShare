@@ -82,6 +82,16 @@ export const account = (() => {
 
             $app.account.logout();
             set({ loggedIn: false } as IAccountStore);
+        },
+        delete: async (password: string) => {
+            const $app = await new Promise<typeof import("$electron/preload")>(resolve => app.subscribe($app => resolve($app)));
+            const $account = await new Promise<IAccountStore>(resolve => account.subscribe($account => resolve($account)));
+            const req = await $app.account.delete($account.username, password);
+
+            if (req.success)
+                set({ loggedIn: false } as IAccountStore);
+
+            return req;
         }
     }
 })();

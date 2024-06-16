@@ -19,6 +19,7 @@ export type IconType =
     "logout" |
     "user" |
     "password" |
+    "accountDelete" |
     "appearance" |
     "nearbyShare" |
     "updates" |

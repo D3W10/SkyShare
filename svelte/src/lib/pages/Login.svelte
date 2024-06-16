@@ -39,7 +39,7 @@
         if ($requestData[0].e)
             error.set(ErrorCode.INVALID_EMAIL);
         else {
-            let check = await account.request("recovery", $requestData[0].v, $settings.language);
+            const check = await account.request("recovery", $requestData[0].v, $settings.language);
 
             if (check.success)
                 page.set("login", 2);
@@ -54,7 +54,7 @@
         if ($recoveryData[0].e)
             error.set(ErrorCode.INVALID_PASSWORD);
         else {
-            let check = await account.recovery($requestData[0].v, $recoveryData[0].v);
+            const check = await account.recovery($requestData[0].v, $recoveryData[0].v);
 
             if (check.success)
                 recoveredModal = true;
@@ -74,7 +74,7 @@
         else if ($signupData[2].e)
             error.set(ErrorCode.INVALID_PASSWORD);
         else {
-            let check = await account.check($signupData[0].v, $signupData[1].v);
+            const check = await account.check($signupData[0].v, $signupData[1].v);
 
             if (check.success) {
                 if (!check.data.username)
@@ -90,7 +90,7 @@
     }
 
     async function choosePhoto() {
-        let photoDialog = await $app.showOpenDialog({
+        const photoDialog = await $app.showOpenDialog({
             title: $i18n.t("login.5.photoChoose"),
             properties: ["openFile"],
             filters: [{ name: "Imagens (*.png, *.jpg, *.jpeg, *.jpe, *.jif, *.jfif, *.gif)", extensions: ["png", "jpg", "jpeg", "jpe", "jif", "jfif", "gif"] }]
@@ -284,14 +284,14 @@
         </form>
     {/if}
 </div>
-<Modal bind:show={recoveryModal} title={$i18n.t("login.3.confirmModal")} disabled={$recoveryData[0].v != recoveryRepPassword} on:submit={onRecovery}>
-    <p>{$i18n.t("login.3.confirmModalDesc")}</p>
+<Modal bind:show={recoveryModal} title={$i18n.t("modal.confirmPasswordRecovery")} disabled={$recoveryData[0].v != recoveryRepPassword} on:submit={onRecovery}>
+    <p>{$i18n.t("modal.confirmPasswordRecoveryDesc")}</p>
     <Input type="password" bind:value={recoveryRepPassword} placeholder={$i18n.t("common.required")} />
 </Modal>
-<Modal bind:show={recoveredModal} title={$i18n.t("login.3.recoveredModal")} canCancel={false} on:submit={() => page.set("login")}>
-    <p>{$i18n.t("login.3.recoveredModalDesc")}</p>
+<Modal bind:show={recoveredModal} title={$i18n.t("modal.accountRecovered")} canCancel={false} on:submit={() => page.set("login")}>
+    <p>{$i18n.t("modal.accountRecoveredDesc")}</p>
 </Modal>
-<Modal bind:show={signupModal} title={$i18n.t("login.4.confirmModal")} disabled={$signupData[2].v != signupRepPassword} on:submit={onSignup}>
-    <p>{$i18n.t("login.4.confirmModalDesc")}</p>
+<Modal bind:show={signupModal} title={$i18n.t("modal.confirmPasswordSignup")} disabled={$signupData[2].v != signupRepPassword} on:submit={onSignup}>
+    <p>{$i18n.t("modal.confirmPasswordSignupDesc")}</p>
     <Input type="password" bind:value={signupRepPassword} placeholder={$i18n.t("common.required")} />
 </Modal>

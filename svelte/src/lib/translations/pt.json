@@ -103,20 +103,14 @@
             "title" : "Recuperar Conta",
             "password": "Palavra-Passe",
             "repeatPassword": "Repetir Palavra-Passe",
-            "recover": "Recuperar",
-            "confirmModal": "Confirmar palavra-passe",
-            "confirmModalDesc": "Por favor confirme a sua palavra-passe para acabar de recuperar a sua conta",
-            "recoveredModal": "Conta recuperada",
-            "recoveredModalDesc": "A sua conta foi recuperada com sucesso! Pode agora iniciar sessão com a sua nova palavra-passe."
+            "recover": "Recuperar"
         },
         {
             "title" : "Criar Conta",
             "username": "Nome de Utilizador",
             "email": "Email",
             "password": "Palavra-Passe",
-            "signup": "Criar conta",
-            "confirmModal": "Confirmar palavra-passe",
-            "confirmModalDesc": "Por favor confirme a sua palavra-passe para acabar de criar a sua conta"
+            "signup": "Criar conta"
         },
         {
             "title": "Personalizar conta",
@@ -139,7 +133,7 @@
             "sync": "Sincronização",
             "syncDesc": "O SkyShare vai sincronizar o seu histórico por todos os dispositivos que utilizam a sua conta para ficar atualizado",
             "identification": "Identificação no envio",
-            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será exibido junto dos ficheiros (pode ser desligado nas definições)"
+            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será exibido junto dos ficheiros (pode ser ligado nas definições)"
         },
         {
             "welcome": "Bem-vindo",
@@ -179,6 +173,19 @@
             "clearHistoryDesc": "Limpa todo o histórico de transferências",
             "clearHistoryButton": "Limpar",
             "memberSince": "Membro desde {{date}}"
+        },
+        {
+            "title": "Apagar Conta",
+            "confirm": "Tem a certeza?",
+            "confirmDesc": "Ao apagar a sua conta, perderá algumas funcionalidades exclusivas a membros!",
+            "list": [
+                "Não irá poder aceder mais ao histório de transferências nem o mesmo será sincronizado entre dispositivos.",
+                "Não será mais identificado com nome e fotografia ao fazer transferências."
+            ],
+            "continue": "Continuar"
+        },
+        {
+            "deleting": "A apagar sua conta SkyShare, por favor aguarde!"
         }
     ],
     "modal": {
@@ -186,6 +193,8 @@
         "cancel": "Cancelar",
         "yes": "Sim",
         "no": "Não",
+        "confirm": "Confirmar",
+        "delete": "Apagar",
         "disabled": "Aguarde",
         "disabledDesc": "Uma operação está atualmente em execução, só poderá fechar o SkyShare quando o mesmo estiver concluído!",
         "offline": "Está offline",
@@ -218,7 +227,7 @@
         "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 3 GB.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
         "fileWithSameNameDesc": "Houve um erro a adicionar {{num}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
-        "nearbyShare": "Nota Rápida",
+        "nearbyShare": "Nota rápida",
         "nearbyShareDesc": [
             "Com esta funcionalidade ativa, quando tiver a página receber aberta, o seu dispositivo será descoberto por outras pessoas na mesma rede.",
             "Quando alguém na sua rede está a enviar ficheiros, uma lista de pessoa com a funcionalidade NeabyShare ativa será mostrada facilitando a transferência de ficheiros e removendo a necessidade de partilhar o código de transferência.",
@@ -231,10 +240,22 @@
             "Tem a certeza que quer ativar esta definição? Atualizações beta são instáveis e podem e pode prejudicar a sua experiência.",
             "Terá de reiniciar o SkyShare para que esta definição seja aplicada."
         ],
-        "resetSettings": "Repor Definições",
+        "resetSettings": "Repor definições",
         "resetSettingsDesc": "Tem a certeza que quer repor todas as definições? Os valores padrão serão aplicados.",
-        "logout": "Terminar Sessão",
-        "logoutDesc": "Tem a certeza que pretende terminar sessão?"
+        "confirmPasswordRecovery": "Confirmar palavra-passe",
+        "confirmPasswordRecoveryDesc": "Por favor confirme a sua palavra-passe para acabar de recuperar a sua conta:",
+        "accountRecovered": "Conta recuperada",
+        "accountRecoveredDesc": "A sua conta foi recuperada com sucesso! Pode agora iniciar sessão com a sua nova palavra-passe.",
+        "confirmPasswordSignup": "Confirmar palavra-passe",
+        "confirmPasswordSignupDesc": "Por favor confirme a sua palavra-passe para acabar de criar a sua conta:",
+        "logout": "Terminar sessão",
+        "logoutDesc": "Tem a certeza que pretende terminar sessão?",
+        "accountDelete": "Apagar conta",
+        "accountDeleteDesc": "Por favor confirme a operação inserindo novamente a sua palavra-passe:",
+        "accountDeleteConfirm": "Último aviso!",
+        "accountDeleteConfirmDesc": "Ao apagar a sua conta todo os seus dados serão apagados de forma irreversível! Assim que pressionar o botão abaixo, o processo de eliminação irá começar.",
+        "deleteSuccess": "Conta apagada",
+        "deleteSuccessDesc": "A sua conta foi apagada com sucesso. Esperamos vê-lo de novo em breve!"
     },
     "common": {
         "back": "Voltar",

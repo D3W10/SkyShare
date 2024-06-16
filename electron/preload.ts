@@ -299,7 +299,7 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     edit: async (username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined) => {
-        let body = { password }; // TODO: Test all options with the API
+        let body = { password };
 
         if (editUsername)
             Object.assign(body, { username: editUsername });
@@ -361,6 +361,23 @@ export const account = {
     logout: () => {
         setSetting("account", { username: null, password: null });
         logger.log("User logged out");
+    },
+    /**
+     * Deletes a user account
+     * @param username The usanme of the account to delete
+     * @param password The password of the account to delete
+     * @returns An object containing one boolean with the success state
+     */
+    delete: async (username: string, password: string) => {
+        const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
+
+        const api = await apiCall({
+            endpoint: "user/" + username,
+            method: "DELETE",
+            params: new URLSearchParams({ password: encodedPass })
+        });
+
+        return { success: api.code == 0 };
     }
 }
 
