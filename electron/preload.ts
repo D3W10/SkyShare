@@ -5,10 +5,12 @@ let wReady: boolean = false, wCompressed: boolean = false;
 let isOffline: () => boolean, winReady: () => unknown, winClose: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
-const logger =  {
+const logger = {
     log: (msg: string) => ipcRenderer.send("LoggerPreload", "info", msg),
     error: (msg: string) => ipcRenderer.send("LoggerPreload", "error", msg)
-}
+};
+
+type DataObjT = { [key: string]: any } | undefined;
 
 export interface AppInfo {
     name: string;
@@ -19,7 +21,27 @@ export interface AppInfo {
 export interface ApiResult {
     code: number;
     message: string;
-    value?: any;
+    value?: DataObjT;
+}
+
+interface ApiCall<T extends DataObjT> {
+    success: boolean;
+    data: T;
+}
+
+function apiTranslator<T extends ApiResult["value"]>(res: ApiResult, add: DataObjT = {}): ApiCall<T | undefined> {
+    let data: T | undefined = undefined;
+
+    if (res.code == 0 && res.value) {
+        data = { ...res.value, ...add } as T;
+
+        if (data) {
+            if (data.createdAt)
+                data.createdAt = new Date(data.createdAt);
+        }
+    }
+
+    return { success: res.code == 0, data };
 }
 
 /**
@@ -230,7 +252,7 @@ export const account = {
      * @param encrypted Should be true if the password is already encrypted, false otherwise
      * @returns An object containing one boolean with the success state and info about the user if it was successful
      */
-    login: async (username: string, password: string, encrypted: boolean = false) => {
+    login: async <T extends DataObjT>(username: string, password: string, encrypted: boolean = false) => {
         const encodedPass = !encrypted ? ipcRenderer.sendSync("EncodePassword", password) : password;
 
         const api = await apiCall({
@@ -244,7 +266,7 @@ export const account = {
             logger.log("Log in successful");
         }
 
-        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, email: api.value.email, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
+        return apiTranslator<T>(api, { password: encodedPass });
     },
     /**
      * Checks if a username and email are available to be picked
@@ -252,14 +274,14 @@ export const account = {
      * @param username The pretended email
      * @returns An object containing one boolean with the success state and the state if the username and email are available or not
      */
-    check: async (username: string, email: string) => {
+    check: async <T extends DataObjT>(username: string, email: string) => {
         const api = await apiCall({
             endpoint: "user/check",
             method: "GET",
             params: new URLSearchParams({ username, email })
         });
 
-        return { success: api.code == 0, data: { username: api.value.username, email: api.value.email } };
+        return apiTranslator<T>(api);
     },
     /**
      * Creates a new user account
@@ -269,7 +291,7 @@ export const account = {
      * @param photo The photo of the user or null if no photo should be set
      * @returns An object containing one boolean with the success state and info about the newly created user if it was successful
      */
-    signup: async (username: string, email: string, password: string, photo: string | null) => {
+    signup: async <T extends DataObjT>(username: string, email: string, password: string, photo: string | null) => {
         let body = { username, email, password };
         const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
 
@@ -287,7 +309,7 @@ export const account = {
             logger.log("Sign up successful");
         }
 
-        return { success: api.code == 0, data: api.code == 0 ? { username, password: encodedPass, email: api.value.email, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
+        return apiTranslator<T>(api, { password: encodedPass });
     },
     /**
      * Edits the information of a user account
@@ -298,7 +320,7 @@ export const account = {
      * @param photo The new photo of the user, null to remove the photo or undefined to leave as is
      * @returns An object containing one boolean with the success state
      */
-    edit: async (username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined) => {
+    edit: async <T extends DataObjT>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined) => {
         let body = { password };
 
         if (editUsername)
@@ -316,12 +338,35 @@ export const account = {
             body
         });
 
-        if (api.code == 0) {
+        if (api.code == 0 && api.value) {
             setSetting("account", { username: api.value.username, password });
             logger.log("Edit account successful");
         }
 
-        return { success: api.code == 0, data: api.code == 0 ? { username: api.value.username, email: api.value.email, photo: api.value.photo, createdAt: new Date(api.value.createdAt) } : null };
+        return apiTranslator<T>(api);
+    },
+    /**
+     * Changes the password of a user account
+     * @param username The username of the user
+     * @param password The password of the user
+     * @param newPassword The new password of the user
+     * @returns An object containing one boolean with the success state
+     */
+    password: async <T extends DataObjT>(username: string, password: string, newPassword: string) => {
+        const api = await apiCall({
+            endpoint: "user/" + username + "/password",
+            method: "PUT",
+            body: { password, newPassword }
+        });
+
+        const encodedPass = ipcRenderer.sendSync("EncodePassword", newPassword);
+
+        if (api.code == 0 && api.value) {
+            setSetting("account", { username: api.value.username, password: encodedPass });
+            logger.log("Edit account password successful");
+        }
+
+        return apiTranslator<T>(api, { password: encodedPass });
     },
     /**
      * Sends an email request from a specific user account
@@ -337,7 +382,7 @@ export const account = {
             body: { type, email, language }
         });
 
-        return { success: api.code == 0 };
+        return apiTranslator(api);
     },
     /**
      * Recovers an account by setting a new password using a recovery token
@@ -353,7 +398,7 @@ export const account = {
             body: { email, password, recoveryToken }
         });
 
-        return { success: api.code == 0 };
+        return apiTranslator(api);
     },
     /**
      * Logs a user out
@@ -377,7 +422,7 @@ export const account = {
             params: new URLSearchParams({ password: encodedPass })
         });
 
-        return { success: api.code == 0 };
+        return apiTranslator(api);
     }
 }
 

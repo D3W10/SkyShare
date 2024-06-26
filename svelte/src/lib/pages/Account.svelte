@@ -18,11 +18,11 @@
     import Input from "$lib/components/Input.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    type settingsPages = "informations" | "password" | "personalization" | "history" | "about";
+    type settingsPages = "informations" | "personalization" | "history" | "about";
 
-    let currentPage: settingsPages = "informations", showLogoutModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
+    let currentPage: settingsPages = "informations", showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
     let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
-    let deleteInfo: [string, boolean] = ["", true];
+    let passwordData = new FValid<[string, string]>(["", ""]), deleteData = new FValid<[string]>([""]);
 
     // TODO Temp
     let historyEnabled: boolean = true;
@@ -64,13 +64,30 @@
         disable.unlock();
     }
 
+    async function onPassword() {
+        disable.lock();
+
+        if ($passwordData[0].v != $passwordData[1].v)
+            error.setLocal("passwordNotMatch");
+        else {
+            const password = await account.password($passwordData[0].v);
+
+            if (password.success)
+                showPasswordSuccessModal = true;
+        }
+
+        $passwordData[0].v = $passwordData[1].v = "";
+
+        disable.unlock();
+    }
+
     function onDelete() {
         page.set("account", 4);
 
         setTimeout(async () => {
             disable.lock();
 
-            const deleted = await account.delete(deleteInfo[0]);
+            const deleted = await account.delete($deleteData[0].v);
 
             disable.unlock();
 
@@ -129,10 +146,6 @@
                                 <Icon name="user" className="h-6" />
                                 <p>{$i18n.t("account.2.informations")}</p>
                             </Button>
-                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "password" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "password"}>
-                                <Icon name="password" className="h-6" />
-                                <p>{$i18n.t("account.2.password")}</p>
-                            </Button>
                             <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "personalization" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "personalization"}>
                                 <Icon name="appearance" className="h-6" />
                                 <p>{$i18n.t("account.2.personalization")}</p>
@@ -168,14 +181,18 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <div>
+                                    <p>{$i18n.t("account.2.password")}</p>
+                                    <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.passwordDesc")}</p>
+                                </div>
+                                <Button type="small" secondary on:click={() => showPasswordModal = true}>{$i18n.t("account.2.passwordButton")}</Button>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div>
                                     <p>{$i18n.t("account.2.delete")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.deleteDesc")}</p>
                                 </div>
                                 <Button type="small" secondary on:click={() => page.set("account", 3)}>{$i18n.t("account.2.deleteButton")}</Button>
                             </div>
-                        </div>
-                    {:else if currentPage == "password"}
-                        <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
                         </div>
                     {:else if currentPage == "personalization"}
                         <div class="flex justify-center items-center" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -280,9 +297,18 @@
 <Modal bind:show={showLogoutModal} title={$i18n.t("modal.logout")} button={$i18n.t("modal.yes")} cancelButton={$i18n.t("modal.no")} on:submit={onLogout}>
     <p>{$i18n.t("modal.logoutDesc")}</p>
 </Modal>
-<Modal bind:show={showDeleteModal} title={$i18n.t("modal.accountDelete")} button={$i18n.t("modal.confirm")} disabled={deleteInfo[1]} on:submit={() => showDeleteConfirmModal = true}>
+<Modal bind:show={showPasswordModal} title={$i18n.t("modal.password")} button={$i18n.t("modal.change")} disabled={!$passwordData[0].v || $passwordData[0].e || !$passwordData[1].v || $passwordData[1].e} on:submit={onPassword}>
+    <p>{$i18n.t("modal.passwordDesc.0")}</p>
+    <Input type="password" value={$passwordData[0].v} error={$passwordData[0].e} placeholder={$i18n.t("common.required")} on:input={e => passwordData.update(0, e.detail.value, e.detail.error)} />
+    <p>{$i18n.t("modal.passwordDesc.1")}</p>
+    <Input type="password" value={$passwordData[1].v} error={$passwordData[1].e} placeholder={$i18n.t("common.required")} on:input={e => passwordData.update(1, e.detail.value, e.detail.error)} />
+</Modal>
+<Modal bind:show={showPasswordSuccessModal} title={$i18n.t("modal.passwordSuccess")} canCancel={false}>
+    <p>{$i18n.t("modal.passwordSuccessDesc")}</p>
+</Modal>
+<Modal bind:show={showDeleteModal} title={$i18n.t("modal.accountDelete")} button={$i18n.t("modal.confirm")} disabled={!$deleteData[0].v || $deleteData[0].e} on:submit={() => showDeleteConfirmModal = true}>
     <p>{$i18n.t("modal.accountDeleteDesc")}</p>
-    <Input type="password" bind:value={deleteInfo[0]} bind:error={deleteInfo[1]} placeholder={$i18n.t("common.required")} />
+    <Input type="password" value={$deleteData[0].v} error={$deleteData[0].e} placeholder={$i18n.t("common.required")} on:input={e => deleteData.update(0, e.detail.value, e.detail.error)} />
 </Modal>
 <Modal bind:show={showDeleteConfirmModal} title={$i18n.t("modal.accountDeleteConfirm")} button={$i18n.t("modal.delete")} on:submit={onDelete}>
     <p>{$i18n.t("modal.accountDeleteConfirmDesc")}</p>

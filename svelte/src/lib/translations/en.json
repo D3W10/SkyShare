@@ -145,7 +145,8 @@
             "title" : "Account",
             "history" : "History",
             "edit" : "Edit Account",
-            "logout": "Log Out"
+            "logout": "Log Out",
+            "notVerified": "Email not verified!"
         },
         {
             "title": "History"
@@ -153,7 +154,6 @@
         {
             "title": "Edit Account",
             "informations": "Informations",
-            "password": "Password",
             "personalization": "Personalization",
             "history": "History",
             "about": "About",
@@ -162,6 +162,9 @@
             "usernameDesc": "Change your account username",
             "email": "Email",
             "emailDesc": "Change your account email",
+            "password": "Password",
+            "passwordDesc": "Change your account password",
+            "passwordButton": "Change",
             "delete": "Delete Account",
             "deleteDesc": "Delete your SkyShare account",
             "deleteButton": "Delete",
@@ -250,6 +253,16 @@
         "confirmPasswordSignupDesc": "Please confirm your password to finish creating your account:",
         "logout": "Log out",
         "logoutDesc": "Are you sure you want to log out?",
+        "password": "Change password",
+        "passwordDesc": [
+            "New password",
+            "Confirm new password"
+        ],
+        "passwordNotMatch": "Passwords don't match",
+        "passwordNotMatchDesc": "The passwords you entered do not match, please try again.",
+        "passwordSuccess": "Password changed",
+        "passwordSuccessDesc": "Your password has been successfully changed!",
+        "change": "Change",
         "accountDelete": "Delete account",
         "accountDeleteDesc": "Please confirm the deletion by typing your password again:",
         "accountDeleteConfirm": "Last warning!",

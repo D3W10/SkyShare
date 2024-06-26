@@ -28,8 +28,9 @@ export enum ErrorCode {
     EMAIL_UNAVAILABLE, PHOTO_TOO_BIG,
     INVALID_PHOTO, UNKNOWN_SIGNUP,
     INVALID_REQUEST_TYPE, INVALID_RECOVERY_TOKEN,
-    UNKNOWN_EDIT,
+    UNKNOWN_EDIT, UNKNOWN_PASSWORD,
 
+    
     TOO_MANY_FILES, // 24
     SIZE_LIMIT_EXCEEDED // 25
 }
@@ -54,6 +55,7 @@ const errorList = {
     [ErrorCode.INVALID_REQUEST_TYPE]: "miscommunication",
     [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken",
     [ErrorCode.UNKNOWN_EDIT]: "", // TODO - Msg missing
+    [ErrorCode.UNKNOWN_PASSWORD]: "", // TODO - Msg missing
     [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
     [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
 }

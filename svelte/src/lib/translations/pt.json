@@ -145,7 +145,8 @@
             "title" : "Conta",
             "history" : "Histórico",
             "edit" : "Editar Conta",
-            "logout": "Terminar Sessão"
+            "logout": "Terminar Sessão",
+            "notVerified": "Email não verificado!"
         },
         {
             "title": "Histórico"
@@ -153,7 +154,6 @@
         {
             "title": "Editar Conta",
             "informations": "Informações",
-            "password": "Palavra-Passe",
             "personalization": "Personalização",
             "history": "Histórico",
             "about": "Sobre",
@@ -162,6 +162,9 @@
             "usernameDesc": "Alterar o nome da conta",
             "email": "Email",
             "emailDesc": "Alterar o email da conta",
+            "password": "Password",
+            "passwordDesc": "Change your account password",
+            "passwordButton": "Change",
             "delete": "Apagar Conta",
             "deleteDesc": "Apagar a sua conta SkyShare",
             "deleteButton": "Apagar",
@@ -250,6 +253,16 @@
         "confirmPasswordSignupDesc": "Por favor confirme a sua palavra-passe para acabar de criar a sua conta:",
         "logout": "Terminar sessão",
         "logoutDesc": "Tem a certeza que pretende terminar sessão?",
+        "password": "Alterar palavra-passe",
+        "passwordDesc": [
+            "Nova palavra-passe",
+            "Confirmar nova palavra-passe"
+        ],
+        "passwordNotMatch": "Palavras-passe não coincidem",
+        "passwordNotMatchDesc": "As palavras-passe inseridas não coincidem, por favor tente novamente.",
+        "passwordSuccess": "Palavra-passe alterada",
+        "passwordSuccessDesc": "A sua palavra-passe foi alterada com sucesso!",
+        "change": "Alterar",
         "accountDelete": "Apagar conta",
         "accountDeleteDesc": "Por favor confirme a operação inserindo novamente a sua palavra-passe:",
         "accountDeleteConfirm": "Último aviso!",

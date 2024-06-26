@@ -1,15 +1,18 @@
 import { get, writable } from "svelte/store";
 import { app } from "./appStore";
 
-interface IAccountStore {
+interface IAccountStore extends IAccountStoreData {
     loggedIn: boolean;
     startup: boolean;
+    recoveryToken?: string;
+}
+
+interface IAccountStoreData {
     username: string;
     password: string;
     email: string;
     photo?: string;
     createdAt: Date;
-    recoveryToken?: string;
 }
 
 export const account = (() => {
@@ -18,7 +21,7 @@ export const account = (() => {
     return {
         subscribe,
         login: async (username: string, password: string, encrypted: boolean = false) => {
-            const loginAttempt = await get(app).account.login(username, password, encrypted);
+            const loginAttempt = await get(app).account.login<IAccountStoreData>(username, password, encrypted);
 
             if (loginAttempt.success)
                 set({ loggedIn: true, startup: encrypted, ...loginAttempt.data! });
@@ -26,10 +29,10 @@ export const account = (() => {
             return loginAttempt.success;
         },
         check: async (username: string, email: string) => {
-            return await get(app).account.check(username, email);
+            return await get(app).account.check<{ username: string, email: string }>(username, email);
         },
         signup: async (username: string, email: string, password: string, photo: string | null) => {
-            const signupAttempt = await get(app).account.signup(username, email, password, photo);
+            const signupAttempt = await get(app).account.signup<IAccountStoreData>(username, email, password, photo);
 
             if (signupAttempt.success)
                 set({ loggedIn: true, startup: false, ...signupAttempt.data! });
@@ -38,17 +41,19 @@ export const account = (() => {
         },
         edit: async (username: string | undefined, email: string | undefined, photo: string | null | undefined) => {
             const acc = get(account);
-            const req = await get(app).account.edit(acc.username, acc.password, username, email, photo);
+            const req = await get(app).account.edit<IAccountStoreData>(acc.username, acc.password, username, email, photo);
 
-            if (req.success)
-                update(n => {
-                    n.startup = false;
-                    n.username = req.data?.username!;
-                    n.email = req.data?.email!;
-                    n.photo = req.data?.photo!;
-                    n.createdAt = req.data?.createdAt!;
-                    return n;
-                });
+            if (req.success && req.data)
+                set({ loggedIn: true, startup: false, ...req.data });
+
+            return req;
+        },
+        password: async (newPassword: string) => {
+            const acc = get(account);
+            const req = await get(app).account.password<IAccountStoreData>(acc.username, acc.password, newPassword);
+
+            if (req.success && req.data)
+                set({ loggedIn: true, startup: false, ...req.data });
 
             return req;
         },
@@ -56,16 +61,25 @@ export const account = (() => {
             const req = await get(app).account.request(type, email, language);
 
             if (req.success && type == "recovery")
-                update(n => { n.recoveryToken = ""; return n; });
+                update(n => {
+                    n.recoveryToken = "";
+                    return n;
+                });
 
             return req;
         },
-        setRecoveryToken: (token: string) => update(n => { n.recoveryToken = token; return n; }),
+        setRecoveryToken: (token: string) => update(n => {
+            n.recoveryToken = token;
+            return n;
+        }),
         recovery: async (email: string, password: string) => {
             const req = await get(app).account.recovery(email, password, get(account).recoveryToken!);
 
             if (req.success)
-                update(n => { n.recoveryToken = undefined; return n; });
+                update(n => {
+                    n.recoveryToken = undefined;
+                    return n;
+                });
 
             return req;
         },
