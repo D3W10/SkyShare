@@ -27,8 +27,9 @@ export enum ErrorCode {
     WRONG_USERPASS, USERNAME_UNAVAILABLE,
     EMAIL_UNAVAILABLE, PHOTO_TOO_BIG,
     INVALID_PHOTO, UNKNOWN_SIGNUP,
-    INVALID_REQUEST_TYPE, INVALID_RECOVERY_TOKEN,
-    UNKNOWN_EDIT, UNKNOWN_PASSWORD,
+    INVALID_REQUEST_TYPE, INVALID_VERIFICATION_TOKEN,
+    INVALID_RECOVERY_TOKEN, UNKNOWN_EDIT,
+    UNKNOWN_PASSWORD,
 
     
     TOO_MANY_FILES, // 24
@@ -53,6 +54,7 @@ const errorList = {
     [ErrorCode.INVALID_PHOTO]: "invalidPhoto",
     [ErrorCode.UNKNOWN_SIGNUP]: "unknownSignup",
     [ErrorCode.INVALID_REQUEST_TYPE]: "miscommunication",
+    [ErrorCode.INVALID_VERIFICATION_TOKEN]: "invalidVerificationToken",
     [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken",
     [ErrorCode.UNKNOWN_EDIT]: "", // TODO - Msg missing
     [ErrorCode.UNKNOWN_PASSWORD]: "", // TODO - Msg missing

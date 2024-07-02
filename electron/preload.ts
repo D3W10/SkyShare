@@ -387,6 +387,21 @@ export const account = {
         return apiTranslator(api);
     },
     /**
+     * Verifies an account using a verification token
+     * @param email The email of the account to verify
+     * @param verificationToken The verification token sent to the email
+     * @returns An object containing one boolean with the success state
+     */
+    verify: async (email: string, verificationToken: string) => {
+        const api = await apiCall({
+            endpoint: "user/verify",
+            method: "POST",
+            body: { email, verificationToken }
+        });
+
+        return apiTranslator(api);
+    },
+    /**
      * Recovers an account by setting a new password using a recovery token
      * @param email The email of the account to recover
      * @param password The new password to be set

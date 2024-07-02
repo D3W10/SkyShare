@@ -20,7 +20,7 @@
 
     type settingsPages = "informations" | "personalization" | "history" | "about";
 
-    let currentPage: settingsPages = "informations", showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
+    let currentPage: settingsPages = "informations", showVerifyModal = false, showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
     let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
     let passwordData = new FValid<[string, string]>(["", ""]), deleteData = new FValid<[string]>([""]);
 
@@ -81,6 +81,14 @@
         disable.unlock();
     }
 
+    async function onVerify() {
+        disable.lock();
+
+        await account.request("verify", $account.email);
+
+        disable.unlock();
+    }
+
     function onDelete() {
         page.set("account", 4);
 
@@ -117,7 +125,7 @@
                     <BlockLink text={$i18n.t("account.0.edit")} icon="editAccount" on:click={() => page.set("account", 2)} />
                     <BlockLink text={$i18n.t("account.0.logout")} icon="logout" on:click={() => showLogoutModal = true} />
                     {#if !$account.emailVerified}
-                        <button class="w-fit px-3 py-1 flex justify-center items-center absolute top-6 left-0 right-0 mx-auto text-background bg-primary rounded-full">
+                        <button class="w-fit px-3 py-1 flex justify-center items-center absolute top-6 left-0 right-0 mx-auto text-background bg-primary rounded-full" on:click={() => showVerifyModal = true}>
                             <Icon name="warning" className="w-5" />
                             <span class="ml-3 text-sm font-semibold">{$i18n.t("account.0.notVerified")}</span>
                         </button>
@@ -300,6 +308,9 @@
         </div>
     {/if}
 </div>
+<Modal bind:show={showVerifyModal} title={$i18n.t("modal.accountVerify")} button={$i18n.t("modal.yes")} cancelButton={$i18n.t("modal.no")} on:submit={onVerify}>
+    <p>{$i18n.t("modal.accountVerifyDesc")}</p>
+</Modal>
 <Modal bind:show={showLogoutModal} title={$i18n.t("modal.logout")} button={$i18n.t("modal.yes")} cancelButton={$i18n.t("modal.no")} on:submit={onLogout}>
     <p>{$i18n.t("modal.logoutDesc")}</p>
 </Modal>

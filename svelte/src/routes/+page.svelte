@@ -20,6 +20,7 @@
     import Welcome from "$lib/pages/Welcome.svelte";
     import Account from "$lib/pages/Account.svelte";
 
+    let showVerifyModal = false;
     const colors: { [key in pages]: string } = {
         home: "[--color-primary:--color-home]",
         send: "[--color-primary:--color-send]",
@@ -48,7 +49,7 @@
 
     $: showErrorModal = $error.show;
 
-    function uriHandler(argv: string[]) {
+    async function uriHandler(argv: string[]) {
         if (argv[0]) {
             if (argv[0] == "login" && $account.loggedIn)
                 argv[0] = "account";
@@ -57,7 +58,13 @@
 
             if (["home", "send", "receive", "settings", "login", "account"].includes(argv[0]))
                 page.set(argv[0] as pages);
-            else if (argv[0] == "recovery" && argv[1] && $account.recoveryToken == "") {
+            else if (argv[0] == "verify" && argv[1] && $account.loggedIn) {
+                if ((await account.verify($account.email, argv[1])).success) {
+                    showVerifyModal = true;
+                    $account.emailVerified = true;
+                }
+            }
+            else if (argv[0] == "recovery" && argv[1] && $account.loggedIn && $account.recoveryToken == "") {
                 account.setRecoveryToken(argv[1]);
                 page.set("login", 3);
             }
@@ -96,5 +103,8 @@
     </div>
     <Modal bind:show={showErrorModal} title={$i18n.t(`modal.${$error.type}`)} button={$i18n.t("modal.okay")} canCancel={false} on:submit={() => error.hide()}>
         <p>{$i18n.t(`modal.${$error.type}Desc`, $error.vars)}</p>
+    </Modal>
+    <Modal bind:show={showVerifyModal} title={$i18n.t("modal.verifySuccess")} button={$i18n.t("modal.okay")} canCancel={false}>
+        <p>{$i18n.t("modal.verifySuccessDesc")}</p>
     </Modal>
 </div>

@@ -70,6 +70,7 @@ export const account = (() => {
 
             return req;
         },
+        verify: async (email: string, verificationToken: string) => await get(app).account.verify(email, verificationToken),
         setRecoveryToken: (token: string) => update(n => {
             n.recoveryToken = token;
             return n;
