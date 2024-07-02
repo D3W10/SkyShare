@@ -8,7 +8,6 @@
     import { disable } from "$lib/stores/disableStore";
     import { account } from "$lib/stores/accountStore";
     import { error, ErrorCode } from "$lib/stores/errorStore";
-    import { settings } from "$lib/stores/settingsStore";
     import { FValid } from "$lib/models/FValid.class";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -39,7 +38,7 @@
         if ($requestData[0].e)
             error.set(ErrorCode.INVALID_EMAIL);
         else {
-            const check = await account.request("recovery", $requestData[0].v, $settings.language);
+            const check = await account.request("recovery", $requestData[0].v);
 
             if (check.success)
                 page.set("login", 2);

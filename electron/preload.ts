@@ -289,10 +289,11 @@ export const account = {
      * @param email The email of the user
      * @param password The password of the user
      * @param photo The photo of the user or null if no photo should be set
+     * @param language The preferred email language
      * @returns An object containing one boolean with the success state and info about the newly created user if it was successful
      */
-    signup: async <T extends DataObjT>(username: string, email: string, password: string, photo: string | null) => {
-        let body = { username, email, password };
+    signup: async <T extends DataObjT>(username: string, email: string, password: string, photo: string | null, language?: string) => {
+        let body = { username, email, password, language };
         const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
 
         if (photo)
@@ -318,10 +319,11 @@ export const account = {
      * @param editUsername The new username of the user or undefined to leave as is
      * @param email The new email of the user or undefined to leave as is
      * @param photo The new photo of the user, null to remove the photo or undefined to leave as is
+     * @param language The preferred email language
      * @returns An object containing one boolean with the success state
      */
-    edit: async <T extends DataObjT>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined) => {
-        let body = { password };
+    edit: async <T extends DataObjT>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined, language?: string) => {
+        let body = { password, language };
 
         if (editUsername)
             Object.assign(body, { username: editUsername });
@@ -375,7 +377,7 @@ export const account = {
      * @param language The preferred email language
      * @returns An object containing one boolean with the success state
      */
-    request: async (type: "verify" | "recovery", email: string, language: string) => {
+    request: async (type: "verify" | "recovery", email: string, language?: string) => {
         const api = await apiCall({
             endpoint: "user/request",
             method: "POST",

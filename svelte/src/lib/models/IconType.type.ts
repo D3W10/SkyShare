@@ -17,6 +17,7 @@ export type IconType =
     "history-bold" |
     "editAccount" |
     "logout" |
+    "warning" |
     "user" |
     "accountDelete" |
     "appearance" |

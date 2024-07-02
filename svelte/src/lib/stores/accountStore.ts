@@ -1,5 +1,6 @@
 import { get, writable } from "svelte/store";
 import { app } from "./appStore";
+import { settings } from "./settingsStore";
 
 interface IAccountStore extends IAccountStoreData {
     loggedIn: boolean;
@@ -13,6 +14,7 @@ interface IAccountStoreData {
     email: string;
     photo?: string;
     createdAt: Date;
+    emailVerified: boolean;
 }
 
 export const account = (() => {
@@ -32,7 +34,7 @@ export const account = (() => {
             return await get(app).account.check<{ username: string, email: string }>(username, email);
         },
         signup: async (username: string, email: string, password: string, photo: string | null) => {
-            const signupAttempt = await get(app).account.signup<IAccountStoreData>(username, email, password, photo);
+            const signupAttempt = await get(app).account.signup<IAccountStoreData>(username, email, password, photo, get(settings).language);
 
             if (signupAttempt.success)
                 set({ loggedIn: true, startup: false, ...signupAttempt.data! });
@@ -41,7 +43,7 @@ export const account = (() => {
         },
         edit: async (username: string | undefined, email: string | undefined, photo: string | null | undefined) => {
             const acc = get(account);
-            const req = await get(app).account.edit<IAccountStoreData>(acc.username, acc.password, username, email, photo);
+            const req = await get(app).account.edit<IAccountStoreData>(acc.username, acc.password, username, email, photo, get(settings).language);
 
             if (req.success && req.data)
                 set({ loggedIn: true, startup: false, ...req.data });
@@ -57,8 +59,8 @@ export const account = (() => {
 
             return req;
         },
-        request: async (type: "verify" | "recovery", email: string, language: string) => {
-            const req = await get(app).account.request(type, email, language);
+        request: async (type: "verify" | "recovery", email: string) => {
+            const req = await get(app).account.request(type, email, get(settings).language);
 
             if (req.success && type == "recovery")
                 update(n => {

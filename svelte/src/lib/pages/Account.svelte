@@ -112,10 +112,16 @@
                     {/if}
                     <p class="text-lg font-semibold">{$account.username}</p>
                 </div>
-                <div slot="right" class="flex flex-col justify-center space-y-4">
+                <div slot="right" class="flex flex-col justify-center relative space-y-4">
                     <BlockLink text={$i18n.t("account.0.history")} icon="history-bold" on:click={() => page.set("account", 1)} />
                     <BlockLink text={$i18n.t("account.0.edit")} icon="editAccount" on:click={() => page.set("account", 2)} />
                     <BlockLink text={$i18n.t("account.0.logout")} icon="logout" on:click={() => showLogoutModal = true} />
+                    {#if !$account.emailVerified}
+                        <button class="w-fit px-3 py-1 flex justify-center items-center absolute top-6 left-0 right-0 mx-auto text-background bg-primary rounded-full">
+                            <Icon name="warning" className="w-5" />
+                            <span class="ml-3 text-sm font-semibold">{$i18n.t("account.0.notVerified")}</span>
+                        </button>
+                    {/if}
                 </div>
             </Columns>
         </div>
