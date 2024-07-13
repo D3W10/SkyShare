@@ -7,6 +7,7 @@ export type IconType =
     "chevron" |
     "files" |
     "add" |
+    "remove" |
     "accountRecovery" |
     "accountCreate" |
     "accountSuccess" |

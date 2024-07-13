@@ -28,7 +28,7 @@
     let historyEnabled: boolean = true;
 
     function onLogout() {
-        account.logout();
+        setTimeout(() => account.logout(), 300);
         page.set("home");
     }
 
