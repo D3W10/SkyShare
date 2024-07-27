@@ -217,6 +217,7 @@ ipcMain.on("ResizeWindow", (_, width, height) => BrowserWindow.getAllWindows()[0
 ipcMain.on("OpenMain", () => {
     splash.close();
     window.show();
+    window.webContents.send("WindowOpen");
 });
 
 ipcMain.on("GetSetting", (event, key: string) => event.returnValue = appConfig.get(key));

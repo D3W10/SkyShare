@@ -12,7 +12,7 @@
     const DEFAULT_STATUS = $i18n.t("splash.starting");
     let start = false, status = DEFAULT_STATUS, dlPercent = 0, splashReady = false, winReady = false;
 
-    $app?.updateReadyCallback(() => {
+    $app?.updateCallback("ready", () => {
         winReady = true;
         $app.log("Main window ready");
         onReady();
@@ -22,7 +22,7 @@
         if (!navigator.onLine) {
             status = $i18n.t("splash.offline");
 
-            await new Promise<void>((resolve) => window.addEventListener("online", () => resolve(), { once: true }));
+            await new Promise<void>(resolve => window.addEventListener("online", () => resolve(), { once: true }));
             status = $i18n.t("splash.starting");
         }
 
@@ -31,13 +31,13 @@
 
     async function checkForUpdates() {
         if ($settings.autoUpdate) {
-            await new Promise<void>((resolve) => {
-                $app.checkForUpdates((available) => {
+            await new Promise<void>(resolve => {
+                $app.checkForUpdates(available => {
                     if (available)
                         status = $i18n.t("splash.updating");
                     else
                         resolve();
-                }, (percent) => dlPercent = percent);
+                }, percent => dlPercent = percent);
             });
         }
 

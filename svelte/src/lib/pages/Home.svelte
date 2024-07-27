@@ -19,8 +19,9 @@
 
             if (content) {
                 resolve(content);
-                showChangesModal = true;
                 $app.setSetting("changelog", null);
+
+                $app.updateCallback("open", () => setTimeout(() => showChangesModal = true, 1000));
             }
             else
                 resolve("");
@@ -46,7 +47,7 @@
     <h1 class="w-full text-xl font-semibold">{$i18n.t(greetingKey, { count: !$account.loggedIn ? 0 : 1, name: $account.username })}</h1>
     <Columns className="z-10">
         <div slot="left" class="flex flex-col justify-center items-center space-y-2">
-            <img class="w-3/6" src="./logo.png" alt="{$info.name} Logo" role="none" on:click={(e) => { if (e.ctrlKey || e.metaKey) waveAnimate = !waveAnimate; }} />
+            <img class="w-3/6" src="./logo.png" alt="{$info.name} Logo" role="none" on:click={e => { if (e.ctrlKey || e.metaKey) waveAnimate = !waveAnimate; }} />
             <p class="text-lg font-semibold">{$info.name}</p>
         </div>
         <div slot="right" class="flex flex-col justify-center space-y-4">
@@ -57,7 +58,7 @@
     </Columns>
     <img src="./wave.svg" class="absolute left-2 right-2 bottom-2 opacity-60" alt="{$info.name} Wave" style={!waveAnimate ? "" : "animation: shrink 3s ease-in-out infinite alternate;"} />
 </div>
-<Modal bind:show={showChangesModal} title={$i18n.t("whatsnew", { version: $info.version })} button={$i18n.t("awesome")} canCancel={false}>
+<Modal bind:show={showChangesModal} title={$i18n.t("home.whatsNew", { version: $info.version })} button={$i18n.t("home.awesome")} canCancel={false}>
     <div class="p-3 bg-secondary rounded-xl font-normal space-y-4 changelog [overflow-y:overlay]">
         {#await changelogLoad then changelog}
             {@html changelog}

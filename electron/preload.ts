@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
-let wReady: boolean = false, wCompressed: boolean = false;
-let isOffline: () => boolean, winReady: () => unknown, winClose: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
+let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
+let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
 const logger = {
@@ -10,7 +10,17 @@ const logger = {
     error: (msg: string) => ipcRenderer.send("LoggerPreload", "error", msg)
 };
 
-type DataObjT = { [key: string]: any } | undefined;
+type TDataObj = { [key: string]: any } | undefined;
+type TEventName = "offline" | "ready" | "open" | "close" | "login" | "uri" | "error";
+type TCallback<T extends TEventName> = 
+    T extends "offline" ? () => boolean :
+    T extends "ready" ? () => unknown :
+    T extends "open" ? () => unknown :
+    T extends "close" ? () => unknown :
+    T extends "login" ? (username: string, password: string) => Promise<unknown> :
+    T extends "uri" ? (args: string[]) => unknown :
+    T extends "error" ? (code: number) => unknown :
+    never;
 
 export interface AppInfo {
     name: string;
@@ -21,15 +31,15 @@ export interface AppInfo {
 export interface ApiResult {
     code: number;
     message: string;
-    value?: DataObjT;
+    value?: TDataObj;
 }
 
-interface ApiCall<T extends DataObjT> {
+interface ApiCall<T extends TDataObj> {
     success: boolean;
     data: T;
 }
 
-function apiTranslator<T extends ApiResult["value"]>(res: ApiResult, add: DataObjT = {}): ApiCall<T | undefined> {
+function apiTranslator<T extends ApiResult["value"]>(res: ApiResult, add: TDataObj = {}): ApiCall<T | undefined> {
     let data: T | undefined = undefined;
 
     if (res.code == 0 && res.value) {
@@ -195,7 +205,7 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  */
 export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true): Promise<ApiResult> {
     try {
-        if (isOffline()) {
+        if (offlineHandler()) {
             errorHandler(-2);
             return {} as ApiResult;
         }
@@ -252,7 +262,7 @@ export const account = {
      * @param encrypted Should be true if the password is already encrypted, false otherwise
      * @returns An object containing one boolean with the success state and info about the user if it was successful
      */
-    login: async <T extends DataObjT>(username: string, password: string, encrypted: boolean = false) => {
+    login: async <T extends TDataObj>(username: string, password: string, encrypted: boolean = false) => {
         const encodedPass = !encrypted ? ipcRenderer.sendSync("EncodePassword", password) : password;
 
         const api = await apiCall({
@@ -274,7 +284,7 @@ export const account = {
      * @param username The pretended email
      * @returns An object containing one boolean with the success state and the state if the username and email are available or not
      */
-    check: async <T extends DataObjT>(username: string, email: string) => {
+    check: async <T extends TDataObj>(username: string, email: string) => {
         const api = await apiCall({
             endpoint: "user/check",
             method: "GET",
@@ -292,7 +302,7 @@ export const account = {
      * @param language The preferred email language
      * @returns An object containing one boolean with the success state and info about the newly created user if it was successful
      */
-    signup: async <T extends DataObjT>(username: string, email: string, password: string, photo: string | null, language?: string) => {
+    signup: async <T extends TDataObj>(username: string, email: string, password: string, photo: string | null, language?: string) => {
         let body = { username, email, password, language };
         const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
 
@@ -322,7 +332,7 @@ export const account = {
      * @param language The preferred email language
      * @returns An object containing one boolean with the success state
      */
-    edit: async <T extends DataObjT>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined, language?: string) => {
+    edit: async <T extends TDataObj>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined, language?: string) => {
         let body = { password, language };
 
         if (editUsername)
@@ -354,7 +364,7 @@ export const account = {
      * @param newPassword The new password of the user
      * @returns An object containing one boolean with the success state
      */
-    password: async <T extends DataObjT>(username: string, password: string, newPassword: string) => {
+    password: async <T extends TDataObj>(username: string, password: string, newPassword: string) => {
         const api = await apiCall({
             endpoint: "user/" + username + "/password",
             method: "PUT",
@@ -464,66 +474,50 @@ export async function sleep(ms: number) {
 }
 
 /**
- * Updates the callback function that allows preload to get the current offline status
- * @param callback The function that returns the offline status
+ * Updates the callback for various in-app events
+ * @param name The name of the event to bind to
+ * @param callback The callback to bind to the event
  */
-export function updateOfflineCallback(callback: () => boolean) {
-    isOffline = callback;
-}
-
-/**
- * Updates the callback function reference to where the main window status should be sent
- * @param callback The function to receive the window status
- */
-export function updateReadyCallback(callback: () => unknown) {
-    winReady = callback;
-    if (wReady)
-        callback();
-}
-
-/**
- * Updates the callback function reference to where the main window close event should be sent
- * 
- * @param callback The function to call when the window is about to close
- */
-export function updateCloseCallback(callback: () => unknown) {
-    winClose = callback;
-}
-
-/**
- * Updates the callback function reference to where the login result should be sent
- * @param callback The function to receive the login result
- */
-export function updateLoginCallback(callback: (username: string, password: string) => Promise<unknown>) {
-    loginHandler = callback;
-}
-
-/**
- * Updates the callback function reference to where the URI callbacks should be sent
- * @param callback The function to receive the URI
- */
-export function updateUriCallback(callback: (args: string[]) => unknown) {
-    uriHandler = callback;
-}
-
-/**
- * Updates the callback function reference to where the API errors should be sent
- * @param callback The function to receive the API error codes
- */
-export function updateErrorCallback(callback: (code: number) => unknown) {
-    errorHandler = callback;
+export function updateCallback<T extends TEventName>(name: T, callback: TCallback<T>) {
+    if (name == "offline")
+        offlineHandler = callback as TCallback<"offline">;
+    else if (name == "ready") {
+        readyHandler = callback as TCallback<"ready">;
+        if (wReady)
+            readyHandler();
+    }
+    else if (name == "open") {
+        openHandler = callback as TCallback<"open">;
+        if (wOpen)
+            openHandler();
+    }
+    else if (name == "close")
+        closeHandler = callback as TCallback<"close">;
+    else if (name == "login")
+        loginHandler = callback as TCallback<"login">;
+    else if (name == "uri")
+        uriHandler = callback as TCallback<"uri">;
+    else if (name == "error")
+        errorHandler = callback as TCallback<"error">;
 }
 
 ipcRenderer.on("CFUProgress", (_, percent: number) => cfuProgress(percent));
 
 ipcRenderer.on("WindowReady", () => {
-    if (winReady)
-        winReady();
+    if (readyHandler)
+        readyHandler();
     else
         wReady = true;
 });
 
-ipcRenderer.on("WindowClose", () => winClose());
+ipcRenderer.on("WindowOpen", () => {
+    if (openHandler)
+        openHandler();
+    else
+        wOpen = true;
+});
+
+ipcRenderer.on("WindowClose", () => closeHandler());
 
 ipcRenderer.on("LoginRequest", async (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", await loginHandler(username, password)));
 
@@ -552,10 +546,5 @@ contextBridge.exposeInMainWorld("app", {
     account,
     sendLoginRequest,
     sleep,
-    updateOfflineCallback,
-    updateReadyCallback,
-    updateCloseCallback,
-    updateLoginCallback,
-    updateUriCallback,
-    updateErrorCallback
+    updateCallback
 });
