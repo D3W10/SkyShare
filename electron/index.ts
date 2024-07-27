@@ -69,7 +69,7 @@ async function createWindow() {
     window.loadURL(!isDev ? `file:///${path.join(__dirname, "www", "index.html")}` : "http://localhost:5173/");
     window.once("ready-to-show", () => splash.webContents.send("WindowReady"));
     if (process.platform == "darwin") {
-        window.on("close", (e) => {
+        window.on("close", e => {
             if (closeLock) {
                 e.preventDefault();
                 window.webContents.send("WindowClose");
@@ -126,7 +126,7 @@ app.on("second-instance", (_, argv) => {
 app.whenReady().then(() => {
     createWindow();
 
-    protocol.handle("app", (request) => net.fetch("file://" + request.url.slice("app://".length)));
+    protocol.handle("app", req => net.fetch("file://" + req.url.slice("app://".length)));
 });
 
 app.on("window-all-closed", () => {
@@ -142,7 +142,7 @@ else
     app.setAsDefaultProtocolClient("skyshare");
 
 function uriHandler(argv: string[]) {
-    let uriArg = argv.find((arg) => arg.startsWith("skyshare://"));
+    let uriArg = argv.find(arg => arg.startsWith("skyshare://"));
     if (!uriArg)
         return;
 
@@ -153,8 +153,8 @@ function uriHandler(argv: string[]) {
 
     if (window.isMinimized())
         window.restore();
-    window.focus();
 
+    window.focus();
     window.webContents.send("UriHandler", args.filter(e => e));
 }
 
@@ -164,7 +164,7 @@ ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.s
 
 //#region Updater
 
-autoUpdater.on("download-progress", (info) => (!splash.isDestroyed() ? splash : window).webContents.send("CFUProgress", info.percent));
+autoUpdater.on("download-progress", info => (!splash.isDestroyed() ? splash : window).webContents.send("CFUProgress", info.percent));
 
 autoUpdater.on("update-downloaded", () => autoUpdater.quitAndInstall());
 
@@ -193,13 +193,13 @@ ipcMain.on("CheckForUpdates", () => {
     if (isDev)
         win.webContents.send("CFUStatus", false);
     
-    autoUpdater.once("update-available", (e) => {
+    autoUpdater.once("update-available", e => {
         appConfig.set("changelog", e.releaseNotes);
         win.webContents.send("CFUStatus", true);
     });
     autoUpdater.once("update-not-available", () => win.webContents.send("CFUStatus", false));
     autoUpdater.once("update-cancelled", () => win.webContents.send("CFUStatus", false));
-    autoUpdater.once("error", (error) => {
+    autoUpdater.once("error", error => {
         logger.error(error.message);
         win.webContents.send("CFUStatus", false);
     });
@@ -226,30 +226,30 @@ ipcMain.on("SetSetting", (_event, key: string, value: any) => appConfig.set(key,
 
 ipcMain.on("ResetSettings", () => appConfig.reset("settings"));
 
-ipcMain.on("GetAppInfo", (event) => {
-    event.returnValue = {
+ipcMain.on("GetAppInfo", e => {
+    e.returnValue = {
         name: packageData.productName,
         version: packageData.version,
         api: !isDev ? "https://skyshare.vercel.app/" : "http://localhost:5174/"
     }
 });
 
-ipcMain.on("GetPlatform", (event) => event.returnValue = process.platform);
+ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
 
-ipcMain.handle("GetFileIcon", async (_event, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
+ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
-ipcMain.handle("IsDirectory", (_event, path: string) => fs.lstatSync(path).isDirectory());
+ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
 
-ipcMain.on("EncodePassword", (event, password: string) => event.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
+ipcMain.on("EncodePassword", (e, password: string) => e.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 
-ipcMain.handle("GetFileAsBase64", async (_event, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
+ipcMain.handle("GetFileAsBase64", async (_, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
 
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);
 
     return {
         canceled: dialogResult.canceled,
-        files: dialogResult.filePaths.map((path) => {
+        files: dialogResult.filePaths.map(path => {
             return {
                 name: path.replace(/.*[\/\\]/, ""),
                 path: path,
