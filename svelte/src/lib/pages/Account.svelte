@@ -22,17 +22,17 @@
 
     let currentPage: settingsPages = "informations", showVerifyModal = false, showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
     let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
+    let settingsData = new FValid<[boolean]>([$account.settings.historyEnabled]);
     let passwordData = new FValid<[string, string]>(["", ""]), deleteData = new FValid<[string]>([""]);
-
-    // TODO Temp
-    let historyEnabled: boolean = true;
 
     function onLogout() {
         setTimeout(() => account.logout(), 300);
         page.set("home");
     }
 
-    $: saveEnable = ["informations", "personalization"].includes(currentPage) && ($editData[0].v != "" || $editData[1].v != "" || $editData[2].v != $account.photo);
+    $: saveEnableEditP = ["informations", "personalization"].includes(currentPage) && ($editData[0].v != "" || $editData[1].v != "" || $editData[2].v != $account.photo);
+    $: saveEnableSettingsP = ["history"].includes(currentPage) && $settingsData[0].v != $account.settings.historyEnabled;
+    $: saveEnable = saveEnableEditP || saveEnableSettingsP;
 
     async function choosePhoto() {
         const photoDialog = await $app.showOpenDialog({
@@ -48,18 +48,22 @@
     async function onSave() {
         disable.lock();
 
-        if ($editData[0].v && $editData[0].e)
-            error.set(ErrorCode.INVALID_USERNAME);
-        else if ($editData[1].v && $editData[1].e)
-            error.set(ErrorCode.INVALID_EMAIL);
-        else {
-            const edit = await account.edit($editData[0].v, $editData[1].v, $editData[2].v == $account.photo ? undefined : $editData[2].v == undefined ? null : $editData[2].v);
+        if (saveEnableEditP) {
+            if ($editData[0].v && $editData[0].e)
+                error.set(ErrorCode.INVALID_USERNAME);
+            else if ($editData[1].v && $editData[1].e)
+                error.set(ErrorCode.INVALID_EMAIL);
+            else {
+                const edit = await account.edit($editData[0].v, $editData[1].v, $editData[2].v == $account.photo ? undefined : $editData[2].v == undefined ? null : $editData[2].v);
 
-            if (edit.success) {
-                $editData[0].v = $editData[1].v = "";
-                $editData[2].v = $account.photo;
+                if (edit.success) {
+                    $editData[0].v = $editData[1].v = "";
+                    $editData[2].v = $account.photo;
+                }
             }
         }
+        else if (saveEnableSettingsP)
+            await account.settings($settingsData[0].v);
 
         disable.unlock();
     }
@@ -242,7 +246,7 @@
                                     <p>{$i18n.t("account.2.enableHistory")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.enableHistoryDesc")}</p>
                                 </div>
-                                <Input type="switch" value={historyEnabled} on:input={(e) => historyEnabled = e.detail.value} />
+                                <Input type="switch" value={$settingsData[0].v} error={$settingsData[0].e} on:input={e => settingsData.update(0, e.detail.value, e.detail.error)} />
                             </div>
                             <div class="flex justify-between items-center">
                                 <div>

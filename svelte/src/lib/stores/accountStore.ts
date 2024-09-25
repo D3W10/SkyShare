@@ -15,6 +15,18 @@ interface IAccountStoreData {
     photo?: string;
     createdAt: Date;
     emailVerified: boolean;
+    settings: {
+        history: IHistoryEntry[];
+        historyEnabled: boolean;
+    }
+}
+
+interface IHistoryEntry {
+    code: string;
+    size: number;
+    secondary: string;
+    type: 0 | 1;
+    date: Date;
 }
 
 export const account = (() => {
@@ -81,6 +93,17 @@ export const account = (() => {
             if (req.success)
                 update(n => {
                     n.recoveryToken = undefined;
+                    return n;
+                });
+
+            return req;
+        },
+        settings: async (historyEnabled: boolean) => {
+            const req = await get(app).account.settings(get(account).username, get(account).password, historyEnabled);
+
+            if (req.success && req.data)
+                update(n => {
+                    n.settings.historyEnabled = req.data!.settings.historyEnabled;
                     return n;
                 });
 

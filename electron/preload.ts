@@ -428,6 +428,22 @@ export const account = {
         return apiTranslator(api);
     },
     /**
+     * Edits the settings of a user account
+     * @param username The username of the user
+     * @param password The password of the user
+     * @param historyEnabled A value that specifies whether the history should be enabled or not
+     * @returns An object containing one boolean with the success state
+     */
+    settings: async (username: string, password: string, historyEnabled: boolean) => {
+        const api = await apiCall({
+            endpoint: "user/" + username + "/settings",
+            method: "PUT",
+            body: { password, historyEnabled }
+        });
+
+        return apiTranslator(api);
+    },
+    /**
      * Logs a user out
      */
     logout: () => {
