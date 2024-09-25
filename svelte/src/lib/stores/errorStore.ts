@@ -44,9 +44,9 @@ const errorList = {
     [ErrorCode.INVALID_USERNAME]: "invalidUsername",
     [ErrorCode.INVALID_EMAIL]: "invalidEmail",
     [ErrorCode.INVALID_PASSWORD]: "invalidPassword",
-    [ErrorCode.INVALID_NEW_USERNAME]: "", // TODO - Msg missing
-    [ErrorCode.INVALID_NEW_EMAIL]: "", // TODO - Msg missing
-    [ErrorCode.INVALID_NEW_PASSWORD]: "", // TODO - Msg missing
+    [ErrorCode.INVALID_NEW_USERNAME]: "invalidNewUsername",
+    [ErrorCode.INVALID_NEW_EMAIL]: "invalidNewEmail",
+    [ErrorCode.INVALID_NEW_PASSWORD]: "invalidNewPassword",
     [ErrorCode.WRONG_USERPASS]: "wrongUserPass",
     [ErrorCode.USERNAME_UNAVAILABLE]: "usernameUnavailable",
     [ErrorCode.EMAIL_UNAVAILABLE]: "emailUnavailable",
@@ -56,8 +56,8 @@ const errorList = {
     [ErrorCode.INVALID_REQUEST_TYPE]: "miscommunication",
     [ErrorCode.INVALID_VERIFICATION_TOKEN]: "invalidVerificationToken",
     [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken",
-    [ErrorCode.UNKNOWN_EDIT]: "", // TODO - Msg missing
-    [ErrorCode.UNKNOWN_PASSWORD]: "", // TODO - Msg missing
+    [ErrorCode.UNKNOWN_EDIT]: "unknownEdit",
+    [ErrorCode.UNKNOWN_PASSWORD]: "unknownPassword",
     [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
     [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
 }
