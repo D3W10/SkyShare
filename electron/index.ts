@@ -206,11 +206,20 @@ ipcMain.on("CheckForUpdates", () => {
 });
 
 ipcMain.on("CloseWindow", () => {
-    closeLock = false;
-    BrowserWindow.getFocusedWindow()!.close();
+    const focus = BrowserWindow.getFocusedWindow();
+
+    if (focus) {
+        closeLock = false;
+        focus.close();
+    }
 });
 
-ipcMain.on("MinimizeWindow", () => BrowserWindow.getFocusedWindow()!.minimize());
+ipcMain.on("MinimizeWindow", () => {
+    const focus = BrowserWindow.getFocusedWindow();
+
+    if (focus)
+        focus.minimize();
+});
 
 ipcMain.on("ResizeWindow", (_, width, height) => BrowserWindow.getAllWindows()[0].setBounds({ width: width != -1 ? width : winWidth, height: height != -1 ? height : winHeight }));
 
