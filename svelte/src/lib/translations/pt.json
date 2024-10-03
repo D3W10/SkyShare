@@ -149,7 +149,9 @@
             "notVerified": "Email não verificado!"
         },
         {
-            "title": "Histórico"
+            "title": "Histórico",
+            "historyDisabled": "Não tem o histórico ativado na sua conta, por favor ative-o nas definições da conta.",
+            "historyEmpty": "Este espaço parece estar um pouco vazio, envie ou receba alguns ficheiros e volte aqui mais tarde!"
         },
         {
             "title": "Editar Conta",
@@ -232,6 +234,8 @@
         "unknownEditDesc": "Um erro desconhecido ocorreu ao tentar guardar as novas informações da sua conta, por favor volte a tentar mais tarde.",
         "unknownPassword": "Erro desconhecido",
         "unknownPasswordDesc": "Um erro desconhecido ocorreu ao tentar alterar a sua palavra-passe, por favor volte a tentar mais tarde.",
+        "unknownHistory": "Erro desconhecido",
+        "unknownHistoryDesc": "Um erro desconhecido ocorreu ao tentar gerir o seu histórico, por favor volte a tentar mais tarde.",
         "photoTooBig": "Tamanho excedido",
         "photoTooBigDesc": "A foto de perfil selecionada é maior que 3 MB, por favor escolha uma com tamanho menor.",
         "invalidPhoto": "Foto de perfil inválida",
@@ -284,7 +288,9 @@
         "accountDeleteConfirm": "Último aviso!",
         "accountDeleteConfirmDesc": "Ao apagar a sua conta todo os seus dados serão apagados de forma irreversível! Assim que pressionar o botão abaixo, o processo de eliminação irá começar.",
         "deleteSuccess": "Conta apagada",
-        "deleteSuccessDesc": "A sua conta foi apagada com sucesso. Esperamos vê-lo de novo em breve!"
+        "deleteSuccessDesc": "A sua conta foi apagada com sucesso. Esperamos vê-lo de novo em breve!",
+        "historyClear": "Limpar histórico",
+        "historyClearDesc": "Tem a certeza que quer limpar todas as entradas do seu histórico de transferências?"
     },
     "common": {
         "back": "Voltar",

@@ -149,7 +149,9 @@
             "notVerified": "Email not verified!"
         },
         {
-            "title": "History"
+            "title": "History",
+            "historyDisabled": "You don't have history enabled on your account, please enable it on your account settings.",
+            "historyEmpty": "This space feels a bit empty, send or receive some files and come back here later!"
         },
         {
             "title": "Edit Account",
@@ -232,6 +234,8 @@
         "unknownEditDesc": "An unknown error occurred while trying save your new account informations, please try again later.",
         "unknownPassword": "Unknown error",
         "unknownPasswordDesc": "An unknown error occurred while trying to change your password, please try again later.",
+        "unknownHistory": "Unknown error",
+        "unknownHistoryDesc": "An unknown error occurred while trying to manage your history, please try again later.",
         "photoTooBig": "File size exceeded",
         "photoTooBigDesc": "The selected photo is bigger than 3 MB, please choose a smaller one.",
         "invalidPhoto": "Invalid photo",
@@ -284,7 +288,9 @@
         "accountDeleteConfirm": "Last warning!",
         "accountDeleteConfirmDesc": "Deleting your account will erase all your data in a irreversible way! Once you press on the button below, the deletion process will start.",
         "deleteSuccess": "Account deleted",
-        "deleteSuccessDesc": "Your account has been successfully deleted. We hope to see you again soon!"
+        "deleteSuccessDesc": "Your account has been successfully deleted. We hope to see you again soon!",
+        "historyClear": "Clean history",
+        "historyClearDesc": "Are you sure you want to clear all entries from your transfer history?"
     },
     "common": {
         "back": "Back",

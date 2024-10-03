@@ -22,10 +22,9 @@ interface IAccountStoreData {
 }
 
 interface IHistoryEntry {
-    code: string;
-    size: number;
-    secondary: string;
     type: 0 | 1;
+    address: string;
+    message: string;
     date: Date;
 }
 
@@ -98,8 +97,22 @@ export const account = (() => {
 
             return req;
         },
+        history: {
+            get: async () => {
+                const acc = get(account);
+                const req = await get(app).account.history.get<IHistoryEntry[]>(acc.username, acc.password);
+
+                return req.success && req.data ? req.data : [];
+            },
+            clear: async () => {
+                const acc = get(account);
+                const req = await get(app).account.history.clear(acc.username, acc.password);
+
+                return req.success;
+            }
+        },
         settings: async (historyEnabled: boolean) => {
-            const req = await get(app).account.settings(get(account).username, get(account).password, historyEnabled);
+            const req = await get(app).account.settings<IAccountStoreData>(get(account).username, get(account).password, historyEnabled);
 
             if (req.success && req.data)
                 update(n => {

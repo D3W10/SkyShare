@@ -20,7 +20,7 @@
 
     type settingsPages = "informations" | "personalization" | "history" | "about";
 
-    let currentPage: settingsPages = "informations", showVerifyModal = false, showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false;
+    let currentPage: settingsPages = "informations", showVerifyModal = false, showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false, showClearModal = false;
     let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
     let settingsData = new FValid<[boolean]>([$account.settings.historyEnabled]);
     let passwordData = new FValid<[string, string]>(["", ""]), deleteData = new FValid<[string]>([""]);
@@ -109,6 +109,14 @@
                 page.set("account", 3);
         }, 600);
     }
+
+    async function onHistoryClear() {
+        disable.lock();
+
+        await account.history.clear();
+
+        disable.unlock();
+    }
 </script>
 
 <div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
@@ -146,6 +154,42 @@
                     {$i18n.t("common.back")}
                 </Button>
             </div>
+            {#if !$account.settings.historyEnabled}
+                <div class="w-full h-full flex justify-center items-center">
+                    <p class="w-2/3 text-center font-semibold">{$i18n.t("account.1.historyDisabled")}</p>
+                </div>
+            {:else}
+                {#await account.history.get()}
+                    <div class="w-full h-full p-4 flex flex-col space-y-6">
+                        <div class="w-full h-[88px] p-4 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 animate-pulse"></div>
+                        <div class="w-full h-[88px] p-4 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 animate-pulse delay-[1000ms]"></div>
+                        <div class="w-full h-[88px] p-4 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 animate-pulse delay-[2000ms]"></div>
+                        <div class="w-full h-[88px] p-4 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 animate-pulse delay-[3000ms]"></div>
+                    </div>
+                {:then history}
+                    {#if history.length == 0}
+                        <div class="w-full h-full flex justify-center items-center">
+                            <p class="w-2/3 text-center font-semibold">{$i18n.t("account.1.historyEmpty")}</p>
+                        </div>
+                    {:else}
+                        <div class="w-full h-full p-4 flex flex-col space-y-6 overflow-scroll">
+                            {#each history as entry}
+                                {@const type = entry.type == 0 ? "send" : "receive"}
+                                <div class="w-full p-4 flex flex-col justify-center bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-2">
+                                    <div class="flex justify-between">
+                                        <div class="-ml-1 flex items-center space-x-1.5">
+                                            <Icon className="h-6 {entry.type == 0 ? "text-send" : "text-receive"}" name={type} />
+                                            <h2 class="text-lg font-semibold">Files {type}{entry.address.length != 0 ? (entry.type == 0 ? " to " : " from ") + entry.address : ""}</h2>
+                                        </div>
+                                        <p class="text-sm">{new Intl.DateTimeFormat("en-GB").format(entry.date)}</p>
+                                    </div>
+                                    <p class="text-sm {entry.message.length == 0 ? "italic" : ""}">{entry.message || "No message"}</p>
+                                </div>
+                            {/each}
+                        </div>
+                    {/if}
+                {/await}
+            {/if}
         </div>
     {:else if $page.subPage == 2}
         <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
@@ -253,7 +297,7 @@
                                     <p>{$i18n.t("account.2.clearHistory")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.clearHistoryDesc")}</p>
                                 </div>
-                                <Button type="small" secondary on:click={() => {/* TODO */}}>{$i18n.t("account.2.clearHistoryButton")}</Button>
+                                <Button type="small" secondary on:click={() => showClearModal = true}>{$i18n.t("account.2.clearHistoryButton")}</Button>
                             </div>
                         </div>
                     {:else if currentPage == "about"}
@@ -336,4 +380,7 @@
 </Modal>
 <Modal bind:show={showSuccessModal} title={$i18n.t("modal.deleteSuccess")} canCancel={false} on:submit={() => page.set("home")}>
     <p>{$i18n.t("modal.deleteSuccessDesc")}</p>
+</Modal>
+<Modal bind:show={showClearModal} title={$i18n.t("modal.historyClear")} button={$i18n.t("modal.yes")} on:submit={() => onHistoryClear()}>
+    <p>{$i18n.t("modal.historyClearDesc")}</p>
 </Modal>

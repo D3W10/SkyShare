@@ -29,7 +29,7 @@ export enum ErrorCode {
     INVALID_PHOTO, UNKNOWN_SIGNUP,
     INVALID_REQUEST_TYPE, INVALID_VERIFICATION_TOKEN,
     INVALID_RECOVERY_TOKEN, UNKNOWN_EDIT,
-    UNKNOWN_PASSWORD,
+    UNKNOWN_PASSWORD, UNKNOWN_HISTORY,
 
     
     TOO_MANY_FILES, // 24
@@ -58,6 +58,7 @@ const errorList = {
     [ErrorCode.INVALID_RECOVERY_TOKEN]: "invalidRecoveryToken",
     [ErrorCode.UNKNOWN_EDIT]: "unknownEdit",
     [ErrorCode.UNKNOWN_PASSWORD]: "unknownPassword",
+    [ErrorCode.UNKNOWN_HISTORY]: "unknownHistory",
     [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
     [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
 }

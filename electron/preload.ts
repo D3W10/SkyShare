@@ -10,7 +10,7 @@ const logger = {
     error: (msg: string) => ipcRenderer.send("LoggerPreload", "error", msg)
 };
 
-type TDataObj = { [key: string]: any } | undefined;
+type TDataObj<T> = T extends {} ? keyof T extends never ? { [key: string]: any } : T : T;
 type TEventName = "offline" | "ready" | "open" | "close" | "login" | "uri" | "error";
 type TCallback<T extends TEventName> = 
     T extends "offline" ? () => boolean :
@@ -31,27 +31,31 @@ export interface AppInfo {
 export interface ApiResult {
     code: number;
     message: string;
-    value?: TDataObj;
+    value?: any;
 }
 
-interface ApiCall<T extends TDataObj> {
+interface ApiCall<T> {
     success: boolean;
     data: T;
 }
 
-function apiTranslator<T extends ApiResult["value"]>(res: ApiResult, add: TDataObj = {}): ApiCall<T | undefined> {
-    let data: T | undefined = undefined;
+function apiTranslator<T = void>(res: ApiResult, add: { [key: string]: any } = {}): ApiCall<TDataObj<T>> {
+    const resGen = (data: any) => ({ success: res.code == 0, data }) as ApiCall<TDataObj<T>>;
 
-    if (res.code == 0 && res.value) {
-        data = { ...res.value, ...add } as T;
+    if (res.code == 0 && res.value && res.value instanceof Object) {
+        if (!Array.isArray(res.value)) {
+            const data = { ...res.value, ...add } as TDataObj<{}>;
 
-        if (data) {
             if (data.createdAt)
                 data.createdAt = new Date(data.createdAt);
+
+            return resGen(data);
         }
+        else
+            return resGen(res.value as TDataObj<[]>);
     }
 
-    return { success: res.code == 0, data };
+    return resGen(undefined);
 }
 
 /**
@@ -262,7 +266,7 @@ export const account = {
      * @param encrypted Should be true if the password is already encrypted, false otherwise
      * @returns An object containing one boolean with the success state and info about the user if it was successful
      */
-    login: async <T extends TDataObj>(username: string, password: string, encrypted: boolean = false) => {
+    login: async <T>(username: string, password: string, encrypted: boolean = false) => {
         const encodedPass = !encrypted ? ipcRenderer.sendSync("EncodePassword", password) : password;
 
         const api = await apiCall({
@@ -284,7 +288,7 @@ export const account = {
      * @param username The pretended email
      * @returns An object containing one boolean with the success state and the state if the username and email are available or not
      */
-    check: async <T extends TDataObj>(username: string, email: string) => {
+    check: async <T>(username: string, email: string) => {
         const api = await apiCall({
             endpoint: "user/check",
             method: "GET",
@@ -302,7 +306,7 @@ export const account = {
      * @param language The preferred email language
      * @returns An object containing one boolean with the success state and info about the newly created user if it was successful
      */
-    signup: async <T extends TDataObj>(username: string, email: string, password: string, photo: string | null, language?: string) => {
+    signup: async <T>(username: string, email: string, password: string, photo: string | null, language?: string) => {
         let body = { username, email, password, language };
         const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
 
@@ -332,7 +336,7 @@ export const account = {
      * @param language The preferred email language
      * @returns An object containing one boolean with the success state
      */
-    edit: async <T extends TDataObj>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined, language?: string) => {
+    edit: async <T>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined, language?: string) => {
         let body = { password, language };
 
         if (editUsername)
@@ -364,7 +368,7 @@ export const account = {
      * @param newPassword The new password of the user
      * @returns An object containing one boolean with the success state
      */
-    password: async <T extends TDataObj>(username: string, password: string, newPassword: string) => {
+    password: async <T>(username: string, password: string, newPassword: string) => {
         const api = await apiCall({
             endpoint: "user/" + username + "/password",
             method: "PUT",
@@ -427,6 +431,38 @@ export const account = {
 
         return apiTranslator(api);
     },
+    history: {
+        /**
+         * Obtains all history entries from a user
+         * @param username The username of the user
+         * @param password The password of the user
+         * @returns An array containing all the entries
+         */
+        get: async <T>(username: string, password: string) => {
+            const api = await apiCall({
+                endpoint: "user/" + username + "/history",
+                method: "GET",
+                params: new URLSearchParams({ password })
+            });
+
+            return apiTranslator<T>(api);
+        },
+        /**
+         * Clears all the entries of the user history
+         * @param username The username of the user
+         * @param password The password of the user
+         * @returns An object containing one boolean with the success state
+         */
+        clear: async (username: string, password: string) => {
+            const api = await apiCall({
+                endpoint: "user/" + username + "/history",
+                method: "DELETE",
+                params: new URLSearchParams({ password })
+            });
+
+            return apiTranslator(api);
+        }
+    },
     /**
      * Edits the settings of a user account
      * @param username The username of the user
@@ -434,14 +470,14 @@ export const account = {
      * @param historyEnabled A value that specifies whether the history should be enabled or not
      * @returns An object containing one boolean with the success state
      */
-    settings: async (username: string, password: string, historyEnabled: boolean) => {
+    settings: async <T>(username: string, password: string, historyEnabled: boolean) => {
         const api = await apiCall({
             endpoint: "user/" + username + "/settings",
             method: "PUT",
             body: { password, historyEnabled }
         });
 
-        return apiTranslator(api);
+        return apiTranslator<T>(api);
     },
     /**
      * Logs a user out
