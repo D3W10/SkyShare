@@ -49,27 +49,27 @@
     {:else if $page.subPage == 2}
         <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("welcome.1.title")}</h1>
-            <div class="w-full h-full flex flex-col items-center p-5 pb-0">
+            <div class="w-full h-full p-4 flex flex-col items-center pb-0">
                 <div class="w-full grid grid-rows-3 gap-6">
-                    <div class="w-full h-full flex items-center p-4 bg-secondary rounded-xl shadow-md hover:shadow-send/50 ring-1 ring-foreground/10 space-x-4 transition-shadow duration-300">
+                    <div class="w-full h-full p-4 flex items-center bg-secondary rounded-xl shadow-md hover:shadow-send/50 ring-1 ring-foreground/10 space-x-4 transition-shadow duration-300">
                         <Icon name="history" className="min-w-12 h-12 m-2 transition-colors duration-300 ease-in-out" />
                         <div>
-                            <h2 class="w-fit mb-1 text-foreground text-lg font-semibold">{$i18n.t("welcome.1.history")}</h2>
-                            <p class="text-sm text-foreground">{$i18n.t("welcome.1.historyDesc")}</p>
+                            <h2 class="mb-1 text-lg font-semibold">{$i18n.t("welcome.1.history")}</h2>
+                            <p class="text-sm">{$i18n.t("welcome.1.historyDesc")}</p>
                         </div>
                     </div>
                     <div class="w-full h-full flex items-center p-4 bg-secondary rounded-xl shadow-md hover:shadow-receive/50 ring-1 ring-foreground/10 space-x-4 transition-shadow duration-300">
                         <Icon name="sync" className="min-w-12 h-12 m-2 transition-colors duration-300 ease-in-out" />
                         <div>
-                            <h2 class="w-fit mb-1 text-foreground text-lg font-semibold">{$i18n.t("welcome.1.sync")}</h2>
-                            <p class="text-sm text-foreground">{$i18n.t("welcome.1.syncDesc")}</p>
+                            <h2 class="mb-1 text-lg font-semibold">{$i18n.t("welcome.1.sync")}</h2>
+                            <p class="text-sm">{$i18n.t("welcome.1.syncDesc")}</p>
                         </div>
                     </div>
                     <div class="w-full h-full flex items-center p-4 bg-secondary rounded-xl shadow-md hover:shadow-account/50 ring-1 ring-foreground/10 space-x-4 transition-shadow duration-300">
                         <Icon name="files" className="min-w-12 h-12 m-2 transition-colors duration-300 ease-in-out" />
                         <div>
-                            <h2 class="w-fit mb-1 text-foreground text-lg font-semibold">{$i18n.t("welcome.1.identification")}</h2>
-                            <p class="text-sm text-foreground">{$i18n.t("welcome.1.identificationDesc")}</p>
+                            <h2 class="mb-1 text-lg font-semibold">{$i18n.t("welcome.1.identification")}</h2>
+                            <p class="text-sm">{$i18n.t("welcome.1.identificationDesc")}</p>
                         </div>
                     </div>
                 </div>
