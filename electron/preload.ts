@@ -52,10 +52,10 @@ function apiTranslator<T = void>(res: ApiResult, add: { [key: string]: any } = {
             return resGen(data);
         }
         else
-            return resGen(res.value as TDataObj<[]>);
+            return resGen(res.value as TDataObj<any[]>);
     }
 
-    return resGen(undefined);
+    return resGen(res.value);
 }
 
 /**
@@ -253,6 +253,19 @@ export function fileSizeFormat(size: number) {
     while (size > 1024);
 
     return size.toFixed(2) + " " + units[count];
+}
+
+/**
+ * Creates a new transfer channel
+ * @returns An object containing one boolean with the success state and info about the newly created transfer channel
+ */
+export async function prepareTransfer() {
+    const api = await apiCall({
+        endpoint: "file/create",
+        method: "GET"
+    });
+
+    return apiTranslator<string>(api);
 }
 
 /**
@@ -595,6 +608,7 @@ contextBridge.exposeInMainWorld("app", {
     showSaveDialog,
     apiCall,
     fileSizeFormat,
+    prepareTransfer,
     account,
     sendLoginRequest,
     sleep,

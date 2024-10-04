@@ -5,6 +5,7 @@
     import { i18n } from "$lib/stores/i18nStore";
     import { app } from "$lib/stores/appStore";
     import { page } from "$lib/stores/pageStore";
+    import { disable } from "$lib/stores/disableStore";
     import { transition } from "$lib/stores/transitionStore";
     import { error, ErrorCode } from "$lib/stores/errorStore";
     import Columns from "$lib/components/layout/Columns.svelte";
@@ -13,7 +14,7 @@
     import Input from "$lib/components/Input.svelte";
     import type { File } from "$electron/lib/File.interface";
 
-    let files: File[] = [], totalSize: number = 0;
+    let files: File[] = [], totalSize: number = 0, code = "";
     let hovering: boolean = false;
     const MAX_FILES = 20, MAX_SIZE = 3221225472;
     const addButton: File = { name: "", path: "", size: 0 };
@@ -65,6 +66,20 @@
             error.setLocal("fileWithSameName", { num: failedCount });
 
         files = files;
+        disable.lock();
+    }
+
+    async function createChannel() {
+        disable.lock();
+
+        const createReq = await $app.prepareTransfer();
+
+        if (createReq.success) {
+            code = createReq.data;
+            page.set("send", 1);
+        }
+
+        disable.unlock();
     }
 </script>
 
@@ -95,21 +110,21 @@
                                     {#each [...files, addButton] as file (file.name)}
                                         <div transition:fade={{ duration: 400, easing: cubicOut }} animate:flip={{ duration: 400, easing: cubicInOut}}>
                                             {#if file.name}
-                                                <div class="w-full px-2 py-1.5 flex items-center relative bg-secondary rounded-lg space-x-2 overflow-hidden group">
+                                                <div class="w-full px-2 py-1.5 flex items-center relative bg-secondary rounded-lg {$disable.d ? "opacity-50" : ""} space-x-2 overflow-hidden group">
                                                     <img src="data:image/png;base64,{file.icon}" class="h-6" alt={$i18n.t("send.fileIcon")} />
                                                     <div class="flex flex-col space-y-0.5">
                                                         <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
                                                         <p class="text-xs text-foreground/70">{$app.fileSizeFormat(file.size)}</p>
                                                     </div>
                                                     <div class="w-7 group-hover:w-14 absolute top-0 bottom-0 right-0 bg-gradient-to-l from-secondary from-75% opacity-0 group-hover:opacity-100 transition-[width,opacity]" />
-                                                    <div class="flex justify-end items-center absolute top-0 bottom-0 right-3 opacity-0 group-hover:opacity-100 invisible group-hover:visible aspect-square transition-opacity">
-                                                        <button class="hover:text-primary transition-colors" on:click={() => files = files.filter(f => f.name != file.name)}>   
+                                                    <div class="flex justify-end items-center absolute top-0 bottom-0 right-3 opacity-0 {!$disable.d ? "group-hover:opacity-100" : ""} invisible group-hover:visible aspect-square transition-opacity">
+                                                        <Button type="invisible" className="hover:text-primary transition-colors" on:click={() => files = files.filter(f => f.name != file.name)}>   
                                                             <Icon name="remove" className="w-5" />
-                                                        </button>
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             {:else}
-                                                <Button type="invisible" className="w-full p-2 flex items-center hover:text-primary bg-secondary rounded-lg space-x-1.5 transition-colors" on:click={() => parseFiles("select")}>
+                                                <Button type="invisible" className="w-full p-2 flex items-center enabled:hover:text-primary bg-secondary rounded-lg space-x-1.5 transition-colors" on:click={() => parseFiles("select")}>
                                                     <Icon name="add" className="h-6" />
                                                     <p>{$i18n.t("send.chooseAddFiles")}</p>
                                                 </Button>
@@ -138,7 +153,7 @@
                             </div>
                         </div>
                     </div>
-                    <Button className="w-fit" disabled={files.length == 0} on:click={() => page.set("send", 1)}>{$i18n.t("send.send")}</Button>
+                    <Button className="w-fit" disabled={files.length == 0} on:click={createChannel}>{$i18n.t("send.send")}</Button>
                 </div>
             </Columns>
         </div>
@@ -151,6 +166,14 @@
                     {$i18n.t("common.back")}
                 </Button>
             </div>
+            <Columns invert>
+                <div slot="left" class="h-full flex justify-center items-center">
+                    <p class="text-7xl font-bold">{code}</p>
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    
+                </div>
+            </Columns>
         </div>
     {/if}
 </div>
