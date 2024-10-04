@@ -6,8 +6,8 @@
     import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
     import { disable } from "$lib/stores/disableStore";
-    import Modal from "$lib/components/Modal.svelte";
-    import Icon from "$lib/components/Icon.svelte";
+    import Modal from "./Modal.svelte";
+    import Icon from "./Icon.svelte";
 
     let showModal: boolean = false, logoClick: number = 0, logoClickTimeout: NodeJS.Timeout;
     const offlineBubble = tweened(0, { duration: 1500, easing: quartOut }), MAX_SIZE = 105;
