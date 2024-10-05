@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
     import { spring } from "svelte/motion";
+    import { twMerge } from "tailwind-merge";
     import { disable } from "$lib/stores/disableStore";
     import Button from "./Button.svelte";
     import Icon from "./Icon.svelte";
@@ -64,14 +65,14 @@
         <div class="w-3.5 h-3.5 bg-white rounded-full transition-all {value ? "ml-[1.125rem]" : ""}" />
     </Button>
 {:else if type == "checkbox"}
-    <input class="w-auto h-4 bg-foreground/10 rounded-md appearance-none disabled:opacity-50 checked:bg-primary checked:bg-check checked:bg-no-repeat checked:bg-center focus-visible:outline focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary aspect-square transition-all {className}" type="checkbox" {placeholder} disabled={disabled || $disable.d} {checked} bind:value bind:this={inputElm} on:click={() => value = !value} on:input={triggerEvent} />
+    <input class={twMerge(`w-auto h-4 bg-foreground/10 rounded-md appearance-none disabled:opacity-50 checked:bg-primary checked:bg-check checked:bg-no-repeat checked:bg-center focus-visible:outline focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary aspect-square transition-all`, className)} type="checkbox" {placeholder} disabled={disabled || $disable.d} {checked} bind:value bind:this={inputElm} on:click={() => value = !value} on:input={triggerEvent} />
 {:else if type == "range"}
-    <div class="flex items-center space-x-3 {className}">
+    <div class={twMerge(`flex items-center space-x-3`, className)}>
         <input class="w-full h-2 p-0 bg-foreground/10 rounded-full appearance-none disabled:opacity-50" type="range" disabled={disabled || $disable.d} {min} {max} {step} bind:value bind:this={inputElm} on:input={triggerEvent} />
-        <input class="!w-10 !p-0 text-right !text-base disabled:opacity-50 {innerClassName}" type="number" {value} disabled={disabled || $disable.d} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
+        <input class={twMerge(`!w-10 !p-0 text-right !text-base disabled:opacity-50`, innerClassName)} type="number" {value} disabled={disabled || $disable.d} on:input={rangeCheck} on:blur={(e) => e.currentTarget.value = value} />
     </div>
 {:else}
-    <div class="bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm ring-1 ring-foreground/10 transition-colors duration-200 focus-within:border-primary {disabled || $disable.d ? "opacity-50" : ""} {!error || "animate-[errorGlow_0.5s_linear_infinite_alternate]"} {className}">
+    <div class={twMerge(`bg-foreground/10 rounded-md border-b-2 border-foreground/15 shadow-sm ring-1 ring-foreground/10 transition-colors duration-200 focus-within:border-primary ${disabled || $disable.d ? "opacity-50" : ""} ${!error || "animate-[errorGlow_0.5s_linear_infinite_alternate]"}`, className)}>
         {#if type == "text" || type == "email" || type == "username"}
             <input class={innerClassName} type="text" {placeholder} disabled={disabled || $disable.d} maxlength={type == "email" ? 250 : (type == "username" ? 15 : maxlength)} bind:value bind:this={inputElm} on:input={triggerEvent} on:keydown />
         {:else if type == "number"}
