@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
+import type { File } from "./lib/File.interface";
 import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
@@ -256,13 +257,37 @@ export function fileSizeFormat(size: number) {
 }
 
 /**
+ * Obtains the list of servers to use for transfers
+ */
+export async function fetchServers() {
+    const api = await apiCall({
+        endpoint: "file/servers",
+        method: "GET"
+    });
+
+    ipcRenderer.send("StoreServers", api.value);
+}
+
+/**
+ * Obtains the servers from the main process
+ * @returns The list of servers to use for the RTC connection
+ */
+export async function getServers() {
+    return await ipcRenderer.invoke("GetServers");
+}
+
+/**
  * Creates a new transfer channel
  * @returns An object containing one boolean with the success state and info about the newly created transfer channel
  */
-export async function prepareTransfer() {
+export async function prepareTransfer(files: File[], offer: object) {
     const api = await apiCall({
         endpoint: "file/create",
-        method: "GET"
+        method: "POST",
+        body: {
+            files: files.map(({ path, ...rest }) => rest),
+            offer
+        }
     });
 
     return apiTranslator<string>(api);
@@ -608,6 +633,8 @@ contextBridge.exposeInMainWorld("app", {
     showSaveDialog,
     apiCall,
     fileSizeFormat,
+    fetchServers,
+    getServers,
     prepareTransfer,
     account,
     sendLoginRequest,

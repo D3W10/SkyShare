@@ -20,6 +20,9 @@ export default {
                 settings: "rgb(var(--color-settings) / <alpha-value>)",
                 account: "rgb(var(--color-account) / <alpha-value>)"
             },
+            dropShadow: {
+                defined: "2px 2px 0 rgb(var(--color-primary))"
+            },
             spacing: {
                 "11/25": "44%",
                 "14/25": "56%"

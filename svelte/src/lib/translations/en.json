@@ -243,7 +243,7 @@
         "tooManyFiles": "Limit exceeded",
         "tooManyFilesDesc": "The maximum number of files has been exceeded! You can only send a maximum of 20 files per transfer.",
         "sizeLimitExceeded": "Limit exceeded",
-        "sizeLimitExceededDesc": "The total file size must not exceed 3 GB.",
+        "sizeLimitExceededDesc": "The total file size must not exceed 15 GB.",
         "fileWithSameName": "Failed to add files",
         "fileWithSameNameDesc": "An error occurred while adding {{num}} of the selected files as there's already files with those names.",
         "nearbyShare": "Quick note",

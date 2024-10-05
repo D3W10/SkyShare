@@ -10,7 +10,7 @@ import { IStore } from "./lib/Store.interface";
 
 require("electron-reload")(__dirname);
 
-var window: BrowserWindow, splash: BrowserWindow, closeLock: boolean = true;
+var window: BrowserWindow, splash: BrowserWindow, closeLock: boolean = true, serverData: object = {};
 const winWidth: number = 1000, winHeight: number = 600;
 const isDev: boolean = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
@@ -184,6 +184,10 @@ function log(logger: Logger, type: "info" | "warn" | "error", msg: string) {
     else if (type == "error")
         logger.error(msg);
 }
+
+ipcMain.on("StoreServers", (_, servers) => serverData = servers);
+
+ipcMain.handle("GetServers", () => serverData);
 
 ipcMain.on("CheckForUpdates", () => {
     autoUpdater.checkForUpdates();

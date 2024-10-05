@@ -26,6 +26,12 @@
             status = $i18n.t("splash.starting");
         }
 
+        fetchServers();
+    }
+
+    async function fetchServers() {
+        await $app.fetchServers();
+
         checkForUpdates();
     }
 

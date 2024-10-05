@@ -243,7 +243,7 @@
         "tooManyFiles": "Limite excedido",
         "tooManyFilesDesc": "A quantidade máxima de ficheiros foi excedida! Apenas pode enviar, no máximo, 20 ficheiros por envio.",
         "sizeLimitExceeded": "Limite excedido",
-        "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 3 GB.",
+        "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a 15 GB.",
         "fileWithSameName": "Falha ao adicionar ficheiros",
         "fileWithSameNameDesc": "Houve um erro a adicionar {{num}} dos ficheiros selecionados pois já existem ficheiros com o mesmo nome.",
         "nearbyShare": "Nota rápida",

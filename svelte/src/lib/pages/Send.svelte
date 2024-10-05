@@ -15,8 +15,8 @@
     import type { File } from "$electron/lib/File.interface";
 
     let files: File[] = [], totalSize: number = 0, code = "";
-    let hovering: boolean = false;
-    const MAX_FILES = 20, MAX_SIZE = 3221225472;
+    let hovering: boolean = false, peerConnection: RTCPeerConnection | null = null;
+    const MAX_FILES = 20, MAX_SIZE = 16106127360;
     const addButton: File = { name: "", path: "", size: 0 };
 
     async function parseFiles(mode: "select" | "drop", e?: DragEvent) {
@@ -66,18 +66,24 @@
             error.setLocal("fileWithSameName", { num: failedCount });
 
         files = files;
-        disable.lock();
     }
 
     async function createChannel() {
         disable.lock();
 
-        const createReq = await $app.prepareTransfer();
+        $app.log("Creating new RTC connection...");
+        peerConnection = new RTCPeerConnection(await $app.getServers());
 
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        const createReq = await $app.prepareTransfer(files, offer);
         if (createReq.success) {
+            $app.log("Transfer created successfully");
+
             code = createReq.data;
             page.set("send", 1);
-        }
+         }
 
         disable.unlock();
     }
@@ -124,7 +130,7 @@
                                                     </div>
                                                 </div>
                                             {:else}
-                                                <Button type="invisible" className="w-full p-2 flex items-center enabled:hover:text-primary bg-secondary rounded-lg space-x-1.5 transition-colors" on:click={() => parseFiles("select")}>
+                                                <Button type="small" className="w-full px-2 justify-start space-x-2" secondary on:click={() => parseFiles("select")}>
                                                     <Icon name="add" className="h-6" />
                                                     <p>{$i18n.t("send.chooseAddFiles")}</p>
                                                 </Button>
@@ -158,7 +164,7 @@
             </Columns>
         </div>
     {:else if $page.subPage == 1}
-        <div class="space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <div class="flex justify-between items-center">
                 <h1 class="w-full text-xl font-semibold">Haha</h1>
                 <Button type="invisible" className="h-fit flex items-center text-primary font-semibold" on:click={() => page.set("send", 0)}>
@@ -167,8 +173,18 @@
                 </Button>
             </div>
             <Columns invert>
-                <div slot="left" class="h-full flex justify-center items-center">
-                    <p class="text-7xl font-bold">{code}</p>
+                <div slot="left" class="h-full flex flex-col justify-center items-center space-y-12">
+                    <p class="text-7xl font-bold drop-shadow-defined tracking-widest">{code || "⊷︎ ⌾︎ ⊶︎"}</p>
+                    <div class="w-full flex justify-center space-x-6">
+                        <Button type="small" className="w-fit pr-5 space-x-2">
+                            <Icon name="copy" className="h-6" />
+                            <p>Copy code</p>
+                        </Button>
+                        <Button type="small" className="w-fit pr-5 space-x-2" secondary>
+                            <Icon name="link" className="h-6" />
+                            <p>Copy link</p>
+                        </Button>
+                    </div>
                 </div>
                 <div slot="right" class="flex flex-col justify-between items-center">
                     

@@ -8,6 +8,8 @@ export type IconType =
     "files" |
     "add" |
     "remove" |
+    "copy" |
+    "link" |
     "accountRecovery" |
     "accountCreate" |
     "accountSuccess" |
