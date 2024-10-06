@@ -52,11 +52,14 @@
             "waiting": "À espera..."
         }
     ],
-    "receive": {
-        "title": "Receber ficheiros",
-        "code": "Código da transferência",
-        "nearbyShare": "Ativar NearbyShare"
-    },
+    "receive": [
+        {
+            "title": "Receber ficheiros",
+            "code": "Código da transferência",
+            "nearbyShare": "Ativar NearbyShare",
+            "receive": "Receber"
+        }
+    ],
     "settings": {
         "title": "Definições",
         "appearance": "Aparência",
@@ -249,6 +252,10 @@
         "unknownHistoryDesc": "Um erro desconhecido ocorreu ao tentar gerir o seu histórico, por favor volte a tentar mais tarde.",
         "messageTooLong": "Mensagem muito longa",
         "messageTooLongDesc": "A mensagem excedeu o comprimento máximo, por favor tente novamente com uma mensagem mais curta.",
+        "invalidCode": "Código inválido",
+        "invalidCodeDesc": "O código inserido não é válido, por favor tente novamente.",
+        "unexistentCode": "Código inválido",
+        "unexistentCodeDesc": "O código inserido não é de uma transferência em curso, por favor verifique o código e tente novamente.",
         "photoTooBig": "Tamanho excedido",
         "photoTooBigDesc": "A foto de perfil selecionada é maior que 3 MB, por favor escolha uma com tamanho menor.",
         "invalidPhoto": "Foto de perfil inválida",

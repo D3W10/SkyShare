@@ -52,11 +52,14 @@
             "waiting": "Waiting..."
         }
     ],
-    "receive": {
-        "title": "Receive files",
-        "code": "Transfer Code",
-        "nearbyShare": "Enable NearbyShare"
-    },
+    "receive": [
+        {
+            "title": "Receive files",
+            "code": "Transfer Code",
+            "nearbyShare": "Enable NearbyShare",
+            "receive": "Receive"
+        }
+    ],
     "settings": {
         "title": "Settings",
         "appearance": "Appearance",
@@ -249,6 +252,10 @@
         "unknownHistoryDesc": "An unknown error occurred while trying to manage your history, please try again later.",
         "messageTooLong": "Message too long",
         "messageTooLongDesc": "The message exceeded the maximum length, please try again with a shorter message.",
+        "invalidCode": "Invalid code",
+        "invalidCodeDesc": "The code you entered is not valid, please try again.",
+        "unexistentCode": "Invalid code",
+        "unexistentCodeDesc": "The code you entered is not from an ongoing transfer, please check the code and try again.",
         "photoTooBig": "File size exceeded",
         "photoTooBigDesc": "The selected photo is bigger than 3 MB, please choose a smaller one.",
         "invalidPhoto": "Invalid photo",

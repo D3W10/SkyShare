@@ -72,9 +72,12 @@
     }
 
     async function createChannel() {
+        if (files.length == 0)
+            return;
+
         disable.lock();
 
-        $app.log("Creating new RTC connection...");
+        $app.log("Creating a new local RTC connection...");
         peerConnection = new RTCPeerConnection(await $app.getServers());
 
         const offer = await peerConnection.createOffer();
