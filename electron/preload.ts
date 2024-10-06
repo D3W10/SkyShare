@@ -513,13 +513,14 @@ export const account = {
      * @param username The username of the user
      * @param password The password of the user
      * @param historyEnabled A value that specifies whether the history should be enabled or not
+     * @param showInfo A value that specifies whether the user's info should be displayed on transfers or not
      * @returns An object containing one boolean with the success state
      */
-    settings: async <T>(username: string, password: string, historyEnabled: boolean) => {
+    settings: async <T>(username: string, password: string, historyEnabled: boolean, showInfo: boolean) => {
         const api = await apiCall({
             endpoint: "user/" + username + "/settings",
             method: "PUT",
-            body: { password, historyEnabled }
+            body: { password, historyEnabled, showInfo }
         });
 
         return apiTranslator<T>(api);

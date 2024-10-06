@@ -72,8 +72,6 @@
         "languageDesc": "Altera o idoma da aplicação",
         "nearbyShareEnabled": "Ativar NearbyShare",
         "nearbyShareEnabledDesc": "Ativar partilha rápida de ficheiros nesta rede",
-        "nearbyShareAnnon": "Mostrar as minhas informações",
-        "nearbyShareAnnonDesc": "Mostrar o meu nome e foto no NearbyShare",
         "checkForUpdates": "Procurar por atualizações",
         "checkForUpdatesDesc": "Procurar por atualizações manualmente",
         "check": "Procurar",
@@ -143,7 +141,7 @@
             "sync": "Sincronização",
             "syncDesc": "O SkyShare vai sincronizar o seu histórico por todos os dispositivos que utilizam a sua conta para ficar atualizado",
             "identification": "Identificação no envio",
-            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será exibido junto dos ficheiros (pode ser ligado nas definições)"
+            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será exibido junto dos ficheiros (pode ser ligado nas definições da conta)"
         },
         {
             "welcome": "Bem-vindo",
@@ -168,6 +166,7 @@
             "informations": "Informações",
             "personalization": "Personalização",
             "history": "Histórico",
+            "privacy": "Privacidade",
             "about": "Sobre",
             "save": "Guardar",
             "username": "Nome de Utilizador",
@@ -187,6 +186,8 @@
             "clearHistory": "Limpar histórico",
             "clearHistoryDesc": "Limpa todo o histórico de transferências",
             "clearHistoryButton": "Limpar",
+            "showInfo": "Mostrar informações pessoais",
+            "showInfoDesc": "Mostrar o nome e a fotografia da minha conta nas transferências e no NearbyShare",
             "memberSince": "Membro desde {{date}}"
         },
         {

@@ -72,8 +72,6 @@
         "languageDesc": "Modify the application language",
         "nearbyShareEnabled": "Enable NearbyShare",
         "nearbyShareEnabledDesc": "Enable quick file sharing on this network",
-        "nearbyShareAnnon": "Show my info",
-        "nearbyShareAnnonDesc": "Display my name and photo when using NearbyShare",
         "checkForUpdates": "Check for updates",
         "checkForUpdatesDesc": "Manually check for updates",
         "check": "Check",
@@ -143,7 +141,7 @@
             "sync": "Syncronization",
             "syncDesc": "SkyShare will sync your transfer history across all the devices using your account to always stay up to date",
             "identification": "Identification on send",
-            "identificationDesc": "When people receive files from you, your name will be displayed next to the files (can be enabled on settings)"
+            "identificationDesc": "When people receive files from you, your name will be displayed next to the files (can be enabled on the account settings)"
         },
         {
             "welcome": "Welcome",
@@ -168,6 +166,7 @@
             "informations": "Informations",
             "personalization": "Personalization",
             "history": "History",
+            "privacy": "Privacy",
             "about": "About",
             "save": "Save",
             "username": "Username",
@@ -183,10 +182,12 @@
             "photo": "Profile Picture",
             "photoChoose": "Choose a photo",
             "enableHistory": "Enable history",
-            "enableHistoryDesc": "Save new entries to the transfer history",
+            "enableHistoryDesc": "Save entries to the transfer history",
             "clearHistory": "Clear history",
             "clearHistoryDesc": "Clear all transfer history entries",
             "clearHistoryButton": "Clear",
+            "showInfo": "Display my personal info",
+            "showInfoDesc": "Display my account name and photo on transfers and NearbyShare",
             "memberSince": "Member since {{date}}"
         },
         {

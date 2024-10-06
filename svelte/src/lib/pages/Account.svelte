@@ -18,11 +18,11 @@
     import Input from "$lib/components/Input.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    type settingsPages = "informations" | "personalization" | "history" | "about";
+    type settingsPages = "informations" | "personalization" | "history" | "privacy" | "about";
 
     let currentPage: settingsPages = "informations", showVerifyModal = false, showLogoutModal = false, showPasswordModal = false, showPasswordSuccessModal = false, showDeleteModal = false, showDeleteConfirmModal = false, showSuccessModal = false, showClearModal = false;
     let editData = new FValid<[string, string, string | undefined]>(["", "", $account.photo]);
-    let settingsData = new FValid<[boolean]>([$account.settings.historyEnabled]);
+    let settingsData = new FValid<[boolean, boolean]>([$account.settings.historyEnabled, $account.settings.showInfo]);
     let passwordData = new FValid<[string, string]>(["", ""]), deleteData = new FValid<[string]>([""]);
 
     function onLogout() {
@@ -31,7 +31,7 @@
     }
 
     $: saveEnableEditP = ["informations", "personalization"].includes(currentPage) && ($editData[0].v != "" || $editData[1].v != "" || $editData[2].v != $account.photo);
-    $: saveEnableSettingsP = ["history"].includes(currentPage) && $settingsData[0].v != $account.settings.historyEnabled;
+    $: saveEnableSettingsP = ["history", "privacy"].includes(currentPage) && ($settingsData[0].v != $account.settings.historyEnabled || $settingsData[1].v != $account.settings.showInfo);
     $: saveEnable = saveEnableEditP || saveEnableSettingsP;
 
     async function choosePhoto() {
@@ -63,7 +63,7 @@
             }
         }
         else if (saveEnableSettingsP)
-            await account.settings($settingsData[0].v);
+            await account.settings($settingsData[0].v, $settingsData[1].v);
 
         disable.unlock();
     }
@@ -216,6 +216,10 @@
                                 <Icon name="history-bold" className="h-6" />
                                 <p>{$i18n.t("account.2.history")}</p>
                             </Button>
+                            <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "privacy" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "privacy"}>
+                                <Icon name="lock" className="h-6" />
+                                <p>{$i18n.t("account.2.privacy")}</p>
+                            </Button>
                             <Button type="invisible" className="w-full p-2 flex items-center {currentPage == "about" ? "text-primary" : ""} hover:bg-foreground/5 !rounded-lg hover:shadow-sm ring-1 ring-transparent hover:ring-foreground/10 space-x-1.5" on:click={() => currentPage = "about"}>
                                 <Icon name="about" className="h-6" />
                                 <p>{$i18n.t("account.2.about")}</p>
@@ -227,28 +231,28 @@
                 <div slot="right" class="!w-2/3 !ml-6 relative *:absolute *:left-5 *:top-3.5 *:bottom-3.5 *:right-0">
                     {#if currentPage == "informations"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center space-x-4">
                                 <div>
                                     <p>{$i18n.t("account.2.username")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.usernameDesc")}</p>
                                 </div>
                                 <Input type="username" value={$editData[0].v} error={$editData[0].e} placeholder={$account.username} on:input={e => editData.update(0, e.detail.value, e.detail.error)} />
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center space-x-4">
                                 <div>
                                     <p>{$i18n.t("account.2.email")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.emailDesc")}</p>
                                 </div>
                                 <Input type="email" value={$editData[1].v} error={$editData[1].e} placeholder={$account.email} on:input={e => editData.update(1, e.detail.value, e.detail.error)} />
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center space-x-4">
                                 <div>
                                     <p>{$i18n.t("account.2.password")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.passwordDesc")}</p>
                                 </div>
                                 <Button type="small" secondary on:click={() => showPasswordModal = true}>{$i18n.t("account.2.passwordButton")}</Button>
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center space-x-4">
                                 <div>
                                     <p>{$i18n.t("account.2.delete")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.deleteDesc")}</p>
@@ -285,19 +289,29 @@
                         </div>
                     {:else if currentPage == "history"}
                         <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center space-x-4">
                                 <div>
                                     <p>{$i18n.t("account.2.enableHistory")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.enableHistoryDesc")}</p>
                                 </div>
                                 <Input type="switch" value={$settingsData[0].v} error={$settingsData[0].e} on:input={e => settingsData.update(0, e.detail.value, e.detail.error)} />
                             </div>
-                            <div class="flex justify-between items-center">
+                            <div class="flex justify-between items-center space-x-4">
                                 <div>
                                     <p>{$i18n.t("account.2.clearHistory")}</p>
                                     <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.clearHistoryDesc")}</p>
                                 </div>
                                 <Button type="small" secondary on:click={() => showClearModal = true}>{$i18n.t("account.2.clearHistoryButton")}</Button>
+                            </div>
+                        </div>
+                    {:else if currentPage == "privacy"}
+                        <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
+                            <div class="flex justify-between items-center space-x-4">
+                                <div>
+                                    <p>{$i18n.t("account.2.showInfo")}</p>
+                                    <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("account.2.showInfoDesc")}</p>
+                                </div>
+                                <Input type="switch" value={$settingsData[1].v} error={$settingsData[1].e} on:input={e => settingsData.update(1, e.detail.value, e.detail.error)} />
                             </div>
                         </div>
                     {:else if currentPage == "about"}

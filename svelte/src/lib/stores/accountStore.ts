@@ -16,8 +16,8 @@ interface IAccountStoreData {
     createdAt: Date;
     emailVerified: boolean;
     settings: {
-        history: IHistoryEntry[];
         historyEnabled: boolean;
+        showInfo: boolean;
     }
 }
 
@@ -111,12 +111,13 @@ export const account = (() => {
                 return req.success;
             }
         },
-        settings: async (historyEnabled: boolean) => {
-            const req = await get(app).account.settings<IAccountStoreData>(get(account).username, get(account).password, historyEnabled);
+        settings: async (historyEnabled: boolean, showInfo: boolean) => {
+            const req = await get(app).account.settings<IAccountStoreData>(get(account).username, get(account).password, historyEnabled, showInfo);
 
             if (req.success && req.data)
                 update(n => {
                     n.settings.historyEnabled = req.data!.settings.historyEnabled;
+                    n.settings.showInfo = req.data!.settings.showInfo;
                     return n;
                 });
 

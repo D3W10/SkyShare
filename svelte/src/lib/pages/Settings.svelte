@@ -4,7 +4,6 @@
     import { app } from "$lib/stores/appStore";
     import { info } from "$lib/stores/infoStore";
     import { transition } from "$lib/stores/transitionStore";
-    import { account } from "$lib/stores/accountStore";
     import { settings } from "$lib/stores/settingsStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -89,14 +88,14 @@
         <div slot="right" class="!w-2/3 !ml-6 py-3.5 pl-5">
             {#if currentPage == "appearance"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.theme")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.themeDesc")}</p>
                         </div>
                         <ComboBox className="w-32" items={[$i18n.t("settings.themeLight"), $i18n.t("settings.themeDark")]} selected={$settings.theme} on:change={(e) => settings.update("theme", e.detail.selected)} />
                     </div>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.language")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.languageDesc")}</p>
@@ -106,40 +105,31 @@
                 </div>
             {:else if currentPage == "nearbyShare"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.nearbyShareEnabled")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.nearbyShareEnabledDesc")}</p>
                         </div>
                         <Input type="switch" value={$settings.nearbyShare} on:input={(e) => { settings.update("nearbyShare", e.detail.value); if (e.detail.value) nearbyShareAlert = true; }} />
                     </div>
-                    {#if $account.loggedIn}
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p>{$i18n.t("settings.nearbyShareAnnon")}</p>
-                                <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.nearbyShareAnnonDesc")}</p>
-                            </div>
-                            <Input type="switch" value={$settings.nearbyShareReveal} on:input={(e) => settings.update("nearbyShareReveal", e.detail.value)} />
-                        </div>
-                    {/if}
                 </div>
             {:else if currentPage == "updates"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.checkForUpdates")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.checkForUpdatesDesc")}</p>
                         </div>
                         <Button type="small" secondary disabled={updating != 0} on:click={checkForUpdates}>{$i18n.t("settings.check")}</Button>
                     </div>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.autoUpdate")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.autoUpdateDesc")}</p>
                         </div>
                         <Input type="switch" value={$settings.autoUpdate} on:input={(e) => settings.update("autoUpdate", e.detail.value)} />
                     </div>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.betaUpdates")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.betaUpdatesDesc")}</p>
@@ -149,7 +139,7 @@
                 </div>
             {:else if currentPage == "reset"}
                 <div class="space-y-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center space-x-4">
                         <div>
                             <p>{$i18n.t("settings.resetSettings")}</p>
                             <p class="mt-0.5 text-foreground/70 text-sm font-normal">{$i18n.t("settings.resetSettingsDesc")}</p>

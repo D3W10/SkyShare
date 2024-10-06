@@ -61,7 +61,7 @@
 </script>
 
 {#if type == "switch"}
-    <Button type="invisible" className="w-10 flex items-center p-1 !rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary {!value ? "bg-foreground/10" : "bg-primary"}" {disabled} on:click={() => { value = !value; triggerEvent(); }}>
+    <Button type="invisible" className="min-w-10 flex items-center p-1 !rounded-full transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary {!value ? "bg-foreground/10" : "bg-primary"}" {disabled} on:click={() => { value = !value; triggerEvent(); }}>
         <div class="w-3.5 h-3.5 bg-white rounded-full transition-all {value ? "ml-[1.125rem]" : ""}" />
     </Button>
 {:else if type == "checkbox"}

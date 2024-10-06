@@ -24,6 +24,7 @@ export type IconType =
     "warning" |
     "user" |
     "accountDelete" |
+    "lock" |
     "appearance" |
     "nearbyShare" |
     "updates" |
