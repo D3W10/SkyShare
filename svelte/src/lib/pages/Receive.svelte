@@ -8,20 +8,20 @@
     import Input from "$lib/components/Input.svelte";
     import Modal from "$lib/components/Modal.svelte";
 
-    let code: number[] = [], elms: HTMLInputElement[] = [];
+    let code: number[] = [], elms: Input[] = [];
     let nearbyShareAlert: boolean = false
 
     function onKeydown(i: number, e: KeyboardEvent) {
         const isNum = !isNaN(+e.key);
 
         if (e.key == "Backspace" && !code[i] && i != 0 || e.key == "ArrowLeft" && i != 0)
-            elms[i - 1].focus();
+            elms[i - 1].input.elm.focus();
         else if (e.key == "ArrowRight" && i != 5)
-            elms[i + 1].focus();
+            elms[i + 1].input.elm.focus();
         else if (code[i] && isNum)
             e.preventDefault();
         else if (isNum && i != 5)
-            setTimeout(() => elms[i + 1].focus(), 10);
+            setTimeout(() => elms[i + 1].input.elm.focus(), 10);
     }
 </script>
 
@@ -35,12 +35,12 @@
                     <div class="flex flex-col items-center space-y-4">
                         <p class="text-lg font-semibold">{$i18n.t("receive.code")}:</p>
                         <div class="flex space-x-2">
-                            <Input className="aspect-square" type="number" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[0]} bind:inputElm={elms[0]} on:keydown={e => onKeydown(0, e)} />
-                            <Input className="aspect-square" type="number" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[1]} bind:inputElm={elms[1]} on:keydown={e => onKeydown(1, e)} />
-                            <Input className="aspect-square" type="number" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[2]} bind:inputElm={elms[2]} on:keydown={e => onKeydown(2, e)} />
-                            <Input className="aspect-square" type="number" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[3]} bind:inputElm={elms[3]} on:keydown={e => onKeydown(3, e)} />
-                            <Input className="aspect-square" type="number" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[4]} bind:inputElm={elms[4]} on:keydown={e => onKeydown(4, e)} />
-                            <Input className="aspect-square" type="number" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[5]} bind:inputElm={elms[5]} on:keydown={e => onKeydown(5, e)} />
+                            <Input bind:this={elms[0]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[0]} on:keydown={e => onKeydown(0, e)} />
+                            <Input bind:this={elms[1]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[1]} on:keydown={e => onKeydown(1, e)} />
+                            <Input bind:this={elms[2]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[2]} on:keydown={e => onKeydown(2, e)} />
+                            <Input bind:this={elms[3]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[3]} on:keydown={e => onKeydown(3, e)} />
+                            <Input bind:this={elms[4]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[4]} on:keydown={e => onKeydown(4, e)} />
+                            <Input bind:this={elms[5]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[5]} on:keydown={e => onKeydown(5, e)} />
                         </div>
                     </div>
                     <div class="flex space-x-4">
