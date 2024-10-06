@@ -18,7 +18,7 @@
 
     let files: File[] = [], totalSize = 0, message = "", code = "";
     let hovering = false, peerConnection: RTCPeerConnection | null = null;
-    let playCodeAnim = false, playLinkAnim = false;
+    let playCodeAnim = false, playLinkAnim = false, scrolling = false, messageScroller: HTMLParagraphElement, messageContainer: HTMLDivElement;
     const MAX_FILES = 20, MAX_SIZE = 16106127360;
     const addButton: File = { name: "", path: "", size: 0 };
 
@@ -86,6 +86,7 @@
 
             code = createReq.data;
             page.set("send", 1);
+            initAnimation();
          }
 
         disable.unlock();
@@ -101,6 +102,22 @@
             navigator.clipboard.writeText(`${$info.homepage}?dl=${code}`);
             playLinkAnim = true;
             setTimeout(() => playLinkAnim = false, 2000);
+        }
+    }
+
+    async function initAnimation() {
+        await $app.sleep($transition.subpageOut.duration);
+
+        scrolling = false;
+        messageScroller.style.removeProperty("animation");
+
+        const container = messageContainer.getBoundingClientRect(), message = messageScroller.getBoundingClientRect();
+        if (message.width + 20 >= container.width) {
+            scrolling = true;
+
+            messageContainer.style.setProperty("--scroll-origin", `${container.width + 50}px`);
+            messageContainer.style.setProperty("--scroll-destination", `-${message.width}px`);
+            messageScroller.style.animation = `side-scroll ${message.width / 75}s linear infinite`;
         }
     }
 </script>
@@ -202,10 +219,33 @@
                         </OneActionButton>
                     </div>
                 </div>
-                <div slot="right" class="flex flex-col justify-between items-center">
-                    
+                <div slot="right" class="flex justify-center items-center">
+                    <div class="w-[81%] space-y-8">
+                        <div class="space-y-1">
+                            <p class="font-semibold">{$i18n.t("send.0.message")}:</p>
+                            <div bind:this={messageContainer} class="relative text-foreground/70 overflow-hidden whitespace-pre before:w-full before:h-full {!scrolling ? "before:hidden" : "before:block"} before:absolute before:bg-edgeFade before:z-10">
+                                <p bind:this={messageScroller} class="w-fit {!message ? "italic" : ""}">{message || $i18n.t("send.1.noMessage")}</p>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="font-semibold">{$i18n.t("send.1.status")}:</p>
+                            <p class="text-foreground/70 animate-pulse">Waiting...</p>
+                        </div>
+                    </div>
                 </div>
             </Columns>
         </div>
     {/if}
 </div>
+
+<style lang="postcss">
+    @keyframes -global-side-scroll {
+        0% {
+            margin-left: var(--scroll-origin);
+        }
+
+        100% {
+            margin-left: var(--scroll-destination);
+        }
+    }
+</style>

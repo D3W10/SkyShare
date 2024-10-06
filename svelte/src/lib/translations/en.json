@@ -46,7 +46,10 @@
         {
             "title": "Transfer details",
             "copyCode": "Copy code",
-            "copyLink": "Copy link"
+            "copyLink": "Copy link",
+            "noMessage": "No message",
+            "status": "Status",
+            "waiting": "Waiting..."
         }
     ],
     "receive": {

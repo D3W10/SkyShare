@@ -23,24 +23,35 @@
         else if (isNum && i != 5)
             setTimeout(() => elms[i + 1].input.elm.focus(), 10);
     }
+
+    function onPaste(e: ClipboardEvent) {
+        e.preventDefault();
+
+        if (e.clipboardData != null) {
+            let pastedCode = e.clipboardData.getData("text");
+
+            if (/^\d{6}$/.test(pastedCode))
+                code = pastedCode.split("").slice(0, 6).map(c => +c);
+        }
+    }
 </script>
 
 <div class="w-full h-full p-6" in:fade={$transition.pageIn} out:fade={$transition.pageOut}>
     {#if $page.subPage == 0}
         <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
             <h1 class="w-full text-xl font-semibold">{$i18n.t("receive.title")}</h1>
-            <Columns>
-                <div class="!w-[60%] flex flex-col justify-between items-center" slot="left">
+            <Columns invert>
+                <div slot="left" class="flex flex-col justify-between items-center">
                     <div class="h-6" />
                     <div class="flex flex-col items-center space-y-4">
                         <p class="text-lg font-semibold">{$i18n.t("receive.code")}:</p>
                         <div class="flex space-x-2">
-                            <Input bind:this={elms[0]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[0]} on:keydown={e => onKeydown(0, e)} />
-                            <Input bind:this={elms[1]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[1]} on:keydown={e => onKeydown(1, e)} />
-                            <Input bind:this={elms[2]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[2]} on:keydown={e => onKeydown(2, e)} />
-                            <Input bind:this={elms[3]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[3]} on:keydown={e => onKeydown(3, e)} />
-                            <Input bind:this={elms[4]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[4]} on:keydown={e => onKeydown(4, e)} />
-                            <Input bind:this={elms[5]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold !text-center leading-tight" bind:value={code[5]} on:keydown={e => onKeydown(5, e)} />
+                            <Input bind:this={elms[0]} type="number" className="aspect-square" innerClassName="px-0.5 py-0 text-2xl font-semibold text-center leading-tight" bind:value={code[0]} on:keydown={e => onKeydown(0, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[1]} type="number" className="aspect-square" innerClassName="px-0.5 py-0 text-2xl font-semibold text-center leading-tight" bind:value={code[1]} on:keydown={e => onKeydown(1, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[2]} type="number" className="aspect-square" innerClassName="px-0.5 py-0 text-2xl font-semibold text-center leading-tight" bind:value={code[2]} on:keydown={e => onKeydown(2, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[3]} type="number" className="aspect-square" innerClassName="px-0.5 py-0 text-2xl font-semibold text-center leading-tight" bind:value={code[3]} on:keydown={e => onKeydown(3, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[4]} type="number" className="aspect-square" innerClassName="px-0.5 py-0 text-2xl font-semibold text-center leading-tight" bind:value={code[4]} on:keydown={e => onKeydown(4, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[5]} type="number" className="aspect-square" innerClassName="px-0.5 py-0 text-2xl font-semibold text-center leading-tight" bind:value={code[5]} on:keydown={e => onKeydown(5, e)} on:paste={onPaste} />
                         </div>
                     </div>
                     <div class="flex space-x-4">
@@ -48,7 +59,7 @@
                         <Input type="switch" value={$settings.nearbyShare} on:input={(e) => { settings.update("nearbyShare", e.detail.value); if (e.detail.value) nearbyShareAlert = true; }} />
                     </div>
                 </div>
-                <div class="!w-[40%]" slot="right">
+                <div slot="right">
                     <div class="w-full h-full p-1 bg-secondary rounded-xl shadow-md ring-1 ring-foreground/10 space-y-1">
                         <canvas></canvas>
                     </div>
