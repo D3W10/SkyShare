@@ -25,26 +25,33 @@
         "whatsNew": "O que há de novo na {{version}}",
         "awesome": "Incrível!"
     },
-    "send": {
-        "title": "Enviar ficheiros",
-        "chooseTitle": "Escolher ficheiros",
-        "chooseSubtitle": "Ou arraste para aqui!",
-        "chooseHoverTitle": "Quase lá!",
-        "chooseHoverSubtitle": "Largue-os aqui para adicionar",
-        "chooseAdd": "Addicionar",
-        "chooseFilter": "Todos os ficheiros",
-        "chooseAddFiles": "Adicionar ficheiros",
-        "message": "Mensagem",
-        "size": "Tamanho Total",
-        "quantity": "Quantidade Total",
-        "file_one": "ficheiro",
-        "file_other": "ficheiros",
-        "fileIcon": "Icone do ficheiro",
-        "send": "Enviar"
-    },
+    "send": [
+        {
+            "title": "Enviar ficheiros",
+            "chooseTitle": "Escolher ficheiros",
+            "chooseSubtitle": "Ou arraste para aqui!",
+            "chooseHoverTitle": "Quase lá!",
+            "chooseHoverSubtitle": "Largue-os aqui para adicionar",
+            "chooseAdd": "Addicionar",
+            "chooseFilter": "Todos os ficheiros",
+            "chooseAddFiles": "Adicionar ficheiros",
+            "message": "Mensagem",
+            "size": "Tamanho Total",
+            "quantity": "Quantidade Total",
+            "file_one": "ficheiro",
+            "file_other": "ficheiros",
+            "fileIcon": "Icone do ficheiro",
+            "send": "Enviar"
+        },
+        {
+            "title": "Detalhes da transferência",
+            "copyCode": "Copiar código",
+            "copyLink": "Copiar link"
+        }
+    ],
     "receive": {
         "title": "Receber ficheiros",
-        "code": "Código de transferência",
+        "code": "Código da transferência",
         "nearbyShare": "Ativar NearbyShare"
     },
     "settings": {
@@ -236,6 +243,8 @@
         "unknownPasswordDesc": "Um erro desconhecido ocorreu ao tentar alterar a sua palavra-passe, por favor volte a tentar mais tarde.",
         "unknownHistory": "Erro desconhecido",
         "unknownHistoryDesc": "Um erro desconhecido ocorreu ao tentar gerir o seu histórico, por favor volte a tentar mais tarde.",
+        "messageTooLong": "Mensagem muito longa",
+        "messageTooLongDesc": "A mensagem excedeu o comprimento máximo, por favor tente novamente com uma mensagem mais curta.",
         "photoTooBig": "Tamanho excedido",
         "photoTooBigDesc": "A foto de perfil selecionada é maior que 3 MB, por favor escolha uma com tamanho menor.",
         "invalidPhoto": "Foto de perfil inválida",

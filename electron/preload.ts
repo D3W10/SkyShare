@@ -26,6 +26,7 @@ type TCallback<T extends TEventName> =
 export interface AppInfo {
     name: string;
     version: string;
+    homepage: string;
     api: string;
 }
 
@@ -278,15 +279,21 @@ export async function getServers() {
 
 /**
  * Creates a new transfer channel
+ * @param files The list of files to be sent
+ * @param offer The RTC offer to assign to the remote peer
+ * @param message The message to be sent with the files or "" if no message should be sent
+ * @param from The name of the user sending the files or "" if it should be sent as guest
  * @returns An object containing one boolean with the success state and info about the newly created transfer channel
  */
-export async function prepareTransfer(files: File[], offer: object) {
+export async function prepareTransfer(files: File[], offer: object, message: string, from: string) {
     const api = await apiCall({
         endpoint: "file/create",
         method: "POST",
         body: {
             files: files.map(({ path, ...rest }) => rest),
-            offer
+            offer,
+            message,
+            from
         }
     });
 

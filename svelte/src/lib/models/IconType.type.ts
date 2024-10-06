@@ -10,6 +10,7 @@ export type IconType =
     "remove" |
     "copy" |
     "link" |
+    "check" |
     "accountRecovery" |
     "accountCreate" |
     "accountSuccess" |

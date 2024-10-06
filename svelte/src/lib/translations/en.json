@@ -25,23 +25,30 @@
         "whatsNew": "What's new on {{version}}",
         "awesome": "Awesome!"
     },
-    "send": {
-        "title": "Send files",
-        "chooseTitle": "Choose files",
-        "chooseSubtitle": "Or drop them here!",
-        "chooseHoverTitle": "Nearly there!",
-        "chooseHoverSubtitle": "Drop them here to add",
-        "chooseAdd": "Add",
-        "chooseFilter": "All files",
-        "chooseAddFiles": "Add files",
-        "message": "Message",
-        "size": "Total Size",
-        "quantity": "Total Quantity",
-        "file_one": "file",
-        "file_other": "files",
-        "fileIcon": "File icon",
-        "send": "Send"
-    },
+    "send": [
+        {
+            "title": "Send files",
+            "chooseTitle": "Choose files",
+            "chooseSubtitle": "Or drop them here!",
+            "chooseHoverTitle": "Nearly there!",
+            "chooseHoverSubtitle": "Drop them here to add",
+            "chooseAdd": "Add",
+            "chooseFilter": "All files",
+            "chooseAddFiles": "Add files",
+            "message": "Message",
+            "size": "Total Size",
+            "quantity": "Total Quantity",
+            "file_one": "file",
+            "file_other": "files",
+            "fileIcon": "File icon",
+            "send": "Send"
+        },
+        {
+            "title": "Transfer details",
+            "copyCode": "Copy code",
+            "copyLink": "Copy link"
+        }
+    ],
     "receive": {
         "title": "Receive files",
         "code": "Transfer Code",
@@ -236,6 +243,8 @@
         "unknownPasswordDesc": "An unknown error occurred while trying to change your password, please try again later.",
         "unknownHistory": "Unknown error",
         "unknownHistoryDesc": "An unknown error occurred while trying to manage your history, please try again later.",
+        "messageTooLong": "Message too long",
+        "messageTooLongDesc": "The message exceeded the maximum length, please try again with a shorter message.",
         "photoTooBig": "File size exceeded",
         "photoTooBigDesc": "The selected photo is bigger than 3 MB, please choose a smaller one.",
         "invalidPhoto": "Invalid photo",
