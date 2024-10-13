@@ -7,7 +7,7 @@
     import { settings } from "$lib/stores/settingsStore";
     import { account } from "$lib/stores/accountStore";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
-    import type { IStoreAccount } from "$electron/lib/Store.interface";
+    import type { IStoreAccount } from "$electron/lib/interfaces/Store.interface";
 
     const DEFAULT_STATUS = $i18n.t("splash.starting");
     let start = false, status = DEFAULT_STATUS, dlPercent = 0, splashReady = false, winReady = false;

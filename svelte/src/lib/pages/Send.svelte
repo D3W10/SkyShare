@@ -14,7 +14,7 @@
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
     import OneActionButton from "$lib/components/OneActionButton.svelte";
-    import type { File } from "$electron/lib/File.interface";
+    import type { File } from "$electron/lib/interfaces/File.interface";
 
     let files: File[] = [], totalSize = 0, message = "", code = "";
     let hovering = false, peerConnection: RTCPeerConnection | null = null;

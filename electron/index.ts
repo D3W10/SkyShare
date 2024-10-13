@@ -5,8 +5,8 @@ import os from "os";
 import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
-import { Logger } from "./lib/Logger.class";
-import { IStore } from "./lib/Store.interface";
+import { Logger } from "./lib/Logger";
+import { IStore } from "./lib/interfaces/Store.interface";
 
 require("electron-reload")(__dirname);
 

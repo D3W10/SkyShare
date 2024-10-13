@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 import { app } from "./appStore";
-import type { IStoreSettings } from "$electron/lib/Store.interface";
+import type { IStoreSettings } from "$electron/lib/interfaces/Store.interface";
 
 export const settings = (() => {
     const { subscribe, set, update } = writable<IStoreSettings>({} as IStoreSettings);

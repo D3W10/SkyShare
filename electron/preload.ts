@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { File } from "./lib/File.interface";
-import type { OpenDialogReturnValue } from "./lib/OpenDialogReturnValue.interface";
+import type { File } from "./lib/interfaces/File.interface";
+import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
+import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
+import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
 let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
@@ -22,19 +24,6 @@ type TCallback<T extends TEventName> =
     T extends "uri" ? (args: string[]) => unknown :
     T extends "error" ? (code: number) => unknown :
     never;
-
-export interface AppInfo {
-    name: string;
-    version: string;
-    homepage: string;
-    api: string;
-}
-
-export interface ApiResult {
-    code: number;
-    message: string;
-    value?: any;
-}
 
 interface ApiCall<T> {
     success: boolean;
