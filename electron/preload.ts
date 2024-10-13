@@ -3,6 +3,8 @@ import type { File } from "./lib/interfaces/File.interface";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
+import type { TransferInfo } from "./lib/interfaces/TransferInfo.interface";
+import type { TransferData } from "./lib/interfaces/TransferData.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
 let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
@@ -268,25 +270,47 @@ export async function getServers() {
 
 /**
  * Creates a new transfer channel
- * @param files The list of files to be sent
  * @param offer The RTC offer to assign to the remote peer
- * @param message The message to be sent with the files or "" if no message should be sent
- * @param from The name of the user sending the files or "" if it should be sent as guest
  * @returns An object containing one boolean with the success state and info about the newly created transfer channel
  */
-export async function prepareTransfer(files: File[], offer: object, message: string, from: string) {
+export async function createTransfer(offer: RTCSessionDescriptionInit) {
     const api = await apiCall({
         endpoint: "file/create",
         method: "POST",
         body: {
-            files: files.map(({ path, ...rest }) => rest),
-            offer,
-            message,
-            from
+            offer
         }
     });
 
-    return apiTranslator<string>(api);
+    return apiTranslator<TransferInfo>(api);
+}
+
+/**
+ * Waits for the other peer to send the RTC answer
+ * @param code The transfer code
+ * @param callback The function to be called when the answer has been sent by the other peer
+ */
+export async function waitTransferConnection(code: string, callback: (data: TransferData) => unknown) {
+    ipcRenderer.send("WaitForAnswer", code);
+    ipcRenderer.once("WaitForAnswerFulfilled", (_, data) => callback(data));
+}
+
+/**
+ * Sends the RTC answer to the other peer
+ * @param code The transfer code
+ * @param answer The RTC answer to give to the other peer
+ * @returns An object containing one boolean with the success state
+ */
+export async function answerTransfer(code: string, answer: RTCSessionDescriptionInit) {
+    const api = await apiCall({
+        endpoint: "file/" + code + "/answer",
+        method: "POST",
+        body: {
+            answer
+        }
+    });
+
+    return apiTranslator<void>(api);
 }
 
 /**
@@ -632,7 +656,9 @@ contextBridge.exposeInMainWorld("app", {
     fileSizeFormat,
     fetchServers,
     getServers,
-    prepareTransfer,
+    createTransfer,
+    waitTransferConnection,
+    answerTransfer,
     account,
     sendLoginRequest,
     sleep,

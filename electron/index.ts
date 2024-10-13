@@ -6,6 +6,7 @@ import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
+import { db, doc, getDoc, onSnapshot } from "./lib/firebase.js";
 import { IStore } from "./lib/interfaces/Store.interface";
 
 require("electron-reload")(__dirname);
@@ -252,6 +253,22 @@ ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
 ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
 ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
+
+ipcMain.on("WaitForAnswer", async (_, code: string) => {
+    const docRef = doc(db, "channels", code);
+
+    if (!(await getDoc(docRef)).exists())
+        return;
+
+    const unsubscribe = onSnapshot(docRef, snapshot => {
+        const data = snapshot.data();
+
+        if (data && data.answer) {
+            window.webContents.send("WaitForAnswerFulfilled", data);
+            unsubscribe();
+        }
+    });
+});
 
 ipcMain.on("EncodePassword", (e, password: string) => e.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 

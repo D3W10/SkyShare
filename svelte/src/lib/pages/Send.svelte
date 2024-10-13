@@ -15,9 +15,11 @@
     import Input from "$lib/components/Input.svelte";
     import OneActionButton from "$lib/components/OneActionButton.svelte";
     import type { File } from "$electron/lib/interfaces/File.interface";
+    import type { TransferInfo } from "$electron/lib/interfaces/TransferInfo.interface";
+    import type { TransferData } from "$electron/lib/interfaces/TransferData.interface";
 
-    let files: File[] = [], totalSize = 0, message = "", code = "";
-    let hovering = false, peerConnection: RTCPeerConnection | null = null;
+    let files: File[] = [], totalSize = 0, message = "", transferInfo: TransferInfo;
+    let hovering = false, peerConnection: RTCPeerConnection | null = null, channel: RTCDataChannel;
     let playCodeAnim = false, playLinkAnim = false, scrolling = false, messageScroller: HTMLParagraphElement, messageContainer: HTMLDivElement;
     const MAX_FILES = 20, MAX_SIZE = 16106127360;
     const addButton: File = { name: "", path: "", size: 0 };
@@ -79,36 +81,52 @@
 
         $app.log("Creating a new local RTC connection...");
         peerConnection = new RTCPeerConnection(await $app.getServers());
+        createDataChannel();
 
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
 
-        const createReq = await $app.prepareTransfer(files, offer, message, ""); // TODO: Should not be always sent as guest
+        const createReq = await $app.createTransfer(offer);
         if (createReq.success) {
             $app.log("Transfer created successfully");
 
-            code = createReq.data;
+            transferInfo = createReq.data;
             page.set("send", 1);
-            initAnimation();
-         }
+            waitConnection();
+        }
 
         disable.unlock();
     }
 
+    function createDataChannel() {
+        if (!peerConnection)
+            return;
+
+        $app.log("Creating data channel...");
+
+        channel = peerConnection.createDataChannel("dataTransfer");
+        channel.binaryType = "arraybuffer";
+        channel.addEventListener("open", () => $app.log("Data channel is now open"));
+        channel.addEventListener("close", () => $app.log("Data channel is now closed"));
+        channel.addEventListener("error", (error) => $app.log("Data channel error: " + error));
+    }
+
     function copy(type: "code" | "link") {
         if (type == "code") {
-            navigator.clipboard.writeText(code);
+            navigator.clipboard.writeText(transferInfo.code);
             playCodeAnim = true;
             setTimeout(() => playCodeAnim = false, 2000);
         }
         else if (type == "link") {
-            navigator.clipboard.writeText(`${$info.homepage}?dl=${code}`);
+            navigator.clipboard.writeText(`${$info.homepage}?dl=${transferInfo.code}`);
             playLinkAnim = true;
             setTimeout(() => playLinkAnim = false, 2000);
         }
     }
 
-    async function initAnimation() {
+    async function waitConnection() {
+        $app.waitTransferConnection(transferInfo.code, onAnswer);
+
         await $app.sleep($transition.subpageOut.duration);
 
         scrolling = false;
@@ -121,6 +139,14 @@
             messageContainer.style.setProperty("--scroll-origin", `${container.width + 50}px`);
             messageContainer.style.setProperty("--scroll-destination", `-${message.width}px`);
             messageScroller.style.animation = `side-scroll ${message.width / 75}s linear infinite`;
+        }
+
+        async function onAnswer(data: TransferData) {
+            if (!peerConnection)
+                return;
+
+            await peerConnection.setRemoteDescription(data.answer);
+            console.log("Remote description set with answer");
         }
     }
 </script>
@@ -210,7 +236,7 @@
             </div>
             <Columns invert>
                 <div slot="left" class="h-full flex flex-col justify-center items-center space-y-12">
-                    <p class="text-7xl font-bold tracking-widest">{code || "⊷︎ ⌾︎ ⊶︎"}</p>
+                    <p class="text-7xl font-bold tracking-widest">{transferInfo.code || "⊷︎ ⌾︎ ⊶︎"}</p>
                     <div class="w-full flex justify-center space-x-6">
                         <OneActionButton pressed={playCodeAnim} on:click={() => copy("code")}>
                             <Icon name="copy" className="h-6" />
