@@ -38,12 +38,14 @@
 
 SkyShare is a desktop application and website that allows you to share files between computers. The app is available is available on both Windows and macOS but devices running other operating systems can use the website as both experiences are connected.
 
-This project consists in three different subprojects:
+This project consists in four different subprojects:
 > 🖥️&emsp;SkyShare [Desktop App](https://github.com/D3W10/SkyShare)
 >
 > 🔌&emsp;SkyShare [API](https://github.com/D3W10/SkyShare-API)
 >
 > 🌐&emsp;SkyShare [Website](https://github.com/D3W10/SkyShare-Website)
+>
+> ✉️&emsp;SkyShare [Mail](https://github.com/D3W10/SkyShare-Mail)
 
 ![App Homescreen](https://assets-d3w10.netlify.app/skyshare/homescreen.png)
 
