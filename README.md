@@ -45,7 +45,7 @@ This project consists in four different subprojects:
 >
 > 🌐&emsp;SkyShare [Website](https://github.com/D3W10/SkyShare-Website)
 >
-> ✉️&emsp;SkyShare [Mail](https://github.com/D3W10/SkyShare-Mail)
+> 📩&emsp;SkyShare [Mail](https://github.com/D3W10/SkyShare-Mail)
 
 ![App Homescreen](https://assets-d3w10.netlify.app/skyshare/homescreen.png)
 
