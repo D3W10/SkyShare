@@ -6,12 +6,13 @@ import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
-import { collection, db, doc, getDoc, onSnapshot } from "./lib/firebase.js";
-import { IStore } from "./lib/interfaces/Store.interface";
+import { collection, db, doc, getDoc, onSnapshot, type Unsubscribe } from "./lib/firebase.js";
+import type { IStore } from "./lib/interfaces/Store.interface";
 
 require("electron-reload")(__dirname);
 
-var window: BrowserWindow, splash: BrowserWindow, closeLock: boolean = true, serverData: object = {};
+let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData: object = {};
+let iceUnsubscribe: Unsubscribe | undefined;
 const winWidth: number = 1000, winHeight: number = 600;
 const isDev: boolean = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
@@ -279,7 +280,7 @@ ipcMain.handle("CheckTransfer", async (_, code: string) => {
 ipcMain.handle("ListenForIce", async (_, code: string) => {
     const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
 
-    const unsubscribe = onSnapshot(iceCandidatesCol, snapshot => {
+    iceUnsubscribe = onSnapshot(iceCandidatesCol, snapshot => {
         snapshot.docChanges().forEach(async change => {
             if (change.type === "added") {
                 const data = change.doc.data().candidate;
@@ -289,9 +290,9 @@ ipcMain.handle("ListenForIce", async (_, code: string) => {
             }
         });
     });
-
-    return unsubscribe;
 });
+
+ipcMain.on("StopListeningForIce", () => iceUnsubscribe!());
 
 ipcMain.on("EncodePassword", (e, password: string) => e.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 

@@ -346,12 +346,13 @@ export async function sendIceCandidate(code: string, candidate: RTCIceCandidate,
  * Listens for ICE candidates for a specific transfer
  * @param code The transfer code
  * @param callback The function to be called when an ICE candidate is received
+ * @returns A unsubscribe function that should be called when the connection has been established
  */
 export async function listenForIce(code: string, callback: (data: RTCIceCandidate) => unknown) {
-    const unsubscribe = await ipcRenderer.invoke("ListenForIce", code);
+    await ipcRenderer.invoke("ListenForIce", code);
     ipcRenderer.on("IceReceived", (_, data) => callback(new RTCIceCandidate(data)));
 
-    return unsubscribe;
+    return () => ipcRenderer.send("StopListeningForIce");
 }
 
 /**

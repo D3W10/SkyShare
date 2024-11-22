@@ -92,12 +92,12 @@
                     <div class="flex flex-col items-center space-y-4">
                         <p class="text-lg font-semibold">{$i18n.t("receive.0.code")}:</p>
                         <div class="flex space-x-2">
-                            <Input bind:this={elms[0]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[0]} on:keydown={e => onKeydown(0, e)} on:paste={onPaste} />
-                            <Input bind:this={elms[1]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[1]} on:keydown={e => onKeydown(1, e)} on:paste={onPaste} />
-                            <Input bind:this={elms[2]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[2]} on:keydown={e => onKeydown(2, e)} on:paste={onPaste} />
-                            <Input bind:this={elms[3]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[3]} on:keydown={e => onKeydown(3, e)} on:paste={onPaste} />
-                            <Input bind:this={elms[4]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[4]} on:keydown={e => onKeydown(4, e)} on:paste={onPaste} />
-                            <Input bind:this={elms[5]} type="number" className="aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[5]} on:keydown={e => onKeydown(5, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[0]} type="number" className="w-11 aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[0]} on:keydown={e => onKeydown(0, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[1]} type="number" className="w-11 aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[1]} on:keydown={e => onKeydown(1, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[2]} type="number" className="w-11 aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[2]} on:keydown={e => onKeydown(2, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[3]} type="number" className="w-11 aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[3]} on:keydown={e => onKeydown(3, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[4]} type="number" className="w-11 aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[4]} on:keydown={e => onKeydown(4, e)} on:paste={onPaste} />
+                            <Input bind:this={elms[5]} type="number" className="w-11 aspect-square" innerClassName="!px-0.5 !py-0 !text-2xl !font-semibold text-center !leading-tight" bind:value={code[5]} on:keydown={e => onKeydown(5, e)} on:paste={onPaste} />
                         </div>
                     </div>
                     <div class="flex space-x-4">

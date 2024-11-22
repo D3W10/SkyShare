@@ -8,7 +8,7 @@
     import { info } from "$lib/stores/infoStore";
     import { disable } from "$lib/stores/disableStore";
     import { transition } from "$lib/stores/transitionStore";
-    import { error, ErrorCode } from "$lib/stores/errorStore";
+    import { error } from "$lib/stores/errorStore";
     import Columns from "$lib/components/layout/Columns.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -17,7 +17,6 @@
     import { WebRTC } from "$lib/models/WebRTC.class";
     import type { File } from "$electron/lib/interfaces/File.interface";
     import type { TransferInfo } from "$electron/lib/interfaces/TransferInfo.interface";
-    import type { TransferData } from "$electron/lib/interfaces/TransferData.interface";
 
     let files: File[] = [], totalSize = 0, message = "", transferInfo: TransferInfo;
     let hovering = false, webRTC: WebRTC | null = null;
