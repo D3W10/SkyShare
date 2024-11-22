@@ -58,6 +58,9 @@
             "code": "Código da transferência",
             "nearbyShare": "Ativar NearbyShare",
             "receive": "Receber"
+        },
+        {
+            "title": "Rever ficheiros"
         }
     ],
     "settings": {
@@ -256,6 +259,8 @@
         "invalidCodeDesc": "O código inserido não é válido, por favor tente novamente.",
         "unexistentCode": "Código inválido",
         "unexistentCodeDesc": "O código inserido não é de uma transferência em curso, por favor verifique o código e tente novamente.",
+        "alreadyAnswered": "Não foi possível conectar",
+        "alreadyAnsweredDesc": "Esta transferência já foi recebida por outra pessoa, por favor tente novamente.",
         "photoTooBig": "Tamanho excedido",
         "photoTooBigDesc": "A foto de perfil selecionada é maior que 3 MB, por favor escolha uma com tamanho menor.",
         "invalidPhoto": "Foto de perfil inválida",

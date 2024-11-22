@@ -10,10 +10,12 @@
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
     import Modal from "$lib/components/Modal.svelte";
+    import { WebRTC } from "$lib/models/WebRTC.class";
+    import type { AnswerInfo } from "$electron/lib/interfaces/AnswerInfo.interface";
 
     let code: number[] = [], elms: Input[] = [];
-    let nearbyShareAlert: boolean = false;
-    let peerConnection: RTCPeerConnection | null = null
+    let nearbyShareAlert = false;
+    let webRTC: WebRTC | null = null, answerInfo: AnswerInfo;
 
     function onKeydown(i: number, e: KeyboardEvent) {
         const isNum = !isNaN(+e.key);
@@ -45,10 +47,38 @@
 
         disable.lock();
 
-        $app.log("Creating a new remote RTC connection...");
-        peerConnection = new RTCPeerConnection(await $app.getServers());
+        const pCode = code.join("");
+        const transfer = await $app.checkTransfer(pCode);
+
+        if (transfer) {
+            $app.log("Creating a new remote RTC connection...");
+            webRTC = new WebRTC();
+
+            await webRTC.setRemote(transfer.offer);
+            const answer = await webRTC.setUpAsReceiver(onFileReceive);
+
+            const answerReq = await $app.answerTransfer(pCode, answer);
+            if (answerReq.success) {
+                $app.log("Transfer answered successfully");
+
+                answerInfo = answerReq.data;
+                page.set("receive", 1);
+                waitConnection();
+            }
+        }
 
         disable.unlock();
+    }
+
+    async function waitConnection() {
+        if (!webRTC)
+            return;
+
+        webRTC?.listenForIceCandidates(code.join(""), answerInfo.token);
+    }
+
+    function onFileReceive(file: Blob) {
+        // TODO
     }
 </script>
 
@@ -80,6 +110,21 @@
                         <canvas></canvas>
                     </div>
                     <Button className="w-fit" disabled={code.some(n => typeof n != "number")} on:click={joinChannel}>{$i18n.t("receive.0.receive")}</Button>
+                </div>
+            </Columns>
+        </div>
+    {:else if $page.subPage == 1}
+        <div class="w-full h-full flex flex-col space-y-4" in:fly={$transition.subpageIn} out:fly={$transition.subpageOut}>
+            <h1 class="w-full text-xl font-semibold">{$i18n.t("receive.1.title")}</h1>
+            <Columns>
+                <div slot="left" class="p-1 flex">
+                    <div class="w-full h-full p-2 relative ring-4 ring-foreground/10 rounded-[12px] overflow-y-auto space-y-2">
+                    </div>
+                </div>
+                <div slot="right" class="flex flex-col justify-between items-center">
+                    <div class="w-full h-full flex justify-center items-center">
+                    </div>
+                    <Button className="w-fit" disabled={true} on:click={() => {}}>{$i18n.t("receive.0.receive")}</Button>
                 </div>
             </Columns>
         </div>

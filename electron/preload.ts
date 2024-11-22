@@ -1,10 +1,10 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { File } from "./lib/interfaces/File.interface";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
 import type { TransferInfo } from "./lib/interfaces/TransferInfo.interface";
 import type { TransferData } from "./lib/interfaces/TransferData.interface";
+import type { AnswerInfo } from "./lib/interfaces/AnswerInfo.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
 let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
@@ -264,8 +264,8 @@ export async function fetchServers() {
  * Obtains the servers from the main process
  * @returns The list of servers to use for the RTC connection
  */
-export async function getServers() {
-    return await ipcRenderer.invoke("GetServers");
+export function getServers() {
+    return ipcRenderer.sendSync("GetServers");
 }
 
 /**
@@ -296,21 +296,62 @@ export async function waitTransferConnection(code: string, callback: (data: Tran
 }
 
 /**
+ * Checks if a certain transfer exists or not
+ * @param code The transfer code
+ * @returns The transfer data if it exists, null otherwise
+ */
+export async function checkTransfer(code: string): Promise<TransferData | null> {
+    return await ipcRenderer.invoke("CheckTransfer", code);
+}
+
+/**
  * Sends the RTC answer to the other peer
  * @param code The transfer code
  * @param answer The RTC answer to give to the other peer
- * @returns An object containing one boolean with the success state
+ * @returns An object containing one boolean with the success state and the token to access the transfer
  */
 export async function answerTransfer(code: string, answer: RTCSessionDescriptionInit) {
     const api = await apiCall({
-        endpoint: "file/" + code + "/answer",
+        endpoint: "file/" + code,
         method: "POST",
         body: {
             answer
         }
     });
 
+    return apiTranslator<AnswerInfo>(api);
+}
+
+/**
+ * Adds an ICE candidate to an existing transfer
+ * @param code The transfer code
+ * @param candidate The RTC ICE candidate to add to the signaling server
+ * @param token The token of the transfer
+ * @returns An object containing one boolean with the success state
+ */
+export async function sendIceCandidate(code: string, candidate: RTCIceCandidate, token: string) {
+    const api = await apiCall({
+        endpoint: "file/" + code + "/ice",
+        method: "POST",
+        body: {
+            candidate,
+            token
+        }
+    });
+
     return apiTranslator<void>(api);
+}
+
+/**
+ * Listens for ICE candidates for a specific transfer
+ * @param code The transfer code
+ * @param callback The function to be called when an ICE candidate is received
+ */
+export async function listenForIce(code: string, callback: (data: RTCIceCandidate) => unknown) {
+    const unsubscribe = await ipcRenderer.invoke("ListenForIce", code);
+    ipcRenderer.on("IceReceived", (_, data) => callback(new RTCIceCandidate(data)));
+
+    return unsubscribe;
 }
 
 /**
@@ -658,7 +699,10 @@ contextBridge.exposeInMainWorld("app", {
     getServers,
     createTransfer,
     waitTransferConnection,
+    checkTransfer,
     answerTransfer,
+    sendIceCandidate,
+    listenForIce,
     account,
     sendLoginRequest,
     sleep,

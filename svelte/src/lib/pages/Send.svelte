@@ -14,14 +14,15 @@
     import Icon from "$lib/components/Icon.svelte";
     import Input from "$lib/components/Input.svelte";
     import OneActionButton from "$lib/components/OneActionButton.svelte";
+    import { WebRTC } from "$lib/models/WebRTC.class";
     import type { File } from "$electron/lib/interfaces/File.interface";
     import type { TransferInfo } from "$electron/lib/interfaces/TransferInfo.interface";
     import type { TransferData } from "$electron/lib/interfaces/TransferData.interface";
 
     let files: File[] = [], totalSize = 0, message = "", transferInfo: TransferInfo;
-    let hovering = false, peerConnection: RTCPeerConnection | null = null, channel: RTCDataChannel;
+    let hovering = false, webRTC: WebRTC | null = null;
     let playCodeAnim = false, playLinkAnim = false, scrolling = false, messageScroller: HTMLParagraphElement, messageContainer: HTMLDivElement;
-    const MAX_FILES = 20, MAX_SIZE = 16106127360;
+    const MAX_FILES = 20, MAX_SIZE = 16106127360, MAX_MESSAGE = 255;
     const addButton: File = { name: "", path: "", size: 0 };
 
     async function parseFiles(mode: "select" | "drop", e?: DragEvent) {
@@ -55,11 +56,11 @@
                 continue;
             }
             else if (files.length + 1 > MAX_FILES) {
-                error.set(ErrorCode.TOO_MANY_FILES);
+                error.setLocal("tooManyFiles");
                 break;
             }
             else if (totalSize + file.size > MAX_SIZE) {
-                error.set(ErrorCode.SIZE_LIMIT_EXCEEDED);
+                error.setLocal("sizeLimitExceeded");
                 break;
             }
 
@@ -76,16 +77,15 @@
     async function createChannel() {
         if (files.length == 0)
             return;
+        else if (message.length > MAX_MESSAGE)
+            return error.setLocal("messageTooLong");
 
         disable.lock();
 
         $app.log("Creating a new local RTC connection...");
-        peerConnection = new RTCPeerConnection(await $app.getServers());
-        createDataChannel();
+        webRTC = new WebRTC();
 
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
-
+        const offer = await webRTC.setUpAsSender();
         const createReq = await $app.createTransfer(offer);
         if (createReq.success) {
             $app.log("Transfer created successfully");
@@ -98,34 +98,17 @@
         disable.unlock();
     }
 
-    function createDataChannel() {
-        if (!peerConnection)
+    async function waitConnection() {
+        if (!webRTC)
             return;
 
-        $app.log("Creating data channel...");
+        $app.waitTransferConnection(transferInfo.code, async data => {
+            if (!webRTC)
+                return;
 
-        channel = peerConnection.createDataChannel("dataTransfer");
-        channel.binaryType = "arraybuffer";
-        channel.addEventListener("open", () => $app.log("Data channel is now open"));
-        channel.addEventListener("close", () => $app.log("Data channel is now closed"));
-        channel.addEventListener("error", (error) => $app.log("Data channel error: " + error));
-    }
-
-    function copy(type: "code" | "link") {
-        if (type == "code") {
-            navigator.clipboard.writeText(transferInfo.code);
-            playCodeAnim = true;
-            setTimeout(() => playCodeAnim = false, 2000);
-        }
-        else if (type == "link") {
-            navigator.clipboard.writeText(`${$info.homepage}?dl=${transferInfo.code}`);
-            playLinkAnim = true;
-            setTimeout(() => playLinkAnim = false, 2000);
-        }
-    }
-
-    async function waitConnection() {
-        $app.waitTransferConnection(transferInfo.code, onAnswer);
+            await webRTC.setRemote(data.answer);
+        });
+        webRTC.listenForIceCandidates(transferInfo.code, transferInfo.token);
 
         await $app.sleep($transition.subpageOut.duration);
 
@@ -141,12 +124,24 @@
             messageScroller.style.animation = `side-scroll ${message.width / 75}s linear infinite`;
         }
 
-        async function onAnswer(data: TransferData) {
-            if (!peerConnection)
-                return;
+        await webRTC.waitForChannelOpen();
+        sendFiles();
+    }
 
-            await peerConnection.setRemoteDescription(data.answer);
-            console.log("Remote description set with answer");
+    async function sendFiles() {
+        // TODO
+    }
+
+    function copy(type: "code" | "link") {
+        if (type === "code") {
+            navigator.clipboard.writeText(transferInfo.code);
+            playCodeAnim = true;
+            setTimeout(() => playCodeAnim = false, 2000);
+        }
+        else if (type === "link") {
+            navigator.clipboard.writeText(`${$info.homepage}?dl=${transferInfo.code}`);
+            playLinkAnim = true;
+            setTimeout(() => playLinkAnim = false, 2000);
         }
     }
 </script>

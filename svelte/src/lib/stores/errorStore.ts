@@ -30,12 +30,9 @@ export enum ErrorCode {
     INVALID_REQUEST_TYPE, INVALID_VERIFICATION_TOKEN,
     INVALID_RECOVERY_TOKEN, UNKNOWN_EDIT,
     UNKNOWN_PASSWORD, UNKNOWN_HISTORY,
-    MESSAGE_TOO_LONG, INVALID_CODE,
-    UNEXISTENT_CODE,
-
-    
-    TOO_MANY_FILES, // 24
-    SIZE_LIMIT_EXCEEDED // 25
+    INVALID_CODE, UNEXISTENT_CODE,
+    ALREADY_ANSWERED, INVALID_ICE,
+    FORBIDDEN
 }
 
 const errorList = {
@@ -61,9 +58,9 @@ const errorList = {
     [ErrorCode.UNKNOWN_EDIT]: "unknownEdit",
     [ErrorCode.UNKNOWN_PASSWORD]: "unknownPassword",
     [ErrorCode.UNKNOWN_HISTORY]: "unknownHistory",
-    [ErrorCode.MESSAGE_TOO_LONG]: "messageTooLong",
     [ErrorCode.INVALID_CODE]: "invalidCode",
     [ErrorCode.UNEXISTENT_CODE]: "unexistentCode",
-    [ErrorCode.TOO_MANY_FILES]: "tooManyFiles",
-    [ErrorCode.SIZE_LIMIT_EXCEEDED]: "sizeLimitExceeded"
+    [ErrorCode.ALREADY_ANSWERED]: "alreadyAnswered",
+    [ErrorCode.INVALID_ICE]: "miscommunication",
+    [ErrorCode.FORBIDDEN]: "miscommunication"
 };

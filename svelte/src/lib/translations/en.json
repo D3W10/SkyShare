@@ -58,6 +58,9 @@
             "code": "Transfer Code",
             "nearbyShare": "Enable NearbyShare",
             "receive": "Receive"
+        },
+        {
+            "title": "Review files"
         }
     ],
     "settings": {
@@ -256,6 +259,8 @@
         "invalidCodeDesc": "The code you entered is not valid, please try again.",
         "unexistentCode": "Invalid code",
         "unexistentCodeDesc": "The code you entered is not from an ongoing transfer, please check the code and try again.",
+        "alreadyAnswered": "Unable to connect",
+        "alreadyAnsweredDesc": "This transfer has already been received by someone else, please try again.",
         "photoTooBig": "File size exceeded",
         "photoTooBigDesc": "The selected photo is bigger than 3 MB, please choose a smaller one.",
         "invalidPhoto": "Invalid photo",
