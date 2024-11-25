@@ -49,7 +49,8 @@
             "copyLink": "Copy link",
             "noMessage": "No message",
             "status": "Status",
-            "waiting": "Waiting..."
+            "waiting": "Waiting...",
+            "connected": "Connected"
         }
     ],
     "receive": [

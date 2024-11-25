@@ -277,7 +277,7 @@ ipcMain.handle("CheckTransfer", async (_, code: string) => {
     return transferDoc.exists() ? transferDoc.data() : null;
 });
 
-ipcMain.handle("ListenForIce", async (_, code: string) => {
+ipcMain.on("ListenForIce", (_, code: string) => {
     const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
 
     iceUnsubscribe = onSnapshot(iceCandidatesCol, snapshot => {
@@ -285,7 +285,7 @@ ipcMain.handle("ListenForIce", async (_, code: string) => {
             if (change.type === "added") {
                 const data = change.doc.data().candidate;
 
-                logger.log(`ICE candidate received: ${data}`);
+                logger.log(`ICE candidate received: ${JSON.stringify(data)}`);
                 window.webContents.send("IceReceived", data);
             }
         });

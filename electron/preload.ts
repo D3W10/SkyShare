@@ -5,6 +5,7 @@ import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
 import type { TransferInfo } from "./lib/interfaces/TransferInfo.interface";
 import type { TransferData } from "./lib/interfaces/TransferData.interface";
 import type { AnswerInfo } from "./lib/interfaces/AnswerInfo.interface";
+import type { IceCandidate } from "./lib/interfaces/IceCandidate.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
 let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
@@ -325,16 +326,16 @@ export async function answerTransfer(code: string, answer: RTCSessionDescription
 /**
  * Adds an ICE candidate to an existing transfer
  * @param code The transfer code
- * @param candidate The RTC ICE candidate to add to the signaling server
+ * @param candidates One or more RTC ICE candidates to add to the remote peer
  * @param token The token of the transfer
  * @returns An object containing one boolean with the success state
  */
-export async function sendIceCandidate(code: string, candidate: RTCIceCandidate, token: string) {
+export async function sendIceCandidate(code: string, candidates: IceCandidate[], token: string) {
     const api = await apiCall({
         endpoint: "file/" + code + "/ice",
         method: "POST",
         body: {
-            candidate,
+            candidates,
             token
         }
     });
@@ -348,9 +349,9 @@ export async function sendIceCandidate(code: string, candidate: RTCIceCandidate,
  * @param callback The function to be called when an ICE candidate is received
  * @returns A unsubscribe function that should be called when the connection has been established
  */
-export async function listenForIce(code: string, callback: (data: RTCIceCandidate) => unknown) {
-    await ipcRenderer.invoke("ListenForIce", code);
-    ipcRenderer.on("IceReceived", (_, data) => callback(new RTCIceCandidate(data)));
+export function listenForIce(code: string, callback: (data: IceCandidate) => unknown) {
+    ipcRenderer.send("ListenForIce", code);
+    ipcRenderer.on("IceReceived", (_, data: IceCandidate) => callback({ candidate: data.candidate, sdpMid: data.sdpMid, sdpMLineIndex: data.sdpMLineIndex }));
 
     return () => ipcRenderer.send("StopListeningForIce");
 }

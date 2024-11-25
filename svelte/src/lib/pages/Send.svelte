@@ -15,11 +15,12 @@
     import Input from "$lib/components/Input.svelte";
     import OneActionButton from "$lib/components/OneActionButton.svelte";
     import { WebRTC } from "$lib/models/WebRTC.class";
+    import { sendIcon } from "$lib/models/fileIcon.const";
     import type { File } from "$electron/lib/interfaces/File.interface";
     import type { TransferInfo } from "$electron/lib/interfaces/TransferInfo.interface";
 
     let files: File[] = [], totalSize = 0, message = "", transferInfo: TransferInfo;
-    let hovering = false, webRTC: WebRTC | null = null;
+    let hovering = false, webRTC: WebRTC | null = null, connected = false;
     let playCodeAnim = false, playLinkAnim = false, scrolling = false, messageScroller: HTMLParagraphElement, messageContainer: HTMLDivElement;
     const MAX_FILES = 20, MAX_SIZE = 16106127360, MAX_MESSAGE = 255;
     const addButton: File = { name: "", path: "", size: 0 };
@@ -80,6 +81,7 @@
             return error.setLocal("messageTooLong");
 
         disable.lock();
+        connected = false;
 
         $app.log("Creating a new local RTC connection...");
         webRTC = new WebRTC();
@@ -106,6 +108,7 @@
                 return;
 
             await webRTC.setRemote(data.answer);
+            await webRTC.exchangeIceCandidates();
         });
         webRTC.listenForIceCandidates(transferInfo.code, transferInfo.token);
 
@@ -124,10 +127,22 @@
         }
 
         await webRTC.waitForChannelOpen();
+        connected = true;
+
+        webRTC.send({
+            d: files.map(f => {
+                const { path, ...file } = f;
+                return file;
+            })
+        });
+
         sendFiles();
     }
 
     async function sendFiles() {
+        if (!webRTC)
+            return;
+
         // TODO
     }
 
@@ -173,7 +188,7 @@
                                         <div transition:fade={{ duration: 400, easing: cubicOut }} animate:flip={{ duration: 400, easing: cubicInOut}}>
                                             {#if file.name}
                                                 <div class="w-full px-2 py-1.5 flex items-center relative bg-secondary rounded-lg {$disable.d ? "opacity-50" : ""} space-x-2 overflow-hidden group">
-                                                    <img src="data:image/png;base64,{file.icon}" class="h-6" alt={$i18n.t("send.0.fileIcon")} />
+                                                    <img src="data:image/png;base64,{file.icon ?? sendIcon}" class="h-6" alt={$i18n.t("send.0.fileIcon")} />
                                                     <div class="flex flex-col space-y-0.5">
                                                         <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
                                                         <p class="text-xs text-foreground/70">{$app.fileSizeFormat(file.size)}</p>
@@ -252,7 +267,7 @@
                         </div>
                         <div class="space-y-1">
                             <p class="font-semibold">{$i18n.t("send.1.status")}:</p>
-                            <p class="text-foreground/70 animate-pulse">Waiting...</p>
+                            <p class="text-foreground/70 {!connected ? "animate-pulse" : ""}">{!connected ? $i18n.t("send.1.waiting") : $i18n.t("send.1.connected")}</p>
                         </div>
                     </div>
                 </div>

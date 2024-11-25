@@ -14,7 +14,7 @@
     import type { AnswerInfo } from "$electron/lib/interfaces/AnswerInfo.interface";
 
     let code: number[] = [], elms: Input[] = [];
-    let nearbyShareAlert = false;
+    let nearbyShareAlert = false, pCode: string;
     let webRTC: WebRTC | null = null, answerInfo: AnswerInfo;
 
     function onKeydown(i: number, e: KeyboardEvent) {
@@ -47,7 +47,7 @@
 
         disable.lock();
 
-        const pCode = code.join("");
+        pCode = code.join("");
         const transfer = await $app.checkTransfer(pCode);
 
         if (transfer) {
@@ -74,11 +74,14 @@
         if (!webRTC)
             return;
 
-        webRTC?.listenForIceCandidates(code.join(""), answerInfo.token);
+        webRTC.listenForIceCandidates(pCode, answerInfo.token);
+        webRTC.exchangeIceCandidates();
+
+        await webRTC.waitForChannelOpen();
     }
 
-    function onFileReceive(file: Blob) {
-        // TODO
+    async function onFileReceive(data: Record<string, unknown>) {
+        $app.log(JSON.stringify(data));
     }
 </script>
 
