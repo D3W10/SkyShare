@@ -8,19 +8,17 @@
         "url": "https://d3w10.netlify.app"
     },
     "scripts": {
-        "dev": "concurrently \"npm run svelte:dev\" \"npm run nodemon\"",
-        "start": "npm run compile && electron .",
+        "dev": "concurrently \"bun run svelte:dev\" \"bun run nodemon\"",
+        "dev-m": "concurrently \"bun run svelte:dev\" \"bun run nodemon\" \"bun run nodemon\"",
+        "start": "bun run compile && electron .",
         "nodemon": "nodemon",
-        "svelte:dev": "cd svelte && npm run dev",
-        "svelte:build": "cd svelte && npm run build",
+        "svelte:dev": "cd svelte && bun run dev",
+        "svelte:build": "cd svelte && bun run build",
         "compile": "tsc",
-        "out:win": "npm run svelte:build && npm run compile && electron-builder build --win --config ./build/build.js --publish never",
-        "out:mac": "npm run svelte:build && npm run compile && electron-builder build --mac --config ./build/build.js --publish never",
-        "publish:win": "npm run svelte:build && npm run compile && electron-builder build --win --config ./build/build.js --publish always",
-        "publish:mac": "npm run svelte:build && npm run compile && electron-builder build --mac --config ./build/build.js --publish always",
-        "check-updates": "npx npm-check-updates",
-        "check-updates:minor": "npx npm-check-updates --target minor",
-        "check-updates:patch": "npx npm-check-updates --target patch"
+        "out:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.js --publish never",
+        "out:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.js --publish never",
+        "publish:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.js --publish always",
+        "publish:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.js --publish always"
     },
     "main": "dist/index.js",
     "repository": {
