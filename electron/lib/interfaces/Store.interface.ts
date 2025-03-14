@@ -1,10 +1,10 @@
 export interface IStore {
     changelog: string | null;
-    settings: IStoreSettings;
-    account: IStoreAccount;
+    settings: StoreSettings;
+    account: StoreAccount;
 }
 
-export interface IStoreSettings {
+export interface StoreSettings {
     theme: number;
     language: string;
     nearbyShare: boolean;
@@ -12,7 +12,7 @@ export interface IStoreSettings {
     betaUpdates: boolean;
 }
 
-export interface IStoreAccount {
+export interface StoreAccount {
     username: string | null;
     password: string | null;
 }

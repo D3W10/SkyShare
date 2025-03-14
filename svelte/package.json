@@ -3,15 +3,11 @@
     "scripts": {
         "dev": "vite dev",
         "build": "vite build",
-        "preview": "vite preview",
-        "check-updates": "npx npm-check-updates",
-        "check-updates:minor": "npx npm-check-updates --target minor",
-        "check-updates:patch": "npx npm-check-updates --target patch"
+        "preview": "vite preview"
     },
     "dependencies": {
         "@sveltejs/vite-plugin-svelte": "^5.0.3",
-        "i18next": "^24.2.2",
-        "svelte-i18next": "^2.2.2"
+        "i18next": "^24.2.2"
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "^3.0.8",

@@ -8,7 +8,7 @@ import type { AnswerInfo } from "./lib/interfaces/AnswerInfo.interface";
 import type { IceCandidate } from "./lib/interfaces/IceCandidate.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
-let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
+let readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
 
 const logger = {
@@ -17,9 +17,8 @@ const logger = {
 };
 
 type TDataObj<T> = T extends {} ? keyof T extends never ? { [key: string]: any } : T : T;
-type TEventName = "offline" | "ready" | "open" | "close" | "login" | "uri" | "error";
+type TEventName = "ready" | "open" | "close" | "login" | "uri" | "error";
 type TCallback<T extends TEventName> = 
-    T extends "offline" ? () => boolean :
     T extends "ready" ? () => unknown :
     T extends "open" ? () => unknown :
     T extends "close" ? () => unknown :
@@ -203,7 +202,7 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  */
 export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true): Promise<ApiResult> {
     try {
-        if (offlineHandler()) {
+        if (!navigator.onLine) {
             errorHandler(-2);
             return {} as ApiResult;
         }
@@ -633,9 +632,7 @@ export async function sleep(ms: number) {
  * @param callback The callback to bind to the event
  */
 export function updateCallback<T extends TEventName>(name: T, callback: TCallback<T>) {
-    if (name == "offline")
-        offlineHandler = callback as TCallback<"offline">;
-    else if (name == "ready") {
+    if (name == "ready") {
         readyHandler = callback as TCallback<"ready">;
         if (wReady)
             readyHandler();

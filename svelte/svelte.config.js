@@ -8,8 +8,6 @@ const config = {
             assets: "../dist/www"
         }),
         alias: {
-            "$": ".",
-            "$/*": "./*",
             "$electron": "../electron",
             "$electron/*": "../electron/*"
         }
