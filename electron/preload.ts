@@ -6,6 +6,7 @@ import type { TransferInfo } from "./lib/interfaces/TransferInfo.interface";
 import type { TransferData } from "./lib/interfaces/TransferData.interface";
 import type { AnswerInfo } from "./lib/interfaces/AnswerInfo.interface";
 import type { IceCandidate } from "./lib/interfaces/IceCandidate.interface";
+import type { IStore } from "./lib/interfaces/Store.interface";
 
 let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
 let readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
@@ -122,7 +123,7 @@ export function openMain() {
  * @param key The key of the setting you want to get
  * @returns The setting value
  */
-export function getSetting(key: string) {
+export function getSetting<T extends keyof IStore>(key: T): IStore[T] {
     return ipcRenderer.sendSync("GetSetting", key);
 }
 
