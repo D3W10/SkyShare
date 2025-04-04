@@ -16,7 +16,7 @@
 </script>
 
 {#await iconPromise then icon} 
-    <icon class={twMerge("flex justify-center items-center", className)}>
+    <icon class={twMerge("flex justify-center items-center *:size-full", className)}>
         {@html icon.default}
     </icon>
 {/await}

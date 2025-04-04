@@ -16,10 +16,9 @@
     --color-send: var(--color-rose-500);
     --color-receive: var(--color-teal-500);
     --color-settings: var(--color-violet-500);
-    --color-account: rgb(235, 117, 14);
+    --color-account: var(--color-amber-500);
 
     --ease-cubic-out: cubic-bezier(0.33, 1, 0.68, 1);
-    --ease-quint-out: cubic-bezier(0.22, 1, 0.36, 1);
 
     --font-outfit: "Outfit";
 
@@ -79,21 +78,7 @@ img {
     -webkit-user-drag: none;
 }
 
-button {
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
-}
-
-dialog {
-    @apply p-0 text-foreground bg-secondary rounded-2xl border-none select-none;
-}
-
-dialog::backdrop {
-    @apply bg-black/50;
-}
-
 /* #region Animations */
-
-
 
 @keyframes shrink {
     from {

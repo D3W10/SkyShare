@@ -7,7 +7,6 @@
     let sidebar = $state(true);
 </script>
 
-<div></div>
 <Framebar bind:sidebar={sidebar} />
 <div class="size-full flex">
     <Sidebar expanded={sidebar} />

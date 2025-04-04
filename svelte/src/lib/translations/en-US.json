@@ -87,7 +87,7 @@
         "betaUpdates": "Beta updates",
         "betaUpdatesDesc": "Get beta updates (unstable)",
         "resetSettings": "Reset Settings",
-        "resetSettingsDesc": "Reset settings to the default values",
+        "resetSettingsDesc": "Reset all settings to the default values",
         "resetButton": "Reset",
         "version": "Version {{version}}"
     },

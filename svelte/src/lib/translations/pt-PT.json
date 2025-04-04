@@ -87,7 +87,7 @@
         "betaUpdates": "Atualizações Beta",
         "betaUpdatesDesc": "Obter atualizações beta (instável)",
         "resetSettings": "Repor Definições",
-        "resetSettingsDesc": "Repor definições para os valores padrão",
+        "resetSettingsDesc": "Repor todas as definições para os valores padrão",
         "resetButton": "Repor",
         "version": "Versão {{version}}"
     },

@@ -10,7 +10,7 @@
 
     let {
         children,
-        class: className = "",
+        class: className,
         title = "Untitled page"
     }: Props = $props();
 </script>
