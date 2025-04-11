@@ -22,6 +22,7 @@
 
     $effect(() => {
         changeLanguage(settings.language);
+        document.documentElement.setAttribute("data-theme", settings.theme);
     });
 </script>
 

@@ -5,7 +5,7 @@ export interface IStore {
 }
 
 export interface StoreSettings {
-    theme: number;
+    theme: "light" | "dark";
     language: string;
     nearbyShare: boolean;
     autoUpdate: boolean;

@@ -10,7 +10,7 @@
 </script>
 
 <PageLayout title="Settings" class="mr-8 flex gap-x-8">
-    <div class="w-56 min-w-56 h-full p-2 flex flex-col gap-y-1 bg-slate-200 dark:bg-slate-900 rounded-2xl ring-1 ring-slate-400/25 dark:ring-slate-400/25 shadow-sm">
+    <div class="w-56 min-w-56 h-full p-2 flex flex-col gap-y-1 bg-slate-200 dark:bg-slate-950 rounded-2xl ring-1 ring-slate-400/25 dark:ring-white/10 shadow-sm">
         <LinkItem href="/settings/appearance" icon="appearance" selected={currentPage.startsWith("appearance")}>
             <p>{i18n.t("settings.appearance")}</p>
         </LinkItem>
@@ -27,5 +27,7 @@
             <p>{i18n.t("settings.about")}</p>
         </LinkItem>
     </div>
-    {@render children()}
+    <div class="w-full grid *:col-[1] *:row-[1]">
+        {@render children()}
+    </div>
 </PageLayout>

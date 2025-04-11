@@ -1,15 +1,17 @@
 export type IconT =
+    "about" |
+    "account" |
+    "appearance" |
+    "arrowRight" |
     "back" |
     "closeWindow" |
     "home" |
     "minimizeWindow" |
+    "nearbyShare" |
     "receive" |
+    "reset" |
     "send" |
     "settings" |
     "sidebar" |
-    "wifiOff" |
-    "appearance" |
-    "nearbyShare" |
     "updates" |
-    "reset" |
-    "about";
+    "wifiOff";

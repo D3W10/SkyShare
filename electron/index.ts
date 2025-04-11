@@ -11,10 +11,10 @@ import type { IStore } from "./lib/interfaces/Store.interface";
 
 require("electron-reload")(__dirname);
 
-let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData: object = {};
+let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData = {};
 let iceUnsubscribe: Unsubscribe | undefined;
-const winWidth: number = 1000, winHeight: number = 600;
-const isDev: boolean = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
+const winWidth = 1000, winHeight = 600;
+const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
 const logger = new Logger("Main", "blue"), pLogger = new Logger("Prld", "cyan"), rLogger = new Logger("Rndr", "green");
 
@@ -22,7 +22,7 @@ const appConfig = new Store<IStore>({
     defaults: {
         changelog: null,
         settings: {
-            theme: 0,
+            theme: "light",
             language: "en-US",
             nearbyShare: true,
             autoUpdate: true,
@@ -196,17 +196,17 @@ ipcMain.on("CheckForUpdates", () => {
     const win = !splash.isDestroyed() ? splash : window;
 
     if (isDev)
-        win.webContents.send("CFUStatus", false);
+        win.webContents.send("CFUStatus", false, {});
     
     autoUpdater.once("update-available", e => {
         appConfig.set("changelog", e.releaseNotes);
-        win.webContents.send("CFUStatus", true);
+        win.webContents.send("CFUStatus", true, { version: e.version, date: e.releaseDate });
     });
-    autoUpdater.once("update-not-available", () => win.webContents.send("CFUStatus", false));
-    autoUpdater.once("update-cancelled", () => win.webContents.send("CFUStatus", false));
+    autoUpdater.once("update-not-available", () => win.webContents.send("CFUStatus", false, {}));
+    autoUpdater.once("update-cancelled", () => win.webContents.send("CFUStatus", false, {}));
     autoUpdater.once("error", error => {
         logger.error(error.message);
-        win.webContents.send("CFUStatus", false);
+        win.webContents.send("CFUStatus", false, {});
     });
 });
 

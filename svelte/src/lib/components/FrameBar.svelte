@@ -81,17 +81,17 @@
             <div class="w-14"></div>
         {/if}
         <div class="ml-1 flex gap-x-1.5" style:-webkit-app-region="no-drag">
-            <button class="w-6 p-0.5 text-slate-500 hover:bg-slate-900/10 disabled:bg-transparent rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default transition duration-200" onclick={() => sidebar = !sidebar}>
+            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default transition duration-200" onclick={() => sidebar = !sidebar}>
                 <Icon name="sidebar" />
             </button>
-            <button class="w-6 p-0.5 text-slate-500 hover:bg-slate-900/10 disabled:bg-transparent rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default transition duration-200" disabled>
+            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default transition duration-200" disabled>
                 <Icon name="back" />
             </button>
         </div>
     </div>
     <div class="h-fit flex" style:-webkit-app-region="no-drag">
         {#if isOffline}
-            <div class="px-2 py-1 flex relative bg-white rounded-lg ring-1 ring-slate-400/10 dark:ring-slate-400/10 shadow-sm before:absolute before:inset-0 before:rounded-md before:border-b-3 before:border-slate-100" transition:fly={platform !== "darwin" ? { x: 10 } : { x: -10 }}>
+            <div class="px-2 py-1 flex relative bg-white dark:bg-slate-900 rounded-lg ring-1 ring-slate-400/10 dark:ring-white/10 shadow-sm before:absolute before:inset-0 before:rounded-md before:border-b-3 before:border-slate-100 dark:before:border-slate-800" transition:fly={platform !== "darwin" ? { x: 10 } : { x: -10 }}>
                 <Icon name="wifiOff" class="w-5" />
                 <span class="ml-2.5 text-sm font-medium">{i18n.t("common.offline")}</span>
             </div>

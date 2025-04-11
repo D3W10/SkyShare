@@ -1,40 +1,59 @@
+<script lang="ts" module>
+    export interface ComboBoxItem {
+        text: string;
+        value: string;
+    }
+</script>
+
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
-    import { slide } from "svelte/transition";
     import { twMerge } from "tailwind-merge";
-    import { transition } from "$lib/stores/transitionStore";
     import Button from "./Button.svelte";
     import Icon from "./Icon.svelte";
-    import { outsideClick } from "../outsideClick";
+    import { boxStyles, outClick } from "$lib/utils.svelte";
 
-    export let className: string = "";
-    export let items: string[];
-    export let selected: number = 0;
-    export let disabled: boolean = false;
-    export let listClassName: string = "";
-    export let listReverse: boolean = false;
+    interface Props {
+        class?: string;
+        items: ComboBoxItem[];
+        value: string;
+        disabled?: boolean;
+        align?: "left" | "right";
+        onchange?: () => unknown;
+    }
 
-    let open = false, closedCss = !listReverse ? "" : "-rotate-180", openCss = !listReverse ? "-rotate-180" : "rotate-0";
-    const dispatch = createEventDispatcher<{ change: { selected: number } }>();
-    $: selectedItem = items[selected];
+    let {
+        class: className,
+        items,
+        value = $bindable(""),
+        disabled,
+        align = "left",
+        onchange
+    }: Props = $props();
 
-    function itemSelected(index: number) {
-        if (selected != index) {
-            selected = index;
+    let open = $state(false);
 
-            dispatch("change", { selected: index });
+    function itemSelected(tag: string) {
+        if (value !== tag) {
+            value = tag;
+            onchange?.();
         }
     }
 </script>
 
-<div use:outsideClick on:outclick={() => { if (open) open = !open; }}>
-    <Button type="invisible" className={twMerge(`block relative ${!open ? "z-10" : "z-20"}`, className)} {disabled} on:click={() => open = !open}>
-        <div class="px-2 py-1.5 flex justify-between items-center bg-secondary rounded-md border-b-2 {!open ? "border-foreground/15" : "border-primary"} shadow-sm ring-1 ring-foreground/10 transition-colors">
-            <p class="text-sm">{selectedItem}</p>
-            <Icon name="chevron" className="w-5 h-5 ml-2 fill-current transition-transform duration-[400ms] ease-quint-out {!open ? closedCss : openCss}" />
+<div use:outClick onoutclick={() => { if (open) open = !open; }}>
+    <Button type="secondary" class={twMerge("pl-3 pr-2.5", open ? "z-1" : "", className)} {disabled} onclick={() => open = !open}>
+        <div class="w-full flex justify-between items-center gap-x-1">
+            <p class="text-sm text-left text-ellipsis whitespace-nowrap overflow-hidden">{items.find(i => i.value === value) ? items.find(i => i.value === value)!.text : items[0].text}</p>
+            <Icon name="arrowRight" class="size-4 min-w-4 {!open ? "rotate-90" : "-rotate-90"} transition-transform duration-200 ease-out" />
         </div>
         {#if open}
-            <div class="w-full absolute {!listReverse ? "top-6" : "bottom-6"} bg-secondary rounded-md shadow-xl ring-1 ring-foreground/10 overflow-hidden -z-10" transition:slide={$transition.comboFlow}>
+            <div class={twMerge(boxStyles.box, "p-1.5 flex-col absolute left-0 right-0 top-10 z-1 before:border-0")}>
+                {#each items as item, i}
+                    <Button type="invisible" class={twMerge("px-2 py-1 text-sm text-left hover:bg-slate-200 hover:dark:bg-slate-800 rounded-sm transition-colors duration-200", i === 0 ? "rounded-t-lg" : i === items.length - 1 ? "rounded-b-lg" : "")} onclick={() => itemSelected(item.value)}>{item.text}</Button>
+                    {#if i !== items.length - 1}
+                        <hr class="h-0.5 my-1 bg-slate-200 dark:bg-slate-700 border-0 rounded-full" />
+                    {/if}
+                {/each}
+            </div>
                 <div id="comboboxItems" class={twMerge(`max-h-[7.5rem] flex flex-col bg-foreground/5 divide-y divide-foreground/10 overflow-y-auto`, listClassName)}>
                     {#each items as item, i}
                         <Button type="invisible" className="px-2 py-1.5 text-left text-sm hover:bg-foreground/5 !rounded-none {i == 0 && !listReverse ? "pt-4" : (i == items.length - 1 && listReverse ? "pb-3.5" : "")}" on:click={() => itemSelected(i)}>{item}</Button>

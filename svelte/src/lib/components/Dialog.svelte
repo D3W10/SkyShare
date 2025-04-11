@@ -15,6 +15,7 @@
         cancelable?: boolean;
         cancelText?: string;
         onsubmit?: () => unknown;
+        oncancel?: () => unknown;
     }
 
     let {
@@ -24,7 +25,8 @@
         text,
         cancelable = true,
         cancelText,
-        onsubmit
+        onsubmit,
+        oncancel
     }: Props = $props();
 
     let dialog = $state<HTMLDialogElement>();
@@ -35,8 +37,10 @@
     });
 
     function closeModal(submit: boolean) {
-        if (submit && onsubmit)
-            onsubmit();
+        if (submit)
+            onsubmit?.();
+        else
+            oncancel?.();
 
         setTimeout(() => dialog?.close(), 400);
         show = false;

@@ -27,6 +27,7 @@ type TCallback<T extends TEventName> =
     T extends "uri" ? (args: string[]) => unknown :
     T extends "error" ? (code: number) => unknown :
     never;
+type TUpdateData = { version: string, date: string };
 
 interface ApiCall<T> {
     success: boolean;
@@ -78,10 +79,10 @@ export function error(msg: any) {
  * @param statusCallback The function to receive the update status
  * @param progressCallback The function to receive the download progress
  */
-export function checkForUpdates(statusCallback: (available: boolean) => unknown, progressCallback: (percent: number) => unknown) {
+export function checkForUpdates(statusCallback: (available: boolean, data: TUpdateData) => unknown, progressCallback: (percent: number) => unknown) {
     ipcRenderer.send("CheckForUpdates");
 
-    ipcRenderer.once("CFUStatus", (_, available: boolean) => statusCallback(available));
+    ipcRenderer.once("CFUStatus", (_, available: boolean, data: TUpdateData) => statusCallback(available, data));
     cfuProgress = progressCallback;
 }
 
