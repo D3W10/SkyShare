@@ -28,6 +28,9 @@
     }
 
     $effect(() => {
+        if (settings.betaUpdates === betaUpdates)
+            return;
+
         if (betaUpdates)
             betaAlert = true;
         else
@@ -48,7 +51,7 @@
             <h3 class="mb-1 font-semibold">{i18n.t("settings.checkForUpdates")}</h3>
             <p class="text-sm text-slate-500">{i18n.t("settings.checkForUpdatesDesc")}</p>
         </div>
-        <Button class="w-32" disabled={updating != 0} onclick={checkForUpdates}>{i18n.t("settings.check")}</Button>
+        <Button class="w-32" disabled={updating !== 0} onclick={checkForUpdates}>{i18n.t("settings.check")}</Button>
     </div>
     <div class="w-full flex justify-between items-center gap-x-6">
         <div>
