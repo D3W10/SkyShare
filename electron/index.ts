@@ -245,7 +245,7 @@ ipcMain.on("GetAppInfo", e => {
         name: packageData.productName,
         version: packageData.version,
         homepage: packageData.homepage,
-        api: !isDev ? "https://skyshare.vercel.app/" : "http://localhost:5174/"
+        api: !isDev ? "https://skyshare.vercel.app/api/v1/" : "http://localhost:5174/api/v1/"
     }
 });
 
