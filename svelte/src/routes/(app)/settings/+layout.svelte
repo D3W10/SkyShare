@@ -1,16 +1,18 @@
 <script lang="ts">
+    import { twMerge } from "tailwind-merge";
     import { page } from "$app/state";
     import { i18n } from "$lib/data/i18n.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import LinkItem from "$lib/components/LinkItem.svelte";
+    import { boxStyles } from "$lib/utils.svelte";
 
     let { children } = $props();
 
     let currentPage = $derived(page.url.pathname.replace(/\/settings\//g, ""));
 </script>
 
-<PageLayout title="Settings" class="mr-8 flex gap-x-8">
-    <div class="w-56 min-w-56 h-full p-2 flex flex-col gap-y-1 bg-slate-200 dark:bg-slate-950 rounded-2xl ring-1 ring-slate-400/25 dark:ring-white/10 shadow-sm">
+<PageLayout title={i18n.t("settings.title")} class="mr-8 flex gap-x-8">
+    <div class={twMerge(boxStyles.pane, "w-56 min-w-56 h-full p-2 flex-col gap-y-1 rounded-2xl")}>
         <LinkItem href="/settings/appearance" icon="appearance" selected={currentPage.startsWith("appearance")}>
             <p>{i18n.t("settings.appearance")}</p>
         </LinkItem>

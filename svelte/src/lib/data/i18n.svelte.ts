@@ -16,7 +16,7 @@ export const i18n = $state({
     language: i18next.language
 });
 
-export function changeLanguage(lng: string) {
+export async function changeLanguage(lng: string) {
     i18next.language = lng;
-    i18next.changeLanguage(lng).then(t => i18n.t = (k => t(k)) as TFunction<["translation", ...string[]], undefined>);
+    i18n.t = await i18next.changeLanguage(lng);
 }
