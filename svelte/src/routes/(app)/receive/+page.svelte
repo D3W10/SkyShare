@@ -54,5 +54,5 @@
             <Input type="number" class="size-12 text-center text-3xl font-semibold" bind:value={n6} onkeydown={onKeydown} onbeforeinput={onBeforeInput} oninput={onInput} onpaste={onPaste} />
         </div>
     </div>
-    <Button class="w-30">{i18n.t("receive.0.receive")}</Button>
+    <Button class="w-30" disabled={!n1 || !n2 || !n3 || !n4 || !n5 || !n6}>{i18n.t("receive.0.receive")}</Button>
 </PageLayout>

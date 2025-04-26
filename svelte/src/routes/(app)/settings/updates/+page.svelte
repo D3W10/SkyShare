@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { fade, slide } from "svelte/transition";
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
+    import { info } from "$lib/data/info.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -10,7 +12,7 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import { boxStyles, transitions } from "$lib/utils.svelte";
 
-    let updating = $state(0), progress = $state(0.5);
+    let updating = $state(0), progress = $state(0);
     let updatedAlert = $state(false), data = $state({ version: "", date: "" });
     let betaUpdates = $state(settings.betaUpdates), betaAlert = $state(false);
 
@@ -39,13 +41,17 @@
 </script>
 
 <div class="w-full py-2 flex flex-col space-y-6" in:transitions.pageIn out:transitions.pageOut>
-    <div class={twMerge(boxStyles.box, "p-5 items-center gap-x-4")}>
-        <Icon name="updates" class="size-10 text-slate-800" />
-        <div class="w-full flex flex-col justify-center gap-y-2">
-            <h3 class="font-semibold">SkyShare {data.version}</h3>
-            <ProgressBar class="mb-1" value={progress} />
+    {#if updating === 2}
+        <div class={twMerge(boxStyles.box, "p-5")} transition:slide={{ duration: 800 }}>
+            <div class="size-full flex items-center gap-x-4" transition:fade={{ duration: 400, delay: 700 }}>
+                <Icon name="updates" class="size-10 text-slate-800 dark:text-slate-300" />
+                <div class="w-full flex flex-col justify-center gap-y-2">
+                    <h3 class="font-semibold">{info.name} {data.version}</h3>
+                    <ProgressBar class="mb-1" value={progress} />
+                </div>
+            </div>
         </div>
-    </div>
+    {/if}
     <div class="w-full flex justify-between items-center gap-x-6">
         <div>
             <h3 class="mb-1 font-semibold">{i18n.t("settings.checkForUpdates")}</h3>

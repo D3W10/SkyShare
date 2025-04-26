@@ -37,6 +37,8 @@
             "chooseAddFiles": "Add files",
             "message": "Message",
             "messagePlaceholder": "Type a message...",
+            "size": "Total Size",
+            "quantity": "Total Quantity",
             "file_one": "file",
             "file_other": "files",
             "fileIcon": "File icon",

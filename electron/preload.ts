@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, webUtils } from "electron";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
@@ -167,6 +167,15 @@ export function getPlatform() {
  */
 export async function getFileIcon(path: string) {
     return await ipcRenderer.invoke("GetFileIcon", path);
+}
+
+/**
+ * Obtains the path to a file stored on the filesystem
+ * @param file The file to get the path from
+ * @returns The path to the file
+ */
+export function getFilePath(file: File) {
+    return webUtils.getPathForFile(file);
 }
 
 /**
@@ -691,6 +700,7 @@ contextBridge.exposeInMainWorld("app", {
     getAppInfo,
     getPlatform,
     getFileIcon,
+    getFilePath,
     isDirectory,
     showOpenDialog,
     showSaveDialog,
