@@ -9,27 +9,29 @@
         children?: Snippet;
         class?: string;
         type?: "normal" | "secondary" | "invisible";
+        dialog?: boolean;
     }
 
     let {
         children,
         class: className,
         type = "normal",
+        dialog = false,
         disabled,
         ...rest
     }: Props = $props();
 </script>
 
 {#if type === "normal"}
-    <button class={twMerge(boxStyles.basic, boxStyles.box, boxStyles.button, className)} disabled={disable.d || disabled} {...rest}>
+    <button class={twMerge(boxStyles.basic, boxStyles.box, boxStyles.button, className)} disabled={(!dialog && disable.d) || disabled} {...rest}>
         {@render children?.()}
     </button>
 {:else if type === "secondary"}
-    <button class={twMerge(boxStyles.basic, boxStyles.box, boxStyles.secondary, className)} disabled={disable.d || disabled} {...rest}>
+    <button class={twMerge(boxStyles.basic, boxStyles.box, boxStyles.secondary, className)} disabled={(!dialog && disable.d) || disabled} {...rest}>
         {@render children?.()}
     </button>
 {:else if type === "invisible"}
-    <button class={twMerge(boxStyles.basic, className)} disabled={disable.d || disabled} {...rest}>
+    <button class={twMerge(boxStyles.basic, className)} disabled={(!dialog && disable.d) || disabled} {...rest}>
         {@render children?.()}
     </button>
 {/if}

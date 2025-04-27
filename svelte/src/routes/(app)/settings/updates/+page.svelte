@@ -74,10 +74,10 @@
         <Switch bind:value={betaUpdates} />
     </div>
 </div>
-<Dialog bind:show={updatedAlert} title={i18n.t("modal.noUpdates")} cancelable={false}>
-    <p>{i18n.t("modal.noUpdatesDesc")}</p>
+<Dialog bind:show={updatedAlert} title={i18n.t("dialog.noUpdates")} cancelable={false}>
+    <p>{i18n.t("dialog.noUpdatesDesc")}</p>
 </Dialog>
-<Dialog bind:show={betaAlert} title={i18n.t("modal.betaUpdates")} onsubmit={() => settings.betaUpdates = true} oncancel={() => betaUpdates = false}>
-    <p>{i18n.t("modal.betaUpdatesDesc.0")}</p>
-    <p>{i18n.t("modal.betaUpdatesDesc.1")}</p>
+<Dialog bind:show={betaAlert} title={i18n.t("dialog.betaUpdates")} onsubmit={() => settings.betaUpdates = true} oncancel={() => betaUpdates = false}>
+    <p>{i18n.t("dialog.betaUpdatesDesc.0")}</p>
+    <p>{i18n.t("dialog.betaUpdatesDesc.1")}</p>
 </Dialog>

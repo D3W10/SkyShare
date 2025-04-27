@@ -1,10 +1,10 @@
 export const disable = $state({ d: false, loading: false });
 
-export function lock(loading: boolean = true) {
+export function setLock(loading: boolean = false) {
     disable.d = true;
     disable.loading = loading;
 }
 
-export function unlock() {
+export function setUnlock() {
     disable.d = disable.loading = false;
 }

@@ -15,15 +15,17 @@
         expanded = true
     }: Props = $props();
 
-    const accountSelected = $derived(page.url.pathname.startsWith(/\/\w+/g.exec("/login")![0]));
+    const accountSelected = $derived(page.url.pathname.startsWith("/account"));
 </script>
 
-<aside class="{expanded ? "w-64 min-w-64" : "w-20 min-w-20"} p-4 flex flex-col gap-y-1 transition-[width,min-width] duration-400">
-    <LinkItem class="px-2" href="/login" selected={accountSelected}>
-        <Icon class="size-10 {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"}" name="account" />
-        <p>{i18n.t("sidebar.login")}</p>
+<aside class="{expanded ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 transition-[width] duration-400">
+    <LinkItem class="{expanded ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href="/account/login" selected={accountSelected}>
+        <Icon class="{!expanded ? "w-5.5 min-w-5.5" : "w-10 min-w-10"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-all! duration-400" name="account" />
+        {#if expanded}
+            <p in:fade={{ duration: 100, delay: 100 }} out:fade={{ duration: 100 }}>{i18n.t("sidebar.login")}</p>
+        {/if}
     </LinkItem>
-    <hr class="h-0.5 mx-0.5 my-2 bg-slate-300 dark:bg-slate-900 border-0 rounded-full" />
+    <hr class="h-0.5 mx-0.5 my-2 bg-slate-950/10 dark:bg-slate-50/10 border-0 rounded-full" />
     {@render item(i18n.t("sidebar.home"), "home", "/")}
     {@render item(i18n.t("sidebar.send"), "send", "/send")}
     {@render item(i18n.t("sidebar.receive"), "receive", "/receive")}

@@ -1,6 +1,7 @@
 export type IconT =
     "about" |
     "account" |
+    "account64" |
     "add" |
     "appearance" |
     "arrowRight" |

@@ -1,12 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { fly } from "svelte/transition";
+    import { twMerge } from "tailwind-merge";
     import { app } from "$lib/data/app.svelte";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
     import { disable } from "$lib/data/disable.svelte";
+    import { setError } from "$lib/data/error.svelte";
     import Icon from "./Icon.svelte";
-    import Dialog from "./Dialog.svelte";
+    import { boxStyles } from "$lib/utils.svelte";
 
     interface Props {
         sidebar?: boolean;
@@ -16,7 +17,7 @@
         sidebar = $bindable(true)
     }: Props = $props();
 
-    let hasFocus = $state(true), showModal = $state(false), isOffline = $state(false);
+    let hasFocus = $state(true), isOffline = $state(false);
     let logoClick = 0, logoClickTimeout: NodeJS.Timeout;
     const platform = app.getPlatform();
 
@@ -49,7 +50,7 @@
         if (!disable.d)
             app.closeWindow();
         else
-            showModal = true;
+            setError("disabled");
     }
 
     function offlineAction() {
@@ -81,17 +82,17 @@
             <div class="w-14"></div>
         {/if}
         <div class="ml-1 flex gap-x-1.5" style:-webkit-app-region="no-drag">
-            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default transition duration-200" onclick={() => sidebar = !sidebar}>
+            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 enabled:cursor-pointer transition duration-200" onclick={() => sidebar = !sidebar}>
                 <Icon name="sidebar" />
             </button>
-            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-default transition duration-200" disabled>
+            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 enabled:cursor-pointer transition duration-200" disabled>
                 <Icon name="back" />
             </button>
         </div>
     </div>
     <div class="h-fit flex" style:-webkit-app-region="no-drag">
         {#if isOffline}
-            <div class="px-2 py-1 flex relative bg-white dark:bg-slate-900 rounded-lg ring-1 ring-slate-400/10 dark:ring-white/10 shadow-sm before:absolute before:inset-0 before:rounded-md before:border-b-3 before:border-slate-100 dark:before:border-slate-800" transition:fly={platform !== "darwin" ? { x: 10 } : { x: -10 }}>
+            <div class={twMerge(boxStyles.box, "px-2 py-1 rounded-lg")}>
                 <Icon name="wifiOff" class="w-5" />
                 <span class="ml-2.5 text-sm font-medium">{i18n.t("common.offline")}</span>
             </div>
@@ -109,6 +110,3 @@
         {/if}
     </div>
 </div>
-<Dialog bind:show={showModal} title={i18n.t("modal.disabled")} cancelable={false}>
-    <p>{i18n.t("modal.disabledDesc")}</p>
-</Dialog>

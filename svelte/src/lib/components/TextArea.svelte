@@ -8,7 +8,7 @@
     interface Props extends Omit<HTMLTextareaAttributes, "class" | "value"> {
         children?: Snippet;
         class?: string;
-        value: any;
+        value?: any;
     }
 
     let {
@@ -21,4 +21,4 @@
     }: Props = $props();
 </script>
 
-<textarea class={twMerge(boxStyles.basic, boxStyles.pane, "px-2.5 py-1 placeholder:text-slate-500 rounded-lg", className)} bind:value disabled={disable.d || disabled} {...rest}></textarea>
+<textarea class={twMerge(boxStyles.basic, boxStyles.pane, "px-2.5 py-1 disabled:text-slate-500 placeholder:text-slate-400 dark:placeholder:text-slate-600 rounded-lg transition-colors duration-200", className)} bind:value disabled={disable.d || disabled} {...rest}></textarea>

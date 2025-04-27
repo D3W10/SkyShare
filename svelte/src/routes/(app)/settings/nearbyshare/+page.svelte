@@ -5,8 +5,7 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import { transitions } from "$lib/utils.svelte";
 
-    let nearbyShare = $state(settings.nearbyShare);
-    let nearbyShareAlert = $state(false);
+    let nearbyShare = $state(settings.nearbyShare), nearbyShareAlert = $state(false);
 
     $effect(() => {
         if (settings.nearbyShare === nearbyShare)
@@ -28,8 +27,8 @@
         <Switch bind:value={nearbyShare} />
     </div>
 </div>
-<Dialog bind:show={nearbyShareAlert} title={i18n.t("modal.nearbyShare")} onsubmit={() => settings.nearbyShare = true} oncancel={() => nearbyShare = false}>
-    <p>{i18n.t("modal.nearbyShareDesc.0")}</p>
-    <p>{i18n.t("modal.nearbyShareDesc.1")}</p>
-    <p>{i18n.t("modal.nearbyShareDesc.2")}</p>
+<Dialog bind:show={nearbyShareAlert} title={i18n.t("dialog.nearbyShare")} onsubmit={() => settings.nearbyShare = true} oncancel={() => nearbyShare = false}>
+    <p>{i18n.t("dialog.nearbyShareDesc.0")}</p>
+    <p>{i18n.t("dialog.nearbyShareDesc.1")}</p>
+    <p>{i18n.t("dialog.nearbyShareDesc.2")}</p>
 </Dialog>

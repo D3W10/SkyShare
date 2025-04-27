@@ -12,7 +12,7 @@
 </script>
 
 <PageLayout title={i18n.t("settings.title")} class="mr-8 flex gap-x-8">
-    <div class={twMerge(boxStyles.pane, "w-56 min-w-56 h-full p-2 flex-col gap-y-1 rounded-2xl")}>
+    <div class={twMerge(boxStyles.pane, "w-56 h-full p-2 flex-col gap-y-1 rounded-2xl")}>
         <LinkItem href="/settings/appearance" icon="appearance" selected={currentPage.startsWith("appearance")}>
             <p>{i18n.t("settings.appearance")}</p>
         </LinkItem>
@@ -29,7 +29,7 @@
             <p>{i18n.t("settings.about")}</p>
         </LinkItem>
     </div>
-    <div class="w-full grid *:col-[1] *:row-[1]">
+    <div class="grid flex-1 *:col-[1] *:row-[1]">
         {@render children()}
     </div>
 </PageLayout>

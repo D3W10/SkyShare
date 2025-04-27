@@ -17,6 +17,6 @@
         <Button class="w-32" onclick={() => resetAlert = true}>{i18n.t("settings.resetButton")}</Button>
     </div>
 </div>
-<Dialog bind:show={resetAlert} title={i18n.t("modal.resetSettings")} onsubmit={resetSettings}>
-    <p>{i18n.t("modal.resetSettingsDesc")}</p>
+<Dialog bind:show={resetAlert} title={i18n.t("dialog.resetSettings")} onsubmit={resetSettings}>
+    <p>{i18n.t("dialog.resetSettingsDesc")}</p>
 </Dialog>

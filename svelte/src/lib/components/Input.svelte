@@ -8,7 +8,7 @@
     interface Props extends Omit<HTMLInputAttributes, "class" | "value"> {
         children?: Snippet;
         class?: string;
-        value: any;
+        value?: any;
     }
 
     let {
@@ -31,4 +31,4 @@
     }
 </script>
 
-<input class={twMerge(boxStyles.basic, boxStyles.pane, "px-2.5 py-1 placeholder:text-slate-500 rounded-lg", className)} {type} bind:value disabled={disable.d || disabled} onbeforeinput={onBeforeInput} {...rest} />
+<input class={twMerge(boxStyles.basic, boxStyles.pane, "px-2.5 py-1 disabled:text-slate-500 placeholder:text-slate-400 dark:placeholder:text-slate-600 rounded-lg transition-colors duration-200", className)} {type} bind:value disabled={disable.d || disabled} onbeforeinput={onBeforeInput} {...rest} />
