@@ -6,6 +6,7 @@ import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
+import { defaultStore } from "./lib/constants/defaultStore.const";
 import { collection, db, doc, getDoc, onSnapshot, type Unsubscribe } from "./lib/firebase.js";
 import type { IStore } from "./lib/interfaces/Store.interface";
 
@@ -19,20 +20,7 @@ const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package
 const logger = new Logger("Main", "blue"), pLogger = new Logger("Prld", "cyan"), rLogger = new Logger("Rndr", "green");
 
 const appConfig = new Store<IStore>({
-    defaults: {
-        changelog: null,
-        settings: {
-            theme: "light",
-            language: "en-US",
-            nearbyShare: true,
-            autoUpdate: true,
-            betaUpdates: false
-        },
-        account: {
-            username: null,
-            password: null
-        }
-    },
+    defaults: defaultStore,
     encryptionKey: "SkyShare"
 });
 
@@ -159,6 +147,10 @@ function uriHandler(argv: string[]) {
     window.webContents.send("UriHandler", args.filter(e => e));
 }
 
+function getValueFromObj(obj: any, path: string) {
+    return path.split(".").reduce((acc, key) => acc && acc[key], obj);
+}
+
 ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
 
 ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
@@ -234,7 +226,15 @@ ipcMain.on("OpenMain", () => {
     window.webContents.send("WindowOpen");
 });
 
-ipcMain.on("GetSetting", (event, key: string) => event.returnValue = appConfig.get(key));
+ipcMain.on("GetSetting", (event, key: string) => {
+    const defaultVal = getValueFromObj(defaultStore, key);
+    const val = appConfig.get(key, defaultVal);
+
+    if (val === null || val === undefined || typeof val !== "object")
+        event.returnValue = val;
+    else
+        event.returnValue = Object.assign(defaultVal, val);
+});
 
 ipcMain.on("SetSetting", (_event, key: string, value: any) => appConfig.set(key, value));
 

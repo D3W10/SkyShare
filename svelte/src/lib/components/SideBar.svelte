@@ -8,20 +8,20 @@
     import type { IconT } from "$lib/models/IconT.type";
 
     interface Props {
-        expanded?: boolean;
+        collapsed?: boolean;
     }
 
     let {
-        expanded = true
+        collapsed = false
     }: Props = $props();
 
     const accountSelected = $derived(page.url.pathname.startsWith("/account"));
 </script>
 
-<aside class="{expanded ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 transition-[width] duration-400">
-    <LinkItem class="{expanded ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href="/account/login" selected={accountSelected}>
-        <Icon class="{!expanded ? "w-5.5 min-w-5.5" : "w-10 min-w-10"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-all! duration-400" name="account" />
-        {#if expanded}
+<aside class="{!collapsed ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 transition-[width] duration-400">
+    <LinkItem class="{!collapsed ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href="/account/login" selected={accountSelected}>
+        <Icon class="{!collapsed ? "w-10 min-w-10" : "w-5.5 min-w-5.5"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-all! duration-400" name="account" />
+        {#if !collapsed}
             <p in:fade={{ duration: 100, delay: 100 }} out:fade={{ duration: 100 }}>{i18n.t("sidebar.login")}</p>
         {/if}
     </LinkItem>
@@ -33,8 +33,8 @@
 </aside>
 
 {#snippet item(name: string, icon: IconT, url: string)}
-    <LinkItem class={!expanded ? "h-10 px-3" : ""} href={url} {icon} selected={url !== "/" && page.url.pathname.startsWith(/\/\w+/g.exec(url)![0]) || page.url.pathname === url}>
-        {#if expanded}
+    <LinkItem class={collapsed ? "h-10 px-3" : ""} href={url} {icon} selected={url !== "/" && page.url.pathname.startsWith(/\/\w+/g.exec(url)![0]) || page.url.pathname === url}>
+        {#if !collapsed}
             <p in:fade={{ duration: 100, delay: 100 }} out:fade={{ duration: 100 }}>{name}</p>
         {/if}
     </LinkItem>

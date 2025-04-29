@@ -57,7 +57,7 @@
                 break;
             }
             else if (totalSize + file.size > MAX_SIZE) {
-                setError("sizeLimitExceeded", { amount: app.fileSizeFormat(MAX_SIZE)  });
+                setError("sizeLimitExceeded", { amount: app.formatFileSize(MAX_SIZE, 0)  });
                 break;
             }
 
@@ -95,7 +95,7 @@
                                 {/if}
                                 <div class="ml-2 flex flex-col gap-y-0">
                                     <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
-                                    <p class="text-xs text-slate-500">{app.fileSizeFormat(file.size)}</p>
+                                    <p class="text-xs text-slate-500">{app.formatFileSize(file.size)}</p>
                                 </div>
                                 {#if !disable.d}
                                     <div class="w-0 group-hover:w-16 absolute top-0 bottom-0 right-0 bg-gradient-to-l from-slate-50 dark:from-slate-900 from-75% rounded-r-2xl opacity-0 group-hover:opacity-100 transition-[width,opacity]"></div>
@@ -126,7 +126,7 @@
                     <h3 class="mb-2 font-semibold">{i18n.t("send.0.size")}</h3>
                     <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
                         {#key files.length}
-                            <p transition:blur={{ duration: 500 }}>{app.fileSizeFormat(files.reduce((previous, current) => previous + current.size, 0))}</p>
+                            <p transition:blur={{ duration: 500 }}>{app.formatFileSize(files.reduce((previous, current) => previous + current.size, 0))}</p>
                         {/key}
                     </div>
                 </div>

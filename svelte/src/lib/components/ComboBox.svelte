@@ -64,7 +64,7 @@
 </script>
 
 <div class="relative" use:outClick onoutclick={() => { if (open) open = !open; }}>
-    <Button type="secondary" class={twMerge("pl-3 pr-2.5 justify-between items-center gap-x-1", className)} {disabled} onclick={() => open = !open}>
+    <Button type="secondary" class={twMerge("pl-3 pr-2.5 justify-between items-center gap-x-1 disabled:opacity-50 transition-opacity duration-200", className)} {disabled} onclick={() => open = !open}>
         <p class="text-sm text-left text-ellipsis whitespace-nowrap overflow-hidden">{items.find(i => i.value === value) ? items.find(i => i.value === value)!.text : items[0].text}</p>
         <Icon name="arrowRight" class="size-4 min-w-4 {!open ? "rotate-90" : "-rotate-90"} transition-transform duration-200 ease-out" />
     </Button>

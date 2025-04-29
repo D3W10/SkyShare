@@ -7,6 +7,7 @@ export interface IStore {
 export interface StoreSettings {
     theme: "light" | "dark";
     language: string;
+    sidebarCollapsed: boolean;
     nearbyShare: boolean;
     autoUpdate: boolean;
     betaUpdates: boolean;
