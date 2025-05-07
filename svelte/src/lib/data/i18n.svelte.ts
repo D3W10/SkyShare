@@ -1,9 +1,9 @@
-import i18next, { type TFunction } from "i18next";
+import i18next from "i18next";
 
 import enUS from "../translations/en-US.json";
 import ptPT from "../translations/pt-PT.json";
 
-await i18next.init({
+i18next.init({
     lng: "en-US",
     resources: {
         "en-US": { translation: enUS },
