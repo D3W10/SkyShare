@@ -56,8 +56,8 @@ async function createWindow() {
     });
 
     window.loadURL(!isDev ? `file:///${path.join(__dirname, "www", "index.html")}` : "http://localhost:5173/");
-    window.once("ready-to-show", () => splash.webContents.send("WindowReady"));
-    if (process.platform == "darwin") {
+
+    if (process.platform === "darwin") {
         window.on("close", e => {
             if (closeLock) {
                 e.preventDefault();
@@ -66,11 +66,13 @@ async function createWindow() {
         });
     }
 
+    ipcMain.once("WindowReady", () => splash.webContents.send("WindowReady"));
+
     window.webContents.setWindowOpenHandler(({ url }) => {
         try {
             let { protocol } = new URL(url);
 
-            if (protocol == "http:" || protocol == "https:") {
+            if (protocol === "http:" || protocol === "https:") {
                 logger.log(`Opening ${url}`);
                 shell.openExternal(url);
                 return { action: "deny" };
@@ -245,7 +247,8 @@ ipcMain.on("GetAppInfo", e => {
         name: packageData.productName,
         version: packageData.version,
         homepage: packageData.homepage,
-        api: !isDev ? "https://skyshare.vercel.app/api/v1/" : "http://localhost:5174/api/v1/"
+        api: !isDev ? packageData.data.server : "http://localhost:5174/api/v1/",
+        cliendId: packageData.data.clientId
     }
 });
 

@@ -1,10 +1,10 @@
 <script lang="ts">
-    import "../app.css";
     import { tick } from "svelte";
     import { app } from "$lib/data/app.svelte";
     import { changeLanguage } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import type { StoreSettings } from "$electron/lib/interfaces/Store.interface";
+    import "../app.css";
 
     let { children } = $props();
 

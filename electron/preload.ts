@@ -12,7 +12,7 @@ import type { CallbackT } from "./lib/types/CallbackT.type";
 
 let wReady = false, wCompressed = false, wOpen = false, updateProgress: (percent: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
-const handlers: Record<AppEventT, CallbackT<AppEventT>[]> = {
+const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> = {
     ready: [],
     open: [],
     close: [],
@@ -113,6 +113,13 @@ export function compressWindow() {
 }
 
 /**
+ * Notifies the splash window that the main window is ready
+ */
+export function winReady() {
+    ipcRenderer.send("WindowReady");
+}
+
+/**
  * Closes the splash window and reveals the main one
  */
 export function openMain() {
@@ -191,13 +198,15 @@ export async function isDirectory(path: string) {
  * Adds a listener for various in-app events
  * @param name The name of the event to bind to
  * @param callback The callback to bind to the event
+ * @param options An object containing the options for the event
+ * @param options.once A boolean indicating whether the event should be called only once
  */
-export function addEventListener<T extends AppEventT>(name: T, callback: CallbackT<T>) {
-    handlers[name].push(callback);
+export function addEventListener<T extends AppEventT>(name: T, callback: CallbackT<T>, { once = false } = {}) {
+    handlers[name].push({ f: callback, once });
 
     if (name === "ready" && wReady)
         (callback as CallbackT<"ready">)();
-    else if (name == "open" && wOpen)
+    else if (name === "open" && wOpen)
         (callback as CallbackT<"open">)();
 }
 
@@ -207,7 +216,8 @@ export function addEventListener<T extends AppEventT>(name: T, callback: Callbac
  * @param args Aditional arguments to pass to the callback
  */
 export function dispatch<T extends AppEventT>(name: T, ...args: Parameters<CallbackT<T>>) {
-    handlers[name].forEach(c => (c as Function)(...args));
+    handlers[name].forEach(c => (c.f as Function)(...args));
+    handlers[name] = handlers[name].filter(c => !c.once);
 }
 
 /**
@@ -675,7 +685,7 @@ ipcRenderer.on("WindowOpen", () => {
 
 ipcRenderer.on("WindowClose", () => dispatch("close"));
 
-ipcRenderer.on("LoginRequest", async (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", await loginHandler(username, password)));
+ipcRenderer.on("LoginRequest", (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", dispatch("login", username, password)));
 
 ipcRenderer.on("UriHandler", (_, args: string[]) => dispatch("uri", args));
 
@@ -687,6 +697,7 @@ contextBridge.exposeInMainWorld("app", {
     closeWindow,
     minimizeWindow,
     compressWindow,
+    winReady,
     openMain,
     getSetting,
     setSetting,

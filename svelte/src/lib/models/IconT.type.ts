@@ -1,14 +1,15 @@
 export type IconT =
     "about" |
     "account" |
-    "account64" |
     "add" |
     "appearance" |
     "arrowRight" |
     "back" |
     "closeWindow" |
     "file" |
+    "history" |
     "home" |
+    "identification" |
     "minimizeWindow" |
     "nearbyShare" |
     "receive" |
@@ -17,6 +18,7 @@ export type IconT =
     "send" |
     "settings" |
     "sidebar" |
+    "sync" |
     "updates" |
     "upload" |
     "wifiOff";

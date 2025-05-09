@@ -66,7 +66,7 @@
     }
 
     function onReady() {
-        app.openMain();
+        app.addEventListener("ready", () => app.openMain(), { once: true });
     }
 </script>
 

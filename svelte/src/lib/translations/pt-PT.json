@@ -95,11 +95,14 @@
     "login": [
         {
             "title" : "Iniciar Sessão",
-            "username": "Nome de Utilizador",
-            "password": "Palavra-Passe",
-            "recovery": "Esqueci-me da minha Palavra-Passe",
-            "signup": "Criar conta",
-            "login": "Iniciar Sessão"
+            "history": "Histórico de Transferências",
+            "historyDesc": "Todas as suas transferências utilizando a aplicação serão guardadas num histório para fácil acesso e gestão",
+            "sync": "Sincronização",
+            "syncDesc": "O seu histórico de transferências será sincronizado por todos os dispositivos que utilizam a sua conta de forma a mantê-lo atualizado",
+            "identification": "Identificação no envio",
+            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será apresentado com a transferência (deve ser ativado nas definições da conta)",
+            "login": "Iniciar Sessão",
+            "signup": "Criar conta"
         },
         {
             "title": "Esqueci-me da minha Palavra-Passe",
@@ -132,28 +135,6 @@
             "title": "Personalizar conta",
             "photo": "Foto de Perfil",
             "photoChoose": "Escolher uma foto"
-        }
-    ],
-    "welcome": [
-        {
-            "title": "Bem-vindo!",
-            "intro" : [
-                "A sua conta foi criada com sucesso!",
-                "Agora vamos ver o que a sua nova conta SkyShare tem para oferecer e algumas dicas para melhorar a sua experiência."
-            ]
-        },
-        {
-            "title": "Novas funcionalidades",
-            "history": "Histórico de Transferências",
-            "historyDesc": "Todos os ficheiros que enviar e receber com o SkyShare serão guardados no histórico por um mês",
-            "sync": "Sincronização",
-            "syncDesc": "O SkyShare vai sincronizar o seu histórico por todos os dispositivos que utilizam a sua conta para ficar atualizado",
-            "identification": "Identificação no envio",
-            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será exibido junto dos ficheiros (pode ser ligado nas definições da conta)"
-        },
-        {
-            "welcome": "Bem-vindo",
-            "continue": "Continuar"
         }
     ],
     "account": [

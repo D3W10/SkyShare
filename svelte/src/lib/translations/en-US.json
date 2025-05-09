@@ -95,11 +95,14 @@
     "login": [
         {
             "title" : "Log In",
-            "username": "Username",
-            "password": "Password",
-            "recovery": "Forgot my password",
-            "signup": "Create account",
-            "login": "Log In"
+            "history": "Transfer history",
+            "historyDesc": "All your transfers using the app will be saved on a history for easy access and management",
+            "sync": "History sync",
+            "syncDesc": "Your transfer history will be synced across all devices using your account to keep it up to date",
+            "identification": "Sender ID",
+            "identificationDesc": "When people receive files from you, your name will be displayed along the transfer (must be enabled on the account settings)",
+            "login": "Log In",
+            "signup": "Create account"
         },
         {
             "title": "Forgot my password",
@@ -132,28 +135,6 @@
             "title": "Personalize account",
             "photo": "Profile Picture",
             "photoChoose": "Choose a photo"
-        }
-    ],
-    "welcome": [
-        {
-            "title": "Welcome!",
-            "intro" : [
-                "You're account was created successfully!",
-                "Let's check out what your new SkyShare account has to offer and some tips to improve your experience."
-            ]
-        },
-        {
-            "title": "New features",
-            "history": "Transfer history",
-            "historyDesc": "All the files you send and receive with SkyShare will be saved on the history for one month",
-            "sync": "Syncronization",
-            "syncDesc": "SkyShare will sync your transfer history across all the devices using your account to always stay up to date",
-            "identification": "Identification on send",
-            "identificationDesc": "When people receive files from you, your name will be displayed next to the files (can be enabled on the account settings)"
-        },
-        {
-            "welcome": "Welcome",
-            "continue": "Continue"
         }
     ],
     "account": [
