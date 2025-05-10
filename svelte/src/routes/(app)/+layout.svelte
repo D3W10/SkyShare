@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
     import { i18n } from "$lib/data/i18n.svelte";
+    import { app } from "$lib/data/app.svelte";
     import { disable } from "$lib/data/disable.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import { error, hideError } from "$lib/data/error.svelte";
@@ -19,6 +21,8 @@
         page.url.pathname.startsWith("/account") ? ["--color-account", "--color-account-light", "--color-account-dark"] :
         ["--color-home", "--color-home-light", "--color-home-dark"]
     );
+
+    onMount(() => app.winReady());
 </script>
 
 <Framebar bind:sidebar={settings.sidebarCollapsed} />

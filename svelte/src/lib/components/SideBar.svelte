@@ -2,6 +2,7 @@
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
     import { i18n } from "$lib/data/i18n.svelte";
+    import { startup } from "$lib/data/startup.svelte";
     import Icon from "./Icon.svelte";
     import LinkItem from "./LinkItem.svelte";
     import { settingsPath } from "$lib/utils.svelte";
@@ -18,7 +19,7 @@
     const accountSelected = $derived(page.url.pathname.startsWith("/account"));
 </script>
 
-<aside class="{!collapsed ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 transition-[width] duration-400">
+<aside class="{!collapsed ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 {!startup.s ? "transition-[width] duration-400" : ""}">
     <LinkItem class="{!collapsed ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href="/account/login" selected={accountSelected}>
         <Icon class="{!collapsed ? "w-10 min-w-10" : "w-5.5 min-w-5.5"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-all! duration-400" name="account" />
         {#if !collapsed}
