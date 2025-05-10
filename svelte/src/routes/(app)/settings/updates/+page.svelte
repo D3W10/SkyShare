@@ -26,7 +26,7 @@
                 updatedAlert = true;
             else
                 data = { version, date };
-        }, p => progress = p);
+        }, p => progress = p / 100);
     }
 
     $effect(() => {

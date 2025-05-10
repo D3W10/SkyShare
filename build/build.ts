@@ -1,7 +1,6 @@
-/**
- * @type {import("electron-builder").Configuration)}
- */
-module.exports = {
+import { Configuration } from "electron-builder";
+
+export default {
     appId: "com.d3w10.skyshare",
     compression: "maximum",
     generateUpdatesFilesForAllChannels: true,
@@ -27,6 +26,7 @@ module.exports = {
     publish: [
         {
             provider: "github",
+            channel: "stable",
             owner: "D3W10",
             repo: "SkyShare"
         }
@@ -82,4 +82,4 @@ module.exports = {
             "skyshare"
         ]
     }
-};
+} satisfies Configuration;

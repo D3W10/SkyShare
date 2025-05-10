@@ -14,7 +14,7 @@
         loggingIn: () => i18n.t("splash.loggingIn")
     }
 
-    let status = $state<keyof typeof states>("starting"), dlPercent = $state(0.5);
+    let status = $state<keyof typeof states>("starting"), percent = $state(0.5);
 
     onMount(async () => {
         await checkConnection();
@@ -41,7 +41,7 @@
                         status = "updating";
                     else
                         resolve();
-                }, percent => dlPercent = percent);
+                }, p => percent = p / 100);
             });
         }
     }
@@ -74,7 +74,7 @@
     <div class="h-8 fixed top-0 left-0 right-0" style="-webkit-app-region: drag;"></div>
     {#if status === "updating"}
         <div class="w-1/3 fixed top-4" transition:fade={{ duration: 400 }}>
-            <ProgressBar class="h-1" bind:value={dlPercent} />
+            <ProgressBar class="h-1" bind:value={percent} />
         </div>
     {/if}
     <div class="size-full flex flex-col justify-between p-6">

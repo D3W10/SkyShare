@@ -1,5 +1,6 @@
 export interface IStore {
     changelog: string | null;
+    updateTo: string;
     settings: StoreSettings;
     account: StoreAccount;
 }

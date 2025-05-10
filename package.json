@@ -15,10 +15,10 @@
         "svelte:dev": "cd svelte && bun run dev",
         "svelte:build": "cd svelte && bun run build",
         "compile": "tsc",
-        "out:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.js --publish never",
-        "out:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.js --publish never",
-        "publish:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.js --publish always",
-        "publish:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.js --publish always"
+        "out:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.ts --publish never",
+        "out:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.ts --publish never",
+        "publish:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.ts --publish always",
+        "publish:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.ts --publish always"
     },
     "main": "dist/index.js",
     "repository": {

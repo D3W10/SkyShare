@@ -1,0 +1,90 @@
+@import "tailwindcss";
+@import "../app.css";
+
+.md-box > :first-child {
+    @apply mt-0!;
+}
+
+.md-box > :last-child {
+    @apply mb-0!;
+}
+
+.md-box h1, .md-box h2, .md-box h3, .md-box h4, .md-box h5, .md-box h6 {
+    @apply mt-6 mb-4 font-semibold leading-5;
+}
+
+.md-box h1 {
+    @apply pb-1 text-3xl border-b-2 border-slate-900/10 dark:border-slate-100/10;
+}
+
+.md-box h2 {
+    @apply pb-3 text-2xl border-b-2 border-slate-900/10 dark:border-slate-100/10;
+}
+
+.md-box h3 {
+    @apply text-xl;
+}
+
+.md-box h4 {
+    @apply text-base;
+}
+
+.md-box h5 {
+    @apply text-sm;
+}
+
+.md-box h6 {
+    @apply text-[0.85em] text-slate-600 dark:text-slate-400;
+}
+
+.md-box p, .md-box blockquote, .md-box ul, .md-box ol, .md-box h5, .md-box h6 {
+    @apply mt-0 mb-4;
+}
+
+.md-box a {
+    @apply text-accent hover:opacity-50 font-semibold transition-opacity duration-200;
+}
+
+.md-box ul, .md-box ol {
+    @apply pl-6;
+}
+
+.md-box ul ul, .md-box ul ol, .md-box ol ol, .md-box ol ul {
+    @apply mt-0 mb-0;
+}
+
+.md-box ul {
+    @apply list-disc;
+}
+
+.md-box ul ul {
+    @apply list-[circle];
+}
+
+.md-box ul ul ul {
+    @apply list-[square];
+}
+
+.md-box ol {
+    @apply list-decimal;
+}
+
+.md-box li + li {
+    @apply mt-1;
+}
+
+.md-box hr {
+    @apply h-1 p-0 mx-0 my-6 bg-slate-900/10 dark:bg-slate-100/10 rounded-full border-0;
+}
+
+.md-box blockquote {
+    @apply px-4 py-0 text-slate-600 dark:text-slate-400 border-l-4 border-slate-900/10 dark:border-slate-100/10;
+}
+
+.md-box pre {
+    @apply mt-1 mb-4 px-4 py-3 bg-slate-300 dark:bg-slate-800 rounded-lg overflow-auto;
+}
+
+.md-box :not(pre) > code {
+    @apply py-1 px-1.5 text-sm bg-slate-300 dark:bg-slate-800 rounded-md whitespace-break-spaces;
+}

@@ -2,6 +2,7 @@ import { IStore } from "../interfaces/Store.interface";
 
 export const defaultStore = {
     changelog: null,
+    updateTo: "",
     settings: {
         theme: "light",
         language: "en-US",
