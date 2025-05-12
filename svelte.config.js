@@ -8,8 +8,8 @@ const config = {
             assets: "../dist/www"
         }),
         alias: {
-            "$electron": "../electron",
-            "$electron/*": "../electron/*"
+            "$electron": "electron",
+            "$electron/*": "electron/*"
         }
     },
     compilerOptions: {

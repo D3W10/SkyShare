@@ -99,11 +99,11 @@
         {/if}
         {#if platform !== "darwin"}
             <div class="flex items-center ml-4 mr-1.5 gap-x-2 group">
-                <div class="size-3.25 bg-foreground/10 rounded-full inset-ring-1 inset-ring-slate-900/10"></div>
-                <button class="size-3.25 flex justify-center items-center {hasFocus ? "bg-amber-500" : "bg-foreground/10 hover:bg-amber-500"} active:bg-amber-600 rounded-full inset-ring-1 inset-ring-slate-900/10 focus-visible:outline-amber-500" aria-label="Minimize" onclick={onYellowButtonClick}>
+                <div class="size-3.25 bg-foreground/15 rounded-full inset-ring-1 inset-ring-slate-900/10"></div>
+                <button class="size-3.25 flex justify-center items-center {hasFocus ? "bg-amber-500" : "bg-foreground/15 group-hover:bg-amber-500"} active:bg-amber-600 rounded-full inset-ring-1 inset-ring-slate-900/10 focus-visible:outline-amber-500" aria-label="Minimize" onclick={onYellowButtonClick}>
                     <Icon name="minimizeWindow" class="size-full hidden group-hover:block text-amber-900" />
                 </button>
-                <button class="size-3.25 flex justify-center items-center {hasFocus ? "bg-red-500" : "bg-foreground/10 hover:bg-red-500"} active:bg-red-600 rounded-full inset-ring-1 inset-ring-slate-900/10 focus-visible:outline-red-500" aria-label="Close" onclick={onRedButtonClick}>
+                <button class="size-3.25 flex justify-center items-center {hasFocus ? "bg-red-500" : "bg-foreground/15 group-hover:bg-red-500"} active:bg-red-600 rounded-full inset-ring-1 inset-ring-slate-900/10 focus-visible:outline-red-500" aria-label="Close" onclick={onRedButtonClick}>
                     <Icon name="closeWindow" class="size-full hidden group-hover:block text-red-900" />
                 </button>
             </div>

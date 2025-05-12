@@ -7,13 +7,9 @@ import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
 import { defaultStore } from "./lib/constants/defaultStore.const";
-import { collection, db, doc, getDoc, onSnapshot, type Unsubscribe } from "./lib/firebase.js";
 import type { IStore } from "./lib/interfaces/Store.interface";
 
-require("electron-reload")(__dirname);
-
 let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData = {};
-let iceUnsubscribe: Unsubscribe | undefined;
 const winWidth = 1000, winHeight = 600;
 const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
@@ -259,7 +255,7 @@ ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(
 ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
 
 ipcMain.on("WaitForAnswer", async (_, code: string) => {
-    const docRef = doc(db, "channels", code);
+    /* const docRef = doc(db, "channels", code);
 
     if (!(await getDoc(docRef)).exists())
         return;
@@ -271,17 +267,17 @@ ipcMain.on("WaitForAnswer", async (_, code: string) => {
             window.webContents.send("WaitForAnswerFulfilled", data);
             unsubscribe();
         }
-    });
+    }); */
 });
 
 ipcMain.handle("CheckTransfer", async (_, code: string) => {
-    const transferDoc = await getDoc(doc(db, "channels", code));
+    /* const transferDoc = await getDoc(doc(db, "channels", code));
 
-    return transferDoc.exists() ? transferDoc.data() : null;
+    return transferDoc.exists() ? transferDoc.data() : null; */
 });
 
 ipcMain.on("ListenForIce", (_, code: string) => {
-    const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
+    /* const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
 
     iceUnsubscribe = onSnapshot(iceCandidatesCol, snapshot => {
         snapshot.docChanges().forEach(async change => {
@@ -292,10 +288,10 @@ ipcMain.on("ListenForIce", (_, code: string) => {
                 window.webContents.send("IceReceived", data);
             }
         });
-    });
+    }); */
 });
 
-ipcMain.on("StopListeningForIce", () => iceUnsubscribe!());
+/* ipcMain.on("StopListeningForIce", () => iceUnsubscribe!()); */
 
 ipcMain.on("EncodePassword", (e, password: string) => e.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 

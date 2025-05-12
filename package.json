@@ -8,19 +8,21 @@
         "url": "https://d3w10.netlify.app"
     },
     "scripts": {
-        "dev": "concurrently \"bun run svelte:dev\" \"bun run nodemon\"",
-        "dev-m": "concurrently \"bun run svelte:dev\" \"bun run nodemon\" \"bun run nodemon\"",
-        "start": "bun run compile && electron .",
+        "dev": "concurrently \"bun run vite:dev\" \"bun run nodemon\"",
+        "start": "concurrently \"bun run vite:dev\" \"bun run electron\"",
+        "electron": "bun run compile && electron .",
         "nodemon": "nodemon",
-        "svelte:dev": "cd svelte && bun run dev",
-        "svelte:build": "cd svelte && bun run build",
-        "compile": "tsc",
-        "out:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.ts --publish never",
-        "out:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.ts --publish never",
-        "publish:win": "bun run svelte:build && bun run compile && electron-builder build --win --config ./build/build.ts --publish always",
-        "publish:mac": "bun run svelte:build && bun run compile && electron-builder build --mac --config ./build/build.ts --publish always"
+        "vite:dev": "vite dev",
+        "vite:build": "vite build",
+        "vite:preview": "vite preview",
+        "compile": "tsc --project electron",
+        "out:win": "bun run vite:build && bun run compile && electron-builder build --win --config ./build/build.ts --publish never",
+        "out:mac": "bun run vite:build && bun run compile && electron-builder build --mac --config ./build/build.ts --publish never",
+        "publish:win": "bun run vite:build && bun run compile && electron-builder build --win --config ./build/build.ts --publish always",
+        "publish:mac": "bun run vite:build && bun run compile && electron-builder build --mac --config ./build/build.ts --publish always"
     },
     "main": "dist/index.js",
+    "type": "module",
     "repository": {
         "type": "git",
         "url": "https://github.com/D3W10/SkyShare"
@@ -32,19 +34,28 @@
         "clientId": "ec6b641dde69f4cb08c1"
     },
     "dependencies": {
+        "@sveltejs/vite-plugin-svelte": "^5.0.3",
         "electron-log": "^5.3.3",
-        "electron-reload": "^2.0.0-alpha.1",
         "electron-store": "8.2.0",
         "electron-updater": "^6.6.2",
-        "firebase": "^11.6.0",
+        "i18next": "^24.2.2",
         "mime": "^4.0.7"
     },
     "devDependencies": {
+        "@sveltejs/adapter-static": "^3.0.8",
+        "@sveltejs/kit": "^2.20.5",
+        "@tailwindcss/vite": "^4.1.3",
         "@types/node": "^22.14.1",
         "concurrently": "^9.1.2",
         "electron": "^35.1.5",
         "electron-builder": "^26.0.12",
         "nodemon": "^3.1.9",
-        "typescript": "^5.8.3"
+        "svelte": "^5.26.2",
+        "svelte-check": "^4.1.6",
+        "tailwindcss": "^4.1.3",
+        "tailwind-merge": "^3.2.0",
+        "tslib": "^2.8.1",
+        "typescript": "^5.8.3",
+        "vite": "^6.2.6"
     }
 }

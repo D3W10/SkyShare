@@ -1,4 +1,4 @@
-import { IStore } from "../interfaces/Store.interface";
+import type { IStore } from "../interfaces/Store.interface";
 
 export const defaultStore = {
     changelog: null,
