@@ -31,19 +31,26 @@
             await new Promise<unknown>(resolve => window.addEventListener("online", resolve, { once: true }));
             status = "starting";
         }
+        console.log("[Splash] App is online");
     }
 
     async function checkForUpdates() {
         if (settings.autoUpdate) {
             await new Promise<void>(resolve => {
                 app.checkForUpdates(available => {
-                    if (available)
+                    if (available) {
                         status = "updating";
-                    else
+                        console.log("[Splash] Update available!");
+                    }
+                    else {
                         resolve();
+                        console.log("[Splash] The app is up to date");
+                    }
                 }, p => percent = p / 100);
             });
         }
+        else
+            console.log("[Splash] Auto update is disabled");
     }
 
     async function fetchServers() {
@@ -62,11 +69,15 @@
         }
         
         splashReady = true;
-        $app.log("Splash window ready"); */
+        console.log("Splash window ready"); */
     }
 
     function onReady() {
-        app.addEventListener("ready", () => app.openMain(), { once: true });
+        console.log("[Splash] Initialization completed");
+        app.addEventListener("ready", () => {
+            console.log("Opening main window");
+            app.openMain();
+        }, { once: true });
     }
 </script>
 

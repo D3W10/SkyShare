@@ -22,8 +22,8 @@ const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> 
 }
 
 const logger = {
-    log: (msg: string) => ipcRenderer.send("LoggerPreload", "info", msg),
-    error: (msg: string) => ipcRenderer.send("LoggerPreload", "error", msg)
+    log: (...data: any[]) => ipcRenderer.send("LoggerPreload", "info", ...data),
+    error: (...data: any[]) => ipcRenderer.send("LoggerPreload", "error", ...data)
 };
 
 type TDataObj<T> = T extends {} ? keyof T extends never ? { [key: string]: any } : T : T;
@@ -54,24 +54,24 @@ function apiTranslator<T = void>(res: ApiResult, add: { [key: string]: any } = {
 }
 
 /**
- * Logs a message to the console
+ * Logs a message to the console (renderer)
  */
-export function log(msg: any) {
-    ipcRenderer.send("LoggerRenderer", "info", msg);
+export function log(...data: any[]) {
+    ipcRenderer.send("LoggerRenderer", "info", ...data);
 }
 
 /**
- * Logs a warning message to the console
+ * Logs a warning message to the console (renderer)
  */
-export function warn(msg: any) {
-    ipcRenderer.send("LoggerRenderer", "warn", msg);
+export function warn(...data: any[]) {
+    ipcRenderer.send("LoggerRenderer", "warn", ...data);
 }
 
 /**
- * Logs an error message to the console
+ * Logs an error message to the console (renderer)
  */
-export function error(msg: any) {
-    ipcRenderer.send("LoggerRenderer", "error", msg);
+export function error(...data: any[]) {
+    ipcRenderer.send("LoggerRenderer", "error", ...data);
 }
 
 /**

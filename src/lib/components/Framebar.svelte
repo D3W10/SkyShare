@@ -54,12 +54,12 @@
     }
 
     function offlineAction() {
-        app.log("Offline mode");
+        console.log("Offline mode");
         isOffline = true;
     }
 
     function onlineAction() {
-        app.log("Online mode");
+        console.log("Online mode");
         isOffline = false;
     }
 

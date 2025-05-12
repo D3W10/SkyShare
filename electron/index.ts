@@ -163,9 +163,9 @@ autoUpdater.on("update-downloaded", () => autoUpdater.quitAndInstall());
 
 //#region Preload Events
 
-ipcMain.on("LoggerPreload", (_, type: "info" | "warn" | "error", msg: string) => log(pLogger, type, msg));
+ipcMain.on("LoggerPreload", (_, type: "info" | "warn" | "error", ...data: any[]) => log(pLogger, type, data.join(" ")));
 
-ipcMain.on("LoggerRenderer", (_, type: "info" | "warn" | "error", msg: string) => log(rLogger, type, msg));
+ipcMain.on("LoggerRenderer", (_, type: "info" | "warn" | "error", ...data: any[]) => log(rLogger, type, data.join(" ")));
 
 function log(logger: Logger, type: "info" | "warn" | "error", msg: string) {
     if (type == "info")

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { tick } from "svelte";
+    import { page } from "$app/state";
     import { app } from "$lib/data/app.svelte";
     import { changeLanguage } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
@@ -9,6 +10,11 @@
     let { children } = $props();
 
     let instantChange = true, oldSettings: StoreSettings;
+
+    const consoleLog = console.log, consoleWarn = console.warn, consoleError = console.error;
+    console.log = (...data: any[]) => (consoleLog(...data), app.log(...data));
+    console.warn = (...data: any[]) => (consoleWarn(...data), app.warn(...data));
+    console.error = (...data: any[]) => (consoleError(...data), app.error(...data));
 
     $effect(() => {
         if (oldSettings) {
@@ -26,6 +32,8 @@
         setTheme(settings.theme, instantChange);
         instantChange = false;
     });
+
+    $effect(() => console.log("Navigating to", page.url.pathname));
 
     const setTheme = async (theme: string, instant = false) => {
         if (document.documentElement.getAttribute("data-theme") === theme) return;
