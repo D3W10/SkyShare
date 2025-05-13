@@ -4,8 +4,8 @@ import adapter from "@sveltejs/adapter-static";
 const config = {
     kit: {
         adapter: adapter({
-            pages: "../dist/www",
-            assets: "../dist/www"
+            pages: "./dist/www",
+            assets: "./dist/www"
         }),
         alias: {
             "$electron": "electron",

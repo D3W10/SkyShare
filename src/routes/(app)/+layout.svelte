@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
+    import { base } from "$app/paths";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { disable } from "$lib/data/disable.svelte";
@@ -15,10 +16,10 @@
     let { children } = $props();
 
     const accentColor = $derived(
-        page.url.pathname.startsWith("/send") ? ["--color-send", "--color-send-light", "--color-send-dark"] :
-        page.url.pathname.startsWith("/receive") ? ["--color-receive", "--color-receive-light", "--color-receive-dark"] :
-        page.url.pathname.startsWith("/settings") ? ["--color-settings", "--color-settings-light", "--color-settings-dark"] :
-        page.url.pathname.startsWith("/account") ? ["--color-account", "--color-account-light", "--color-account-dark"] :
+        page.url.pathname.startsWith(base + "/send") ? ["--color-send", "--color-send-light", "--color-send-dark"] :
+        page.url.pathname.startsWith(base + "/receive") ? ["--color-receive", "--color-receive-light", "--color-receive-dark"] :
+        page.url.pathname.startsWith(base + "/settings") ? ["--color-settings", "--color-settings-light", "--color-settings-dark"] :
+        page.url.pathname.startsWith(base + "/account") ? ["--color-account", "--color-account-light", "--color-account-dark"] :
         ["--color-home", "--color-home-light", "--color-home-dark"]
     );
 

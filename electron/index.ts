@@ -11,7 +11,7 @@ import type { IStore } from "./lib/interfaces/Store.interface";
 
 let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData = {};
 const winWidth = 1000, winHeight = 600;
-const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
+const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG !== undefined && process.env.DEBUG.match(/true/gi) !== null || process.argv.includes("--debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
 const logger = new Logger("Main", "blue"), pLogger = new Logger("Prld", "cyan"), rLogger = new Logger("Rndr", "green");
 
@@ -42,7 +42,6 @@ async function createWindow() {
         fullscreenable: false,
         maximizable: false,
         show: false,
-        icon: !isDev ? path.join(__dirname, "./dist/www/logo.png") : path.join(__dirname, "../svelte/static/logo.png"),
         titleBarStyle: "hiddenInset",
         trafficLightPosition: { x: 12, y: 12 },
         webPreferences: {
@@ -91,7 +90,6 @@ async function createWindow() {
         fullscreenable: false,
         maximizable: false,
         show: false,
-        icon: !isDev ? path.join(__dirname, "./dist/www/logo.png") : path.join(__dirname, "../svelte/static/logo.png"),
         webPreferences: {
             devTools: isDebug,
             preload: path.join(__dirname, "preload.js")
