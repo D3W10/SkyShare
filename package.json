@@ -10,7 +10,7 @@
     "scripts": {
         "dev": "concurrently \"bun run vite:dev\" \"bun run nodemon\"",
         "start": "concurrently \"bun run vite:dev\" \"bun run electron\"",
-        "electron": "bun run compile && electron .",
+        "electron": "bun run compile && bun build/postCompile.ts && electron .",
         "nodemon": "nodemon",
         "vite:dev": "vite dev",
         "vite:build": "vite build",

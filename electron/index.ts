@@ -149,10 +149,6 @@ function getValueFromObj(obj: any, path: string) {
     return path.split(".").reduce((acc, key) => acc && acc[key], obj);
 }
 
-ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
-
-ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
-
 //#region Updater
 
 autoUpdater.on("download-progress", info => (!splash.isDestroyed() ? splash : window).webContents.send("CFUProgress", info.percent));
@@ -249,6 +245,12 @@ ipcMain.on("GetAppInfo", e => {
 });
 
 ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
+
+ipcMain.on("SetProgressBar", (_, p: number) => window.setProgressBar(p / 100));
+
+ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
+
+ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
 
 ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
