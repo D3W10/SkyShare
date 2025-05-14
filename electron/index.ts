@@ -131,16 +131,14 @@ function uriHandler(argv: string[]) {
     if (!uriArg)
         return;
 
-    const args = uriArg.slice("skyshare://".length).split("/");
-    
-    logger.log("Handling arguments");
-    logger.log(`Arguments: [${args}]`);
+    const url = uriArg.slice("skyshare://".length);
+    logger.log("Handling arguments: " + url);
 
     if (window.isMinimized())
         window.restore();
 
     window.focus();
-    window.webContents.send("UriHandler", args.filter(e => e));
+    window.webContents.send("UriHandler", url);
 }
 
 function getValueFromObj(obj: any, path: string) {

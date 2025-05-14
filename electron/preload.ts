@@ -687,7 +687,7 @@ ipcRenderer.on("WindowClose", () => dispatch("close"));
 
 ipcRenderer.on("LoginRequest", (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", dispatch("login", username, password)));
 
-ipcRenderer.on("UriHandler", (_, args: string[]) => dispatch("uri", args));
+ipcRenderer.on("UriHandler", (_, url: string) => dispatch("uri", url));
 
 contextBridge.exposeInMainWorld("app", {
     log,

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { tick } from "svelte";
     import { page } from "$app/state";
+    import { base } from "$app/paths";
+    import { goto } from "$app/navigation";
     import { app } from "$lib/data/app.svelte";
     import { changeLanguage } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
@@ -15,6 +17,8 @@
     console.log = (...data: any[]) => (consoleLog(...data), app.log(...data));
     console.warn = (...data: any[]) => (consoleWarn(...data), app.warn(...data));
     console.error = (...data: any[]) => (consoleError(...data), app.error(...data));
+
+    app.addEventListener("uri", url => goto(`${base}/${url}`));
 
     $effect(() => {
         if (oldSettings) {
