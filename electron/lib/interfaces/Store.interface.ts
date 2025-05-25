@@ -1,18 +1,20 @@
 export interface IStore {
     changelog: string | null;
-    settings: IStoreSettings;
-    account: IStoreAccount;
+    updateTo: string;
+    settings: StoreSettings;
+    account: StoreAccount;
 }
 
-export interface IStoreSettings {
-    theme: number;
+export interface StoreSettings {
+    theme: "light" | "dark";
     language: string;
+    sidebarCollapsed: boolean;
     nearbyShare: boolean;
     autoUpdate: boolean;
     betaUpdates: boolean;
 }
 
-export interface IStoreAccount {
+export interface StoreAccount {
     username: string | null;
     password: string | null;
 }

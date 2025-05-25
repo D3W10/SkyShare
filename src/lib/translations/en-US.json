@@ -1,0 +1,231 @@
+{
+    "splash": {
+        "starting": "Starting",
+        "offline": "Waiting for network",
+        "updating": "Updating",
+        "loggingIn": "Logging in"
+    },
+    "sidebar": {
+        "login": "Login",
+        "home": "Homepage",
+        "send": "Send",
+        "receive": "Receive",
+        "settings": "Settings"
+    },
+    "home": {
+        "morning_zero": "Good morning!",
+        "morning": "Good morning {{name}}!",
+        "afternoon_zero": "Good afternoon!",
+        "afternoon": "Good afternoon {{name}}!",
+        "evening_zero": "Good evening!",
+        "evening": "Good evening {{name}}!",
+        "send": "Send files",
+        "receive": "Receive files",
+        "settings": "Settings",
+        "whatsNew": "What's new on {{version}}",
+        "awesome": "Awesome!"
+    },
+    "send": [
+        {
+            "title": "Send files",
+            "chooseTitle": "Choose files",
+            "chooseSubtitle": "Or drop them here!",
+            "chooseHoverTitle": "Nearly there!",
+            "chooseHoverSubtitle": "Drop them here to add",
+            "chooseAdd": "Add",
+            "chooseFilter": "All files",
+            "chooseAddFiles": "Add files",
+            "message": "Message",
+            "messagePlaceholder": "Type a message...",
+            "size": "Total Size",
+            "quantity": "Total Quantity",
+            "file_one": "file",
+            "file_other": "files",
+            "fileIcon": "File icon",
+            "send": "Send"
+        },
+        {
+            "title": "Transfer details",
+            "copyCode": "Copy code",
+            "copyLink": "Copy link",
+            "noMessage": "No message",
+            "status": "Status",
+            "waiting": "Waiting...",
+            "connected": "Connected"
+        }
+    ],
+    "receive": [
+        {
+            "title": "Receive files",
+            "code": "Transfer Code",
+            "nearbyShare": "Enable NearbyShare",
+            "receive": "Receive"
+        },
+        {
+            "title": "Review files"
+        }
+    ],
+    "settings": {
+        "title": "Settings",
+        "appearance": "Appearance",
+        "nearbyShare": "NearbyShare",
+        "updates": "Updates",
+        "reset": "Reset",
+        "about": "About",
+        "theme": "Theme",
+        "themeDesc": "Change the application theme",
+        "themeLight": "Light",
+        "themeDark": "Dark",
+        "language": "Language",
+        "languageDesc": "Modify the application language",
+        "nearbyShareEnabled": "Enable NearbyShare",
+        "nearbyShareEnabledDesc": "Enable quick file sharing on this network",
+        "checkForUpdates": "Check for updates",
+        "checkForUpdatesDesc": "Manually check for updates",
+        "check": "Check",
+        "autoUpdate": "Automatic updates",
+        "autoUpdateDesc": "Updates the application automatically",
+        "betaUpdates": "Beta updates",
+        "betaUpdatesDesc": "Get beta updates (unstable)",
+        "resetSettings": "Reset Settings",
+        "resetSettingsDesc": "Reset all settings to the default values",
+        "resetButton": "Reset",
+        "version": "Version {{version}}"
+    },
+    "login": [
+        {
+            "title" : "Log In",
+            "history": "Transfer history",
+            "historyDesc": "All your transfers using the app will be saved on a history for easy access and management",
+            "sync": "History sync",
+            "syncDesc": "Your transfer history will be synced across all devices using your account to keep it up to date",
+            "identification": "Sender ID",
+            "identificationDesc": "When people receive files from you, your name will be displayed along the transfer (must be enabled on the account settings)",
+            "login": "Log In",
+            "signup": "Create account"
+        },
+        {
+            "title": "Forgot my password",
+            "email": "Email",
+            "recover": "Recover Account"
+        },
+        {
+            "title": "Email sent",
+            "sent": "Email sent!",
+            "sentDesc": "An email has been sent to the provided address!",
+            "notes": [
+                "Open the email you received and follow the link to reset your password.",
+                "If you did not receive an email, either it has been marked as spam or no account exists with this email address."
+            ]
+        },
+        {
+            "title" : "Recover Account",
+            "password": "Password",
+            "repeatPassword": "Repeat Password",
+            "recover": "Recover"
+        },
+        {
+            "title" : "Create Account",
+            "username": "Username",
+            "email": "Email",
+            "password": "Password",
+            "signup": "Create account"
+        },
+        {
+            "title": "Personalize account",
+            "photo": "Profile Picture",
+            "photoChoose": "Choose a photo"
+        }
+    ],
+    "account": [
+        {
+            "title" : "Account",
+            "history" : "History",
+            "edit" : "Edit Account",
+            "logout": "Log Out",
+            "notVerified": "Email not verified!"
+        },
+        {
+            "title": "History",
+            "historyDisabled": "You don't have history enabled on your account, please enable it on your account settings.",
+            "historyEmpty": "This space feels a bit empty, send or receive some files and come back here later!"
+        },
+        {
+            "title": "Edit Account",
+            "informations": "Informations",
+            "personalization": "Personalization",
+            "history": "History",
+            "privacy": "Privacy",
+            "about": "About",
+            "save": "Save",
+            "username": "Username",
+            "usernameDesc": "Change your account username",
+            "email": "Email",
+            "emailDesc": "Change your account email",
+            "password": "Password",
+            "passwordDesc": "Change your account password",
+            "passwordButton": "Change",
+            "delete": "Delete Account",
+            "deleteDesc": "Delete your SkyShare account",
+            "deleteButton": "Delete",
+            "photo": "Profile Picture",
+            "photoChoose": "Choose a photo",
+            "enableHistory": "Enable history",
+            "enableHistoryDesc": "Save entries to the transfer history",
+            "clearHistory": "Clear history",
+            "clearHistoryDesc": "Clear all transfer history entries",
+            "clearHistoryButton": "Clear",
+            "showInfo": "Display my personal info",
+            "showInfoDesc": "Display my account name and photo on transfers and NearbyShare",
+            "memberSince": "Member since {{date}}"
+        },
+        {
+            "title": "Delete Account",
+            "confirm": "Are you sure?",
+            "confirmDesc": "By deleting your account, you will lose some features exclusive to members!",
+            "list": [
+                "You will no longer be able to access your transfer history and it won't sync across devices.",
+                "You will no longer be identified with name and photo when making transfers."
+            ],
+            "continue": "Continue"
+        },
+        {
+            "deleting": "Deleting your SkyShare account, hang on tight!"
+        }
+    ],
+    "dialog": {
+        "okay": "Okay",
+        "cancel": "Cancel",
+        "unknown": "Unknown error",
+        "unknownDesc": "An unknown error occurred in the app or while trying to reach the server, this likely happened cause you're running an outdated version of SkyShare. Please make sure you're running the latest version and try again.",
+        "disabled": "Hold on",
+        "disabledDesc": "An operation is currently running, you may only close SkyShare once it's finished!",
+        "tooManyFiles": "Limit exceeded",
+        "tooManyFilesDesc": "The maximum number of files has been exceeded! You can only send a maximum of {{amount}} files per transfer.",
+        "sizeLimitExceeded": "Limit exceeded",
+        "sizeLimitExceededDesc": "The total file size must not exceed {{amount}}.",
+        "fileWithSameName": "Failed to add files",
+        "fileWithSameNameDesc": "An error occurred while adding {{amount}} of the selected files, check if they still exist and if their name is unique.",
+        "nearbyShare": "Quick note",
+        "nearbyShareDesc": [
+            "With this feature enabled, when you have the receive page open, your device will be discovered by other people on the same network.",
+            "When someone on your network is sending files, a list of people with the NearbyShare feature on will be shown providing quick transfers without the need of sharing the transfer code.",
+            "Your info will not be shared on the network unless you have a SkyShare account and you opt-in using the \"Show my info\" switch."
+        ],
+        "noUpdates": "All good!",
+        "noUpdatesDesc": "You already have the latest version of SkyShare. That's great news!",
+        "betaUpdates": "Important note",
+        "betaUpdatesDesc": [
+            "Are you sure you want to enable this setting? Beta updates are unstable and can break your user experience.",
+            "You will have to restart SkyShare for this setting to be applied."
+        ],
+        "resetSettings": "Reset settings",
+        "resetSettingsDesc": "Are you sure you want to reset all settings? The default values will be applied."
+    },
+    "common": {
+        "required": "Required",
+        "optional": "Optional",
+        "next": "Next",
+        "offline": "Offline"
+    }
+}

@@ -36,7 +36,7 @@
 
 ## About
 
-SkyShare is a desktop application and website that allows you to share files between computers. The app is available is available on both Windows and macOS but devices running other operating systems can use the website as both experiences are connected.
+SkyShare is both a desktop and a web application that allows you to share files between devices. The desktop app is available for both Windows and macOS, other devices can use the web app for sharing files.
 
 This project consists in four different subprojects:
 > 🖥️&emsp;SkyShare [Desktop App](https://github.com/D3W10/SkyShare)
@@ -46,6 +46,11 @@ This project consists in four different subprojects:
 > 🌐&emsp;SkyShare [Website](https://github.com/D3W10/SkyShare-Website)
 >
 > 📩&emsp;SkyShare [Mail](https://github.com/D3W10/SkyShare-Mail)
+>
+> 🔗&emsp;SkyShare [WebSocket Server](https://github.com/D3W10/SkyShare-WS)
+
+> [!NOTE]
+> The desktop app can also be compiled and used on Linux, just note that some bugs may occur.
 
 ![App Homescreen](https://assets-d3w10.netlify.app/skyshare/homescreen.png)
 
@@ -95,7 +100,7 @@ If you want to deploy a copy of SkyShare on your device to develop a feature or 
 
 In order to run the application, you will need the following tools:
 - Node.JS (`20.0.0` or higher);
-- npm (or equivalent);
+- bun (or equivalent);
 - git (*optional*).
 
 <br />
@@ -109,13 +114,11 @@ In order to run the application, you will need the following tools:
 2. Open the project folder using your prefered code editor (ex: VS Code)
 3. Install the required dependencies on both the backend and frontend
     ```sh
-    npm i
-    cd svelte
-    npm i
+    bun i
     ```
 4. On the project root run the following command to run the app
     ```sh
-    npm run dev
+    bun run dev
     ```
 
 <br />

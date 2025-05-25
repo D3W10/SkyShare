@@ -17,19 +17,19 @@ export class Logger {
         this.logger = log.scope(`%c${this.name}%c`);
     }
 
-    info(msg: any) {
-        this.log(msg);
+    info(data: any) {
+        this.log(data);
     }
 
-    log(msg: any, ...colors: string[]) {
-        this.logger.info(`color: ${this.color}`, "color: unset", msg, ...(colors.map((e) => `color: ${e}`)));
+    log(data: any, ...colors: string[]) {
+        this.logger.info(`color: ${this.color}`, "color: unset", data, ...(colors.map((e) => `color: ${e}`)));
     }
 
-    warn(msg: any, ...colors: string[]) {
-        this.logger.warn(`color: ${this.color}`, "color: unset", `%c${msg}`, "color: yellow", ...(colors.map((e) => `color: ${e}`)));
+    warn(data: any, ...colors: string[]) {
+        this.logger.warn(`color: ${this.color}`, "color: unset", `%c${data}`, "color: yellow", ...(colors.map((e) => `color: ${e}`)));
     }
 
-    error(msg: any, ...colors: string[]) {
-        this.logger.error(`color: ${this.color}`, "color: unset", `%c${msg}`, "color: red", ...(colors.map((e) => `color: ${e}`)));
+    error(data: any, ...colors: string[]) {
+        this.logger.error(`color: ${this.color}`, "color: unset", `%c${data}`, "color: red", ...(colors.map((e) => `color: ${e}`)));
     }
 }

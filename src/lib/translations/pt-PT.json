@@ -1,0 +1,231 @@
+{
+    "splash": {
+        "starting": "A iniciar",
+        "offline": "Aguardando internet",
+        "updating": "A atualizar",
+        "loggingIn": "A iniciar sessão"
+    },
+    "sidebar": {
+        "login": "Iniciar Sessão",
+        "home": "Página Inicial",
+        "send": "Enviar",
+        "receive": "Receber",
+        "settings": "Definições"
+    },
+    "home": {
+        "morning_zero": "Bom dia!",
+        "morning": "Bom dia {{name}}!",
+        "afternoon_zero": "Boa tarde!",
+        "afternoon": "Boa tarde {{name}}!",
+        "evening_zero": "Boa noite!",
+        "evening": "Boa noite {{name}}!",
+        "send": "Enviar ficheiros",
+        "receive": "Receber ficheiros",
+        "settings": "Definições",
+        "whatsNew": "O que há de novo na {{version}}",
+        "awesome": "Incrível!"
+    },
+    "send": [
+        {
+            "title": "Enviar ficheiros",
+            "chooseTitle": "Escolher ficheiros",
+            "chooseSubtitle": "Ou arraste para aqui!",
+            "chooseHoverTitle": "Quase lá!",
+            "chooseHoverSubtitle": "Largue-os aqui para adicionar",
+            "chooseAdd": "Addicionar",
+            "chooseFilter": "Todos os ficheiros",
+            "chooseAddFiles": "Adicionar ficheiros",
+            "message": "Mensagem",
+            "messagePlaceholder": "Escreva uma mensagem...",
+            "size": "Tamanho Total",
+            "quantity": "Quantidade Total",
+            "file_one": "ficheiro",
+            "file_other": "ficheiros",
+            "fileIcon": "Icone do ficheiro",
+            "send": "Enviar"
+        },
+        {
+            "title": "Detalhes da transferência",
+            "copyCode": "Copiar código",
+            "copyLink": "Copiar link",
+            "noMessage": "Sem mensagem",
+            "status": "Estado",
+            "waiting": "Em espera...",
+            "connected": "Conectado"
+        }
+    ],
+    "receive": [
+        {
+            "title": "Receber ficheiros",
+            "code": "Código da transferência",
+            "nearbyShare": "Ativar NearbyShare",
+            "receive": "Receber"
+        },
+        {
+            "title": "Rever ficheiros"
+        }
+    ],
+    "settings": {
+        "title": "Definições",
+        "appearance": "Aparência",
+        "nearbyShare": "NearbyShare",
+        "updates": "Atualizações",
+        "reset": "Repor",
+        "about": "Sobre",
+        "theme": "Tema",
+        "themeDesc": "Mudar o tema da aplicação",
+        "themeLight": "Claro",
+        "themeDark": "Escuro",
+        "language": "Idioma",
+        "languageDesc": "Altera o idoma da aplicação",
+        "nearbyShareEnabled": "Ativar NearbyShare",
+        "nearbyShareEnabledDesc": "Ativar partilha rápida de ficheiros nesta rede",
+        "checkForUpdates": "Procurar por atualizações",
+        "checkForUpdatesDesc": "Procurar por atualizações manualmente",
+        "check": "Procurar",
+        "autoUpdate": "Atualizações automáticas",
+        "autoUpdateDesc": "Atualiza a aplicação automaticamente",
+        "betaUpdates": "Atualizações Beta",
+        "betaUpdatesDesc": "Obter atualizações beta (instável)",
+        "resetSettings": "Repor Definições",
+        "resetSettingsDesc": "Repor todas as definições para os valores padrão",
+        "resetButton": "Repor",
+        "version": "Versão {{version}}"
+    },
+    "login": [
+        {
+            "title" : "Iniciar Sessão",
+            "history": "Histórico de Transferências",
+            "historyDesc": "Todas as suas transferências utilizando a aplicação serão guardadas num histório para fácil acesso e gestão",
+            "sync": "Sincronização",
+            "syncDesc": "O seu histórico de transferências será sincronizado por todos os dispositivos que utilizam a sua conta de forma a mantê-lo atualizado",
+            "identification": "Identificação no envio",
+            "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será apresentado com a transferência (deve ser ativado nas definições da conta)",
+            "login": "Iniciar Sessão",
+            "signup": "Criar conta"
+        },
+        {
+            "title": "Esqueci-me da minha Palavra-Passe",
+            "email": "Email",
+            "recover": "Recuperar Conta"
+        },
+        {
+            "title": "Email enviado",
+            "sent": "Email enviado!",
+            "sentDesc": "Um email foi enviado para o endereço especificado!",
+            "notes": [
+                "Abra o email que recebeu e siga o link para repor a sua palavra-passe.",
+                "Se não recebeu um email, ou o mesmo foi marcado como spam ou não existe nenhuma conta com este endereço de email."
+            ]
+        },
+        {
+            "title" : "Recuperar Conta",
+            "password": "Palavra-Passe",
+            "repeatPassword": "Repetir Palavra-Passe",
+            "recover": "Recuperar"
+        },
+        {
+            "title" : "Criar Conta",
+            "username": "Nome de Utilizador",
+            "email": "Email",
+            "password": "Palavra-Passe",
+            "signup": "Criar conta"
+        },
+        {
+            "title": "Personalizar conta",
+            "photo": "Foto de Perfil",
+            "photoChoose": "Escolher uma foto"
+        }
+    ],
+    "account": [
+        {
+            "title" : "Conta",
+            "history" : "Histórico",
+            "edit" : "Editar Conta",
+            "logout": "Terminar Sessão",
+            "notVerified": "Email não verificado!"
+        },
+        {
+            "title": "Histórico",
+            "historyDisabled": "Não tem o histórico ativado na sua conta, por favor ative-o nas definições da conta.",
+            "historyEmpty": "Este espaço parece estar um pouco vazio, envie ou receba alguns ficheiros e volte aqui mais tarde!"
+        },
+        {
+            "title": "Editar Conta",
+            "informations": "Informações",
+            "personalization": "Personalização",
+            "history": "Histórico",
+            "privacy": "Privacidade",
+            "about": "Sobre",
+            "save": "Guardar",
+            "username": "Nome de Utilizador",
+            "usernameDesc": "Alterar o nome da conta",
+            "email": "Email",
+            "emailDesc": "Alterar o email da conta",
+            "password": "Password",
+            "passwordDesc": "Change your account password",
+            "passwordButton": "Change",
+            "delete": "Apagar Conta",
+            "deleteDesc": "Apagar a sua conta SkyShare",
+            "deleteButton": "Apagar",
+            "photo": "Foto de Perfil",
+            "photoChoose": "Escolher uma foto",
+            "enableHistory": "Ativar histórico",
+            "enableHistoryDesc": "Guardar itens no histórico de transferências",
+            "clearHistory": "Limpar histórico",
+            "clearHistoryDesc": "Limpa todo o histórico de transferências",
+            "clearHistoryButton": "Limpar",
+            "showInfo": "Mostrar informações pessoais",
+            "showInfoDesc": "Mostrar o nome e a fotografia da minha conta nas transferências e no NearbyShare",
+            "memberSince": "Membro desde {{date}}"
+        },
+        {
+            "title": "Apagar Conta",
+            "confirm": "Tem a certeza?",
+            "confirmDesc": "Ao apagar a sua conta, perderá algumas funcionalidades exclusivas a membros!",
+            "list": [
+                "Não irá poder aceder mais ao histório de transferências nem o mesmo será sincronizado entre dispositivos.",
+                "Não será mais identificado com nome e fotografia ao fazer transferências."
+            ],
+            "continue": "Continuar"
+        },
+        {
+            "deleting": "A apagar sua conta SkyShare, por favor aguarde!"
+        }
+    ],
+    "dialog": {
+        "okay": "OK",
+        "cancel": "Cancelar",
+        "unknown": "Erro desconhecido",
+        "unknownDesc": "Um erro desconhecido ocorreu na aplicação ou ao tentar conectar ao servidor, o mesmo provavelmente aconteceu se estiver a utilizar uma versão desatualizada do SkyShare. Por favor verifique que está a utilizar a versão mais recente e tente novamente.",
+        "disabled": "Aguarde",
+        "disabledDesc": "Uma operação está atualmente em execução, só poderá fechar o SkyShare quando o mesmo estiver concluído!",
+        "tooManyFiles": "Limite excedido",
+        "tooManyFilesDesc": "A quantidade máxima de ficheiros foi excedida! Apenas pode enviar, no máximo, {{amount}} ficheiros por envio.",
+        "sizeLimitExceeded": "Limite excedido",
+        "sizeLimitExceededDesc": "O tamanho total dos ficheiros não pode ser superior a {{amount}}.",
+        "addingError": "Falha ao adicionar ficheiros",
+        "addingErrorDesc": "Houve um erro ao adicionar {{amount}} dos ficheiros selecionados, verifique se os mesmos ainda existem e se o seu nome é único.",
+        "nearbyShare": "Nota rápida",
+        "nearbyShareDesc": [
+            "Com esta funcionalidade ativa, quando tiver a página receber aberta, o seu dispositivo será descoberto por outras pessoas na mesma rede.",
+            "Quando alguém na sua rede está a enviar ficheiros, uma lista de pessoa com a funcionalidade NeabyShare ativa será mostrada facilitando a transferência de ficheiros e removendo a necessidade de partilhar o código de transferência.",
+            "As suas informações não serão partilhadas a não ser que tenha uma conta SkyShare e tenha optado por ativar a opção \"Mostrar as minhas informações\"."
+        ],
+        "noUpdates": "Tudo em ordem!",
+        "noUpdatesDesc": "Já tens a versão mais recente do SkyShare. São ótimas notícias!",
+        "betaUpdates": "Nota importante",
+        "betaUpdatesDesc": [
+            "Tem a certeza que quer ativar esta definição? Atualizações beta são instáveis e podem e pode prejudicar a sua experiência.",
+            "Terá de reiniciar o SkyShare para que esta definição seja aplicada."
+        ],
+        "resetSettings": "Repor definições",
+        "resetSettingsDesc": "Tem a certeza que quer repor todas as definições? Os valores padrão serão aplicados."
+    },
+    "common": {
+        "required": "Obrigatório",
+        "optional": "Opcional",
+        "next": "Próximo",
+        "offline": "Offline"
+    }
+}

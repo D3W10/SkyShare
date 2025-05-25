@@ -1,0 +1,1 @@
+export type AppEventT = "ready" | "open" | "close" | "login" | "uri" | "error";

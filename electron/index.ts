@@ -6,33 +6,17 @@ import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
-import { collection, db, doc, getDoc, onSnapshot, type Unsubscribe } from "./lib/firebase.js";
+import { defaultStore } from "./lib/constants/defaultStore.const";
 import type { IStore } from "./lib/interfaces/Store.interface";
 
-require("electron-reload")(__dirname);
-
-let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData: object = {};
-let iceUnsubscribe: Unsubscribe | undefined;
-const winWidth: number = 1000, winHeight: number = 600;
-const isDev: boolean = !app.isPackaged, isDebug = isDev || process.env.DEBUG != undefined && process.env.DEBUG.match(/true/gi) != null || process.argv.includes("-debug");
+let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData = {};
+const winWidth = 1000, winHeight = 600;
+const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG !== undefined && process.env.DEBUG.match(/true/gi) !== null || process.argv.includes("--debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
 const logger = new Logger("Main", "blue"), pLogger = new Logger("Prld", "cyan"), rLogger = new Logger("Rndr", "green");
 
 const appConfig = new Store<IStore>({
-    defaults: {
-        changelog: null,
-        settings: {
-            theme: 0,
-            language: "en",
-            nearbyShare: true,
-            autoUpdate: true,
-            betaUpdates: false
-        },
-        account: {
-            username: null,
-            password: null
-        }
-    },
+    defaults: defaultStore,
     encryptionKey: "SkyShare"
 });
 
@@ -58,7 +42,6 @@ async function createWindow() {
         fullscreenable: false,
         maximizable: false,
         show: false,
-        icon: !isDev ? path.join(__dirname, "./dist/www/logo.png") : path.join(__dirname, "../svelte/static/logo.png"),
         titleBarStyle: "hiddenInset",
         trafficLightPosition: { x: 12, y: 12 },
         webPreferences: {
@@ -68,8 +51,8 @@ async function createWindow() {
     });
 
     window.loadURL(!isDev ? `file:///${path.join(__dirname, "www", "index.html")}` : "http://localhost:5173/");
-    window.once("ready-to-show", () => splash.webContents.send("WindowReady"));
-    if (process.platform == "darwin") {
+
+    if (process.platform === "darwin") {
         window.on("close", e => {
             if (closeLock) {
                 e.preventDefault();
@@ -78,11 +61,13 @@ async function createWindow() {
         });
     }
 
+    ipcMain.once("WindowReady", () => splash.webContents.send("WindowReady"));
+
     window.webContents.setWindowOpenHandler(({ url }) => {
         try {
             let { protocol } = new URL(url);
 
-            if (protocol == "http:" || protocol == "https:") {
+            if (protocol === "http:" || protocol === "https:") {
                 logger.log(`Opening ${url}`);
                 shell.openExternal(url);
                 return { action: "deny" };
@@ -105,7 +90,6 @@ async function createWindow() {
         fullscreenable: false,
         maximizable: false,
         show: false,
-        icon: !isDev ? path.join(__dirname, "./dist/www/logo.png") : path.join(__dirname, "../svelte/static/logo.png"),
         webPreferences: {
             devTools: isDebug,
             preload: path.join(__dirname, "preload.js")
@@ -147,21 +131,19 @@ function uriHandler(argv: string[]) {
     if (!uriArg)
         return;
 
-    const args = uriArg.slice("skyshare://".length).split("/");
-    
-    logger.log("Handling arguments");
-    logger.log(`Arguments: [${args}]`);
+    const url = uriArg.slice("skyshare://".length);
+    logger.log("Handling arguments: " + url);
 
     if (window.isMinimized())
         window.restore();
 
     window.focus();
-    window.webContents.send("UriHandler", args.filter(e => e));
+    window.webContents.send("UriHandler", url);
 }
 
-ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
-
-ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
+function getValueFromObj(obj: any, path: string) {
+    return path.split(".").reduce((acc, key) => acc && acc[key], obj);
+}
 
 //#region Updater
 
@@ -173,9 +155,9 @@ autoUpdater.on("update-downloaded", () => autoUpdater.quitAndInstall());
 
 //#region Preload Events
 
-ipcMain.on("LoggerPreload", (_, type: "info" | "warn" | "error", msg: string) => log(pLogger, type, msg));
+ipcMain.on("LoggerPreload", (_, type: "info" | "warn" | "error", ...data: any[]) => log(pLogger, type, data.join(" ")));
 
-ipcMain.on("LoggerRenderer", (_, type: "info" | "warn" | "error", msg: string) => log(rLogger, type, msg));
+ipcMain.on("LoggerRenderer", (_, type: "info" | "warn" | "error", ...data: any[]) => log(rLogger, type, data.join(" ")));
 
 function log(logger: Logger, type: "info" | "warn" | "error", msg: string) {
     if (type == "info")
@@ -196,17 +178,17 @@ ipcMain.on("CheckForUpdates", () => {
     const win = !splash.isDestroyed() ? splash : window;
 
     if (isDev)
-        win.webContents.send("CFUStatus", false);
+        win.webContents.send("CFUStatus", false, {});
     
     autoUpdater.once("update-available", e => {
         appConfig.set("changelog", e.releaseNotes);
-        win.webContents.send("CFUStatus", true);
+        win.webContents.send("CFUStatus", true, { version: e.version, date: e.releaseDate });
     });
-    autoUpdater.once("update-not-available", () => win.webContents.send("CFUStatus", false));
-    autoUpdater.once("update-cancelled", () => win.webContents.send("CFUStatus", false));
+    autoUpdater.once("update-not-available", () => win.webContents.send("CFUStatus", false, {}));
+    autoUpdater.once("update-cancelled", () => win.webContents.send("CFUStatus", false, {}));
     autoUpdater.once("error", error => {
         logger.error(error.message);
-        win.webContents.send("CFUStatus", false);
+        win.webContents.send("CFUStatus", false, {});
     });
 });
 
@@ -234,7 +216,15 @@ ipcMain.on("OpenMain", () => {
     window.webContents.send("WindowOpen");
 });
 
-ipcMain.on("GetSetting", (event, key: string) => event.returnValue = appConfig.get(key));
+ipcMain.on("GetSetting", (event, key: string) => {
+    const defaultVal = getValueFromObj(defaultStore, key);
+    const val = appConfig.get(key, defaultVal);
+
+    if (val === null || val === undefined || typeof val !== "object")
+        event.returnValue = val;
+    else
+        event.returnValue = Object.assign(defaultVal, val);
+});
 
 ipcMain.on("SetSetting", (_event, key: string, value: any) => appConfig.set(key, value));
 
@@ -245,18 +235,25 @@ ipcMain.on("GetAppInfo", e => {
         name: packageData.productName,
         version: packageData.version,
         homepage: packageData.homepage,
-        api: !isDev ? "https://skyshare.vercel.app/" : "http://localhost:5174/"
+        api: !isDev ? packageData.data.server : "http://localhost:5174/api/v1/",
+        cliendId: packageData.data.clientId
     }
 });
 
 ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
+
+ipcMain.on("SetProgressBar", (_, p: number) => window.setProgressBar(p / 100));
+
+ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
+
+ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
 
 ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
 ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
 
 ipcMain.on("WaitForAnswer", async (_, code: string) => {
-    const docRef = doc(db, "channels", code);
+    /* const docRef = doc(db, "channels", code);
 
     if (!(await getDoc(docRef)).exists())
         return;
@@ -268,17 +265,17 @@ ipcMain.on("WaitForAnswer", async (_, code: string) => {
             window.webContents.send("WaitForAnswerFulfilled", data);
             unsubscribe();
         }
-    });
+    }); */
 });
 
 ipcMain.handle("CheckTransfer", async (_, code: string) => {
-    const transferDoc = await getDoc(doc(db, "channels", code));
+    /* const transferDoc = await getDoc(doc(db, "channels", code));
 
-    return transferDoc.exists() ? transferDoc.data() : null;
+    return transferDoc.exists() ? transferDoc.data() : null; */
 });
 
 ipcMain.on("ListenForIce", (_, code: string) => {
-    const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
+    /* const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
 
     iceUnsubscribe = onSnapshot(iceCandidatesCol, snapshot => {
         snapshot.docChanges().forEach(async change => {
@@ -289,10 +286,10 @@ ipcMain.on("ListenForIce", (_, code: string) => {
                 window.webContents.send("IceReceived", data);
             }
         });
-    });
+    }); */
 });
 
-ipcMain.on("StopListeningForIce", () => iceUnsubscribe!());
+/* ipcMain.on("StopListeningForIce", () => iceUnsubscribe!()); */
 
 ipcMain.on("EncodePassword", (e, password: string) => e.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 

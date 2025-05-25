@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, webUtils } from "electron";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
@@ -6,27 +6,28 @@ import type { TransferInfo } from "./lib/interfaces/TransferInfo.interface";
 import type { TransferData } from "./lib/interfaces/TransferData.interface";
 import type { AnswerInfo } from "./lib/interfaces/AnswerInfo.interface";
 import type { IceCandidate } from "./lib/interfaces/IceCandidate.interface";
+import type { IStore } from "./lib/interfaces/Store.interface";
+import type { AppEventT } from "./lib/types/AppEventT.type";
+import type { CallbackT } from "./lib/types/CallbackT.type";
 
-let wReady: boolean = false, wCompressed: boolean = false, wOpen: boolean = false;
-let offlineHandler: () => boolean, readyHandler: () => unknown, openHandler: () => unknown, closeHandler: () => unknown, cfuProgress: (percent: number) => unknown, loginHandler: (username: string, password: string) => Promise<unknown>, uriHandler: (args: string[]) => unknown, errorHandler: (code: number) => unknown;
+let wReady = false, wCompressed = false, wOpen = false, updateProgress: (percent: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
+const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> = {
+    ready: [],
+    open: [],
+    close: [],
+    login: [],
+    uri: [],
+    error: []
+}
 
 const logger = {
-    log: (msg: string) => ipcRenderer.send("LoggerPreload", "info", msg),
-    error: (msg: string) => ipcRenderer.send("LoggerPreload", "error", msg)
+    log: (...data: any[]) => ipcRenderer.send("LoggerPreload", "info", ...data),
+    error: (...data: any[]) => ipcRenderer.send("LoggerPreload", "error", ...data)
 };
 
 type TDataObj<T> = T extends {} ? keyof T extends never ? { [key: string]: any } : T : T;
-type TEventName = "offline" | "ready" | "open" | "close" | "login" | "uri" | "error";
-type TCallback<T extends TEventName> = 
-    T extends "offline" ? () => boolean :
-    T extends "ready" ? () => unknown :
-    T extends "open" ? () => unknown :
-    T extends "close" ? () => unknown :
-    T extends "login" ? (username: string, password: string) => Promise<unknown> :
-    T extends "uri" ? (args: string[]) => unknown :
-    T extends "error" ? (code: number) => unknown :
-    never;
+type TUpdateData = { version: string, date: string };
 
 interface ApiCall<T> {
     success: boolean;
@@ -53,24 +54,24 @@ function apiTranslator<T = void>(res: ApiResult, add: { [key: string]: any } = {
 }
 
 /**
- * Logs a message to the console
+ * Logs a message to the console (renderer)
  */
-export function log(msg: any) {
-    ipcRenderer.send("LoggerRenderer", "info", msg);
+export function log(...data: any[]) {
+    ipcRenderer.send("LoggerRenderer", "info", ...data);
 }
 
 /**
- * Logs a warning message to the console
+ * Logs a warning message to the console (renderer)
  */
-export function warn(msg: any) {
-    ipcRenderer.send("LoggerRenderer", "warn", msg);
+export function warn(...data: any[]) {
+    ipcRenderer.send("LoggerRenderer", "warn", ...data);
 }
 
 /**
- * Logs an error message to the console
+ * Logs an error message to the console (renderer)
  */
-export function error(msg: any) {
-    ipcRenderer.send("LoggerRenderer", "error", msg);
+export function error(...data: any[]) {
+    ipcRenderer.send("LoggerRenderer", "error", ...data);
 }
 
 /**
@@ -78,11 +79,11 @@ export function error(msg: any) {
  * @param statusCallback The function to receive the update status
  * @param progressCallback The function to receive the download progress
  */
-export function checkForUpdates(statusCallback: (available: boolean) => unknown, progressCallback: (percent: number) => unknown) {
+export function checkForUpdates(statusCallback: (available: boolean, data: TUpdateData) => unknown, progressCallback: (percent: number) => unknown) {
     ipcRenderer.send("CheckForUpdates");
 
-    ipcRenderer.once("CFUStatus", (_, available: boolean) => statusCallback(available));
-    cfuProgress = progressCallback;
+    ipcRenderer.once("CFUStatus", (_, available: boolean, data: TUpdateData) => statusCallback(available, data));
+    updateProgress = progressCallback;
 }
 
 /**
@@ -112,6 +113,13 @@ export function compressWindow() {
 }
 
 /**
+ * Notifies the splash window that the main window is ready
+ */
+export function winReady() {
+    ipcRenderer.send("WindowReady");
+}
+
+/**
  * Closes the splash window and reveals the main one
  */
 export function openMain() {
@@ -123,7 +131,7 @@ export function openMain() {
  * @param key The key of the setting you want to get
  * @returns The setting value
  */
-export function getSetting(key: string) {
+export function getSetting<T extends keyof IStore>(key: T): IStore[T] {
     return ipcRenderer.sendSync("GetSetting", key);
 }
 
@@ -169,12 +177,47 @@ export async function getFileIcon(path: string) {
 }
 
 /**
+ * Obtains the path to a file stored on the filesystem
+ * @param file The file to get the path from
+ * @returns The path to the file
+ */
+export function getFilePath(file: File) {
+    return webUtils.getPathForFile(file);
+}
+
+/**
  * Checks if the provided path is a file or a folder
  * @param path The path to the file or folder
  * @returns A boolean indicating whether the provided path is a file or a folder
  */
 export async function isDirectory(path: string) {
     return await ipcRenderer.invoke("IsDirectory", path);
+}
+
+/**
+ * Adds a listener for various in-app events
+ * @param name The name of the event to bind to
+ * @param callback The callback to bind to the event
+ * @param options An object containing the options for the event
+ * @param options.once A boolean indicating whether the event should be called only once
+ */
+export function addEventListener<T extends AppEventT>(name: T, callback: CallbackT<T>, { once = false } = {}) {
+    handlers[name].push({ f: callback, once });
+
+    if (name === "ready" && wReady)
+        (callback as CallbackT<"ready">)();
+    else if (name === "open" && wOpen)
+        (callback as CallbackT<"open">)();
+}
+
+/**
+ * Notifies all listeners about a specific event
+ * @param name The name of the event to notify
+ * @param args Aditional arguments to pass to the callback
+ */
+export function dispatch<T extends AppEventT>(name: T, ...args: Parameters<CallbackT<T>>) {
+    handlers[name].forEach(c => (c.f as Function)(...args));
+    handlers[name] = handlers[name].filter(c => !c.once);
 }
 
 /**
@@ -203,8 +246,8 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  */
 export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true): Promise<ApiResult> {
     try {
-        if (offlineHandler()) {
-            errorHandler(-2);
+        if (!navigator.onLine) {
+            dispatch("error", -2);
             return {} as ApiResult;
         }
 
@@ -216,17 +259,17 @@ export async function apiCall({ endpoint, method, params, body }: { endpoint: st
         });
 
         const json = await apiResult.json() as ApiResult;
-        if (json.code != 0 && errorHandler) {
+        if (json.code !== 0) {
             logger.error("API threw an error with code " + json.code);
             if (error)
-                errorHandler(json.code);
+                dispatch("error", json.code);
         }
 
         return json;
     }
     catch (err) {
         logger.error(String(err));
-        errorHandler(-1);
+        dispatch("error", -1);
 
         return {} as ApiResult;
     }
@@ -235,10 +278,11 @@ export async function apiCall({ endpoint, method, params, body }: { endpoint: st
 /**
  * Formats a size in bytes to the closest unit
  * @param size The size in bytes
+ * @param decimals The number of decimals to display
  * @returns The formatted size in human readable format
  */
-export function fileSizeFormat(size: number) {
-    let count: number = 0;
+export function formatFileSize(size: number, decimals: number = 2) {
+    let count = 0;
 
     do {
         size /= 1024;
@@ -246,7 +290,7 @@ export function fileSizeFormat(size: number) {
     }
     while (size > 1024);
 
-    return size.toFixed(2) + " " + units[count];
+    return size.toFixed(decimals) + " " + units[count];
 }
 
 /**
@@ -617,65 +661,33 @@ export async function sendLoginRequest(username: string, password: string) {
     logger.log("Startup logging in...");
 
     ipcRenderer.send("LoginRequest", username, password);
-    return new Promise((resolve) => ipcRenderer.once("LoginRequestFulfilled", (_, result: boolean) => resolve(result)));
+    return new Promise(resolve => ipcRenderer.once("LoginRequestFulfilled", (_, result: boolean) => resolve(result)));
 }
 
 /**
  * Stops the program execution for the specified amount of time
  */
 export async function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * Updates the callback for various in-app events
- * @param name The name of the event to bind to
- * @param callback The callback to bind to the event
- */
-export function updateCallback<T extends TEventName>(name: T, callback: TCallback<T>) {
-    if (name == "offline")
-        offlineHandler = callback as TCallback<"offline">;
-    else if (name == "ready") {
-        readyHandler = callback as TCallback<"ready">;
-        if (wReady)
-            readyHandler();
-    }
-    else if (name == "open") {
-        openHandler = callback as TCallback<"open">;
-        if (wOpen)
-            openHandler();
-    }
-    else if (name == "close")
-        closeHandler = callback as TCallback<"close">;
-    else if (name == "login")
-        loginHandler = callback as TCallback<"login">;
-    else if (name == "uri")
-        uriHandler = callback as TCallback<"uri">;
-    else if (name == "error")
-        errorHandler = callback as TCallback<"error">;
-}
-
-ipcRenderer.on("CFUProgress", (_, percent: number) => cfuProgress(percent));
+ipcRenderer.on("CFUProgress", (_, percent: number) => updateProgress(percent));
 
 ipcRenderer.on("WindowReady", () => {
-    if (readyHandler)
-        readyHandler();
-    else
-        wReady = true;
+    dispatch("ready");
+    wReady = true;
 });
 
 ipcRenderer.on("WindowOpen", () => {
-    if (openHandler)
-        openHandler();
-    else
-        wOpen = true;
+    dispatch("open");
+    wOpen = true;
 });
 
-ipcRenderer.on("WindowClose", () => closeHandler());
+ipcRenderer.on("WindowClose", () => dispatch("close"));
 
-ipcRenderer.on("LoginRequest", async (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", await loginHandler(username, password)));
+ipcRenderer.on("LoginRequest", (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", dispatch("login", username, password)));
 
-ipcRenderer.on("UriHandler", (_, args: string[]) => uriHandler(args));
+ipcRenderer.on("UriHandler", (_, url: string) => dispatch("uri", url));
 
 contextBridge.exposeInMainWorld("app", {
     log,
@@ -685,6 +697,7 @@ contextBridge.exposeInMainWorld("app", {
     closeWindow,
     minimizeWindow,
     compressWindow,
+    winReady,
     openMain,
     getSetting,
     setSetting,
@@ -692,11 +705,14 @@ contextBridge.exposeInMainWorld("app", {
     getAppInfo,
     getPlatform,
     getFileIcon,
+    getFilePath,
     isDirectory,
+    addEventListener,
+    dispatch,
     showOpenDialog,
     showSaveDialog,
     apiCall,
-    fileSizeFormat,
+    formatFileSize,
     fetchServers,
     getServers,
     createTransfer,
@@ -707,6 +723,5 @@ contextBridge.exposeInMainWorld("app", {
     listenForIce,
     account,
     sendLoginRequest,
-    sleep,
-    updateCallback
+    sleep
 });
