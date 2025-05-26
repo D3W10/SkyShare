@@ -7,7 +7,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { connection } from "$lib/data/connection.svelte";
-    import { disable, setLock } from "$lib/data/disable.svelte";
+    import { disable, setLock, setUnlock } from "$lib/data/disable.svelte";
     import { setError } from "$lib/data/error.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -80,6 +80,7 @@
         connection.c = new WebRTC();
         await connection.c.setUpAsSender();
 
+        setUnlock();
         goto("/send/waiting");
     }
 </script>

@@ -48,8 +48,6 @@
             "title": "Detalhes da transferência",
             "copyCode": "Copiar código",
             "copyLink": "Copiar link",
-            "noMessage": "Sem mensagem",
-            "status": "Estado",
             "waiting": "Em espera...",
             "connected": "Conectado"
         }

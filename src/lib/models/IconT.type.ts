@@ -5,11 +5,14 @@ export type IconT =
     "appearance" |
     "arrowRight" |
     "back" |
+    "checkmark" |
     "closeWindow" |
+    "copy" |
     "file" |
     "history" |
     "home" |
     "identification" |
+    "link" |
     "minimizeWindow" |
     "nearbyShare" |
     "receive" |
@@ -18,6 +21,7 @@ export type IconT =
     "send" |
     "settings" |
     "sidebar" |
+    "stopwatch" |
     "sync" |
     "updates" |
     "upload" |
