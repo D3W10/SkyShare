@@ -2,7 +2,6 @@ import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "elect
 import fs from "fs";
 import path from "path";
 import os from "os";
-import crypto from "crypto";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
@@ -251,47 +250,6 @@ ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.s
 ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
 ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
-
-ipcMain.on("WaitForAnswer", async (_, code: string) => {
-    /* const docRef = doc(db, "channels", code);
-
-    if (!(await getDoc(docRef)).exists())
-        return;
-
-    const unsubscribe = onSnapshot(docRef, snapshot => {
-        const data = snapshot.data();
-
-        if (data && data.answer) {
-            window.webContents.send("WaitForAnswerFulfilled", data);
-            unsubscribe();
-        }
-    }); */
-});
-
-ipcMain.handle("CheckTransfer", async (_, code: string) => {
-    /* const transferDoc = await getDoc(doc(db, "channels", code));
-
-    return transferDoc.exists() ? transferDoc.data() : null; */
-});
-
-ipcMain.on("ListenForIce", (_, code: string) => {
-    /* const iceCandidatesCol = collection(db, `channels/${code}/iceCandidates`);
-
-    iceUnsubscribe = onSnapshot(iceCandidatesCol, snapshot => {
-        snapshot.docChanges().forEach(async change => {
-            if (change.type === "added") {
-                const data = change.doc.data().candidate;
-
-                logger.log(`ICE candidate received: ${JSON.stringify(data)}`);
-                window.webContents.send("IceReceived", data);
-            }
-        });
-    }); */
-});
-
-/* ipcMain.on("StopListeningForIce", () => iceUnsubscribe!()); */
-
-ipcMain.on("EncodePassword", (e, password: string) => e.returnValue = crypto.createHash("sha512").update(password).digest("hex"));
 
 ipcMain.handle("GetFileAsBase64", async (_, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
 

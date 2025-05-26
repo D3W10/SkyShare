@@ -2,10 +2,6 @@ import { contextBridge, ipcRenderer, webUtils } from "electron";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
-import type { TransferInfo } from "./lib/interfaces/TransferInfo.interface";
-import type { TransferData } from "./lib/interfaces/TransferData.interface";
-import type { AnswerInfo } from "./lib/interfaces/AnswerInfo.interface";
-import type { IceCandidate } from "./lib/interfaces/IceCandidate.interface";
 import type { IStore } from "./lib/interfaces/Store.interface";
 import type { AppEventT } from "./lib/types/AppEventT.type";
 import type { CallbackT } from "./lib/types/CallbackT.type";
@@ -311,93 +307,6 @@ export async function fetchServers() {
  */
 export function getServers() {
     return ipcRenderer.sendSync("GetServers");
-}
-
-/**
- * Creates a new transfer channel
- * @param offer The RTC offer to assign to the remote peer
- * @returns An object containing one boolean with the success state and info about the newly created transfer channel
- */
-export async function createTransfer(offer: RTCSessionDescriptionInit) {
-    const api = await apiCall({
-        endpoint: "file/create",
-        method: "POST",
-        body: {
-            offer
-        }
-    });
-
-    return apiTranslator<TransferInfo>(api);
-}
-
-/**
- * Waits for the other peer to send the RTC answer
- * @param code The transfer code
- * @param callback The function to be called when the answer has been sent by the other peer
- */
-export async function waitTransferConnection(code: string, callback: (data: TransferData) => unknown) {
-    ipcRenderer.send("WaitForAnswer", code);
-    ipcRenderer.once("WaitForAnswerFulfilled", (_, data) => callback(data));
-}
-
-/**
- * Checks if a certain transfer exists or not
- * @param code The transfer code
- * @returns The transfer data if it exists, null otherwise
- */
-export async function checkTransfer(code: string): Promise<TransferData | null> {
-    return await ipcRenderer.invoke("CheckTransfer", code);
-}
-
-/**
- * Sends the RTC answer to the other peer
- * @param code The transfer code
- * @param answer The RTC answer to give to the other peer
- * @returns An object containing one boolean with the success state and the token to access the transfer
- */
-export async function answerTransfer(code: string, answer: RTCSessionDescriptionInit) {
-    const api = await apiCall({
-        endpoint: "file/" + code,
-        method: "POST",
-        body: {
-            answer
-        }
-    });
-
-    return apiTranslator<AnswerInfo>(api);
-}
-
-/**
- * Adds an ICE candidate to an existing transfer
- * @param code The transfer code
- * @param candidates One or more RTC ICE candidates to add to the remote peer
- * @param token The token of the transfer
- * @returns An object containing one boolean with the success state
- */
-export async function sendIceCandidate(code: string, candidates: IceCandidate[], token: string) {
-    const api = await apiCall({
-        endpoint: "file/" + code + "/ice",
-        method: "POST",
-        body: {
-            candidates,
-            token
-        }
-    });
-
-    return apiTranslator<void>(api);
-}
-
-/**
- * Listens for ICE candidates for a specific transfer
- * @param code The transfer code
- * @param callback The function to be called when an ICE candidate is received
- * @returns A unsubscribe function that should be called when the connection has been established
- */
-export function listenForIce(code: string, callback: (data: IceCandidate) => unknown) {
-    ipcRenderer.send("ListenForIce", code);
-    ipcRenderer.on("IceReceived", (_, data: IceCandidate) => callback({ candidate: data.candidate, sdpMid: data.sdpMid, sdpMLineIndex: data.sdpMLineIndex }));
-
-    return () => ipcRenderer.send("StopListeningForIce");
 }
 
 /**
@@ -715,12 +624,6 @@ contextBridge.exposeInMainWorld("app", {
     formatFileSize,
     fetchServers,
     getServers,
-    createTransfer,
-    waitTransferConnection,
-    checkTransfer,
-    answerTransfer,
-    sendIceCandidate,
-    listenForIce,
     account,
     sendLoginRequest,
     sleep

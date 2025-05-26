@@ -3,15 +3,18 @@
     import { flip } from "svelte/animate";
     import { cubicInOut, cubicOut } from "svelte/easing";
     import { twMerge } from "tailwind-merge";
+    import { goto } from "$app/navigation";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
-    import { disable } from "$lib/data/disable.svelte";
+    import { connection } from "$lib/data/connection.svelte";
+    import { disable, setLock } from "$lib/data/disable.svelte";
     import { setError } from "$lib/data/error.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import TextArea from "$lib/components/TextArea.svelte";
     import { boxStyles, transitions } from "$lib/utils.svelte";
+    import { WebRTC } from "$lib/models/WebRTC.class";
     import type { File } from "$electron/lib/interfaces/File.interface";
 
     let files = $state<File[]>([]), hovering = $state(0), message = $state("");
@@ -69,6 +72,15 @@
             setError("addingError", { amount: failedCount });
 
         files = files;
+    }
+
+    async function startSend() {
+        setLock(true);
+
+        connection.c = new WebRTC();
+        await connection.c.setUpAsSender();
+
+        goto("/send/waiting");
     }
 </script>
 
@@ -140,6 +152,6 @@
                 </div>
             </div>
         </div>
-        <Button class="w-30" disabled={files.length === 0}>{i18n.t("send.0.send")}</Button>
+        <Button class="w-30" disabled={files.length === 0} onclick={startSend}>{i18n.t("send.0.send")}</Button>
     </div>
 </PageLayout>
