@@ -41,18 +41,12 @@ SkyShare is both a desktop and a web application that allows you to share files 
 This project consists in four different subprojects:
 > 🖥️&emsp;SkyShare [Desktop App](https://github.com/D3W10/SkyShare)
 >
-> 🔌&emsp;SkyShare [API](https://github.com/D3W10/SkyShare-API)
->
-> 🌐&emsp;SkyShare [Website](https://github.com/D3W10/SkyShare-Website)
->
-> 📩&emsp;SkyShare [Mail](https://github.com/D3W10/SkyShare-Mail)
->
 > 🔗&emsp;SkyShare [WebSocket Server](https://github.com/D3W10/SkyShare-WS)
 
 > [!NOTE]
 > The desktop app can also be compiled and used on Linux, just note that some bugs may occur.
 
-![App Homescreen](https://assets-d3w10.netlify.app/skyshare/homescreen.png)
+![App Homescreen](./.github/homescreen.png)
 
 <br />
 
@@ -133,4 +127,5 @@ Distributed under the Mozilla Public License 2.0. Check `LICENSE` for more detai
 
 ## Credits
 
-- Made by [Daniel Nunes](https://d3w10.netlify.app/)
+- [Daniel Nunes](https://d3w10.netlify.app/)
+- Mihail Arcus

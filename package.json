@@ -3,10 +3,15 @@
     "productName": "SkyShare",
     "version": "3.0.0",
     "description": "Sharing, Simply Better",
-    "author": {
-        "name": "Daniel Nunes",
-        "url": "https://d3w10.netlify.app"
-    },
+    "contributors": [
+        {
+            "name": "Daniel Nunes",
+            "url": "https://d3w10.netlify.app"
+        },
+        {
+            "name": "Mihail Arcus"
+        }
+    ],
     "scripts": {
         "dev": "concurrently \"bun run vite:dev\" \"bun run nodemon\"",
         "start": "concurrently \"bun run vite:dev\" \"bun run electron\"",
