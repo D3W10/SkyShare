@@ -90,7 +90,7 @@
     {/if}
     <div class="size-full flex flex-col justify-between p-6">
         <div class="space-y-3">
-            <img src="/logo.png" class="w-10" alt="Logo" />
+            <img src="/logo.svg" class="w-10" alt="Logo" />
             <h1 class="text-2xl font-semibold">{info.name}</h1>
         </div>
         <p class="animate-pulse" in:fade={{ duration: 400, delay: 400 }}>{states[status]()}</p>
