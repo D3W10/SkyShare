@@ -70,6 +70,10 @@ export class WebRTC {
                     console.log("[WS] Transfer code: " + this._code);
                     resolve(this.code);
                 }
+                else if (payload.type === "answer") {
+                    console.log("[WS] Remote description set with offer");
+                    this.peerConnection.setRemoteDescription(new RTCSessionDescription(payload.data.answer));
+                }
                 else if (payload.type === "iceReceiver") {
                     console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
                     this.peerConnection.addIceCandidate(payload.data);
@@ -79,19 +83,43 @@ export class WebRTC {
         // TODO: Handle websocket errors (and maybe reject promise)
     }
 
-    async setUpAsReceiver(offer: RTCSessionDescriptionInit, onReceive: (data: Record<string, unknown>) => unknown) {
-        console.log("[WS] Remote description set with offer");
-        await this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    async setUpAsReceiver(code: string/* , onReceive: (data: Record<string, unknown>) => unknown */) {
+        await new Promise<void>(resolve => setTimeout(resolve, 3000));
+        this.ws.send(JSON.stringify({
+            type: "connect",
+            data: { code }
+        }));
 
-        console.log("[WS] Creating answer and setting local description");
+        const setup = async (offer: RTCSessionDescriptionInit) => {
+            console.log("[WS] Remote description set with offer");
+            await this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    
+            console.log("[WS] Creating answer and setting local description");
+    
+            const answer = await this.peerConnection.createAnswer();
+            await this.peerConnection.setLocalDescription(answer);
+    
+            //this.setupDataChannel(onReceive);
+            this.type = "receiver";
+            this.ws.send(JSON.stringify({
+                type: "answer",
+                data: { code, answer }
+            }));
+        }
 
-        const answer = await this.peerConnection.createAnswer();
-        await this.peerConnection.setLocalDescription(answer);
+        return new Promise<boolean>(resolve => {
+            this.ws.addEventListener("message", e => {
+                const payload = JSON.parse(e.data);
+    
+                if (payload.type === "offer") {
+                    setup(payload.data.offer);
+                    resolve(true);
+                }
+            });
 
-        this.setupDataChannel(onReceive);
-        this.type = "receiver";
-
-        return answer;
+            this.ws.addEventListener("close", () => resolve(false), { once: true });
+        });
+        // TODO: Handle websocket errors (and maybe reject promise)
     }
 
     sendIceCandidate(ice: RTCIceCandidate) {

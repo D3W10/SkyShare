@@ -1,15 +1,20 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import { i18n } from "$lib/data/i18n.svelte";
+    import { setLock, setUnlock } from "$lib/data/disable.svelte";
+    import { connection } from "$lib/data/connection.svelte";
+    import { setError } from "$lib/data/error.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Input from "$lib/components/Input.svelte";
     import Switch from "$lib/components/Switch.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
     import Button from "$lib/components/Button.svelte";
+    import { WebRTC } from "$lib/models/WebRTC.class";
 
     let n1 = $state(""), n2 = $state(""), n3 = $state(""), n4 = $state(""), n5 = $state(""), n6 = $state("");
     let nearbyShare = $state(settings.nearbyShare), nearbyShareAlert = $state(false);
-    const code = $derived(+(n1[0] + n2[0] + n3[0] + n4[0] + n5[0] + n6[0]));
+    const code = $derived(n1[0] + n2[0] + n3[0] + n4[0] + n5[0] + n6[0]);
 
     function onKeydown(e: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement; }) {
         if (e.key === "Backspace" && e.currentTarget.value.length === 0 && e.currentTarget.previousElementSibling) {
@@ -45,6 +50,20 @@
         }
     }
 
+    async function startReceive() {
+        setLock(true);
+
+        connection.c = new WebRTC();
+        const success = await connection.c.setUpAsReceiver(code);
+
+        setUnlock();
+
+        if (success)
+            goto("/receive/review");
+        else
+            setError("invalidCode");
+    }
+
     $effect(() => {
         if (settings.nearbyShare === nearbyShare)
             return;
@@ -72,7 +91,7 @@
         <p class="font-semibold">{i18n.t("receive.0.nearbyShare")}</p>
         <Switch bind:value={nearbyShare} />
     </div>
-    <Button class="w-30 mb-4" disabled={!n1 || !n2 || !n3 || !n4 || !n5 || !n6}>{i18n.t("receive.0.receive")}</Button>
+    <Button class="w-30 mb-4" disabled={!n1 || !n2 || !n3 || !n4 || !n5 || !n6} onclick={startReceive}>{i18n.t("receive.0.receive")}</Button>
 </PageLayout>
 <Dialog bind:show={nearbyShareAlert} title={i18n.t("dialog.nearbyShare")} onsubmit={() => settings.nearbyShare = true} oncancel={() => nearbyShare = false}>
     <p>{i18n.t("dialog.nearbyShareDesc.0")}</p>

@@ -18,8 +18,7 @@
     import type { File } from "$electron/lib/interfaces/File.interface";
 
     let files = $state<File[]>([]), hovering = $state(0), message = $state("");
-    const totalSize = $derived(files.reduce((p, c) => p + c.size, 0));
-    const MAX_FILES = 50, MAX_SIZE = 32212254720, MAX_MESSAGE = 500;
+    const MAX_FILES = 50, MAX_MESSAGE = 500;
 
     async function parseFiles(mode: "select" | "drop", e?: DragEvent) {
         let failedCount = 0, fileList: File[] = [];
@@ -57,10 +56,6 @@
             }
             else if (files.length + 1 > MAX_FILES) {
                 setError("tooManyFiles", { amount: MAX_FILES });
-                break;
-            }
-            else if (totalSize + file.size > MAX_SIZE) {
-                setError("sizeLimitExceeded", { amount: app.formatFileSize(MAX_SIZE, 0)  });
                 break;
             }
 
