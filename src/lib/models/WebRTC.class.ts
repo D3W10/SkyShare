@@ -51,7 +51,6 @@ export class WebRTC {
 
         this.createDataChannel();
         this.type = "sender";
-        this._timeout = new Date(Date.now() + 600000);
 
         const offer = await this.peerConnection.createOffer();
         await this.peerConnection.setLocalDescription(offer);
@@ -67,24 +66,32 @@ export class WebRTC {
     
                 if (payload.type === "code") {
                     this._code = payload.data.code;
+                    this._timeout = new Date(Date.now() + payload.data.timeout);
                     console.log("[WS] Transfer code: " + this._code);
                     resolve(this.code);
                 }
                 else if (payload.type === "answer") {
                     console.log("[WS] Remote description set with offer");
                     this.peerConnection.setRemoteDescription(new RTCSessionDescription(payload.data.answer));
+                    this.exchangingIce = true;
+                    this.batchSendIce();
                 }
                 else if (payload.type === "iceReceiver") {
                     console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
-                    this.peerConnection.addIceCandidate(payload.data);
+                    this.peerConnection.addIceCandidate(payload.data.ice);
                 }
             });
+
+            this.ws.addEventListener("close", e => {
+                console.log(e.reason);
+            }, { once: true });
         });
         // TODO: Handle websocket errors (and maybe reject promise)
     }
 
     async setUpAsReceiver(code: string/* , onReceive: (data: Record<string, unknown>) => unknown */) {
         await new Promise<void>(resolve => setTimeout(resolve, 3000));
+        this._code = code;
         this.ws.send(JSON.stringify({
             type: "connect",
             data: { code }
@@ -105,6 +112,9 @@ export class WebRTC {
                 type: "answer",
                 data: { code, answer }
             }));
+
+            this.exchangingIce = true;
+            this.batchSendIce();
         }
 
         return new Promise<boolean>(resolve => {
@@ -115,20 +125,33 @@ export class WebRTC {
                     setup(payload.data.offer);
                     resolve(true);
                 }
+                else if (payload.type === "iceSender") {
+                    console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
+                    this.peerConnection.addIceCandidate(payload.data.ice);
+                }
             });
 
-            this.ws.addEventListener("close", () => resolve(false), { once: true });
+            this.ws.addEventListener("close", e => {
+                console.log(e.reason);
+                resolve(false);
+            }, { once: true });
         });
         // TODO: Handle websocket errors (and maybe reject promise)
     }
 
     sendIceCandidate(ice: RTCIceCandidate) {
-        if (this.code === "" || !this.exchangingIce)
-            this.candidates.push(ice);
-        else {
+        this.candidates.push(ice);
+        this.batchSendIce();
+    }
+
+    batchSendIce() {
+        if (this._code !== "" && this.exchangingIce) {
             const sendIce = (i: RTCIceCandidate) => this.ws?.send(JSON.stringify({
                 type: "ice" + this.type.substring(0, 1).toUpperCase() + this.type.substring(1),
-                data: i
+                data: {
+                    code: this._code,
+                    ice: i
+                }
             }));;
 
             while (this.candidates.length > 0) {
@@ -136,7 +159,6 @@ export class WebRTC {
                 if (i)
                     sendIce(i);
             }
-            sendIce(ice);
         }
     }
 

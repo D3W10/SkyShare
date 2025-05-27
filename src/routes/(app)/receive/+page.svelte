@@ -58,10 +58,10 @@
 
         setUnlock();
 
-        if (success)
+        /* if (success)
             goto("/receive/review");
         else
-            setError("invalidCode");
+            setError("invalidCode"); */
     }
 
     $effect(() => {
