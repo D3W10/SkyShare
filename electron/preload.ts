@@ -17,10 +17,10 @@ const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> 
     error: []
 }
 
-const consoleLog = console.log, consoleWarn = console.warn, consoleError = console.error;
-console.log = (...data: any[]) => (consoleLog(...data), ipcRenderer.send("LoggerPreload", "info", ...data));
-console.warn = (...data: any[]) => (consoleWarn(...data), ipcRenderer.send("LoggerPreload", "warn", ...data));
-console.error = (...data: any[]) => (consoleError(...data), ipcRenderer.send("LoggerPreload", "error", ...data));
+const _consoleLog = console.log, _consoleWarn = console.warn, _consoleError = console.error;
+console.log = (...data: any[]) => (_consoleLog(...data), ipcRenderer.send("LoggerPreload", "info", ...data));
+console.warn = (...data: any[]) => (_consoleWarn(...data), ipcRenderer.send("LoggerPreload", "warn", ...data));
+console.error = (...data: any[]) => (_consoleError(...data), ipcRenderer.send("LoggerPreload", "error", ...data));
 
 type TUpdateData = { version: string, date: string };
 
@@ -263,26 +263,6 @@ export function formatFileSize(size: number, decimals = 2) {
     while (size > 1024);
 
     return size.toFixed(decimals) + " " + units[count];
-}
-
-/**
- * Obtains the list of servers to use for transfers
- */
-export async function fetchServers() {
-    const api = await apiCall({
-        endpoint: "file/servers",
-        method: "GET"
-    });
-
-    ipcRenderer.send("StoreServers", api.value);
-}
-
-/**
- * Obtains the servers from the main process
- * @returns The list of servers to use for the RTC connection
- */
-export function getServers() {
-    return ipcRenderer.sendSync("GetServers");
 }
 
 /**
@@ -598,8 +578,6 @@ contextBridge.exposeInMainWorld("app", {
     showSaveDialog,
     apiCall,
     formatFileSize,
-    fetchServers,
-    getServers,
     account,
     sendLoginRequest,
     sleep

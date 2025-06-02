@@ -8,7 +8,7 @@ import { Logger } from "./lib/Logger";
 import { defaultStore } from "./lib/constants/defaultStore.const";
 import type { IStore } from "./lib/interfaces/Store.interface";
 
-let window: BrowserWindow, splash: BrowserWindow, closeLock = true, serverData = {};
+let window: BrowserWindow, splash: BrowserWindow, closeLock = true;
 const winWidth = 1000, winHeight = 600;
 const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG !== undefined && process.env.DEBUG.match(/true/gi) !== null || process.argv.includes("--debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
@@ -166,10 +166,6 @@ function log(logger: Logger, type: "info" | "warn" | "error", msg: string) {
     else if (type == "error")
         logger.error(msg);
 }
-
-ipcMain.on("StoreServers", (_, servers) => serverData = servers);
-
-ipcMain.on("GetServers", e => e.returnValue = serverData);
 
 ipcMain.on("CheckForUpdates", () => {
     autoUpdater.checkForUpdates();

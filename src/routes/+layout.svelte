@@ -13,10 +13,10 @@
 
     let instantChange = true, oldSettings: StoreSettings;
 
-    const consoleLog = console.log, consoleWarn = console.warn, consoleError = console.error;
-    console.log = (...data: any[]) => (consoleLog(...data), app.log(...data));
-    console.warn = (...data: any[]) => (consoleWarn(...data), app.warn(...data));
-    console.error = (...data: any[]) => (consoleError(...data), app.error(...data));
+    const _consoleLog = console.log, _consoleWarn = console.warn, _consoleError = console.error;
+    console.log = (...data: any[]) => (_consoleLog(...data), app.log(...data));
+    console.warn = (...data: any[]) => (_consoleWarn(...data), app.warn(...data));
+    console.error = (...data: any[]) => (_consoleError(...data), app.error(...data));
 
     app.addEventListener("uri", url => goto(`${base}/${url}`));
 
