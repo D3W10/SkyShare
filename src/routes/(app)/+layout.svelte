@@ -7,7 +7,7 @@
     import { app } from "$lib/data/app.svelte";
     import { disable } from "$lib/data/disable.svelte";
     import { settings } from "$lib/data/settings.svelte";
-    import { error, hideError } from "$lib/data/error.svelte";
+    import { error, hideError, setError } from "$lib/data/error.svelte";
     import Framebar from "$lib/components/Framebar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
@@ -23,7 +23,9 @@
         ["--color-home", "--color-home-light", "--color-home-dark"]
     );
 
-    onMount(() => app.winReady());
+    app.addEventListener("error", setError);
+
+    onMount(app.winReady);
 </script>
 
 <Framebar bind:sidebar={settings.sidebarCollapsed} />

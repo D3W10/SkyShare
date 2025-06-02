@@ -1,4 +1,5 @@
 import type { AppEventT } from "./AppEventT.type";
+import type { ErrorT } from "./ErrorT.type";
 
 export type CallbackT<T extends AppEventT> = 
     T extends "ready" ? () => unknown :
@@ -6,5 +7,5 @@ export type CallbackT<T extends AppEventT> =
     T extends "close" ? () => unknown :
     T extends "login" ? (username: string, password: string) => Promise<unknown> :
     T extends "uri" ? (url: string) => unknown :
-    T extends "error" ? (code: number) => unknown :
+    T extends "error" ? (code: ErrorT, vars?: Record<string, any>) => unknown :
     never;

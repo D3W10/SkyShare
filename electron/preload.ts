@@ -7,7 +7,7 @@ import type { AppEventT } from "./lib/types/AppEventT.type";
 import type { CallbackT } from "./lib/types/CallbackT.type";
 
 let wReady = false, wCompressed = false, wOpen = false, updateProgress: (percent: number) => unknown;
-const units = ["Bytes", "KB", "MB", "GB"], apiUrl: string = ipcRenderer.sendSync("GetAppInfo").api;
+const units = ["Bytes", "KB", "MB", "GB"], apiUrl = ipcRenderer.sendSync("GetAppInfo").api;
 const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> = {
     ready: [],
     open: [],
@@ -17,37 +17,12 @@ const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> 
     error: []
 }
 
-const logger = {
-    log: (...data: any[]) => ipcRenderer.send("LoggerPreload", "info", ...data),
-    error: (...data: any[]) => ipcRenderer.send("LoggerPreload", "error", ...data)
-};
+const consoleLog = console.log, consoleWarn = console.warn, consoleError = console.error;
+console.log = (...data: any[]) => (consoleLog(...data), ipcRenderer.send("LoggerPreload", "info", ...data));
+console.warn = (...data: any[]) => (consoleWarn(...data), ipcRenderer.send("LoggerPreload", "warn", ...data));
+console.error = (...data: any[]) => (consoleError(...data), ipcRenderer.send("LoggerPreload", "error", ...data));
 
-type TDataObj<T> = T extends {} ? keyof T extends never ? { [key: string]: any } : T : T;
 type TUpdateData = { version: string, date: string };
-
-interface ApiCall<T> {
-    success: boolean;
-    data: T;
-}
-
-function apiTranslator<T = void>(res: ApiResult, add: { [key: string]: any } = {}): ApiCall<TDataObj<T>> {
-    const resGen = (data: any) => ({ success: res.code == 0, data }) as ApiCall<TDataObj<T>>;
-
-    if (res.code == 0 && res.value && res.value instanceof Object) {
-        if (!Array.isArray(res.value)) {
-            const data = { ...res.value, ...add } as TDataObj<{}>;
-
-            if (data.createdAt)
-                data.createdAt = new Date(data.createdAt);
-
-            return resGen(data);
-        }
-        else
-            return resGen(res.value as TDataObj<any[]>);
-    }
-
-    return resGen(res.value);
-}
 
 /**
  * Logs a message to the console (renderer)
@@ -87,7 +62,7 @@ export function checkForUpdates(statusCallback: (available: boolean, data: TUpda
  */
 export function closeWindow() {
     ipcRenderer.send("CloseWindow");
-    logger.log("Window Closed");
+    console.log("Window Closed");
 }
 
 /**
@@ -95,7 +70,7 @@ export function closeWindow() {
  */
 export function minimizeWindow() {
     ipcRenderer.send("MinimizeWindow");
-    logger.log("Window Minimized");
+    console.log("Window Minimized");
 }
 
 /**
@@ -103,7 +78,7 @@ export function minimizeWindow() {
  */
 export function compressWindow() {
     ipcRenderer.send("ResizeWindow", -1, !wCompressed ? 40 : -1);
-    logger.log(`Window ${!wCompressed ? "Compressed" : "Decompressed"}`);
+    console.log(`Window ${!wCompressed ? "Compressed" : "Decompressed"}`);
 
     wCompressed = !wCompressed;
 }
@@ -240,34 +215,35 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  * @param error A boolean indicating whether the error should be handled by the native error system
  * @returns A JSON containing the code, message and returned value
  */
-export async function apiCall({ endpoint, method, params, body }: { endpoint: string, method: string, params?: URLSearchParams, body?: object }, error: boolean = true): Promise<ApiResult> {
+export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: string, { method, params, body }: { method?: string, params?: string, body?: object } = {}, error = true): Promise<T | undefined> {
     try {
         if (!navigator.onLine) {
-            dispatch("error", -2);
-            return {} as ApiResult;
+            dispatch("error", "offline");
+            return;
         }
 
-        logger.log("API call made: " + apiUrl + endpoint + (params ? "?" + params : ""));
+        console.log("[API] " + endpoint + (params ? "?" + params : ""));
+        method = method ?? "GET";
 
         const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
             method,
             body: body ? JSON.stringify(body) : undefined
         });
 
-        const json = await apiResult.json() as ApiResult;
-        if (json.code !== 0) {
-            logger.error("API threw an error with code " + json.code);
+        const json = await apiResult.json() as ApiResult<T>;
+        if (json.code !== "success") {
+            console.error("[API] Return error: " + json.code);
             if (error)
-                dispatch("error", json.code);
+                dispatch("error", "unknown");
         }
 
-        return json;
+        return json.data;
     }
     catch (err) {
-        logger.error(String(err));
-        dispatch("error", -1);
-
-        return {} as ApiResult;
+        console.error(err instanceof Error ? err.message : err);
+        if (error)
+            dispatch("error", "unknown");
+        return;
     }
 }
 
@@ -277,7 +253,7 @@ export async function apiCall({ endpoint, method, params, body }: { endpoint: st
  * @param decimals The number of decimals to display
  * @returns The formatted size in human readable format
  */
-export function formatFileSize(size: number, decimals: number = 2) {
+export function formatFileSize(size: number, decimals = 2) {
     let count = 0;
 
     do {
@@ -539,7 +515,7 @@ export const account = {
      */
     logout: () => {
         setSetting("account", { username: null, password: null });
-        logger.log("User logged out");
+        console.log("User logged out");
     },
     /**
      * Deletes a user account
@@ -567,7 +543,7 @@ export const account = {
  * @returns A boolean if the authentication on the main window was successful
  */
 export async function sendLoginRequest(username: string, password: string) {
-    logger.log("Startup logging in...");
+    console.log("Startup logging in...");
 
     ipcRenderer.send("LoginRequest", username, password);
     return new Promise(resolve => ipcRenderer.once("LoginRequestFulfilled", (_, result: boolean) => resolve(result)));

@@ -35,7 +35,7 @@
     "license": "MPL-2.0",
     "homepage": "http://20.86.131.181/",
     "data": {
-        "server": "http://20.86.131.181/api/v1/",
+        "api": "http://20.86.131.181/api/v1/",
         "clientId": "ec6b641dde69f4cb08c1"
     },
     "dependencies": {

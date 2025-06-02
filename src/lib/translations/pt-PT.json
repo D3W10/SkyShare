@@ -196,6 +196,8 @@
         "cancel": "Cancelar",
         "unknown": "Erro desconhecido",
         "unknownDesc": "Um erro desconhecido ocorreu na aplicação ou ao tentar conectar ao servidor, o mesmo provavelmente aconteceu se estiver a utilizar uma versão desatualizada do SkyShare. Por favor verifique que está a utilizar a versão mais recente e tente novamente.",
+        "offline": "Está offline",
+        "offlineDesc": "O SkyShare não conseguiu aceder à internet, verifique se está online e se tem uma ligação estável.",
         "disabled": "Aguarde",
         "disabledDesc": "Uma operação está atualmente em execução, só poderá fechar o SkyShare quando o mesmo estiver concluído!",
         "tooManyFiles": "Limite excedido",

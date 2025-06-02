@@ -1,4 +1,4 @@
-import type { ErrorT } from "$lib/models/ErrorT.type";
+import type { ErrorT } from "$electron/lib/types/ErrorT.type";
 
 interface ErrorState {
     e: ErrorT;

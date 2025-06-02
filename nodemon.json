@@ -3,5 +3,5 @@
         "electron/"
     ],
     "ext": "ts, js, json",
-    "exec": "npm run electron"
+    "exec": "bun run electron"
 }

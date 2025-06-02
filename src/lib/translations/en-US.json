@@ -196,6 +196,8 @@
         "cancel": "Cancel",
         "unknown": "Unknown error",
         "unknownDesc": "An unknown error occurred in the app or while trying to reach the server, this likely happened cause you're running an outdated version of SkyShare. Please make sure you're running the latest version and try again.",
+        "offline": "You're offline",
+        "offlineDesc": "SkyShare could not reach the internet, make sure you're online and have a stable connection.",
         "disabled": "Hold on",
         "disabledDesc": "An operation is currently running, you may only close SkyShare once it's finished!",
         "tooManyFiles": "Limit exceeded",
