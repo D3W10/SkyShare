@@ -41,7 +41,7 @@ SkyShare is both a desktop and a web application that allows you to share files 
 This project consists in four different subprojects:
 > 🖥️&emsp;SkyShare [Desktop App](https://github.com/D3W10/SkyShare)
 >
-> 🔗&emsp;SkyShare [WebSocket Server](https://github.com/D3W10/SkyShare-WS)
+> 🔌&emsp;SkyShare [API](https://github.com/D3W10/SkyShare-API)
 
 > [!NOTE]
 > The desktop app can also be compiled and used on Linux, just note that some bugs may occur.
@@ -106,7 +106,7 @@ In order to run the application, you will need the following tools:
     git clone https://github.com/D3W10/SkyShare.git
     ```
 2. Open the project folder using your prefered code editor (ex: VS Code)
-3. Install the required dependencies on both the backend and frontend
+3. Install the required dependencies
     ```sh
     bun i
     ```

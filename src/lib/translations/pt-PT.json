@@ -94,7 +94,7 @@
         {
             "title" : "Iniciar Sessão",
             "history": "Histórico de Transferências",
-            "historyDesc": "Todas as suas transferências utilizando a aplicação serão guardadas num histório para fácil acesso e gestão",
+            "historyDesc": "Todas as suas transferências utilizando a aplicação serão guardadas num histórico para fácil acesso e gestão",
             "sync": "Sincronização",
             "syncDesc": "O seu histórico de transferências será sincronizado por todos os dispositivos que utilizam a sua conta de forma a mantê-lo atualizado",
             "identification": "Identificação no envio",
