@@ -1,27 +1,38 @@
+import { app } from "$lib/data/app.svelte";
+import { info } from "$lib/data/info.svelte";
+import { setError } from "$lib/data/error.svelte";
+
+type Direction = "sender" | "receiver";
+type Credentials = { username: string, password: string };
+
 export class WebRTC {
     private ws: WebSocket;
     private peerConnection: RTCPeerConnection;
     private dataChannel: RTCDataChannel | undefined;
     private candidates: RTCIceCandidate[] = [];
-    private type: "sender" | "receiver" = "sender";
+    private type: Direction = "sender";
     private _code = "";
     private _timeout: Date | undefined;
     private exchangingIce = false;
 
     constructor() {
-        this.ws = new WebSocket("ws://20.86.131.181/ws");
+        this.ws = new WebSocket("");
+        this.peerConnection = new RTCPeerConnection();
 
-        this.peerConnection = new RTCPeerConnection({
-            iceServers: [
-                {
-                    urls: "stun:20.86.131.181:3478",
-                },
-                {
-                    urls: "turn:20.86.131.181:3478",
-                    username: "teste",
-                    credential: "teste123"
-                }
-            ]
+        app.apiCall<Credentials>("credentials").then(data => {
+            if (data)
+                this.peerConnection = new RTCPeerConnection({
+                    iceServers: [
+                        {
+                            urls: "stun:20.86.131.181:3478",
+                        },
+                        {
+                            urls: "turn:20.86.131.181:3478",
+                            username: data.username,
+                            credential: data.password
+                        }
+                    ]
+                });
         });
 
         this.peerConnection.addEventListener("icecandidate", async event => {
@@ -46,21 +57,23 @@ export class WebRTC {
         return this._timeout;
     }
 
-    async setUpAsSender() {
-        console.log("[WS] Creating offer and setting local description");
+    setUpAsSender() {
+        return new Promise<string>(async resolve => {
+            this.createDataChannel();
+            this.type = "sender";
+            this.ws = new WebSocket(info.homepage + "transfer/create");
+            await this.waitForWebSocketOpen();
 
-        this.createDataChannel();
-        this.type = "sender";
+            console.log("[WS] Creating offer and setting local description");
 
-        const offer = await this.peerConnection.createOffer();
-        await this.peerConnection.setLocalDescription(offer);
+            const offer = await this.peerConnection.createOffer();
+            await this.peerConnection.setLocalDescription(offer);
 
-        this.ws.send(JSON.stringify({
-            type: "offer",
-            data: { offer }
-        }));
+            this.ws.send(JSON.stringify({
+                type: "offer",
+                data: { offer }
+            }));
 
-        return new Promise<string>(resolve => {
             this.ws.addEventListener("message", e => {
                 const payload = JSON.parse(e.data);
     
@@ -74,9 +87,9 @@ export class WebRTC {
                     console.log("[WS] Remote description set with offer");
                     this.peerConnection.setRemoteDescription(new RTCSessionDescription(payload.data.answer));
                     this.exchangingIce = true;
-                    this.batchSendIce();
+                    this.syncIce();
                 }
-                else if (payload.type === "iceReceiver") {
+                else if (payload.type === "ice") {
                     console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
                     this.peerConnection.addIceCandidate(payload.data.ice);
                 }
@@ -84,48 +97,57 @@ export class WebRTC {
 
             this.ws.addEventListener("close", e => {
                 console.log(e.reason);
-            }, { once: true });
+            });
         });
         // TODO: Handle websocket errors (and maybe reject promise)
     }
 
-    async setUpAsReceiver(code: string/* , onReceive: (data: Record<string, unknown>) => unknown */) {
-        await new Promise<void>(resolve => setTimeout(resolve, 3000));
-        this._code = code;
-        this.ws.send(JSON.stringify({
-            type: "connect",
-            data: { code }
-        }));
+    setUpAsReceiver(code: string/* , onReceive: (data: Record<string, unknown>) => unknown */) {
+        return new Promise<boolean>(async resolve => {
+            const data = await app.apiCall<{ status: boolean }>("transfer/" + code + "/check");
+            if (!data)
+                return resolve(false);
+            else if (!data.status) {
+                setError("invalidCode");
+                return resolve(false);
+            }
+            else
+                resolve(true);
 
-        const setup = async (offer: RTCSessionDescriptionInit) => {
-            console.log("[WS] Remote description set with offer");
-            await this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-    
-            console.log("[WS] Creating answer and setting local description");
-    
-            const answer = await this.peerConnection.createAnswer();
-            await this.peerConnection.setLocalDescription(answer);
-    
-            //this.setupDataChannel(onReceive);
-            this.type = "receiver";
+            this._code = code;
+            this.ws = new WebSocket(info.homepage + "transfer/" + code);
+
+            await this.waitForWebSocketOpen();
             this.ws.send(JSON.stringify({
-                type: "answer",
-                data: { code, answer }
+                type: "offer"
             }));
 
-            this.exchangingIce = true;
-            this.batchSendIce();
-        }
+            const setup = async (offer: RTCSessionDescriptionInit) => {
+                console.log("[WS] Remote description set with offer");
+                await this.peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
 
-        return new Promise<boolean>(resolve => {
+                console.log("[WS] Creating answer and setting local description");
+
+                const answer = await this.peerConnection.createAnswer();
+                await this.peerConnection.setLocalDescription(answer);
+
+                //this.setupDataChannel(onReceive);
+                this.type = "receiver";
+                this.ws.send(JSON.stringify({
+                    type: "answer",
+                    data: { answer }
+                }));
+
+                this.exchangingIce = true;
+                this.syncIce();
+            }
+
             this.ws.addEventListener("message", e => {
                 const payload = JSON.parse(e.data);
-    
-                if (payload.type === "offer") {
+
+                if (payload.type === "offer")
                     setup(payload.data.offer);
-                    resolve(true);
-                }
-                else if (payload.type === "iceSender") {
+                else if (payload.type === "ice") {
                     console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
                     this.peerConnection.addIceCandidate(payload.data.ice);
                 }
@@ -133,18 +155,21 @@ export class WebRTC {
 
             this.ws.addEventListener("close", e => {
                 console.log(e.reason);
-                resolve(false);
-            }, { once: true });
+            });
         });
         // TODO: Handle websocket errors (and maybe reject promise)
+    }
+
+    waitForWebSocketOpen() {
+        return new Promise<void>(resolve => this.ws.addEventListener("open", () => resolve()));
     }
 
     sendIceCandidate(ice: RTCIceCandidate) {
         this.candidates.push(ice);
-        this.batchSendIce();
+        this.syncIce();
     }
 
-    batchSendIce() {
+    syncIce() {
         if (this._code !== "" && this.exchangingIce) {
             const sendIce = (i: RTCIceCandidate) => this.ws?.send(JSON.stringify({
                 type: "ice" + this.type.substring(0, 1).toUpperCase() + this.type.substring(1),

@@ -60,7 +60,9 @@
             "receive": "Receber"
         },
         {
-            "title": "Rever ficheiros"
+            "title": "Rever ficheiros",
+            "sentBy": "Enviado por",
+            "noMessage": "Sem mensagem"
         }
     ],
     "settings": {

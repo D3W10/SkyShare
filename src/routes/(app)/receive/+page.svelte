@@ -54,24 +54,17 @@
         setLock(true);
 
         connection.c = new WebRTC();
-        const success = await connection.c.setUpAsReceiver(code);
-
-        setUnlock();
-
-        /* if (success)
-            goto("/receive/review");
-        else
-            setError("invalidCode"); */
+        if (await connection.c.setUpAsReceiver(code))
+            goto("/receive/" + code);
     }
 
     $effect(() => {
-        if (settings.nearbyShare === nearbyShare)
-            return;
-
-        if (nearbyShare)
-            nearbyShareAlert = true;
-        else
-            settings.nearbyShare = nearbyShare;
+        if (settings.nearbyShare !== nearbyShare) {
+            if (nearbyShare)
+                nearbyShareAlert = true;
+            else
+                settings.nearbyShare = nearbyShare;
+        }
     });
 </script>
 

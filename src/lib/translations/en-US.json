@@ -60,7 +60,9 @@
             "receive": "Receive"
         },
         {
-            "title": "Review files"
+            "title": "Review files",
+            "sentBy": "Sent by",
+            "noMessage": "No message"
         }
     ],
     "settings": {

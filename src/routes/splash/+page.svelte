@@ -19,7 +19,6 @@
     onMount(async () => {
         await checkConnection();
         await checkForUpdates();
-        await fetchServers();
         await accountLogIn();
         onReady();
     });
@@ -51,10 +50,6 @@
         }
         else
             console.log("[Splash] Auto update is disabled");
-    }
-
-    async function fetchServers() {
-        await app.fetchServers();
     }
 
     async function accountLogIn() {

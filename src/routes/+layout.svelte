@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { tick } from "svelte";
+    import { onMount, tick } from "svelte";
     import { page } from "$app/state";
     import { base } from "$app/paths";
     import { goto } from "$app/navigation";
@@ -61,6 +61,10 @@
             { duration: 800, easing: "ease-in-out", pseudoElement: "::view-transition-new(root)" }
         );
     };
+
+    onMount(() => {
+        window.goto = goto;
+    });
 </script>
 
 {@render children()}

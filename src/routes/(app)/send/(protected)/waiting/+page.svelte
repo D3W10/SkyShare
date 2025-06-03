@@ -11,7 +11,7 @@
     import { boxStyles } from "$lib/utils.svelte";
     import { fade } from "svelte/transition";
 
-    let connected = $state(false), timeLeft = $state((connection.c?.timeout?.getTime() ?? 0) - Date.now());
+    let connected = $state(false), timeLeft = $state((connection.c!.timeout!.getTime()) - Date.now());
     let codeAnim = $state(false), linkAnim = $state(false);
 
     function copy(type: "code" | "link") {
@@ -28,15 +28,15 @@
     }
 
     $effect(() => {
-        if (!connection.c || !connection.c.code || !connection.c.timeout || timeLeft <= 0)
+        if (timeLeft <= 0)
             goto("/send");
     });
 
-    setInterval(() => timeLeft = (connection.c?.timeout?.getTime() ?? 0) - Date.now(), 1000);
+    setInterval(() => timeLeft = connection.c!.timeout!.getTime() - Date.now(), 1000);
 </script>
 
 <PageLayout title={i18n.t("send.1.title")} class="flex flex-col justify-center items-center gap-y-6">
-    <p class="text-7xl font-bold tracking-widest drop-shadow-lg drop-shadow-accent/30">{connection.c?.code || "000000"}</p>
+    <p class="text-7xl font-bold tracking-widest drop-shadow-lg drop-shadow-accent/30">{connection.c!.code}</p>
     <div class="flex gap-x-4">
         <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => copy("code")}>
             <div class="size-5">
