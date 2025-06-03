@@ -72,7 +72,7 @@
     async function startSend() {
         setLock(true);
 
-        connection.c = new WebRTC();
+        connection.c = new WebRTC(await WebRTC.getCredentials());
         await connection.c.setUpAsSender(files);
 
         setUnlock();

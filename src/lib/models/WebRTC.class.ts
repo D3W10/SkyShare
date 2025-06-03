@@ -19,23 +19,18 @@ export class WebRTC {
     private exchangingIce = false;
     private onDisconnect: (() => unknown) | undefined;
 
-    constructor() {
-        this.peerConnection = new RTCPeerConnection();
-
-        app.apiCall<Credentials>("credentials").then(data => {
-            if (data)
-                this.peerConnection = new RTCPeerConnection({
-                    iceServers: [
-                        {
-                            urls: "stun:20.86.131.181:3478",
-                        },
-                        {
-                            urls: "turn:20.86.131.181:3478",
-                            username: data.username,
-                            credential: data.password
-                        }
-                    ]
-                });
+    constructor(credentials: Credentials) {
+        this.peerConnection = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: "stun:20.86.131.181:3478",
+                },
+                {
+                    urls: "turn:20.86.131.181:3478",
+                    username: credentials.username,
+                    credential: credentials.password
+                }
+            ]
         });
 
         this.peerConnection.addEventListener("icecandidate", async event => {
@@ -50,6 +45,17 @@ export class WebRTC {
                 console.error("ICE connection failed");
             // TODO: Handle errors
         });
+    }
+
+    static async getCredentials(): Promise<Credentials> {
+        const data = await app.apiCall<Credentials>("credentials");
+
+        if (data)
+            return data;
+        else
+            return { username: "", password: "" };
+
+        // TODO Handle error
     }
 
     public get code() {
@@ -80,7 +86,7 @@ export class WebRTC {
 
             this.ws.addEventListener("message", async e => {
                 const payload = JSON.parse(e.data);
-    
+
                 if (payload.type === "code") {
                     this._code = payload.data.code;
                     this._timeout = new Date(Date.now() + payload.data.timeout);

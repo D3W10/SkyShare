@@ -52,7 +52,7 @@
     async function startReceive() {
         setLock(true);
 
-        connection.c = new WebRTC();
+        connection.c = new WebRTC(await WebRTC.getCredentials());
         if (await connection.c.setUpAsReceiver(code))
             goto("/receive/" + code);
         else
