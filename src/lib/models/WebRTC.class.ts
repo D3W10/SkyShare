@@ -1,22 +1,25 @@
 import { app } from "$lib/data/app.svelte";
 import { info } from "$lib/data/info.svelte";
 import { setError } from "$lib/data/error.svelte";
+import type { File } from "$electron/lib/interfaces/File.interface";
 
 type Direction = "sender" | "receiver";
 type Credentials = { username: string, password: string };
 
 export class WebRTC {
-    private ws: WebSocket;
+    private ws: WebSocket | undefined;
     private peerConnection: RTCPeerConnection;
     private dataChannel: RTCDataChannel | undefined;
+    private fileChannel: RTCDataChannel | undefined;
     private candidates: RTCIceCandidate[] = [];
     private type: Direction = "sender";
     private _code = "";
     private _timeout: Date | undefined;
+    private files: File[] = [];
     private exchangingIce = false;
+    private onDisconnect: (() => unknown) | undefined;
 
     constructor() {
-        this.ws = new WebSocket("");
         this.peerConnection = new RTCPeerConnection();
 
         app.apiCall<Credentials>("credentials").then(data => {
@@ -57,11 +60,12 @@ export class WebRTC {
         return this._timeout;
     }
 
-    setUpAsSender() {
+    setUpAsSender(files: File[]) {
         return new Promise<string>(async resolve => {
-            this.createDataChannel();
+            this.createChannels();
             this.type = "sender";
-            this.ws = new WebSocket(info.homepage + "transfer/create");
+            this.files = files;
+            this.ws = new WebSocket(info.api + "transfer/create");
             await this.waitForWebSocketOpen();
 
             console.log("[WS] Creating offer and setting local description");
@@ -74,7 +78,7 @@ export class WebRTC {
                 data: { offer }
             }));
 
-            this.ws.addEventListener("message", e => {
+            this.ws.addEventListener("message", async e => {
                 const payload = JSON.parse(e.data);
     
                 if (payload.type === "code") {
@@ -85,24 +89,27 @@ export class WebRTC {
                 }
                 else if (payload.type === "answer") {
                     console.log("[WS] Remote description set with offer");
-                    this.peerConnection.setRemoteDescription(new RTCSessionDescription(payload.data.answer));
+                    await this.peerConnection.setRemoteDescription(new RTCSessionDescription(payload.data.answer));
                     this.exchangingIce = true;
                     this.syncIce();
                 }
                 else if (payload.type === "ice") {
                     console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
-                    this.peerConnection.addIceCandidate(payload.data.ice);
+                    await this.peerConnection.addIceCandidate(payload.data.ice);
                 }
+                else if (payload.type === "disconnect")
+                    this.onDisconnect?.();
             });
 
             this.ws.addEventListener("close", e => {
                 console.log(e.reason);
+                // TODO Handle error
             });
         });
         // TODO: Handle websocket errors (and maybe reject promise)
     }
 
-    setUpAsReceiver(code: string/* , onReceive: (data: Record<string, unknown>) => unknown */) {
+    setUpAsReceiver(code: string) {
         return new Promise<boolean>(async resolve => {
             const data = await app.apiCall<{ status: boolean }>("transfer/" + code + "/check");
             if (!data)
@@ -115,7 +122,7 @@ export class WebRTC {
                 resolve(true);
 
             this._code = code;
-            this.ws = new WebSocket(info.homepage + "transfer/" + code);
+            this.ws = new WebSocket(info.api + "transfer/" + code);
 
             await this.waitForWebSocketOpen();
             this.ws.send(JSON.stringify({
@@ -131,9 +138,9 @@ export class WebRTC {
                 const answer = await this.peerConnection.createAnswer();
                 await this.peerConnection.setLocalDescription(answer);
 
-                //this.setupDataChannel(onReceive);
+                this.setupChannels();
                 this.type = "receiver";
-                this.ws.send(JSON.stringify({
+                this.ws!.send(JSON.stringify({
                     type: "answer",
                     data: { answer }
                 }));
@@ -151,6 +158,8 @@ export class WebRTC {
                     console.log("[WS] ICE candidate received and added: " + JSON.stringify(payload.data));
                     this.peerConnection.addIceCandidate(payload.data.ice);
                 }
+
+                // TODO Handle disconnect and error
             });
 
             this.ws.addEventListener("close", e => {
@@ -160,8 +169,12 @@ export class WebRTC {
         // TODO: Handle websocket errors (and maybe reject promise)
     }
 
+    setOnDisconnect(callback: () => unknown) {
+        this.onDisconnect = callback;
+    }
+
     waitForWebSocketOpen() {
-        return new Promise<void>(resolve => this.ws.addEventListener("open", () => resolve()));
+        return new Promise<void>(resolve => this.ws?.addEventListener("open", () => resolve()));
     }
 
     sendIceCandidate(ice: RTCIceCandidate) {
@@ -203,27 +216,67 @@ export class WebRTC {
         });
     }
 
-    send(data: Record<string, unknown>) {
-        if (!this.dataChannel)
-            return;
-
-        this.dataChannel.send(JSON.stringify(data));
+    sendDetails() {
+        if (this.type === "sender")
+            this.sendInChunks(JSON.stringify(this.files.map(f => ({ name: f.name, size: f.size, icon: f.icon }))));
     }
 
-    private createDataChannel() {
+    send(data: Record<string, unknown>) {
+        /* this.dataChannel.send(JSON.stringify(data)); */
+    }
+
+    private sendInChunks(data: string, chunkSize = 32 * 1024) {
+        if (!this.dataChannel || this.dataChannel.readyState !== "open")
+            return;
+
+        for (let i = 0; i < data.length; i += chunkSize)
+            this.dataChannel.send(data.slice(i, i + chunkSize));
+    }
+
+    private createChannels() {
         console.log("[WS] Creating data channel...");
 
-        this.dataChannel = this.peerConnection.createDataChannel("transfer");
+        this.dataChannel = this.peerConnection.createDataChannel("data");
         this.dataChannel.addEventListener("open", () => console.log("[WS] Data channel is now open"));
         this.dataChannel.addEventListener("close", () => console.log("[WS] Data channel is now closed"));
         this.dataChannel.addEventListener("error", err => console.error("[WS] Data channel error: " + err));
+
+        console.log("[WS] Creating file channel...");
+
+        this.fileChannel = this.peerConnection.createDataChannel("file");
+        this.fileChannel.addEventListener("open", () => console.log("[WS] File channel is now open"));
+        this.fileChannel.addEventListener("close", () => console.log("[WS] File channel is now closed"));
+        this.fileChannel.addEventListener("error", err => console.error("[WS] File channel error: " + err));
 
         // TODO: Handle errors
         return true;
     }
 
-    private setupDataChannel(onReceive: (data: Record<string, unknown>) => unknown) {
+    private setupChannels() {
         this.peerConnection.addEventListener("datachannel", e => {
+            console.log("[WS] New channel received: " + e.channel.label);
+            if (e.channel.label === "data") {
+                this.dataChannel = e.channel;
+                this.dataChannel.addEventListener("message", e => {
+                    console.log("[WS] Received a chunk of data");
+                    console.log(e.data);
+                });
+                this.dataChannel.addEventListener("open", () => console.log("[WS] Receive channel is now open"));
+                this.dataChannel.addEventListener("close", () => console.log("[WS] Receive channel is now closed"));
+                this.dataChannel.addEventListener("error", err => console.error("[WS] Data channel error: " + err));
+            }
+            else if (e.channel.label === "file") {
+                this.fileChannel = e.channel;
+                this.fileChannel.addEventListener("message", e => {
+                    console.log("[WS] Received a chunk of file");
+
+                    console.log(e.data);
+                });
+                this.fileChannel.addEventListener("open", () => console.log("[WS] File channel is now open"));
+                this.fileChannel.addEventListener("close", () => console.log("[WS] File channel is now closed"));
+                this.fileChannel.addEventListener("error", err => console.error("[WS] File channel error: " + err));
+            }
+            /*
             let receivedBuffers: any[] = [];
             this.dataChannel = e.channel;
 
@@ -232,7 +285,7 @@ export class WebRTC {
 
                 onReceive(JSON.parse(e.data));
 
-                /* receivedBuffers.push(e.data);
+                receivedBuffers.push(e.data);
 
                 if (e.data.byteLength === 0) {
                     const receivedBlob = new Blob(receivedBuffers);
@@ -240,12 +293,9 @@ export class WebRTC {
 
                     this.app.log("File received with size " + this.app.fileSizeFormat(receivedBlob.size));
                     onReceive(receivedBlob);
-                } */
+                }
             });
-        
-            this.dataChannel.addEventListener("open", () => console.log("[WS] Receive channel is now open"));
-            this.dataChannel.addEventListener("close", () => console.log("[WS] Receive channel is now closed"));
-            this.dataChannel.addEventListener("error", err => console.error("[WS] Data channel error: " + err));
+            */
         });
     }
 }

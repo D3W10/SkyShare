@@ -73,7 +73,7 @@
         setLock(true);
 
         connection.c = new WebRTC();
-        await connection.c.setUpAsSender();
+        await connection.c.setUpAsSender(files);
 
         setUnlock();
         goto("/send/waiting");
