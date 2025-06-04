@@ -7,5 +7,5 @@ export type CallbackT<T extends AppEventT> =
     T extends "close" ? () => unknown :
     T extends "login" ? (username: string, password: string) => Promise<unknown> :
     T extends "uri" ? (url: string) => unknown :
-    T extends "error" ? (code: ErrorT, vars?: Record<string, any>) => unknown :
+    T extends "error" ? (code: ErrorT, vars?: { [key: string]: any }) => unknown :
     never;

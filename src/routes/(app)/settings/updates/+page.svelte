@@ -10,7 +10,7 @@
     import Switch from "$lib/components/Switch.svelte";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { boxStyles, transitions } from "$lib/utils.svelte";
+    import { boxStyles, transitions } from "$lib/utils";
 
     let updating = $state(0), progress = $state(0);
     let updatedAlert = $state(false), data = $state({ version: "", date: "" });

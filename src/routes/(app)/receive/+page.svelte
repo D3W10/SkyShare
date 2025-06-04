@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { i18n } from "$lib/data/i18n.svelte";
+    import { app } from "$lib/data/app.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import { settings } from "$lib/data/settings.svelte";
@@ -10,6 +11,8 @@
     import Dialog from "$lib/components/Dialog.svelte";
     import Button from "$lib/components/Button.svelte";
     import { WebRTC } from "$lib/models/WebRTC.class";
+    import { AppError } from "$lib/models/AppError.class";
+    import { safeTry } from "$lib/utils";
 
     let n1 = $state<number | null>(null), n2 = $state<number | null>(null), n3 = $state<number | null>(null), n4 = $state<number | null>(null), n5 = $state<number | null>(null), n6 = $state<number | null>(null);
     let nearbyShare = $state(settings.nearbyShare), nearbyShareAlert = $state(false);
@@ -49,14 +52,21 @@
         }
     }
 
-    async function startReceive() {
-        setLock(true);
+    function startReceive() {
+        safeTry(async () => {
+            setLock(true);
 
-        connection.c = new WebRTC(await WebRTC.getCredentials());
-        if (await connection.c.setUpAsReceiver(code))
+            const data = await app.apiCall<{ status: boolean }>("transfer/" + code + "/check");
+            if (!data)
+                return setUnlock();
+            else if (!data.status)
+                throw new AppError("invalidCode");
+
+            connection.c = new WebRTC(await WebRTC.getCredentials());
+            await connection.c.setUpAsReceiver(code);
+
             goto("/receive/" + code);
-        else
-            setUnlock();
+        });
     }
 
     $effect(() => {

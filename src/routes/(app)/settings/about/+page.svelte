@@ -2,7 +2,7 @@
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
-    import { boxStyles, transitions } from "$lib/utils.svelte";
+    import { boxStyles, transitions } from "$lib/utils";
 
     let versionClick = 0, versionClickTimeout: NodeJS.Timeout;
 

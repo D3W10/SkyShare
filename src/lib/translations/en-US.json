@@ -60,6 +60,7 @@
             "receive": "Receive"
         },
         {
+            "obtainingInfo": "Obtaining transfer information...",
             "title": "Review files",
             "sentBy": "Sent by",
             "noMessage": "No message"
@@ -198,6 +199,8 @@
         "cancel": "Cancel",
         "unknown": "Unknown error",
         "unknownDesc": "An unknown error occurred in the app or while trying to reach the server, this likely happened cause you're running an outdated version of SkyShare. Please make sure you're running the latest version and try again.",
+        "down": "Server error",
+        "downDesc": "Unable to reach the SkyShare server, please check your internet connection and try again.",
         "offline": "You're offline",
         "offlineDesc": "SkyShare could not reach the internet, make sure you're online and have a stable connection.",
         "disabled": "Hold on",

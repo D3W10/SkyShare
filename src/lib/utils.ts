@@ -1,5 +1,8 @@
 import { fade } from "svelte/transition";
 import { cubicIn, cubicOut } from "svelte/easing";
+import { setError } from "./data/error.svelte";
+import { setUnlock } from "./data/disable.svelte";
+import { AppError } from "./models/AppError.class";
 import type { Action } from "svelte/action";
 
 export const boxStyles = {
@@ -16,6 +19,21 @@ export const settingsPath = "/settings/appearance";
 export const transitions = {
     pageIn: (node: Element) => fade(node, { duration: 200, delay: 50, easing: cubicIn }),
     pageOut: (node: Element) => fade(node, { duration: 150, easing: cubicOut })
+}
+
+export async function safeTry(fn: () => Promise<unknown>) {
+    try {
+        await fn();
+    }
+    catch (e) {
+        console.error(e instanceof Error ? e.message : e);
+        setUnlock();
+
+        if (e instanceof AppError)
+            setError(e.code);
+        else
+            setError("unknown");
+    }
 }
 
 export const outClick: Action<HTMLElement, undefined, { onoutclick: (e: CustomEvent) => unknown; }> = node => {

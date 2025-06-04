@@ -1,5 +1,5 @@
 import { redirect, type RequestHandler } from "@sveltejs/kit";
-import { settingsPath } from "$lib/utils.svelte";
+import { settingsPath } from "$lib/utils";
 
 export const prerender = true;
 

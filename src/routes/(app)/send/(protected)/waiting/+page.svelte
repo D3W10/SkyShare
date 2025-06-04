@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { blur } from "svelte/transition";
     import { goto } from "$app/navigation";
     import { twMerge } from "tailwind-merge";
@@ -8,7 +9,7 @@
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
     import { fade } from "svelte/transition";
 
     let connected = $state(false), timeLeft = $state((connection.c!.timeout!.getTime()) - Date.now());
@@ -32,6 +33,12 @@
             goto("/send");
     });
 
+    connection.c!.setListener("dataOpen", () => {
+        connected = true;
+        connection.c!.sendDetails();
+    });
+
+    connection.c!.setListener("disconnect", () => connected = false);
     setInterval(() => timeLeft = connection.c!.timeout!.getTime() - Date.now(), 1000);
 </script>
 

@@ -2,7 +2,7 @@
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import Button from "./Button.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
     import type { Snippet } from "svelte";
 
     interface Props {

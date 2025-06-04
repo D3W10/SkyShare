@@ -6,7 +6,7 @@
     import { startup } from "$lib/data/startup.svelte";
     import Icon from "./Icon.svelte";
     import LinkItem from "./LinkItem.svelte";
-    import { settingsPath } from "$lib/utils.svelte";
+    import { settingsPath } from "$lib/utils";
     import type { IconT } from "$lib/models/IconT.type";
 
     interface Props {

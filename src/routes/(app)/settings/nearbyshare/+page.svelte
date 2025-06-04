@@ -3,7 +3,7 @@
     import { settings } from "$lib/data/settings.svelte";
     import Switch from "$lib/components/Switch.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { transitions } from "$lib/utils.svelte";
+    import { transitions } from "$lib/utils";
 
     let nearbyShare = $state(settings.nearbyShare), nearbyShareAlert = $state(false);
 

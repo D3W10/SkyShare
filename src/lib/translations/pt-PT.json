@@ -60,6 +60,7 @@
             "receive": "Receber"
         },
         {
+            "obtainingInfo": "A obter as informações da transferência...",
             "title": "Rever ficheiros",
             "sentBy": "Enviado por",
             "noMessage": "Sem mensagem"
@@ -198,6 +199,8 @@
         "cancel": "Cancelar",
         "unknown": "Erro desconhecido",
         "unknownDesc": "Um erro desconhecido ocorreu na aplicação ou ao tentar conectar ao servidor, o mesmo provavelmente aconteceu se estiver a utilizar uma versão desatualizada do SkyShare. Por favor verifique que está a utilizar a versão mais recente e tente novamente.",
+        "down": "Error do servidor",
+        "downDesc": "Não foi possível aceder ao servidor do SkyShare, verifique a sua ligação à internet e tente novamente.",
         "offline": "Está offline",
         "offlineDesc": "O SkyShare não conseguiu aceder à internet, verifique se está online e se tem uma ligação estável.",
         "disabled": "Aguarde",

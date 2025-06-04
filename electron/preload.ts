@@ -8,7 +8,7 @@ import type { CallbackT } from "./lib/types/CallbackT.type";
 
 let wReady = false, wCompressed = false, wOpen = false, updateProgress: (percent: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl = ipcRenderer.sendSync("GetAppInfo").api;
-const handlers: Record<AppEventT, { f: CallbackT<AppEventT>, once: boolean }[]> = {
+const handlers: { [K in AppEventT]: { f: CallbackT<AppEventT>, once: boolean }[] } = {
     ready: [],
     open: [],
     close: [],

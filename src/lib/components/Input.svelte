@@ -1,7 +1,7 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
     import { disable } from "$lib/data/disable.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
     import type { Snippet } from "svelte";
     import type { HTMLInputAttributes } from "svelte/elements";
 

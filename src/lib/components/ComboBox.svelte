@@ -10,7 +10,7 @@
     import { twMerge } from "tailwind-merge";
     import Button from "./Button.svelte";
     import Icon from "./Icon.svelte";
-    import { boxStyles, outClick } from "$lib/utils.svelte";
+    import { boxStyles, outClick } from "$lib/utils";
 
     interface Props {
         class?: string;

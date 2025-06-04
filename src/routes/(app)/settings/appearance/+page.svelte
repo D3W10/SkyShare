@@ -2,7 +2,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import ComboBox, { type ComboBoxItem } from "$lib/components/ComboBox.svelte";
-    import { transitions } from "$lib/utils.svelte";
+    import { transitions } from "$lib/utils";
 
     const themeList: ComboBoxItem[] = [
         { text: i18n.t("settings.themeLight"), value: "light" },

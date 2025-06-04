@@ -1,5 +1,6 @@
 export type ErrorT =
     "unknown" |
+    "down" |
     "offline" |
     "disabled" |
     "tooManyFiles" |

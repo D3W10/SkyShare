@@ -13,7 +13,7 @@
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import TextArea from "$lib/components/TextArea.svelte";
-    import { boxStyles, transitions } from "$lib/utils.svelte";
+    import { boxStyles, safeTry, transitions } from "$lib/utils";
     import { WebRTC } from "$lib/models/WebRTC.class";
     import type { File } from "$electron/lib/interfaces/File.interface";
 
@@ -69,14 +69,16 @@
         files = files;
     }
 
-    async function startSend() {
-        setLock(true);
+    function startSend() {
+        safeTry(async () => {
+            setLock(true);
 
-        connection.c = new WebRTC(await WebRTC.getCredentials());
-        await connection.c.setUpAsSender(files);
+            connection.c = new WebRTC(await WebRTC.getCredentials());
+            await connection.c.setUpAsSender(files, message);
 
-        setUnlock();
-        goto("/send/waiting");
+            setUnlock();
+            goto("/send/waiting");
+        });
     }
 </script>
 
@@ -95,14 +97,14 @@
                 {#each [...files, {} as File] as file, i (file.name)}
                     <div transition:fade={{ duration: 400, easing: cubicOut }} animate:flip={{ duration: 400, easing: cubicInOut }}>
                         {#if i !== files.length}
-                            <div class={twMerge(boxStyles.box, "px-2 group")}>
+                            <div class={twMerge(boxStyles.box, "px-2 items-center group")}>
                                 {#if file.icon}
                                     <img src="data:image/png;base64,{file.icon}" class="h-6" alt={i18n.t("send.0.fileIcon")} />
                                 {:else}
                                     <Icon name="file" class="h-6" />
                                 {/if}
                                 <div class="ml-2 flex flex-col gap-y-0">
-                                    <p class="text-sm overflow-hidden [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
+                                    <p class="text-sm overflow-hidden break-words [display:-webkit-box] [word-break:break-all] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
                                     <p class="text-xs text-slate-500">{app.formatFileSize(file.size)}</p>
                                 </div>
                                 {#if !disable.d}

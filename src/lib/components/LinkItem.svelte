@@ -5,7 +5,7 @@
     import { disable } from "$lib/data/disable.svelte";
     import Link from "./Link.svelte";
     import Icon from "./Icon.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
     import type { Snippet } from "svelte";
     import type { IconT } from "$lib/models/IconT.type";
 

@@ -8,7 +8,7 @@
     import Link from "$lib/components/Link.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
     import "$lib/markdown.css";
 
     let greetingKey = $state("home.morning"), changelog = $state(""), showChanges = $state(false);

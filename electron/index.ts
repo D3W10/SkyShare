@@ -230,7 +230,7 @@ ipcMain.on("GetAppInfo", e => {
         name: packageData.productName,
         version: packageData.version,
         homepage: packageData.homepage,
-        api: !isDev ? packageData.data.api : "http://127.0.0.1:8020/api/v1/",
+        api: !isDev ? packageData.data.api : "http://localhost:8020/api/v1/",
         cliendId: packageData.data.clientId
     }
 });

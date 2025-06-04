@@ -3,7 +3,7 @@
     import { resetSettings } from "$lib/data/settings.svelte";
     import Button from "$lib/components/Button.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { transitions } from "$lib/utils.svelte";
+    import { transitions } from "$lib/utils";
 
     let resetAlert = $state(false);
 </script>

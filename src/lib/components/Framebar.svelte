@@ -7,7 +7,7 @@
     import { disable } from "$lib/data/disable.svelte";
     import { setError } from "$lib/data/error.svelte";
     import Icon from "./Icon.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
 
     interface Props {
         sidebar?: boolean;

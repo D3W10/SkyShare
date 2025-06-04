@@ -2,7 +2,7 @@
     import { twMerge } from "tailwind-merge";
     import { base } from "$app/paths";
     import { disable } from "$lib/data/disable.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
     import type { Snippet } from "svelte";
     import type { HTMLAnchorAttributes } from "svelte/elements";
 

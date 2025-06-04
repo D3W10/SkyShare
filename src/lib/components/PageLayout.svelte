@@ -1,6 +1,6 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
-    import { transitions } from "$lib/utils.svelte";
+    import { transitions } from "$lib/utils";
     import type { Snippet } from "svelte";
 
     interface Props {
