@@ -66,16 +66,20 @@ export default {
     dmg: {
         contents: [
             {
-                x: 190,
-                y: 175
+                x: 400,
+                y: 350
             },
             {
-                x: 365,
-                y: 175,
+                x: 680,
+                y: 350,
                 type: "link",
                 path: "/Applications"
             }
-        ]
+        ],
+        window: {
+            width: 1080,
+            height: 788
+        }
     },
     protocols: {
         name: "SkyShare Protocol",
