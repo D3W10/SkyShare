@@ -5,8 +5,9 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
     import { disable } from "$lib/data/disable.svelte";
-    import { setError } from "$lib/data/error.svelte";
+    import { cleanAll } from "$lib/data/cleanup.svelte";
     import Icon from "./Icon.svelte";
+    import Dialog from "./Dialog.svelte";
     import { boxStyles } from "$lib/utils";
 
     interface Props {
@@ -17,7 +18,7 @@
         sidebar = $bindable(true)
     }: Props = $props();
 
-    let hasFocus = $state(true), isOffline = $state(false);
+    let hasFocus = $state(true), isOffline = $state(false), closeAlert = $state(false);
     let logoClick = 0, logoClickTimeout: NodeJS.Timeout;
     const platform = app.getPlatform();
 
@@ -47,10 +48,12 @@
     }
 
     function onRedButtonClick() {
-        if (!disable.d)
+        if (!disable.d) {
+            cleanAll();
             app.closeWindow();
+        }
         else
-            setError("disabled");
+            closeAlert = true;
     }
 
     function offlineAction() {
@@ -110,3 +113,6 @@
         {/if}
     </div>
 </div>
+<Dialog bind:show={closeAlert} title={i18n.t("dialog.disabled")} onsubmit={() => (cleanAll(), app.closeWindow())}>
+    <p>{i18n.t("dialog.disabledDesc")}</p>
+</Dialog>

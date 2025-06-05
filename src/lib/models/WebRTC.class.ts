@@ -9,6 +9,7 @@ type Direction = "sender" | "receiver";
 type Credentials = { username: string, password: string };
 
 export class WebRTC {
+    private rtcConfig: RTCConfiguration;
     private ws: WebSocket | undefined;
     private peerConnection: RTCPeerConnection;
     private dataChannel: RTCDataChannel | undefined;
@@ -20,10 +21,11 @@ export class WebRTC {
     private details: { [key: string]: unknown } = {};
     private exchangingIce = false;
     private events: { [K in RTCEventT]?: RTCCallbackT<K> } = {};
+    private dataHeap = "";
     private dataChannelQueue: string[] = [];
 
     constructor(credentials: Credentials) {
-        this.peerConnection = new RTCPeerConnection({
+        this.rtcConfig = {
             iceServers: [
                 {
                     urls: "stun:20.86.131.181:3478",
@@ -34,20 +36,9 @@ export class WebRTC {
                     credential: credentials.password
                 }
             ]
-        });
-
-        this.peerConnection.addEventListener("icecandidate", async event => {
-            if (event.candidate) {
-                console.log("[RTC] New ICE candidate: " + JSON.stringify(event.candidate));
-
-                this.sendIceCandidate(event.candidate);
-            }
-        });
-        this.peerConnection.addEventListener("iceconnectionstatechange", () => {
-            if (this.peerConnection.iceConnectionState === "disconnected" || this.peerConnection.iceConnectionState === "failed")
-                console.error("ICE connection failed");
-            // TODO: Handle errors
-        });
+        };
+        this.peerConnection = new RTCPeerConnection(this.rtcConfig);
+        this.setupListeners();
     }
 
     static async getCredentials(): Promise<Credentials> {
@@ -65,6 +56,20 @@ export class WebRTC {
 
     public get timeout() {
         return this._timeout;
+    }
+
+    private setupListeners() {
+        this.peerConnection.addEventListener("icecandidate", async event => {
+            if (event.candidate) {
+                console.log("[RTC] New ICE candidate: " + JSON.stringify(event.candidate));
+                this.sendIceCandidate(event.candidate);
+            }
+        });
+        this.peerConnection.addEventListener("iceconnectionstatechange", () => {
+            if (this.peerConnection.iceConnectionState === "disconnected" || this.peerConnection.iceConnectionState === "failed")
+                console.error("ICE connection failed");
+            // TODO: Handle errors
+        });
     }
 
     async setUpAsSender(files: File[], message: string): Promise<string> {
@@ -110,8 +115,10 @@ export class WebRTC {
                         await this.peerConnection.addIceCandidate(payload.data.ice);
                     }
                     else if (payload.type === "disconnect") {
+                        this.disconnect(true);
+                        this.peerConnection = new RTCPeerConnection(this.rtcConfig);
+                        this.setupListeners();
                         this.events.disconnect?.();
-                        //reject(new AppError("disconnected"));
                     }
                 }
                 catch (err) {
@@ -182,7 +189,7 @@ export class WebRTC {
         )
             (callback as () => unknown)();
         else if (name === "data")
-            this.dispatchData();
+            this.syncData();
     }
 
     waitForWebSocketOpen() {
@@ -212,23 +219,6 @@ export class WebRTC {
         }
     }
 
-    sendDetails() {
-        if (this.type === "sender")
-            this.sendInChunks(JSON.stringify(this.details), this.dataChannel);
-    }
-
-    send(data: Blob) {
-        /* this.dataChannel.send(JSON.stringify(data)); */
-    }
-
-    private sendInChunks(data: string, channel?: RTCDataChannel, chunkSize = 32 * 1024) {
-        if (!channel || channel.readyState !== "open")
-            return;
-
-        for (let i = 0; i < data.length; i += chunkSize)
-            channel.send(data.slice(i, i + chunkSize));
-    }
-
     private createChannels() {
         console.log("[RTC] Creating data channel...");
 
@@ -253,75 +243,98 @@ export class WebRTC {
                 this.fileChannel = e.channel;
                 this.configFileChannel(this.fileChannel);
             }
-            /*
-            let receivedBuffers: any[] = [];
-            this.dataChannel = e.channel;
-
-            this.dataChannel.addEventListener("message", e => {
-                console.log("[RTC] Received a chunk of data");
-
-                onReceive(JSON.parse(e.data));
-
-                receivedBuffers.push(e.data);
-
-                if (e.data.byteLength === 0) {
-                    const receivedBlob = new Blob(receivedBuffers);
-                    receivedBuffers = [];
-
-                    this.app.log("File received with size " + this.app.fileSizeFormat(receivedBlob.size));
-                    onReceive(receivedBlob);
-                }
-            });
-            */
         });
     }
 
     private configDataChannel(channel: RTCDataChannel) {
         channel.addEventListener("message", e => {
-            console.log(`[RTC] Received a chunk of data (${e.data.length})`);
-            this.dispatchData(e.data);
+            if (e.data.length)
+                console.log(`[RTC] Received a chunk of data (${e.data.length})`);
 
-            // TODO: Join multipart chunks
+            this.dispatchData(e.data);
         });
         channel.addEventListener("open", () => {
             console.log("[RTC] Data channel is now open");
             this.events.dataOpen?.();
         });
         channel.addEventListener("close", () => console.log("[RTC] Data channel is now closed"));
-        channel.addEventListener("error", err => console.error("[RTC] Data channel error: " + err));
+        channel.addEventListener("error", err => {
+            if (!err.error.sctpCauseCode || err.error.sctpCauseCode !== 12) {
+                console.error("[RTC] Data channel error: " + err.error);
+            }
+        });
         // TODO: Handle errors
     }
 
     private configFileChannel(channel: RTCDataChannel) {
         channel.addEventListener("message", e => {
-            console.log(`[RTC] Received a chunk of data (${e.data.length})`);
-            // TODO: Join multipart chunks
+            if (e.data.length)
+                console.log(`[RTC] Received a chunk of data (${e.data.length})`);
+            // this.dispatchData(e.data);
         });
         channel.addEventListener("open", () => {
             console.log("[RTC] File channel is now open");
             this.events.fileOpen?.();
         });
         channel.addEventListener("close", () => console.log("[RTC] File channel is now closed"));
-        channel.addEventListener("error", err => console.error("[RTC] File channel error: " + err));
+        channel.addEventListener("error", err => {
+            if (!err.error.sctpCauseCode || err.error.sctpCauseCode !== 12) {
+                console.error("[RTC] File channel error: " + err.error);
+            }
+        });
         // TODO: Handle errors
     }
 
-    private dispatchData(data?: string) {
-        if (!this.events.data && data) {
-            this.dataChannelQueue.push(data);
+    sendDetails() {
+        if (this.type === "sender")
+            this.sendInChunks(JSON.stringify(this.details), this.dataChannel);
+    }
+
+    send(data: Blob) {
+        /* this.dataChannel.send(JSON.stringify(data)); */
+    }
+
+    private sendInChunks(data: string, channel?: RTCDataChannel, chunkSize = 32 * 1024) {
+        if (!channel || channel.readyState !== "open")
             return;
+
+        for (let i = 0; i < data.length; i += chunkSize)
+            channel.send(data.slice(i, i + chunkSize));
+
+        channel.send("");
+    }
+
+    private joinChunks(data: string) {
+        if (data.length === 0) {
+            this.dataChannelQueue.push(this.dataHeap);
+            this.dataHeap = "";
         }
+        else
+            this.dataHeap += data;
 
-        if (this.events.data) {
-            if (this.dataChannelQueue.length > 0) {
-                let msg: string | undefined;
+        return data.length === 0;
+    }
 
-                while (msg = this.dataChannelQueue.shift())
-                    this.events.data(msg);
-            }
+    private dispatchData(data: string) {
+        if (this.joinChunks(data))
+            this.syncData();
+    }
 
-            if (data && this.events.data)
-                this.events.data(data);
+    private syncData() {
+        if (this.dataChannelQueue.length > 0 && this.events.data) {
+            let msg: string | undefined;
+
+            while (msg = this.dataChannelQueue.shift())
+                this.events.data(msg);
         }
+    }
+
+    disconnect(rtcOnly = false) {
+        if (!rtcOnly)
+            this.ws?.close(1000, "Normal closure");
+
+        this.dataChannel?.close();
+        this.fileChannel?.close();
+        this.peerConnection.close();
     }
 }

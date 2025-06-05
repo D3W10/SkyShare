@@ -4,6 +4,7 @@
     import { app } from "$lib/data/app.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
     import { connection } from "$lib/data/connection.svelte";
+    import { cleanup } from "$lib/data/cleanup.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Input from "$lib/components/Input.svelte";
@@ -63,6 +64,7 @@
                 throw new AppError("invalidCode");
 
             connection.c = new WebRTC(await WebRTC.getCredentials());
+            cleanup.push(() => connection.c?.disconnect());
             await connection.c.setUpAsReceiver(code);
 
             goto("/receive/" + code);

@@ -9,6 +9,7 @@
     import { connection } from "$lib/data/connection.svelte";
     import { disable, setLock, setUnlock } from "$lib/data/disable.svelte";
     import { setError } from "$lib/data/error.svelte";
+    import { cleanup } from "$lib/data/cleanup.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -74,6 +75,7 @@
             setLock(true);
 
             connection.c = new WebRTC(await WebRTC.getCredentials());
+            cleanup.push(() => connection.c?.disconnect());
             await connection.c.setUpAsSender(files, message);
 
             setUnlock();

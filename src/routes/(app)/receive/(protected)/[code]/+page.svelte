@@ -35,7 +35,7 @@
     {#if !connected}
         <p class="size-full flex justify-center items-center text-lg font-semibold" in:transitions.pageIn out:transitions.pageOut>{i18n.t("receive.1.obtainingInfo")}</p>
     {:else}
-        <div class="flex gap-x-6" in:transitions.pageIn out:transitions.pageOut>
+        <div class="size-full flex gap-x-6" in:transitions.pageIn out:transitions.pageOut>
             <div class={twMerge(boxStyles.pane, "w-64 h-full p-2 flex flex-col gap-y-2 rounded-2xl overflow-y-auto")}>
                 {#each files as file (file.name)}
                     <div class={twMerge(boxStyles.box, "px-2 items-center")}>

@@ -7,13 +7,13 @@
     import Icon from "./Icon.svelte";
     import { boxStyles } from "$lib/utils";
     import type { Snippet } from "svelte";
+    import type { HTMLAnchorAttributes } from "svelte/elements";
     import type { IconT } from "$lib/models/IconT.type";
 
-    interface Props {
+    interface Props extends Omit<HTMLAnchorAttributes, "class" | "type"> {
         children?: Snippet;
         class?: string;
         icon?: IconT;
-        href: string;
         selected?: boolean;
     }
 
@@ -22,11 +22,12 @@
         class: className,
         icon,
         href,
-        selected = false
+        selected = false,
+        ...rest
     }: Props = $props();
 </script>
 
-<Link class={twMerge("w-full px-3 py-2 flex items-center gap-x-3 relative hover:text-slate-800 dark:hover:text-slate-300 font-medium rounded-xl transition duration-200 group z-0 *:transition-colors *:duration-200", disable.d ? "opacity-50" : "", !selected ? "text-slate-600 dark:text-slate-500" : "text-slate-800 dark:text-slate-300", boxStyles.basic, className)} {href} type="invisible">
+<Link class={twMerge("w-full px-3 py-2 flex items-center gap-x-3 relative hover:text-slate-800 dark:hover:text-slate-300 font-medium rounded-xl transition duration-200 group z-0 *:transition-colors *:duration-200", disable.d ? "opacity-50" : "", !selected ? "text-slate-600 dark:text-slate-500" : "text-slate-800 dark:text-slate-300", boxStyles.basic, className)} {href} type="invisible" {...rest}>
     {#if selected}
         <div class={twMerge(boxStyles.box, "absolute inset-0 -z-1")} transition:scale={{ duration: 200, start: 0.95, easing: cubicOut }}></div>
     {/if}
