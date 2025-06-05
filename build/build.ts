@@ -59,7 +59,7 @@ export default {
                 "x64"
             ]
         },
-        icon: "../svelte/static/logo.png",
+        icon: "./logo.png",
         type: "distribution",
         hardenedRuntime: false
     },

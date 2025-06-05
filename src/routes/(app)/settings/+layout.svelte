@@ -4,7 +4,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import LinkItem from "$lib/components/LinkItem.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
 
     let { children } = $props();
 

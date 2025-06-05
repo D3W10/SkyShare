@@ -14,10 +14,10 @@
     let connected = $state(false), ready = $state(false);
     let files = $state<File[]>([]), message = $state("");
 
-    connection.c!.setListener("dataOpen", () => (connected = true, setUnlock()));
-    connection.c!.setListener("fileOpen", () => ready = true);
+    connection.c?.setListener("dataOpen", () => (connected = true, setUnlock()));
+    connection.c?.setListener("fileOpen", () => ready = true);
 
-    connection.c!.setListener("data", data => {
+    connection.c?.setListener("data", data => {
         if (files.length === 0) {
             const info = JSON.parse(data);
 
@@ -31,11 +31,11 @@
     }
 </script>
 
-{#if !connected}
-    <p class="size-full flex justify-center items-center text-lg font-semibold" in:transitions.pageIn out:transitions.pageOut>{i18n.t("receive.1.obtainingInfo")}</p>
-{:else}
-    <div in:transitions.pageIn out:transitions.pageOut>
-        <PageLayout title={i18n.t("receive.1.title")} class="flex gap-x-6">
+<PageLayout title={i18n.t("receive.1.title")}>
+    {#if !connected}
+        <p class="size-full flex justify-center items-center text-lg font-semibold" in:transitions.pageIn out:transitions.pageOut>{i18n.t("receive.1.obtainingInfo")}</p>
+    {:else}
+        <div class="flex gap-x-6" in:transitions.pageIn out:transitions.pageOut>
             <div class={twMerge(boxStyles.pane, "w-64 h-full p-2 flex flex-col gap-y-2 rounded-2xl overflow-y-auto")}>
                 {#each files as file (file.name)}
                     <div class={twMerge(boxStyles.box, "px-2 items-center")}>
@@ -85,6 +85,6 @@
                 </div>
                 <Button class="w-30" disabled={!ready} onclick={startReceive}>{i18n.t("receive.0.receive")}</Button>
             </div>
-        </PageLayout>
-    </div>
-{/if}
+        </div>
+    {/if}
+</PageLayout>

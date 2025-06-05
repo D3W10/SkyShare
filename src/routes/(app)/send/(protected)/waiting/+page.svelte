@@ -12,7 +12,7 @@
     import { boxStyles } from "$lib/utils";
     import { fade } from "svelte/transition";
 
-    let connected = $state(false), timeLeft = $state((connection.c!.timeout!.getTime()) - Date.now());
+    let connected = $state(false), timeLeft = $state((connection.c?.timeout?.getTime() ?? 0) - Date.now());
     let codeAnim = $state(false), linkAnim = $state(false);
 
     function copy(type: "code" | "link") {
@@ -33,17 +33,17 @@
             goto("/send");
     });
 
-    connection.c!.setListener("dataOpen", () => {
+    connection.c?.setListener("dataOpen", () => {
         connected = true;
         connection.c!.sendDetails();
     });
 
-    connection.c!.setListener("disconnect", () => connected = false);
+    connection.c?.setListener("disconnect", () => connected = false);
     setInterval(() => timeLeft = connection.c!.timeout!.getTime() - Date.now(), 1000);
 </script>
 
 <PageLayout title={i18n.t("send.1.title")} class="flex flex-col justify-center items-center gap-y-6">
-    <p class="text-7xl font-bold tracking-widest drop-shadow-lg drop-shadow-accent/30">{connection.c!.code}</p>
+    <p class="text-7xl font-bold tracking-widest drop-shadow-lg drop-shadow-accent/30">{connection.c?.code}</p>
     <div class="flex gap-x-4">
         <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => copy("code")}>
             <div class="size-5">

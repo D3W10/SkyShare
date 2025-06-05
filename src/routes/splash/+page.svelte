@@ -90,5 +90,6 @@
         </div>
         <p class="animate-pulse" in:fade={{ duration: 400, delay: 400 }}>{states[status]()}</p>
     </div>
-    <img src="/mesh.png" class="fixed top-0 bottom-0 right-0 -z-1" alt="{info.name} Mesh" />
+    <img src="/meshLight.svg" class="fixed top-0 bottom-0 right-0 block dark:hidden -z-1" alt="{info.name} Mesh" />
+    <img src="/meshDark.svg" class="fixed top-0 bottom-0 right-0 hidden dark:block -z-1" alt="{info.name} Mesh" />
 </div>

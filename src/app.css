@@ -114,7 +114,6 @@ body {
 }
 
 img {
-    @apply block;
     -webkit-user-drag: none;
 }
 

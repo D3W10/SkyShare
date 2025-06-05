@@ -7,7 +7,7 @@
     import Button from "$lib/components/Button.svelte";
     import Link from "$lib/components/Link.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { boxStyles } from "$lib/utils.svelte";
+    import { boxStyles } from "$lib/utils";
 
     let historyDialog = $state(false), syncDialog = $state(false), identificationDialog = $state(false);
 </script>
