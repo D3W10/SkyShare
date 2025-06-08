@@ -73,7 +73,6 @@ export class WebRTC {
     }
 
     async setUpAsSender(files: File[], message: string): Promise<string> {
-        this.createChannels();
         this.type = "sender";
         this.ws = new WebSocket(info.api + "transfer/create");
         this.details = {
@@ -82,16 +81,7 @@ export class WebRTC {
         };
 
         await this.waitForWebSocketOpen();
-
-        console.log("[RTC] Creating offer and setting local description");
-
-        const offer = await this.peerConnection.createOffer();
-        await this.peerConnection.setLocalDescription(offer);
-
-        this.ws.send(JSON.stringify({
-            type: "offer",
-            data: { offer }
-        }));
+        this.setUpSenderRTC();
 
         return new Promise((resolve, reject) => {
             this.ws!.addEventListener("message", async e => {
@@ -115,9 +105,13 @@ export class WebRTC {
                         await this.peerConnection.addIceCandidate(payload.data.ice);
                     }
                     else if (payload.type === "disconnect") {
+                        console.log("[RTC] User disconnected, recreating peer connection...");
                         this.disconnect(true);
+
+                        this.exchangingIce = false;
                         this.peerConnection = new RTCPeerConnection(this.rtcConfig);
                         this.setupListeners();
+                        this.setUpSenderRTC();
                         this.events.disconnect?.();
                     }
                 }
@@ -131,6 +125,22 @@ export class WebRTC {
                 //reject(new AppError("connection_closed"));
             });
         });
+    }
+
+    private async setUpSenderRTC() {
+        if (!this.ws) return;
+
+        this.createChannels();
+
+        console.log("[RTC] Creating offer and setting local description");
+
+        const offer = await this.peerConnection.createOffer();
+        await this.peerConnection.setLocalDescription(offer);
+
+        this.ws.send(JSON.stringify({
+            type: "offer",
+            data: { offer }
+        }));
     }
 
     async setUpAsReceiver(code: string) {

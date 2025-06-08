@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { blur } from "svelte/transition";
     import { goto } from "$app/navigation";
     import { twMerge } from "tailwind-merge";
@@ -39,7 +38,7 @@
     });
 
     connection.c?.setListener("disconnect", () => connected = false);
-    setInterval(() => timeLeft = connection.c!.timeout!.getTime() - Date.now(), 1000);
+    setInterval(() => timeLeft = (connection.c?.timeout?.getTime() ?? 0) - Date.now(), 1000);
 </script>
 
 <PageLayout title={i18n.t("send.1.title")} class="flex flex-col justify-center items-center gap-y-6">
