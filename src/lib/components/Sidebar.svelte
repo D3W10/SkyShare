@@ -3,6 +3,7 @@
     import { page } from "$app/state";
     import { base } from "$app/paths";
     import { i18n } from "$lib/data/i18n.svelte";
+    import { account } from "$lib/data/account.svelte";
     import { startup } from "$lib/data/startup.svelte";
     import { cleanAll } from "$lib/data/cleanup.svelte";
     import Icon from "./Icon.svelte";
@@ -22,7 +23,7 @@
 </script>
 
 <aside class="{!collapsed ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 {!startup.s ? "transition-[width] duration-400" : ""}">
-    <LinkItem class="{!collapsed ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href="/account/login" selected={accountSelected} onclick={cleanAll}>
+    <LinkItem class="{!collapsed ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href={!account.loggedIn ? "/account/login" : "/account"} selected={accountSelected} onclick={cleanAll}>
         <Icon class="{!collapsed ? "w-10 min-w-10" : "w-5.5 min-w-5.5"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-all! duration-400" name="account" />
         {#if !collapsed}
             <p in:fade={{ duration: 100, delay: 100 }} out:fade={{ duration: 100 }}>{i18n.t("sidebar.login")}</p>

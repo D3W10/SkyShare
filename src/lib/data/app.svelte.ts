@@ -13,9 +13,3 @@ if (browser && window) {
     for (const key of Object.keys(window.app) as (keyof Preload)[])
         (app as any)[key] = window.app[key];
 }
-
-declare global {
-    interface Window {
-        app: Preload;
-    }
-}

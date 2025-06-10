@@ -3,5 +3,6 @@ export interface AppInfo {
     version: string;
     homepage: string;
     api: string;
-    cliendId: string;
+    auth: string;
+    isDev: boolean;
 }

@@ -270,73 +270,6 @@ export function formatFileSize(size: number, decimals = 2) {
  */
 export const account = {
     /**
-     * Logs a user in if they have an account
-     * @param username The username of the user
-     * @param password The password of the user
-     * @param encrypted Should be true if the password is already encrypted, false otherwise
-     * @returns An object containing one boolean with the success state and info about the user if it was successful
-     */
-    login: async <T>(username: string, password: string, encrypted: boolean = false) => {
-        const encodedPass = !encrypted ? ipcRenderer.sendSync("EncodePassword", password) : password;
-
-        const api = await apiCall({
-            endpoint: "user/login",
-            method: "GET",
-            params: new URLSearchParams({ username, password: encodedPass })
-        }, !encrypted);
-
-        if (api.code == 0) {
-            setSetting("account", { username, password: encodedPass });
-            logger.log("Log in successful");
-        }
-
-        return apiTranslator<T>(api, { password: encodedPass });
-    },
-    /**
-     * Checks if a username and email are available to be picked
-     * @param username The pretended username
-     * @param username The pretended email
-     * @returns An object containing one boolean with the success state and the state if the username and email are available or not
-     */
-    check: async <T>(username: string, email: string) => {
-        const api = await apiCall({
-            endpoint: "user/check",
-            method: "GET",
-            params: new URLSearchParams({ username, email })
-        });
-
-        return apiTranslator<T>(api);
-    },
-    /**
-     * Creates a new user account
-     * @param username The username of the user
-     * @param email The email of the user
-     * @param password The password of the user
-     * @param photo The photo of the user or null if no photo should be set
-     * @param language The preferred email language
-     * @returns An object containing one boolean with the success state and info about the newly created user if it was successful
-     */
-    signup: async <T>(username: string, email: string, password: string, photo: string | null, language?: string) => {
-        let body = { username, email, password, language };
-        const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
-
-        if (photo)
-            Object.assign(body, { photo: await ipcRenderer.invoke("GetFileAsBase64", photo) });
-
-        const api = await apiCall({
-            endpoint: "user/signup",
-            method: "POST",
-            body
-        });
-
-        if (api.code == 0) {
-            setSetting("account", { username, password: encodedPass });
-            logger.log("Sign up successful");
-        }
-
-        return apiTranslator<T>(api, { password: encodedPass });
-    },
-    /**
      * Edits the information of a user account
      * @param username The username of the user
      * @param password The password of the user
@@ -358,7 +291,7 @@ export const account = {
         else if (photo === null)
             Object.assign(body, { photo: null });
         
-        const api = await apiCall({
+        /* const api = await apiCall({
             endpoint: "user/" + username,
             method: "PUT",
             body
@@ -369,7 +302,7 @@ export const account = {
             logger.log("Edit account successful");
         }
 
-        return apiTranslator<T>(api);
+        return apiTranslator<T>(api); */
     },
     /**
      * Changes the password of a user account
@@ -379,7 +312,7 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     password: async <T>(username: string, password: string, newPassword: string) => {
-        const api = await apiCall({
+       /*  const api = await apiCall({
             endpoint: "user/" + username + "/password",
             method: "PUT",
             body: { password, newPassword }
@@ -392,7 +325,7 @@ export const account = {
             logger.log("Edit account password successful");
         }
 
-        return apiTranslator<T>(api, { password: encodedPass });
+        return apiTranslator<T>(api, { password: encodedPass }); */
     },
     /**
      * Sends an email request from a specific user account
@@ -402,13 +335,13 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     request: async (type: "verify" | "recovery", email: string, language?: string) => {
-        const api = await apiCall({
+       /*  const api = await apiCall({
             endpoint: "user/request",
             method: "POST",
             body: { type, email, language }
         });
 
-        return apiTranslator(api);
+        return apiTranslator(api); */
     },
     /**
      * Verifies an account using a verification token
@@ -417,13 +350,13 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     verify: async (email: string, verificationToken: string) => {
-        const api = await apiCall({
+        /* const api = await apiCall({
             endpoint: "user/verify",
             method: "POST",
             body: { email, verificationToken }
         });
 
-        return apiTranslator(api);
+        return apiTranslator(api); */
     },
     /**
      * Recovers an account by setting a new password using a recovery token
@@ -433,13 +366,13 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     recovery: async (email: string, password: string, recoveryToken: string) => {
-        const api = await apiCall({
+       /*  const api = await apiCall({
             endpoint: "user/recovery",
             method: "POST",
             body: { email, password, recoveryToken }
         });
 
-        return apiTranslator(api);
+        return apiTranslator(api); */
     },
     history: {
         /**
@@ -449,13 +382,13 @@ export const account = {
          * @returns An array containing all the entries
          */
         get: async <T>(username: string, password: string) => {
-            const api = await apiCall({
+ /*            const api = await apiCall({
                 endpoint: "user/" + username + "/history",
                 method: "GET",
                 params: new URLSearchParams({ password })
             });
 
-            return apiTranslator<T>(api);
+            return apiTranslator<T>(api); */
         },
         /**
          * Clears all the entries of the user history
@@ -464,13 +397,13 @@ export const account = {
          * @returns An object containing one boolean with the success state
          */
         clear: async (username: string, password: string) => {
-            const api = await apiCall({
+            /* const api = await apiCall({
                 endpoint: "user/" + username + "/history",
                 method: "DELETE",
                 params: new URLSearchParams({ password })
             });
 
-            return apiTranslator(api);
+            return apiTranslator(api); */
         }
     },
     /**
@@ -482,13 +415,13 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     settings: async <T>(username: string, password: string, historyEnabled: boolean, showInfo: boolean) => {
-        const api = await apiCall({
+        /* const api = await apiCall({
             endpoint: "user/" + username + "/settings",
             method: "PUT",
             body: { password, historyEnabled, showInfo }
         });
 
-        return apiTranslator<T>(api);
+        return apiTranslator<T>(api); */
     },
     /**
      * Logs a user out
@@ -504,7 +437,7 @@ export const account = {
      * @returns An object containing one boolean with the success state
      */
     delete: async (username: string, password: string) => {
-        const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
+        /* const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
 
         const api = await apiCall({
             endpoint: "user/" + username,
@@ -512,7 +445,7 @@ export const account = {
             params: new URLSearchParams({ password: encodedPass })
         });
 
-        return apiTranslator(api);
+        return apiTranslator(api); */
     }
 }
 

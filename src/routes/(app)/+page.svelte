@@ -4,6 +4,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { info } from "$lib/data/info.svelte";
+    import { account } from "$lib/data/account.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Link from "$lib/components/Link.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -39,7 +40,7 @@
     setInterval(updateGreeting, 60000);
 </script>
 
-<PageLayout title={i18n.t(greetingKey, { count: 0 })} class="px-14 pb-8 flex gap-x-8">
+<PageLayout title={i18n.t(greetingKey, { count: account.loggedIn ? 0 : 1, name: account.username })} class="px-14 pb-8 flex gap-x-8">
     <div class="w-1/2 pl-16 flex flex-col justify-center gap-y-8">
         <div class="flex items-center gap-x-4">
             <img class="h-10" src="/logo.svg" alt="{info.name} Logo" />

@@ -36,7 +36,7 @@
     "homepage": "http://20.86.131.181/",
     "data": {
         "api": "http://20.86.131.181/api/v1/",
-        "clientId": "ec6b641dde69f4cb08c1"
+        "auth": "http://20.86.131.181:8000/"
     },
     "dependencies": {
         "@sveltejs/vite-plugin-svelte": "^5.0.3",

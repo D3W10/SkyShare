@@ -57,7 +57,7 @@
                         <h3 class="font-semibold">{i18n.t("receive.1.sentBy")}</h3>
                         <div class="flex gap-x-1.5">
                             <Icon name="account" class="size-6" />
-                            <p>Annonymus</p>
+                            <p>{i18n.t("receive.1.anonymous")}</p>
                         </div>
                     </div>
                     <h3 class="mt-6 mb-2 font-semibold">{i18n.t("send.0.message")}</h3>

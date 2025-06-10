@@ -18,6 +18,7 @@ export class WebRTC {
     private type: Direction = "sender";
     private _code = "";
     private _timeout: Date | undefined;
+    private defaultTimeout = 0;
     private details: { [key: string]: unknown } = {};
     private exchangingIce = false;
     private events: { [K in RTCEventT]?: RTCCallbackT<K> } = {};
@@ -90,7 +91,8 @@ export class WebRTC {
 
                     if (payload.type === "code") {
                         this._code = payload.data.code;
-                        this._timeout = new Date(Date.now() + payload.data.timeout);
+                        this.defaultTimeout = payload.data.timeout;
+                        this._timeout = new Date(Date.now() + this.defaultTimeout);
                         console.log("[RTC] Transfer code: " + this._code);
                         resolve(this._code);
                     }
@@ -110,6 +112,7 @@ export class WebRTC {
 
                         this.exchangingIce = false;
                         this.peerConnection = new RTCPeerConnection(this.rtcConfig);
+                        this._timeout = new Date(Date.now() + this.defaultTimeout);
                         this.setupListeners();
                         this.setUpSenderRTC();
                         this.events.disconnect?.();

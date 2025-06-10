@@ -1,5 +1,10 @@
 /// <reference types="svelte" />
 
-interface Window {
-    goto: (url: string) => Promise<unknown>;
+import type * as preload from "$electron/preload";
+
+declare global {
+    interface Window {
+        app: typeof preload;
+        goto: (url: string) => Promise<unknown>;
+    }
 }

@@ -63,6 +63,7 @@
             "obtainingInfo": "Obtaining transfer information...",
             "title": "Review files",
             "sentBy": "Sent by",
+            "anonymous": "Anonymous",
             "noMessage": "No message"
         }
     ],

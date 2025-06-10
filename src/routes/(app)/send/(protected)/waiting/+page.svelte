@@ -11,7 +11,9 @@
     import { boxStyles } from "$lib/utils";
     import { fade } from "svelte/transition";
 
-    let connected = $state(false), timeLeft = $state((connection.c?.timeout?.getTime() ?? 0) - Date.now());
+    const timeDiff = () => (connection.c?.timeout?.getTime() ?? 0) - Date.now();
+
+    let connected = $state(false), timeLeft = $state(timeDiff());
     let codeAnim = $state(false), linkAnim = $state(false);
 
     function copy(type: "code" | "link") {
@@ -37,8 +39,12 @@
         connection.c!.sendDetails();
     });
 
-    connection.c?.setListener("disconnect", () => connected = false);
-    setInterval(() => timeLeft = (connection.c?.timeout?.getTime() ?? 0) - Date.now(), 1000);
+    connection.c?.setListener("disconnect", () => {
+        connected = false;
+        timeLeft = timeDiff();
+    });
+
+    setInterval(() => timeLeft = timeDiff(), 1000);
 </script>
 
 <PageLayout title={i18n.t("send.1.title")} class="flex flex-col justify-center items-center gap-y-6">
@@ -78,12 +84,14 @@
             <p class={!connected ? "animate-pulse" : ""}>{!connected ? i18n.t("send.1.waiting") : i18n.t("send.1.connected")}</p>
         </div>
     {/key}
-    <div class={twMerge(boxStyles.pane, "w-23.5 pl-3 pr-4 py-1.5 absolute right-6 bottom-6 gap-x-2 text-sm font-medium rounded-full transition-colors duration-200", timeLeft <= 60000 ? "text-accent *:animate-pulse" : "")}>
-        <Icon name="stopwatch" class="size-5" />
-        <div class="relative">
-            {#key timeLeft}
-                <p class="absolute" transition:blur={{ duration: 500 }}>{new Date(timeLeft).toLocaleTimeString([], { minute: "2-digit", second: "2-digit" })}</p>
-            {/key}
+    {#if !connected}
+        <div class={twMerge(boxStyles.pane, "w-23.5 pl-3 pr-4 py-1.5 absolute right-6 bottom-6 gap-x-2 text-sm font-medium rounded-full transition-colors duration-200", timeLeft <= 60000 ? "text-accent *:animate-pulse" : "")} transition:fade={{ duration: 400, delay: 400 }}>
+            <Icon name="stopwatch" class="size-5" />
+            <div class="relative">
+                {#key timeLeft}
+                    <p class="absolute" transition:blur={{ duration: 500 }}>{new Date(timeLeft).toLocaleTimeString([], { minute: "2-digit", second: "2-digit" })}</p>
+                {/key}
+            </div>
         </div>
-    </div>
+    {/if}
 </PageLayout>

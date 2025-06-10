@@ -7,6 +7,7 @@ import { autoUpdater } from "electron-updater";
 import { Logger } from "./lib/Logger";
 import { defaultStore } from "./lib/constants/defaultStore.const";
 import type { IStore } from "./lib/interfaces/Store.interface";
+import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 
 let window: BrowserWindow, splash: BrowserWindow, closeLock = true;
 const winWidth = 1000, winHeight = 600;
@@ -231,8 +232,9 @@ ipcMain.on("GetAppInfo", e => {
         version: packageData.version,
         homepage: packageData.homepage,
         api: !isDev ? packageData.data.api : "http://localhost:8020/api/v1/",
-        cliendId: packageData.data.clientId
-    }
+        auth: packageData.data.auth,
+        isDev
+    } satisfies AppInfo;
 });
 
 ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
