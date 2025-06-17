@@ -84,14 +84,14 @@
     }
 </script>
 
-<PageLayout title={i18n.t("send.0.title")} class="flex gap-x-6">
+<PageLayout title={i18n.t("send.title")} class="flex gap-x-6">
     <div class={twMerge(boxStyles.pane, "w-64 h-full p-0 grid relative rounded-2xl overflow-hidden z-0 *:col-[1] *:row-[1] before:absolute before:-top-8 before:-bottom-8 before:left-1/2 before:bg-rainbow-conic before:opacity-0 before:animate-rotate before:-translate-x-1/2 before:aspect-square before:-z-2 after:absolute after:bg-slate-200 dark:after:bg-slate-950 after:-z-1 after:transition-all after:duration-200", disable.d ? "*:opacity-50" : "", !hovering ? "before:transition-opacity before:duration-0 before:delay-200 after:inset-0 after:rounded-2xl" : "before:opacity-100 after:inset-2 after:rounded-lg")} role="none" ondragenter={() => hovering++} ondragleave={() => hovering--} ondragover={e => e.preventDefault()} ondrop={e => { e.preventDefault(); parseFiles("drop", e); }}>
         {#if files.length === 0}
             <div class="size-full transition-opacity duration-200" in:transitions.pageIn out:transitions.pageOut>
                 <Button type="invisible" class="size-full flex flex-col justify-center items-center enabled:cursor-pointer z-1 *:pointer-events-none" onclick={() => parseFiles("select")}>
                     <Icon name="upload" class="w-12 mb-2" />
-                    <p class="text-center font-semibold">{hovering === 0 ? i18n.t("send.0.chooseTitle") : i18n.t("send.0.chooseHoverTitle")}</p>
-                    <p class="text-sm text-center text-slate-500">{hovering === 0 ? i18n.t("send.0.chooseSubtitle") : i18n.t("send.0.chooseHoverSubtitle")}</p>
+                    <p class="text-center font-semibold">{hovering === 0 ? i18n.t("send.chooseTitle") : i18n.t("send.chooseHoverTitle")}</p>
+                    <p class="text-sm text-center text-slate-500">{hovering === 0 ? i18n.t("send.chooseSubtitle") : i18n.t("send.chooseHoverSubtitle")}</p>
                 </Button>
             </div>
         {:else}
@@ -101,7 +101,7 @@
                         {#if i !== files.length}
                             <div class={twMerge(boxStyles.box, "px-2 items-center group")}>
                                 {#if file.icon}
-                                    <img src="data:image/png;base64,{file.icon}" class="h-6" alt={i18n.t("send.0.fileIcon")} />
+                                    <img src="data:image/png;base64,{file.icon}" class="h-6" alt={i18n.t("send.fileIcon")} />
                                 {:else}
                                     <Icon name="file" class="h-6" />
                                 {/if}
@@ -121,7 +121,7 @@
                         {:else}
                             <Button type="secondary" class="w-full px-2 justify-start items-center gap-x-2" onclick={() => parseFiles("select")}>
                                 <Icon name="add" class="size-6" />
-                                <p class="text-sm">{i18n.t("send.0.chooseAddFiles")}</p>
+                                <p class="text-sm">{i18n.t("send.chooseAddFiles")}</p>
                             </Button>
                         {/if}
                     </div>
@@ -131,11 +131,11 @@
     </div>
     <div class="h-full px-4 flex flex-col items-center flex-1">
         <div class="size-full">
-            <h3 class="mb-2 font-semibold">{i18n.t("send.0.message")}</h3>
-            <TextArea class="w-full rounded-xl resize-none" bind:value={message} placeholder={i18n.t("send.0.messagePlaceholder")} rows={5} maxlength={MAX_MESSAGE} />
+            <h3 class="mb-2 font-semibold">{i18n.t("send.message")}</h3>
+            <TextArea class="w-full rounded-xl resize-none" bind:value={message} placeholder={i18n.t("send.messagePlaceholder")} rows={5} maxlength={MAX_MESSAGE} />
             <div class="mt-6 flex gap-x-4">
                 <div class="flex-1">
-                    <h3 class="mb-2 font-semibold">{i18n.t("send.0.size")}</h3>
+                    <h3 class="mb-2 font-semibold">{i18n.t("send.size")}</h3>
                     <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
                         {#key files.length}
                             <p transition:blur={{ duration: 500 }}>{app.formatFileSize(files.reduce((p, c) => p + c.size, 0))}</p>
@@ -143,15 +143,15 @@
                     </div>
                 </div>
                 <div class="flex-1">
-                    <h3 class="mb-2 font-semibold">{i18n.t("send.0.quantity")}</h3>
+                    <h3 class="mb-2 font-semibold">{i18n.t("send.quantity")}</h3>
                     <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
                         {#key files.length}
-                            <p transition:blur={{ duration: 500 }}>{files.length} {i18n.t("send.0.file", { count: files.length })}</p>
+                            <p transition:blur={{ duration: 500 }}>{files.length} {i18n.t("send.file", { count: files.length })}</p>
                         {/key}
                     </div>
                 </div>
             </div>
         </div>
-        <Button class="w-30" disabled={files.length === 0} onclick={startSend}>{i18n.t("send.0.send")}</Button>
+        <Button class="w-30" disabled={files.length === 0} onclick={startSend}>{i18n.t("send.send")}</Button>
     </div>
 </PageLayout>

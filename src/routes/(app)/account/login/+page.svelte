@@ -15,7 +15,7 @@
     let debugShow = $state(false), debugData = $state("");
 </script>
 
-<PageLayout title={i18n.t("login.0.title")} class="px-14 flex gap-x-6">
+<PageLayout title={i18n.t("account.login.title")} class="px-14 flex gap-x-6">
     <div class="pl-16 flex flex-col justify-center flex-1 gap-y-8">
         <div class="flex items-center gap-x-4">
             <img class="h-10" src="/logo.svg" alt="{info.name} Logo" role="none" onclick={info.isDev ? () => debugShow = !debugShow : undefined} />
@@ -27,22 +27,22 @@
         <div class="space-y-2.5">
             <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => historyDialog = true}>
                 <Icon name="history" class="size-5" />
-                <p>{i18n.t("login.0.history")}</p>
+                <p>{i18n.t("account.login.history")}</p>
             </Button>
             <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => syncDialog = true}>
                 <Icon name="sync" class="size-5" />
-                <p>{i18n.t("login.0.sync")}</p>
+                <p>{i18n.t("account.login.sync")}</p>
             </Button>
             <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => identificationDialog = true}>
                 <Icon name="identification" class="size-5" />
-                <p>{i18n.t("login.0.identification")}</p>
+                <p>{i18n.t("account.login.identification")}</p>
             </Button>
         </div>
     </div>
     <div class="flex flex-col justify-center items-center flex-1">
         <div class="w-40 space-y-3">
-            <Button class="w-full" onclick={() => window.open(getLogin())}>{i18n.t("login.0.login")}</Button>
-            <Button class="w-full" type="secondary" onclick={() => window.open(getSignup())}>{i18n.t("login.0.signup")}</Button>
+            <Button class="w-full" onclick={() => window.open(getLogin())}>{i18n.t("account.login.login")}</Button>
+            <Button class="w-full" type="secondary" onclick={() => window.open(getSignup())}>{i18n.t("account.login.signup")}</Button>
         </div>
     </div>
     {#if debugShow}
@@ -54,12 +54,12 @@
         </div>
     {/if}
 </PageLayout>
-<Dialog bind:show={historyDialog} title={i18n.t("login.0.history")} cancelable={false}>
-    <p>{i18n.t("login.0.historyDesc")}</p>
+<Dialog bind:show={historyDialog} title={i18n.t("account.login.history")} cancelable={false}>
+    <p>{i18n.t("account.login.historyDesc")}</p>
 </Dialog>
-<Dialog bind:show={syncDialog} title={i18n.t("login.0.sync")} cancelable={false}>
-    <p>{i18n.t("login.0.syncDesc")}</p>
+<Dialog bind:show={syncDialog} title={i18n.t("account.login.sync")} cancelable={false}>
+    <p>{i18n.t("account.login.syncDesc")}</p>
 </Dialog>
-<Dialog bind:show={identificationDialog} title={i18n.t("login.0.identification")} cancelable={false}>
-    <p>{i18n.t("login.0.identificationDesc")}</p>
+<Dialog bind:show={identificationDialog} title={i18n.t("account.login.identification")} cancelable={false}>
+    <p>{i18n.t("account.login.identificationDesc")}</p>
 </Dialog>

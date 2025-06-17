@@ -21,7 +21,6 @@
     });
 </script>
 
-
 <PageLayout title={i18n.t("receive.1")}>
     <p class="size-full flex justify-center items-center text-lg font-semibold">{i18n.t("receive.1")}</p>
 </PageLayout>

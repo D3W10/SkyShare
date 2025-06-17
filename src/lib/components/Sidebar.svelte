@@ -26,14 +26,14 @@
     <LinkItem class="{!collapsed ? "px-2" : ""} transition-[color_200ms,_padding_400ms]" href={!account.loggedIn ? "/account/login" : "/account"} selected={accountSelected} onclick={cleanAll}>
         <Icon class="{!collapsed ? "w-10 min-w-10" : "w-5.5 min-w-5.5"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-all! duration-400" name="account" />
         {#if !collapsed}
-            <p in:fade={{ duration: 100, delay: 100 }} out:fade={{ duration: 100 }}>{i18n.t("sidebar.login")}</p>
+            <p in:fade={{ duration: 100, delay: 100 }} out:fade={{ duration: 100 }}>{i18n.t("app.login")}</p>
         {/if}
     </LinkItem>
     <hr class="h-0.5 mx-0.5 my-2 bg-slate-950/10 dark:bg-slate-50/10 border-0 rounded-full" />
-    {@render item(i18n.t("sidebar.home"), "home", "/")}
-    {@render item(i18n.t("sidebar.send"), "send", "/send")}
-    {@render item(i18n.t("sidebar.receive"), "receive", "/receive")}
-    {@render item(i18n.t("sidebar.settings"), "settings", settingsPath)}
+    {@render item(i18n.t("app.home"), "home", "/")}
+    {@render item(i18n.t("app.send"), "send", "/send")}
+    {@render item(i18n.t("app.receive"), "receive", "/receive")}
+    {@render item(i18n.t("app.settings"), "settings", settingsPath)}
 </aside>
 
 {#snippet item(name: string, icon: IconT, url: string)}

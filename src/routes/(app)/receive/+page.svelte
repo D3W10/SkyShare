@@ -81,9 +81,9 @@
     });
 </script>
 
-<PageLayout title={i18n.t("receive.0.title")} class="flex flex-col items-center">
+<PageLayout title={i18n.t("receive.title")} class="flex flex-col items-center">
     <div class="h-full flex flex-col justify-center items-center gap-y-4">
-        <h3 class="text-center text-lg font-semibold">{i18n.t("receive.0.code")}</h3>
+        <h3 class="text-center text-lg font-semibold">{i18n.t("receive.code")}</h3>
         <div class="flex gap-x-4">
             <Input type="number" class="size-12 text-center text-3xl font-semibold" bind:value={n1} onkeydown={onKeydown} onbeforeinput={onBeforeInput} oninput={onInput} onpaste={onPaste} />
             <Input type="number" class="size-12 text-center text-3xl font-semibold" bind:value={n2} onkeydown={onKeydown} onbeforeinput={onBeforeInput} oninput={onInput} onpaste={onPaste} />
@@ -94,10 +94,10 @@
         </div>
     </div>
     <div class="flex gap-x-4 absolute bottom-6 left-6">
-        <p class="font-semibold">{i18n.t("receive.0.nearbyShare")}</p>
+        <p class="font-semibold">{i18n.t("receive.nearbyShare")}</p>
         <Switch bind:value={nearbyShare} />
     </div>
-    <Button class="w-30 mb-4" disabled={[n1, n2, n3, n4, n5, n6].includes(null)} onclick={startReceive}>{i18n.t("receive.0.receive")}</Button>
+    <Button class="w-30 mb-4" disabled={[n1, n2, n3, n4, n5, n6].includes(null)} onclick={startReceive}>{i18n.t("receive.receive")}</Button>
 </PageLayout>
 <Dialog bind:show={nearbyShareAlert} title={i18n.t("dialog.nearbyShare")} onsubmit={() => settings.nearbyShare = true} oncancel={() => nearbyShare = false}>
     <p>{i18n.t("dialog.nearbyShareDesc.0")}</p>

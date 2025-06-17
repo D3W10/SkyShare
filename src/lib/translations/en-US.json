@@ -5,12 +5,13 @@
         "updating": "Updating",
         "loggingIn": "Logging in"
     },
-    "sidebar": {
+    "app": {
         "login": "Login",
         "home": "Homepage",
         "send": "Send",
         "receive": "Receive",
-        "settings": "Settings"
+        "settings": "Settings",
+        "offline": "Offline"
     },
     "home": {
         "morning_zero": "Good morning!",
@@ -25,48 +26,44 @@
         "whatsNew": "What's new on {{version}}",
         "awesome": "Awesome!"
     },
-    "send": [
-        {
-            "title": "Send files",
-            "chooseTitle": "Choose files",
-            "chooseSubtitle": "Or drop them here!",
-            "chooseHoverTitle": "Nearly there!",
-            "chooseHoverSubtitle": "Drop them here to add",
-            "chooseAdd": "Add",
-            "chooseFilter": "All files",
-            "chooseAddFiles": "Add files",
-            "message": "Message",
-            "messagePlaceholder": "Type a message...",
-            "size": "Total Size",
-            "quantity": "Total Quantity",
-            "file_one": "file",
-            "file_other": "files",
-            "fileIcon": "File icon",
-            "send": "Send"
-        },
-        {
+    "send": {
+        "title": "Send files",
+        "chooseTitle": "Choose files",
+        "chooseSubtitle": "Or drop them here!",
+        "chooseHoverTitle": "Nearly there!",
+        "chooseHoverSubtitle": "Drop them here to add",
+        "chooseAdd": "Add",
+        "chooseFilter": "All files",
+        "chooseAddFiles": "Add files",
+        "message": "Message",
+        "messagePlaceholder": "Type a message...",
+        "size": "Total Size",
+        "quantity": "Total Quantity",
+        "file_one": "file",
+        "file_other": "files",
+        "fileIcon": "File icon",
+        "send": "Send",
+        "waiting": {
             "title": "Transfer details",
             "copyCode": "Copy code",
             "copyLink": "Copy link",
             "waiting": "Waiting...",
             "connected": "Connected"
         }
-    ],
-    "receive": [
-        {
-            "title": "Receive files",
-            "code": "Transfer Code",
-            "nearbyShare": "Enable NearbyShare",
-            "receive": "Receive"
-        },
-        {
+    },
+    "receive": {
+        "title": "Receive files",
+        "code": "Transfer Code",
+        "nearbyShare": "Enable NearbyShare",
+        "receive": "Receive",
+        "review": {
             "obtainingInfo": "Obtaining transfer information...",
             "title": "Review files",
             "sentBy": "Sent by",
             "anonymous": "Anonymous",
             "noMessage": "No message"
         }
-    ],
+    },
     "settings": {
         "title": "Settings",
         "appearance": "Appearance",
@@ -94,8 +91,8 @@
         "resetButton": "Reset",
         "version": "Version {{version}}"
     },
-    "login": [
-        {
+    "account": {
+        "login": {
             "title" : "Log In",
             "history": "Transfer history",
             "historyDesc": "All your transfers using the app will be saved on a history for easy access and management",
@@ -105,99 +102,13 @@
             "identificationDesc": "When people receive files from you, your name will be displayed along the transfer (must be enabled on the account settings)",
             "login": "Log In",
             "signup": "Create account"
-        },
-        {
-            "title": "Forgot my password",
-            "email": "Email",
-            "recover": "Recover Account"
-        },
-        {
-            "title": "Email sent",
-            "sent": "Email sent!",
-            "sentDesc": "An email has been sent to the provided address!",
-            "notes": [
-                "Open the email you received and follow the link to reset your password.",
-                "If you did not receive an email, either it has been marked as spam or no account exists with this email address."
-            ]
-        },
-        {
-            "title" : "Recover Account",
-            "password": "Password",
-            "repeatPassword": "Repeat Password",
-            "recover": "Recover"
-        },
-        {
-            "title" : "Create Account",
-            "username": "Username",
-            "email": "Email",
-            "password": "Password",
-            "signup": "Create account"
-        },
-        {
-            "title": "Personalize account",
-            "photo": "Profile Picture",
-            "photoChoose": "Choose a photo"
         }
-    ],
-    "account": [
-        {
-            "title" : "Account",
-            "history" : "History",
-            "edit" : "Edit Account",
-            "logout": "Log Out",
-            "notVerified": "Email not verified!"
-        },
-        {
-            "title": "History",
-            "historyDisabled": "You don't have history enabled on your account, please enable it on your account settings.",
-            "historyEmpty": "This space feels a bit empty, send or receive some files and come back here later!"
-        },
-        {
-            "title": "Edit Account",
-            "informations": "Informations",
-            "personalization": "Personalization",
-            "history": "History",
-            "privacy": "Privacy",
-            "about": "About",
-            "save": "Save",
-            "username": "Username",
-            "usernameDesc": "Change your account username",
-            "email": "Email",
-            "emailDesc": "Change your account email",
-            "password": "Password",
-            "passwordDesc": "Change your account password",
-            "passwordButton": "Change",
-            "delete": "Delete Account",
-            "deleteDesc": "Delete your SkyShare account",
-            "deleteButton": "Delete",
-            "photo": "Profile Picture",
-            "photoChoose": "Choose a photo",
-            "enableHistory": "Enable history",
-            "enableHistoryDesc": "Save entries to the transfer history",
-            "clearHistory": "Clear history",
-            "clearHistoryDesc": "Clear all transfer history entries",
-            "clearHistoryButton": "Clear",
-            "showInfo": "Display my personal info",
-            "showInfoDesc": "Display my account name and photo on transfers and NearbyShare",
-            "memberSince": "Member since {{date}}"
-        },
-        {
-            "title": "Delete Account",
-            "confirm": "Are you sure?",
-            "confirmDesc": "By deleting your account, you will lose some features exclusive to members!",
-            "list": [
-                "You will no longer be able to access your transfer history and it won't sync across devices.",
-                "You will no longer be identified with name and photo when making transfers."
-            ],
-            "continue": "Continue"
-        },
-        {
-            "deleting": "Deleting your SkyShare account, hang on tight!"
-        }
-    ],
+    },
     "dialog": {
         "okay": "Okay",
         "cancel": "Cancel",
+        "yes": "Yes",
+        "no": "No",
         "unknown": "Unknown error",
         "unknownDesc": "An unknown error occurred in the app or while trying to reach the server, this likely happened cause you're running an outdated version of SkyShare. Please make sure you're running the latest version and try again.",
         "down": "Server error",
@@ -227,11 +138,5 @@
         ],
         "resetSettings": "Reset settings",
         "resetSettingsDesc": "Are you sure you want to reset all settings? The default values will be applied."
-    },
-    "common": {
-        "required": "Required",
-        "optional": "Optional",
-        "next": "Next",
-        "offline": "Offline"
     }
 }

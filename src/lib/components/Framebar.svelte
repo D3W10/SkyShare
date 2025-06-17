@@ -97,7 +97,7 @@
         {#if isOffline}
             <div class={twMerge(boxStyles.box, "px-2 py-1 rounded-lg")}>
                 <Icon name="wifiOff" class="w-5" />
-                <span class="ml-2.5 text-sm font-medium">{i18n.t("common.offline")}</span>
+                <span class="ml-2.5 text-sm font-medium">{i18n.t("app.offline")}</span>
             </div>
         {/if}
         {#if platform !== "darwin"}
@@ -113,6 +113,6 @@
         {/if}
     </div>
 </div>
-<Dialog bind:show={closeAlert} title={i18n.t("dialog.disabled")} onsubmit={() => (cleanAll(), app.closeWindow())}>
+<Dialog bind:show={closeAlert} title={i18n.t("dialog.disabled")} text={i18n.t("dialog.yes")} cancelText={i18n.t("dialog.no")} onsubmit={() => (cleanAll(), app.closeWindow())}>
     <p>{i18n.t("dialog.disabledDesc")}</p>
 </Dialog>

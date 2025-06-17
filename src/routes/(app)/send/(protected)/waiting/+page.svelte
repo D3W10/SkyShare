@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { blur } from "svelte/transition";
+    import { blur, fade } from "svelte/transition";
     import { goto } from "$app/navigation";
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
@@ -9,7 +9,6 @@
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import { boxStyles } from "$lib/utils";
-    import { fade } from "svelte/transition";
 
     const timeDiff = () => (connection.c?.timeout?.getTime() ?? 0) - Date.now();
 
@@ -47,7 +46,7 @@
     setInterval(() => timeLeft = timeDiff(), 1000);
 </script>
 
-<PageLayout title={i18n.t("send.1.title")} class="flex flex-col justify-center items-center gap-y-6">
+<PageLayout title={i18n.t("send.waiting.title")} class="flex flex-col justify-center items-center gap-y-6">
     <p class="text-7xl font-bold tracking-widest drop-shadow-lg drop-shadow-accent/30">{connection.c?.code}</p>
     <div class="flex gap-x-4">
         <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => copy("code")}>
@@ -62,7 +61,7 @@
                     </div>
                 {/if}
             </div>
-            <p>{i18n.t("send.1.copyCode")}</p>
+            <p>{i18n.t("send.waiting.copyCode")}</p>
         </Button>
         <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => copy("link")}>
             <div class="size-5">
@@ -76,12 +75,12 @@
                     </div>
                 {/if}
             </div>
-            <p>{i18n.t("send.1.copyLink")}</p>
+            <p>{i18n.t("send.waiting.copyLink")}</p>
         </Button>
     </div>
     {#key connected}
         <div class={twMerge(boxStyles.pane, "py-1.5 absolute left-6 bottom-6 text-sm")} in:fade={{ duration: 200, delay: 200 }} out:fade={{ duration: 200 }}>
-            <p class={!connected ? "animate-pulse" : ""}>{!connected ? i18n.t("send.1.waiting") : i18n.t("send.1.connected")}</p>
+            <p class={!connected ? "animate-pulse" : ""}>{!connected ? i18n.t("send.waiting.waiting") : i18n.t("send.waiting.connected")}</p>
         </div>
     {/key}
     {#if !connected}

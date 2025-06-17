@@ -24,4 +24,15 @@ export async function finishLogin(accessToken: string, refreshToken: string, exp
     account.auth.accessToken = accessToken;
     account.auth.refreshToken = refreshToken;
     account.auth.expireDate = Date.now() + expiresIn;
+
+    try {
+        const userInfoReq = await fetch(info.auth + "api/userinfo", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        }), userInfo = await userInfoReq.json();
+    
+        console.log(userInfo);
+    }
+    catch {}
 }
