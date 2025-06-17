@@ -43,6 +43,13 @@
         timeLeft = timeDiff();
     });
 
+    connection.c?.setListener("data", raw => {
+        const { type } = JSON.parse(raw);
+
+        if (type === "start")
+            goto("/send/transfer");
+    });
+
     setInterval(() => timeLeft = timeDiff(), 1000);
 </script>
 

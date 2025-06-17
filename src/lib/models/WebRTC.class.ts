@@ -298,16 +298,25 @@ export class WebRTC {
         // TODO: Handle errors
     }
 
+    signalStart() {
+        this.sendInChunks(JSON.stringify({
+            type: "start"
+        }), this.dataChannel);
+    }
+
     sendDetails() {
         if (this.type === "sender")
-            this.sendInChunks(JSON.stringify(this.details), this.dataChannel);
+            this.sendInChunks(JSON.stringify({
+                type: "details",
+                data: this.details
+            }), this.dataChannel);
     }
 
     send(data: Blob) {
         /* this.dataChannel.send(JSON.stringify(data)); */
     }
 
-    private sendInChunks(data: string, channel?: RTCDataChannel, chunkSize = 32 * 1024) {
+    private sendInChunks(data: string, channel: RTCDataChannel | undefined, chunkSize = 32 * 1024) {
         if (!channel || channel.readyState !== "open")
             return;
 

@@ -17,17 +17,19 @@
     connection.c?.setListener("dataOpen", () => (connected = true, setUnlock()));
     connection.c?.setListener("fileOpen", () => ready = true);
 
-    connection.c?.setListener("data", data => {
-        if (files.length === 0) {
-            const info = JSON.parse(data);
+    connection.c?.setListener("data", raw => {
+        const { type, data } = JSON.parse(raw);
 
-            files = info.files;
-            message = info.message;
+        if (type === "details" && files.length === 0) {
+            files = data.files;
+            message = data.message;
         }
     });
 
     function startReceive() {
-
+        setLock();
+        connection.c?.signalStart();
+        goto("/receive/transfer");
     }
 </script>
 

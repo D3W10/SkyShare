@@ -49,6 +49,12 @@
             "copyLink": "Copiar link",
             "waiting": "Em espera...",
             "connected": "Conectado"
+        },
+        "transfer": {
+            "title": "A enviar",
+            "progress": "Progresso",
+            "estimated": "Estimado",
+            "speed": "Velocidade"
         }
     },
     "receive": {
@@ -62,6 +68,9 @@
             "sentBy": "Enviado por",
             "anonymous": "Desconhecido",
             "noMessage": "Sem mensagem"
+        },
+        "transfer": {
+            "title": "A receber"
         }
     },
     "settings": {
