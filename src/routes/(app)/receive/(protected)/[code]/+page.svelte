@@ -5,6 +5,7 @@
     import { app } from "$lib/data/app.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
+    import { setError } from "$lib/data/error.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
@@ -16,6 +17,11 @@
 
     connection.c?.setListener("dataOpen", () => (connected = true, setUnlock()));
     connection.c?.setListener("fileOpen", () => ready = true);
+
+    connection.c?.setListener("end", () => {
+        setError("senderDisconnected");
+        goto("/receive");
+    });
 
     connection.c?.setListener("data", raw => {
         const { type, data } = JSON.parse(raw);

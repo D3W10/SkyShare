@@ -80,7 +80,6 @@ export class WebRTC {
         this.peerConnection.addEventListener("iceconnectionstatechange", () => {
             if (this.peerConnection.iceConnectionState === "disconnected" || this.peerConnection.iceConnectionState === "failed")
                 console.error("ICE connection failed");
-            // TODO: Handle errors
         });
     }
 
@@ -192,12 +191,11 @@ export class WebRTC {
                 console.log("[RTC] ICE candidate received and added: " + JSON.stringify(payload.data));
                 this.peerConnection.addIceCandidate(payload.data.ice);
             }
-
-            // TODO Handle disconnect and error
         });
 
         this.ws.addEventListener("close", e => {
             console.log("[RTC] WebSocket closed:", e.reason);
+            this.events.end?.();
         });
     }
 

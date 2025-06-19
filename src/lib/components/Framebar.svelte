@@ -79,7 +79,7 @@
 <div class="w-full h-10 min-h-10 py-1 pl-3 pr-1.5 flex justify-between items-center overflow-hidden" style:-webkit-app-region="drag">
     <div class="flex items-center gap-x-2">
         {#if platform !== "darwin"}
-            <img class="h-5 ml-0.5" src="/logo.svg" alt="{info.name} Logo" role="none" onclick={onLogoClick} style:-webkit-app-region="no-drag" />
+            <img class="h-5 ml-0.5" src="./logo.svg" alt="{info.name} Logo" role="none" onclick={onLogoClick} style:-webkit-app-region="no-drag" />
             <p class="text-sm font-semibold {hasFocus ? "opacity-100" : "opacity-50"}">{info.name}</p>
         {:else}
             <div class="w-14"></div>

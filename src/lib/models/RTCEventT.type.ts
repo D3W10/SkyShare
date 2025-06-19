@@ -3,4 +3,5 @@ export type RTCEventT =
     "dataOpen" |
     "file" |
     "fileOpen" |
-    "disconnect";
+    "disconnect" |
+    "end";

@@ -6,4 +6,5 @@ export type RTCCallbackT<T extends RTCEventT> =
     T extends "file" ? (f: ArrayBuffer) => unknown :
     T extends "fileOpen" ? () => unknown :
     T extends "disconnect" ? () => unknown :
+    T extends "end" ? () => unknown :
     never;

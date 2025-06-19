@@ -43,7 +43,7 @@
 <PageLayout title={i18n.t(greetingKey, { count: !account.loggedIn ? 0 : 1, name: account.username })} class="px-14 pb-8 flex gap-x-8">
     <div class="w-1/2 pl-16 flex flex-col justify-center gap-y-8">
         <div class="flex items-center gap-x-4">
-            <img class="h-10" src="/logo.svg" alt="{info.name} Logo" />
+            <img class="h-10" src="./logo.svg" alt="{info.name} Logo" />
             <h3 class="text-2xl font-semibold">{info.name}</h3>
         </div>
         <div class="space-y-2.5">

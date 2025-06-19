@@ -5,4 +5,5 @@ export type ErrorT =
     "disabled" |
     "tooManyFiles" |
     "addingError" |
-    "invalidCode";
+    "invalidCode" |
+    "senderDisconnected";

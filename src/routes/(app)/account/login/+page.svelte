@@ -18,7 +18,7 @@
 <PageLayout title={i18n.t("account.login.title")} class="px-14 flex gap-x-6">
     <div class="pl-16 flex flex-col justify-center flex-1 gap-y-8">
         <div class="flex items-center gap-x-4">
-            <img class="h-10" src="/logo.svg" alt="{info.name} Logo" role="none" onclick={info.isDev ? () => debugShow = !debugShow : undefined} />
+            <img class="h-10" src="./logo.svg" alt="{info.name} Logo" role="none" onclick={info.isDev ? () => debugShow = !debugShow : undefined} />
             <div>
                 <h3 class="text-2xl font-semibold">{info.name}</h3>
                 <h4 class="-mt-0.5 text-sm font-semibold">Account</h4>
