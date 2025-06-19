@@ -108,10 +108,26 @@ app.on("second-instance", (_, argv) => {
     uriHandler(argv);
 });
 
+protocol.registerSchemesAsPrivileged([{
+    scheme: "io",
+    privileges: {
+        supportFetchAPI: true
+    }
+}]);
+
 app.whenReady().then(() => {
     createWindow();
 
-    protocol.handle("app", req => net.fetch("file://" + req.url.slice("app://".length)));
+    protocol.handle("io", req => {    
+        try {
+            return new Response(fs.readFileSync(req.url.replace("io:/", "")), {
+                headers: { "Content-Type": "application/octet-stream" }
+            });
+        }
+        catch (err) {
+            return new Response("Not found", { status: 404 });
+        }
+      });
 });
 
 app.on("window-all-closed", () => {
@@ -250,6 +266,13 @@ ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(
 ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
 
 ipcMain.handle("GetFileAsBase64", async (_, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
+
+ipcMain.on("SaveToFile", (_, file, location) => {
+    fs.writeFile(location, Buffer.from(file), err => {
+        if (err)
+            console.error("Failed to save file to", location);
+    });
+});
 
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);

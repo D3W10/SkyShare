@@ -26,9 +26,21 @@
         }
     });
 
-    function startReceive() {
+    async function startReceive() {
+        const chosenLocation = await app.showSaveDialog({
+            title: i18n.t("receive.chooseTitle"),
+            defaultPath: files[0].name,
+            properties: ["createDirectory", "showOverwriteConfirmation"],
+            message: i18n.t("receive.chooseTitle")
+        });
+
+        if (chosenLocation.canceled || !connection.c)
+            return;
+
+        connection.c.savePath = chosenLocation.filePath.replace(/[\/\\]{1}([^\/\\]+)$/g, "") + "/";
+
         setLock();
-        connection.c?.signalStart();
+        connection.c.signalStart();
         goto("/receive/transfer");
     }
 </script>

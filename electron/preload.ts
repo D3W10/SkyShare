@@ -266,6 +266,15 @@ export function formatFileSize(size: number, decimals = 2) {
 }
 
 /**
+ * Saves a file to a specific location
+ * @param file The file to be saved
+ * @param location The location where to save the file
+ */
+export function saveToFile(file: ArrayBuffer, location: string) {
+    ipcRenderer.send("SaveToFile", file, location);
+}
+
+/**
  * Object containing functions regarding the account system
  */
 export const account = {
@@ -511,6 +520,7 @@ contextBridge.exposeInMainWorld("app", {
     showSaveDialog,
     apiCall,
     formatFileSize,
+    saveToFile,
     account,
     sendLoginRequest,
     sleep

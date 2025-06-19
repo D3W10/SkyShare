@@ -1,9 +1,24 @@
 <script lang="ts">
     import { i18n } from "$lib/data/i18n.svelte";
+    import { app } from "$lib/data/app.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import ProgressCircle from "$lib/components/ProgressCircle.svelte";
     let sta = $state(0);
+
+    let nameList: string[] = [];
+
+    connection.c?.setListener("data", raw => {
+        const { type, data } = JSON.parse(raw);
+
+        if (type === "list")
+            nameList = data;
+    });
+
+    connection.c?.setListener("file", raw => {
+        if (connection.c)
+            app.saveToFile(raw, connection.c.savePath + nameList.shift());
+    });
 </script>
 
 <PageLayout title={i18n.t("receive.transfer.title")} class="flex flex-col items-center">

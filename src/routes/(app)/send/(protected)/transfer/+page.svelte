@@ -4,6 +4,8 @@
     import PageLayout from "$lib/components/PageLayout.svelte";
     import ProgressCircle from "$lib/components/ProgressCircle.svelte";
     let sta = $state(0);
+
+    connection.c?.send();
 </script>
 
 <PageLayout title={i18n.t("send.transfer.title")} class="flex flex-col items-center">

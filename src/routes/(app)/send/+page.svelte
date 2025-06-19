@@ -28,11 +28,11 @@
             const chosenFiles = await app.showOpenDialog({
                 title: i18n.t("send.chooseTitle"),
                 filters: [{ name: i18n.t("send.chooseFilter"), extensions: ["*"] }],
-                properties: ["openFile", "multiSelections", "treatPackageAsDirectory"],
+                properties: ["openFile", "multiSelections", "createDirectory"],
                 message: i18n.t("send.chooseTitle")
             });
 
-            if (!chosenFiles || chosenFiles?.canceled)
+            if (chosenFiles.canceled)
                 return;
 
             fileList = chosenFiles.files;

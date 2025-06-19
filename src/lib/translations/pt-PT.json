@@ -62,6 +62,7 @@
         "code": "Código da transferência",
         "nearbyShare": "Ativar NearbyShare",
         "receive": "Receber",
+        "chooseTitle": "Escolher a localização para guardar",
         "review": {
             "obtainingInfo": "A obter as informações da transferência...",
             "title": "Rever ficheiros",

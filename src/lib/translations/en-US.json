@@ -62,6 +62,7 @@
         "code": "Transfer Code",
         "nearbyShare": "Enable NearbyShare",
         "receive": "Receive",
+        "chooseTitle": "Choose save location",
         "review": {
             "obtainingInfo": "Obtaining transfer information...",
             "title": "Review files",
