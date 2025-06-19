@@ -2,10 +2,10 @@
     import { onMount, tick } from "svelte";
     import { page } from "$app/state";
     import { base } from "$app/paths";
-    import { goto } from "$app/navigation";
     import { app } from "$lib/data/app.svelte";
     import { changeLanguage } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
+    import { goto } from "$lib/utils";
     import type { StoreSettings } from "$electron/lib/interfaces/Store.interface";
     import "../app.css";
 
@@ -18,7 +18,7 @@
     console.warn = (...data: any[]) => (_consoleWarn(...data), app.warn(...data));
     console.error = (...data: any[]) => (_consoleError(...data), app.error(...data));
 
-    app.addEventListener("uri", url => goto(`${base}/${url}`));
+    app.addEventListener("uri", goto);
 
     $effect(() => {
         if (oldSettings) {
@@ -37,7 +37,7 @@
         instantChange = false;
     });
 
-    $effect(() => console.log("Navigating to", page.url.pathname));
+    $effect(() => console.log("Navigating to", page.url.pathname.replace(base, "")));
 
     const setTheme = async (theme: string, instant = false) => {
         if (document.documentElement.getAttribute("data-theme") === theme) return;

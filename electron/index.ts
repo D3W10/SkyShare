@@ -61,7 +61,10 @@ async function createWindow() {
         });
     }
 
-    ipcMain.once("WindowReady", () => splash.webContents.send("WindowReady"));
+    ipcMain.once("WindowReady", () => {
+        uriHandler(process.argv);
+        splash.webContents.send("WindowReady");
+    });
 
     window.webContents.setWindowOpenHandler(({ url }) => {
         try {
@@ -104,8 +107,13 @@ if (!app.requestSingleInstanceLock())
     app.quit();
 
 app.on("second-instance", (_, argv) => {
-    logger.log("New instance opened");
+    console.log("New instance opened");
     uriHandler(argv);
+});
+
+app.on("open-url", (_, url) => {
+    console.log("New protocol URL opened");
+    uriHandler([url]);
 });
 
 protocol.registerSchemesAsPrivileged([{

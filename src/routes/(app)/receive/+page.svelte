@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
@@ -13,7 +12,7 @@
     import Button from "$lib/components/Button.svelte";
     import { WebRTC } from "$lib/models/WebRTC.class";
     import { AppError } from "$lib/models/AppError.class";
-    import { safeTry } from "$lib/utils";
+    import { goto, safeTry } from "$lib/utils";
 
     let n1 = $state<number | null>(null), n2 = $state<number | null>(null), n3 = $state<number | null>(null), n4 = $state<number | null>(null), n5 = $state<number | null>(null), n6 = $state<number | null>(null);
     let nearbyShare = $state(settings.nearbyShare), nearbyShareAlert = $state(false);
@@ -67,7 +66,7 @@
             cleanup.push(() => connection.c?.disconnect());
             await connection.c.setUpAsReceiver(code);
 
-            goto("/receive/" + code);
+            goto("/receive/code?code=" + code);
         });
     }
 

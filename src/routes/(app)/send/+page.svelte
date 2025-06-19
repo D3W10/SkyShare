@@ -3,7 +3,6 @@
     import { flip } from "svelte/animate";
     import { cubicInOut, cubicOut } from "svelte/easing";
     import { twMerge } from "tailwind-merge";
-    import { goto } from "$app/navigation";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { connection } from "$lib/data/connection.svelte";
@@ -14,7 +13,7 @@
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import TextArea from "$lib/components/TextArea.svelte";
-    import { boxStyles, safeTry, transitions } from "$lib/utils";
+    import { boxStyles, goto, safeTry, transitions } from "$lib/utils";
     import { WebRTC } from "$lib/models/WebRTC.class";
     import type { File } from "$electron/lib/interfaces/File.interface";
 

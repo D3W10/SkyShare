@@ -1,6 +1,5 @@
 <script lang="ts">
     import { blur, fade } from "svelte/transition";
-    import { goto } from "$app/navigation";
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
@@ -8,7 +7,7 @@
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
-    import { boxStyles } from "$lib/utils";
+    import { boxStyles, goto } from "$lib/utils";
 
     const timeDiff = () => (connection.c?.timeout?.getTime() ?? 0) - Date.now();
 

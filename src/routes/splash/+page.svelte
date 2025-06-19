@@ -6,6 +6,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
+    import { images } from "$lib/utils";
 
     const states = {
         starting: () => i18n.t("splash.starting"),
@@ -85,11 +86,11 @@
     {/if}
     <div class="size-full flex flex-col justify-between p-6">
         <div class="space-y-3">
-            <img src="./logo.svg" class="w-10" alt="Logo" />
+            <img src={images.logo} class="w-10" alt="Logo" />
             <h1 class="text-2xl font-semibold">{info.name}</h1>
         </div>
         <p class="animate-pulse" in:fade={{ duration: 400, delay: 400 }}>{states[status]()}</p>
     </div>
-    <img src="./meshLight.svg" class="fixed top-0 bottom-0 right-0 block dark:hidden -z-1" alt="{info.name} Mesh" />
-    <img src="./meshDark.svg" class="fixed top-0 bottom-0 right-0 hidden dark:block -z-1" alt="{info.name} Mesh" />
+    <img src={images.meshLight} class="fixed top-0 bottom-0 right-0 block dark:hidden -z-1" alt="{info.name} Mesh" />
+    <img src={images.meshDark} class="fixed top-0 bottom-0 right-0 hidden dark:block -z-1" alt="{info.name} Mesh" />
 </div>

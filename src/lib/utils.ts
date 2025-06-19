@@ -1,5 +1,8 @@
+import path from "path";
 import { fade } from "svelte/transition";
 import { cubicIn, cubicOut } from "svelte/easing";
+import { goto as sGoto } from "$app/navigation";
+import { base } from "$app/paths";
 import { setError } from "./data/error.svelte";
 import { setUnlock } from "./data/disable.svelte";
 import { AppError } from "./models/AppError.class";
@@ -19,6 +22,16 @@ export const settingsPath = "/settings/appearance";
 export const transitions = {
     pageIn: (node: Element) => fade(node, { duration: 200, delay: 50, easing: cubicIn }),
     pageOut: (node: Element) => fade(node, { duration: 150, easing: cubicOut })
+}
+
+export const images = {
+    logo: base + "/logo.svg",
+    meshLight: base + "/meshLight.svg",
+    meshDark: base + "/meshDark.svg"
+}
+
+export async function goto(url: string) {
+    return sGoto(path.join(base, url));
 }
 
 export async function safeTry(fn: () => Promise<unknown>) {

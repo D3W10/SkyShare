@@ -2,7 +2,7 @@
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
-    import { boxStyles, transitions } from "$lib/utils";
+    import { boxStyles, images, transitions } from "$lib/utils";
 
     let versionClick = 0, versionClickTimeout: NodeJS.Timeout;
 
@@ -26,7 +26,7 @@
 <div class="w-full py-2 flex flex-col space-y-6" in:transitions.pageIn out:transitions.pageOut>
     <div class={twMerge(boxStyles.box, "p-5")}>
         <div class="size-full flex items-center gap-x-4">
-            <img src="./logo.svg" alt="{info.name} Logo" class="h-10" />
+            <img src={images.logo} alt="{info.name} Logo" class="h-10" />
             <div class="w-full flex flex-col justify-center gap-y-0.5">
                 <h3 class="font-semibold">{info.name}</h3>
                 <p class="text-sm text-slate-500" role="none" onclick={onVersionClick}>{i18n.t("settings.version", { version: info.version })}</p>

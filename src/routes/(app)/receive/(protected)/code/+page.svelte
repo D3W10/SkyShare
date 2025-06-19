@@ -1,6 +1,5 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
-    import { goto } from "$app/navigation";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { connection } from "$lib/data/connection.svelte";
@@ -9,7 +8,7 @@
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
-    import { boxStyles, transitions } from "$lib/utils";
+    import { boxStyles, goto, transitions } from "$lib/utils";
     import type { File } from "$electron/lib/interfaces/File.interface";
 
     let connected = $state(false), ready = $state(false);
