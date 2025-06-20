@@ -1,4 +1,3 @@
-import path from "path";
 import { fade } from "svelte/transition";
 import { cubicIn, cubicOut } from "svelte/easing";
 import { goto as sGoto } from "$app/navigation";
@@ -31,7 +30,7 @@ export const images = {
 }
 
 export async function goto(url: string) {
-    return sGoto(path.join(base, url));
+    return sGoto((base.length !== 0 ? base + "/" : "") + url);
 }
 
 export async function safeTry(fn: () => Promise<unknown>) {

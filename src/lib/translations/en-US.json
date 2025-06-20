@@ -54,7 +54,14 @@
             "title": "Sending",
             "progress": "Progress",
             "estimated": "Estimated",
-            "speed": "Speed"
+            "speed": "Speed",
+            "hours": "hours",
+            "minutes": "minutes",
+            "seconds": "seconds"
+        },
+        "done": {
+            "title": "Files sent",
+            "finish": "Finish"
         }
     },
     "receive": {
@@ -72,6 +79,10 @@
         },
         "transfer": {
             "title": "Receiving"
+        },
+        "done": {
+            "title": "Files received",
+            "open": "Open folder"
         }
     },
     "settings": {

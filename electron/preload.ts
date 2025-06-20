@@ -266,12 +266,55 @@ export function formatFileSize(size: number, decimals = 2) {
 }
 
 /**
- * Saves a file to a specific location
- * @param file The file to be saved
- * @param location The location where to save the file
+ * Formats a time duration in seconds to a human-readable string.
+ * @param seconds The time duration in seconds
+ * @returns The formatted time string
  */
-export function saveToFile(file: ArrayBuffer, location: string) {
-    ipcRenderer.send("SaveToFile", file, location);
+export function formatTime(seconds: number, [hStr, mStr, sStr] = ["hours", "minutes", "seconds"]) {
+    seconds = Math.max(0, Math.floor(seconds));
+
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+
+    if (h > 0)
+        return `${h} ${hStr}`;
+    else if (m > 0)
+        return `${m} ${mStr}`;
+    else
+        return `${s} ${sStr}`;
+}
+
+/**
+ * Notifies the main process to initiate a new file stream
+ * @param location The location where to save the file
+ * @returns A promise containing the success state of the operation
+ */
+export function createFileStream(location: string): Promise<boolean> {
+    return ipcRenderer.invoke("CreateFileStrem", location);
+}
+
+/**
+ * Writes a chunk to the current file stream
+ * @param chunk The chunk to be written
+ */
+export function writeChunk(chunk: ArrayBuffer) {
+    ipcRenderer.send("WriteChunk", chunk);
+}
+
+/**
+ * Closes the current file stream
+ */
+export function closeFileStream() {
+    ipcRenderer.send("CloseFileStream");
+}
+
+/**
+ * Shows the file or folder in the system file explorer
+ * @param path The path to the file or folder
+ */
+export function showItemInFolder(path: string) {
+    ipcRenderer.send("ShowItemInFolder", path);
 }
 
 /**
@@ -520,7 +563,11 @@ contextBridge.exposeInMainWorld("app", {
     showSaveDialog,
     apiCall,
     formatFileSize,
-    saveToFile,
+    formatTime,
+    createFileStream,
+    writeChunk,
+    closeFileStream,
+    showItemInFolder,
     account,
     sendLoginRequest,
     sleep

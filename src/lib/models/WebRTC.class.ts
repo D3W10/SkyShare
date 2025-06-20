@@ -8,6 +8,8 @@ import type { File } from "$electron/lib/interfaces/File.interface";
 type Direction = "sender" | "receiver";
 type Credentials = { username: string, password: string };
 
+const MAX_BUFFERED_AMOUNT = 8388608;
+
 export class WebRTC {
     private rtcConfig: RTCConfiguration;
     private ws: WebSocket | undefined;
@@ -20,13 +22,15 @@ export class WebRTC {
     private _timeout: Date | undefined;
     private _savePath = "";
     private defaultTimeout = 0;
-    private details: { files: File[], message: string } = { files: [], message: "" };
+    private _details: { files: File[], message: string } = { files: [], message: "" };
     private exchangingIce = false;
     private events: { [K in RTCEventT]?: RTCCallbackT<K> } = {};
     private dataHeap = "";
     private dataChannelQueue: string[] = [];
-    private fileHeap = new ArrayBuffer(0);
-    private fileChannelQueue: ArrayBuffer[] = [];
+    private fileOngoing = false;
+    private fileIndex = 0;
+    private transferSize = 0;
+    private progressStartTime?: number;
 
     constructor(credentials: Credentials) {
         this.rtcConfig = {
@@ -70,6 +74,14 @@ export class WebRTC {
         this._savePath = path;
     }
 
+    public get details() {
+        return this._details;
+    }
+
+    public set details(details: { files: File[], message: string }) {
+        this._details = details;
+    }
+
     private setupListeners() {
         this.peerConnection.addEventListener("icecandidate", async event => {
             if (event.candidate) {
@@ -86,7 +98,7 @@ export class WebRTC {
     async setUpAsSender(files: File[], message: string): Promise<string> {
         this.type = "sender";
         this.ws = new WebSocket(info.api + "transfer/create");
-        this.details = { files, message };
+        this._details = { files, message };
 
         await this.waitForWebSocketOpen();
         this.setUpSenderRTC();
@@ -286,11 +298,14 @@ export class WebRTC {
     }
 
     private configFileChannel(channel: RTCDataChannel) {
+        this.transferSize = 0;
+
         channel.addEventListener("message", e => {
             if (e.data.byteLength)
                 console.log(`[RTC] Received a chunk of data (${e.data.byteLength})`);
 
-            this.dispatchFile(e.data);
+            this.calculateProgress(e.data.byteLength);
+            this.writeFileChunk(e.data);
         });
         channel.addEventListener("open", () => {
             console.log("[RTC] File channel is now open");
@@ -305,6 +320,27 @@ export class WebRTC {
         // TODO: Handle errors
     }
 
+    calculateProgress(size: number) {
+        const totalSize = this._details.files.reduce((p, c) => p + c.size, 0);
+
+        if (!this.progressStartTime)
+            this.progressStartTime = Date.now();
+
+        this.transferSize += size;
+
+        const now = Date.now();
+        const elapsed = (now - this.progressStartTime) / 1000;
+        const progress = Math.floor(this.transferSize * 100 / totalSize);
+
+        let speed = 0,eta = 0;
+        if (elapsed > 0)
+            speed = this.transferSize / elapsed;
+        if (speed > 0)
+            eta = Math.ceil((totalSize - this.transferSize) / speed);
+
+        this.events.progress?.(progress, eta, speed);
+    }
+
     signalStart() {
         this.sendInChunks(JSON.stringify({
             type: "start"
@@ -316,38 +352,72 @@ export class WebRTC {
             this.sendInChunks(JSON.stringify({
                 type: "details",
                 data: {
-                    files: this.details.files.map(f => ({ name: f.name, size: f.size, icon: f.icon })),
-                    message: this.details.message
+                    files: this._details.files.map(f => ({ name: f.name, size: f.size, icon: f.icon })),
+                    message: this._details.message
                 }
             }), this.dataChannel);
     }
 
-    send() {
-        this.sendInChunks(JSON.stringify({
-            type: "list",
-            data: this.details.files.map(f => f.name)
-        }), this.dataChannel);
-
-        this.details.files.forEach(async f => {
+    async send() {
+        for (const f of this._details.files) {
             console.log("Sending file: " + f.path);
             const fileReq = await fetch("io://" + f.path);
             const buffer = await fileReq.arrayBuffer();
+            // TODO: Handle error if result is 404
 
-            this.sendInChunks(buffer, this.fileChannel);
-        });
+            await this.sendInChunks(buffer, this.fileChannel);
+        }
     }
 
-    private sendInChunks(data: string | ArrayBuffer, channel: RTCDataChannel | undefined, chunkSize = 32 * 1024) {
+    private async sendInChunks(data: string | ArrayBuffer, channel: RTCDataChannel | undefined, chunkSize = 32 * 1024) {
         if (!channel || channel.readyState !== "open")
             return;
 
         const str = typeof data === "string";
         const length = str ? data.length : data.byteLength;
 
-        for (let i = 0; i < length; i += chunkSize)
-            channel.send(data.slice(i, i + chunkSize) as any);
+        for (let i = 0; i < length; i += chunkSize) {
+            const slice = data.slice(i, i + chunkSize);
+
+            if (this.type === "sender" && slice instanceof ArrayBuffer)
+                this.calculateProgress(slice.byteLength);
+
+            channel.send(slice as any);
+
+            if (channel.bufferedAmount >= MAX_BUFFERED_AMOUNT)
+                await new Promise(resolve => channel.addEventListener("bufferedamountlow", resolve, { once: true }));
+        }
 
         str ? channel.send("") : channel.send(new ArrayBuffer(0));
+    }
+
+    private dispatchData(data: string) {
+        if (this.joinDataChunks(data))
+            this.syncData();
+    }
+
+    private writeFileChunk(file: ArrayBuffer) {
+        if (file.byteLength !== 0) {
+            if (!this.fileOngoing) {
+                const path = this.savePath + "/" + this._details.files[this.fileIndex].name;
+
+                console.log("[RTC] Initiated file stream for ", path);
+                app.createFileStream(path);
+                this.fileOngoing = true;
+            }
+
+            app.writeChunk(file);
+        }
+        else if (this.fileOngoing) {
+            console.log("[RTC] Closing file stream");
+
+            app.closeFileStream();
+            this.fileOngoing = false;
+            this.fileIndex++;
+
+            if (this.fileIndex === this._details.files.length)
+                this.events.finish?.();
+        }
     }
 
     private joinDataChunks(data: string) {
@@ -361,49 +431,12 @@ export class WebRTC {
         return data.length === 0;
     }
 
-    private joinFileChunks(file: ArrayBuffer) {
-        if (file.byteLength === 0) {
-            this.fileChannelQueue.push(this.fileHeap);
-            this.fileHeap = new ArrayBuffer(0);
-        }
-        else
-            this.fileHeap = this.concatArrayBuffers(this.fileHeap, file);
-
-        return file.byteLength === 0;
-    }
-
-    private concatArrayBuffers(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer {
-        const tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
-        tmp.set(new Uint8Array(buffer1), 0);
-        tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
-        return tmp.buffer;
-    }
-
-    private dispatchData(data: string) {
-        if (this.joinDataChunks(data))
-            this.syncData();
-    }
-
-    private dispatchFile(file: ArrayBuffer) {
-        if (this.joinFileChunks(file))
-            this.syncFiles();
-    }
-
     private syncData() {
         if (this.dataChannelQueue.length > 0 && this.events.data) {
             let msg: string | undefined;
 
             while (msg = this.dataChannelQueue.shift())
                 this.events.data(msg);
-        }
-    }
-
-    private syncFiles() {
-        if (this.fileChannelQueue.length > 0 && this.events.file) {
-            let buffer: ArrayBuffer | undefined;
-
-            while (buffer = this.fileChannelQueue.shift())
-                this.events.file(buffer);
         }
     }
 

@@ -54,7 +54,14 @@
             "title": "A enviar",
             "progress": "Progresso",
             "estimated": "Estimado",
-            "speed": "Velocidade"
+            "speed": "Velocidade",
+            "hours": "horas",
+            "minutes": "minutos",
+            "seconds": "segundos"
+        },
+        "done": {
+            "title": "Ficheiros enviados",
+            "finish": "Terminar"
         }
     },
     "receive": {
@@ -72,6 +79,10 @@
         },
         "transfer": {
             "title": "A receber"
+        },
+        "done": {
+            "title": "Ficheiros recebidos",
+            "open": "Abrir pasta"
         }
     },
     "settings": {

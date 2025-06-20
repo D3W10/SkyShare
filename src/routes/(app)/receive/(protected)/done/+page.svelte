@@ -1,0 +1,73 @@
+<script lang="ts">
+    import { twMerge } from "tailwind-merge";
+    import { i18n } from "$lib/data/i18n.svelte";
+    import { app } from "$lib/data/app.svelte";
+    import { connection } from "$lib/data/connection.svelte";
+    import PageLayout from "$lib/components/PageLayout.svelte";
+    import Icon from "$lib/components/Icon.svelte";
+    import Button from "$lib/components/Button.svelte";
+    import { boxStyles, goto } from "$lib/utils";
+
+    const details = connection.c?.details;
+
+    connection.c?.setListener("end", () => {});
+
+    setTimeout(() => connection.c?.disconnect(), 300);
+</script>
+
+<PageLayout title={i18n.t("receive.done.title")} class="flex gap-x-6">
+    <div class={twMerge(boxStyles.pane, "w-64 h-full p-2 flex flex-col gap-y-2 rounded-2xl overflow-y-auto")}>
+        {#if details?.files}
+            {#each details?.files as file (file.name)}
+                <div class={twMerge(boxStyles.box, "px-2 items-center")}>
+                    {#if file.icon}
+                        <img src="data:image/png;base64,{file.icon}" class="h-6" alt={i18n.t("send.fileIcon")} />
+                    {:else}
+                        <Icon name="file" class="h-6" />
+                    {/if}
+                    <div class="ml-2 flex flex-col gap-y-0">
+                        <p class="text-sm overflow-hidden break-words [display:-webkit-box] [word-break:break-all] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
+                        <p class="text-xs text-slate-500">{app.formatFileSize(file.size)}</p>
+                    </div>
+                </div>
+            {/each}
+        {/if}
+    </div>
+    <div class="h-full px-4 flex flex-col items-center flex-1">
+        <div class="size-full">
+            <div class="flex gap-x-6">
+                <h3 class="font-semibold">{i18n.t("receive.review.sentBy")}</h3>
+                <div class="flex gap-x-1.5">
+                    <Icon name="account" class="size-6" />
+                    <p>{i18n.t("receive.review.anonymous")}</p>
+                </div>
+            </div>
+            <h3 class="mt-6 mb-2 font-semibold">{i18n.t("send.message")}</h3>
+            <div class={twMerge(boxStyles.pane, "h-32 py-1.5 overflow-y-auto", !details?.message ? "flex justify-center items-center" : "")}>
+                {#if details?.message}
+                    <p class="h-fit">{details?.message}</p>
+                {:else}
+                    <p class="font-semibold text-slate-500">{i18n.t("receive.review.noMessage")}</p>
+                {/if}
+            </div>
+            {#if details?.files}
+                <div class="mt-6 flex gap-x-4">
+                    <div class="flex-1">
+                        <h3 class="mb-2 font-semibold">{i18n.t("send.size")}</h3>
+                        <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
+                            <p>{app.formatFileSize(details.files.reduce((p, c) => p + c.size, 0))}</p>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="mb-2 font-semibold">{i18n.t("send.quantity")}</h3>
+                        <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
+                            <p>{details.files.length} {i18n.t("send.file", { count: details.files.length })}</p>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+            <Button type="secondary" class="w-full mt-6" onclick={() => connection.c?.savePath && app.showItemInFolder(connection.c?.savePath + "/" + details?.files[0].name)}>{i18n.t("receive.done.open")}</Button>
+        </div>
+        <Button class="w-30" onclick={() => goto("/receive")}>{i18n.t("send.done.finish")}</Button>
+    </div>
+</PageLayout>

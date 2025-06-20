@@ -25,9 +25,10 @@
     connection.c?.setListener("data", raw => {
         const { type, data } = JSON.parse(raw);
 
-        if (type === "details" && files.length === 0) {
+        if (type === "details" && files.length === 0 && connection.c) {
             files = data.files;
             message = data.message;
+            connection.c.details = data;
         }
     });
 

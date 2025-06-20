@@ -3,6 +3,7 @@
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
+    import { setLock } from "$lib/data/disable.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -45,8 +46,10 @@
     connection.c?.setListener("data", raw => {
         const { type } = JSON.parse(raw);
 
-        if (type === "start")
+        if (type === "start") {
+            setLock();
             goto("/send/transfer");
+        }
     });
 
     setInterval(() => timeLeft = timeDiff(), 1000);

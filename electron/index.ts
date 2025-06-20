@@ -10,6 +10,7 @@ import type { IStore } from "./lib/interfaces/Store.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 
 let window: BrowserWindow, splash: BrowserWindow, closeLock = true;
+let currentFileStream: fs.WriteStream | undefined = undefined;
 const winWidth = 1000, winHeight = 600;
 const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG !== undefined && process.env.DEBUG.match(/true/gi) !== null || process.argv.includes("--debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
@@ -128,7 +129,7 @@ app.whenReady().then(() => {
 
     protocol.handle("io", req => {    
         try {
-            return new Response(fs.readFileSync(req.url.replace("io:/", "")), {
+            return new Response(fs.readFileSync(decodeURI(req.url.replace("io:", "").replace(/\\{2,}/g, "\\").replace(/\/{2,}/g, "\/"))), {
                 headers: { "Content-Type": "application/octet-stream" }
             });
         }
@@ -275,12 +276,21 @@ ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirector
 
 ipcMain.handle("GetFileAsBase64", async (_, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
 
-ipcMain.on("SaveToFile", (_, file, location) => {
-    fs.writeFile(location, Buffer.from(file), err => {
-        if (err)
-            console.error("Failed to save file to", location);
+ipcMain.handle("CreateFileStrem", (_, location) => {
+    return new Promise<boolean>(resolve => {
+        currentFileStream = fs.createWriteStream(location);
+
+        currentFileStream.on("open", () => resolve(true))
+        currentFileStream.on("error", () => resolve(false));
     });
+    // TODO: Handle error in case the app is unable to write file to the location
 });
+
+ipcMain.on("WriteChunk", (_, chunk) => currentFileStream?.write(Buffer.from(chunk)));
+
+ipcMain.on("CloseFileStream", () => currentFileStream?.end());
+
+ipcMain.on("ShowItemInFolder", (_, path) => shell.showItemInFolder(path));
 
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);
