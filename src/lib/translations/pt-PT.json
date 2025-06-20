@@ -122,7 +122,12 @@
             "identification": "Identificação no envio",
             "identificationDesc": "Quando alguém receber ficheiros enviados por si, o seu nome será apresentado com a transferência (deve ser ativado nas definições da conta)",
             "login": "Iniciar Sessão",
-            "signup": "Criar conta"
+            "signup": "Criar conta",
+            "complete": {
+                "title": "A iniciar sessão",
+                "loggingIn": "Está quase, estamos a iniciar a sua sessão...",
+                "welcome": "Bem-vindo"
+            }
         }
     },
     "dialog": {

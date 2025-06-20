@@ -122,7 +122,12 @@
             "identification": "Sender ID",
             "identificationDesc": "When people receive files from you, your name will be displayed along the transfer (must be enabled on the account settings)",
             "login": "Log In",
-            "signup": "Create account"
+            "signup": "Create account",
+            "complete": {
+                "title": "Logging in",
+                "loggingIn": "Hang tight, we are logging you in...",
+                "welcome": "Welcome"
+            }
         }
     },
     "dialog": {

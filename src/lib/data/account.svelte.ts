@@ -1,8 +1,24 @@
 import { info } from "./info.svelte";
 
-export const account = $state({
+interface AccountState {
+    loggedIn: boolean;
+    username: string;
+    email: string;
+    picture: string | undefined;
+    emailVerified: boolean;
+    auth: {
+        accessToken: string;
+        refreshToken: string;
+        expireDate: number;
+    };
+}
+
+export const account = $state<AccountState>({
     loggedIn: false,
     username: "",
+    email: "",
+    picture: undefined,
+    emailVerified: false,
     auth: {
         accessToken: "",
         refreshToken: "",
@@ -31,8 +47,17 @@ export async function finishLogin(accessToken: string, refreshToken: string, exp
                 Authorization: `Bearer ${accessToken}`
             }
         }), userInfo = await userInfoReq.json();
-    
-        console.log(userInfo);
+
+        account.loggedIn = true;
+        account.username = userInfo.preferred_username;
+        account.email = userInfo.email;
+        account.picture = userInfo.picture;
+        account.emailVerified = userInfo.email_verified;
+
+        return true;
     }
-    catch {}
+    catch {
+        /* TODO: Handle error */
+        return false;
+    }
 }
