@@ -11,8 +11,5 @@ export const defaultStore = {
         autoUpdate: true,
         betaUpdates: false
     },
-    account: {
-        username: null,
-        password: null
-    }
+    account: {}
 } satisfies IStore;

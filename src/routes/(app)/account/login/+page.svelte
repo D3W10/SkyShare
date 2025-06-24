@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
     import { getLogin, getSignup } from "$lib/data/account.svelte";
@@ -7,8 +6,9 @@
     import Icon from "$lib/components/Icon.svelte";
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
+    import OneAction from "$lib/components/OneAction.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { boxStyles, goto, images } from "$lib/utils";
+    import { goto, images } from "$lib/utils";
 
     let historyDialog = $state(false), syncDialog = $state(false), identificationDialog = $state(false);
     let debugShow = $state(false), debugData = $state("");
@@ -24,18 +24,9 @@
             </div>
         </div>
         <div class="space-y-2.5">
-            <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => historyDialog = true}>
-                <Icon name="history" class="size-5" />
-                <p>{i18n.t("account.login.history")}</p>
-            </Button>
-            <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => syncDialog = true}>
-                <Icon name="sync" class="size-5" />
-                <p>{i18n.t("account.login.sync")}</p>
-            </Button>
-            <Button type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full cursor-pointer")} onclick={() => identificationDialog = true}>
-                <Icon name="identification" class="size-5" />
-                <p>{i18n.t("account.login.identification")}</p>
-            </Button>
+            <OneAction type="button" icon="history" onclick={() => historyDialog = true}>{i18n.t("account.login.history")}</OneAction>
+            <OneAction type="button" icon="sync" onclick={() => syncDialog = true}>{i18n.t("account.login.sync")}</OneAction>
+            <OneAction type="button" icon="identification" onclick={() => identificationDialog = true}>{i18n.t("account.login.identification")}</OneAction>
         </div>
     </div>
     <div class="flex flex-col justify-center items-center flex-1">
@@ -47,7 +38,7 @@
     {#if debugShow}
         <div class="flex gap-x-2 absolute bottom-6 left-6 right-6">
             <Input class="w-full" type="text" bind:value={debugData} />
-            <Button class="p-2 rounded-lg before:rounded-lg" onclick={() => goto("/account/login/complete?" + new URLSearchParams(JSON.parse(debugData).data).toString())}>
+            <Button class="p-2 rounded-lg before:rounded-lg" onclick={() => { const parsed = JSON.parse(debugData); goto("/account/login/complete?" + new URLSearchParams({ code: parsed.code, ...parsed.data }).toString())}}>
                 <Icon name="arrowRight" class="size-5" />
             </Button>
         </div>

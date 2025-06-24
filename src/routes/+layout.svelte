@@ -2,8 +2,9 @@
     import { onMount, tick } from "svelte";
     import { page } from "$app/state";
     import { base } from "$app/paths";
-    import { app } from "$lib/data/app.svelte";
     import { changeLanguage } from "$lib/data/i18n.svelte";
+    import { app } from "$lib/data/app.svelte";
+    import { loginStored } from "$lib/data/account.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import { goto } from "$lib/utils";
     import type { StoreSettings } from "$electron/lib/interfaces/Store.interface";
@@ -19,6 +20,7 @@
     console.error = (...data: any[]) => (_consoleError(...data), app.error(...data));
 
     app.addEventListener("uri", goto);
+    app.addEventListener("login", async () => app.dispatch("loginFulfilled", await loginStored()));
 
     $effect(() => {
         if (oldSettings) {

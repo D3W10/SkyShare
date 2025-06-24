@@ -256,7 +256,7 @@ ipcMain.on("GetAppInfo", e => {
         name: packageData.productName,
         version: packageData.version,
         homepage: packageData.homepage,
-        api: !isDev ? packageData.data.api : "http://localhost:8020/api/v1/",
+        api: !isDev ? packageData.data.api : "http://localhost:8020/api/v1",
         auth: packageData.data.auth,
         isDev
     } satisfies AppInfo;
@@ -265,10 +265,6 @@ ipcMain.on("GetAppInfo", e => {
 ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
 
 ipcMain.on("SetProgressBar", (_, p: number) => window.setProgressBar(p / 100));
-
-ipcMain.on("LoginRequest", (_, username: string, password: string) => window.webContents.send("LoginRequest", username, password));
-
-ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
 
 ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
@@ -291,6 +287,14 @@ ipcMain.on("WriteChunk", (_, chunk) => currentFileStream?.write(Buffer.from(chun
 ipcMain.on("CloseFileStream", () => currentFileStream?.end());
 
 ipcMain.on("ShowItemInFolder", (_, path) => shell.showItemInFolder(path));
+
+ipcMain.on("SaveCredentials", (_, accessToken: string, refreshToken: string, expiresOn: number) => appConfig.set("account", { accessToken, refreshToken, expiresOn }));
+
+ipcMain.on("Logout", () => appConfig.set("account", {}));
+
+ipcMain.on("LoginRequest", () => window.webContents.send("LoginRequest"));
+
+ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
 
 ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
     let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);

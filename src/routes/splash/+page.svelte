@@ -1,12 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
+    import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { info } from "$lib/data/info.svelte";
-    import { i18n } from "$lib/data/i18n.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
     import { images } from "$lib/utils";
+    import type { StoreAccount } from "$electron/lib/interfaces/Store.interface";
 
     const states = {
         starting: () => i18n.t("splash.starting"),
@@ -54,18 +55,14 @@
     }
 
     async function accountLogIn() {
-        /* const storedInfo = $app.getSetting("account") as IStoreAccount;
+        const storedInfo = app.getSetting("account") as StoreAccount;
 
-        if (storedInfo.username && storedInfo.password) {
-            status = $i18n.t("splash.loggingIn");
+        if (storedInfo.accessToken && storedInfo.refreshToken && storedInfo.expiresOn) {
+            status = "loggingIn";
+            console.log("[Splash] Startup logging in...");
 
-            const loginSuccess = await $app.sendLoginRequest(storedInfo.username, storedInfo.password);
-            if (!loginSuccess)
-                account.logout();
+            await app.sendLoginRequest();
         }
-        
-        splashReady = true;
-        console.log("Splash window ready"); */
     }
 
     function onReady() {

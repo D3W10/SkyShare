@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils } from "electron";
+import { ErrorT } from "./lib/types/ErrorT.type";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
@@ -6,13 +7,15 @@ import type { IStore } from "./lib/interfaces/Store.interface";
 import type { AppEventT } from "./lib/types/AppEventT.type";
 import type { CallbackT } from "./lib/types/CallbackT.type";
 
-let wReady = false, wCompressed = false, wOpen = false, updateProgress: (percent: number) => unknown;
+let wReady = false, wCompressed = false, wOpen = false, wLogin = false;
+let updateProgress: (percent: number) => unknown;
 const units = ["Bytes", "KB", "MB", "GB"], apiUrl = ipcRenderer.sendSync("GetAppInfo").api;
 const handlers: { [K in AppEventT]: { f: CallbackT<AppEventT>, once: boolean }[] } = {
     ready: [],
     open: [],
     close: [],
     login: [],
+    loginFulfilled: [],
     uri: [],
     error: []
 }
@@ -179,6 +182,8 @@ export function addEventListener<T extends AppEventT>(name: T, callback: Callbac
         (callback as CallbackT<"ready">)();
     else if (name === "open" && wOpen)
         (callback as CallbackT<"open">)();
+    else if (name === "login" && wLogin)
+        (callback as CallbackT<"login">)();
 }
 
 /**
@@ -213,13 +218,13 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  * Makes a call to the API
  * @param options An object containing the endpoint to reach, the HTTP method and the parameters/body to send
  * @param error A boolean indicating whether the error should be handled by the native error system
- * @returns A JSON containing the code, message and returned value
+ * @returns A tuple containing the success state of the operation and an object containing the data returned by the API
  */
-export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: string, { method, params, body }: { method?: string, params?: string, body?: object } = {}, error = true): Promise<T | undefined> {
+export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: string, { method, params, body }: { method?: string, params?: string, body?: object } = {}, error = true): Promise<["", T] | [ErrorT, null]> {
     try {
         if (!navigator.onLine) {
             dispatch("error", "offline");
-            return;
+            return ["offline", null];
         }
 
         console.log("[API] " + endpoint + (params ? "?" + params : ""));
@@ -231,19 +236,22 @@ export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: s
         });
 
         const json = await apiResult.json() as ApiResult<T>;
-        if (json.code !== "success") {
+        if (json.code !== "success" || !json.data) {
             console.error("[API] Return error: " + json.code);
             if (error)
                 dispatch("error", "unknown");
+
+            return ["unknown", null];
         }
 
-        return json.data;
+        return ["", json.data];
     }
     catch (err) {
         console.error(err instanceof Error ? err.message : err);
         if (error)
             dispatch("error", "unknown");
-        return;
+
+        return ["unknown", null];
     }
 }
 
@@ -318,199 +326,28 @@ export function showItemInFolder(path: string) {
 }
 
 /**
- * Object containing functions regarding the account system
+ * Saves the user credentials for future logins
+ * @param accessToken The user access token
+ * @param refreshToken The user refresh token
+ * @param expiresOn The expiration time of the token
  */
-export const account = {
-    /**
-     * Edits the information of a user account
-     * @param username The username of the user
-     * @param password The password of the user
-     * @param editUsername The new username of the user or undefined to leave as is
-     * @param email The new email of the user or undefined to leave as is
-     * @param photo The new photo of the user, null to remove the photo or undefined to leave as is
-     * @param language The preferred email language
-     * @returns An object containing one boolean with the success state
-     */
-    edit: async <T>(username: string, password: string, editUsername: string | undefined, email: string | undefined, photo: string | null | undefined, language?: string) => {
-        let body = { password, language };
+export function saveCredentials(accessToken: string, refreshToken: string, expiresOn: number) {
+    ipcRenderer.send("SaveCredentials", accessToken, refreshToken, expiresOn);
+}
 
-        if (editUsername)
-            Object.assign(body, { username: editUsername });
-        if (email)
-            Object.assign(body, { email });
-        if (photo)
-            Object.assign(body, { photo: await ipcRenderer.invoke("GetFileAsBase64", photo) });
-        else if (photo === null)
-            Object.assign(body, { photo: null });
-        
-        /* const api = await apiCall({
-            endpoint: "user/" + username,
-            method: "PUT",
-            body
-        });
-
-        if (api.code == 0 && api.value) {
-            setSetting("account", { username: api.value.username, password });
-            logger.log("Edit account successful");
-        }
-
-        return apiTranslator<T>(api); */
-    },
-    /**
-     * Changes the password of a user account
-     * @param username The username of the user
-     * @param password The password of the user
-     * @param newPassword The new password of the user
-     * @returns An object containing one boolean with the success state
-     */
-    password: async <T>(username: string, password: string, newPassword: string) => {
-       /*  const api = await apiCall({
-            endpoint: "user/" + username + "/password",
-            method: "PUT",
-            body: { password, newPassword }
-        });
-
-        const encodedPass = ipcRenderer.sendSync("EncodePassword", newPassword);
-
-        if (api.code == 0 && api.value) {
-            setSetting("account", { username: api.value.username, password: encodedPass });
-            logger.log("Edit account password successful");
-        }
-
-        return apiTranslator<T>(api, { password: encodedPass }); */
-    },
-    /**
-     * Sends an email request from a specific user account
-     * @param type The type of request desired
-     * @param email The email of the user
-     * @param language The preferred email language
-     * @returns An object containing one boolean with the success state
-     */
-    request: async (type: "verify" | "recovery", email: string, language?: string) => {
-       /*  const api = await apiCall({
-            endpoint: "user/request",
-            method: "POST",
-            body: { type, email, language }
-        });
-
-        return apiTranslator(api); */
-    },
-    /**
-     * Verifies an account using a verification token
-     * @param email The email of the account to verify
-     * @param verificationToken The verification token sent to the email
-     * @returns An object containing one boolean with the success state
-     */
-    verify: async (email: string, verificationToken: string) => {
-        /* const api = await apiCall({
-            endpoint: "user/verify",
-            method: "POST",
-            body: { email, verificationToken }
-        });
-
-        return apiTranslator(api); */
-    },
-    /**
-     * Recovers an account by setting a new password using a recovery token
-     * @param email The email of the account to recover
-     * @param password The new password to be set
-     * @param recoveryToken The recovery token sent to the email
-     * @returns An object containing one boolean with the success state
-     */
-    recovery: async (email: string, password: string, recoveryToken: string) => {
-       /*  const api = await apiCall({
-            endpoint: "user/recovery",
-            method: "POST",
-            body: { email, password, recoveryToken }
-        });
-
-        return apiTranslator(api); */
-    },
-    history: {
-        /**
-         * Obtains all history entries from a user
-         * @param username The username of the user
-         * @param password The password of the user
-         * @returns An array containing all the entries
-         */
-        get: async <T>(username: string, password: string) => {
- /*            const api = await apiCall({
-                endpoint: "user/" + username + "/history",
-                method: "GET",
-                params: new URLSearchParams({ password })
-            });
-
-            return apiTranslator<T>(api); */
-        },
-        /**
-         * Clears all the entries of the user history
-         * @param username The username of the user
-         * @param password The password of the user
-         * @returns An object containing one boolean with the success state
-         */
-        clear: async (username: string, password: string) => {
-            /* const api = await apiCall({
-                endpoint: "user/" + username + "/history",
-                method: "DELETE",
-                params: new URLSearchParams({ password })
-            });
-
-            return apiTranslator(api); */
-        }
-    },
-    /**
-     * Edits the settings of a user account
-     * @param username The username of the user
-     * @param password The password of the user
-     * @param historyEnabled A value that specifies whether the history should be enabled or not
-     * @param showInfo A value that specifies whether the user's info should be displayed on transfers or not
-     * @returns An object containing one boolean with the success state
-     */
-    settings: async <T>(username: string, password: string, historyEnabled: boolean, showInfo: boolean) => {
-        /* const api = await apiCall({
-            endpoint: "user/" + username + "/settings",
-            method: "PUT",
-            body: { password, historyEnabled, showInfo }
-        });
-
-        return apiTranslator<T>(api); */
-    },
-    /**
-     * Logs a user out
-     */
-    logout: () => {
-        setSetting("account", { username: null, password: null });
-        console.log("User logged out");
-    },
-    /**
-     * Deletes a user account
-     * @param username The usanme of the account to delete
-     * @param password The password of the account to delete
-     * @returns An object containing one boolean with the success state
-     */
-    delete: async (username: string, password: string) => {
-        /* const encodedPass = ipcRenderer.sendSync("EncodePassword", password);
-
-        const api = await apiCall({
-            endpoint: "user/" + username,
-            method: "DELETE",
-            params: new URLSearchParams({ password: encodedPass })
-        });
-
-        return apiTranslator(api); */
-    }
+/**
+ * Logs the user out
+ */
+export function logout() {
+    ipcRenderer.send("Logout");
 }
 
 /**
  * Sends a login request to authenticate the user on the main window
- * @param username The username of the user
- * @param password The password of the user
  * @returns A boolean if the authentication on the main window was successful
  */
-export async function sendLoginRequest(username: string, password: string) {
-    console.log("Startup logging in...");
-
-    ipcRenderer.send("LoginRequest", username, password);
+export async function sendLoginRequest() {
+    ipcRenderer.send("LoginRequest");
     return new Promise(resolve => ipcRenderer.once("LoginRequestFulfilled", (_, result: boolean) => resolve(result)));
 }
 
@@ -535,7 +372,11 @@ ipcRenderer.on("WindowOpen", () => {
 
 ipcRenderer.on("WindowClose", () => dispatch("close"));
 
-ipcRenderer.on("LoginRequest", (_, username: string, password: string) => ipcRenderer.send("LoginRequestFulfilled", dispatch("login", username, password)));
+ipcRenderer.on("LoginRequest", () => {
+    dispatch("login");
+    wLogin = true;
+    addEventListener("loginFulfilled", s => ipcRenderer.send("LoginRequestFulfilled", s));
+});
 
 ipcRenderer.on("UriHandler", (_, url: string) => dispatch("uri", url));
 
@@ -568,7 +409,8 @@ contextBridge.exposeInMainWorld("app", {
     writeChunk,
     closeFileStream,
     showItemInFolder,
-    account,
+    saveCredentials,
+    logout,
     sendLoginRequest,
     sleep
 });

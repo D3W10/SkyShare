@@ -5,6 +5,7 @@ export type IconT =
     "appearance" |
     "arrowRight" |
     "back" |
+    "brush" |
     "checkmark" |
     "closeWindow" |
     "copy" |
@@ -13,6 +14,7 @@ export type IconT =
     "home" |
     "identification" |
     "link" |
+    "logout" |
     "minimizeWindow" |
     "nearbyShare" |
     "receive" |

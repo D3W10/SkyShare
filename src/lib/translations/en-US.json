@@ -128,7 +128,11 @@
                 "loggingIn": "Hang tight, we are logging you in...",
                 "welcome": "Welcome"
             }
-        }
+        },
+        "title": "Account",
+        "history" : "History",
+        "settings" : "Account settings",
+        "logout": "Log out",
     },
     "dialog": {
         "okay": "Okay",
@@ -151,6 +155,8 @@
         "invalidCodeDesc": "This code is not associated to an ongoing transfer. Please double-check it and try again.",
         "senderDisconnected": "Sender disconnected",
         "senderDisconnectedDesc": "The person that was sending you files has disconnected.",
+        "loginError": "Login error",
+        "loginErrorDesc": "An error occurred while logging you in, please try again.",
         "nearbyShare": "Quick note",
         "nearbyShareDesc": [
             "With this feature enabled, when you have the receive page open, your device will be discovered by other people on the same network.",

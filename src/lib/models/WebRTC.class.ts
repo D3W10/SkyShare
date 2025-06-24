@@ -50,9 +50,9 @@ export class WebRTC {
     }
 
     static async getCredentials(): Promise<Credentials> {
-        const data = await app.apiCall<Credentials>("credentials");
+        const [error, data] = await app.apiCall<Credentials>("/credentials", {}, false);
 
-        if (!data)
+        if (error)
             throw new AppError("down");
         
         return data;
@@ -97,7 +97,7 @@ export class WebRTC {
 
     async setUpAsSender(files: File[], message: string): Promise<string> {
         this.type = "sender";
-        this.ws = new WebSocket(info.api + "transfer/create");
+        this.ws = new WebSocket(info.api + "/transfer/create");
         this._details = { files, message };
 
         await this.waitForWebSocketOpen();
@@ -167,7 +167,7 @@ export class WebRTC {
 
     async setUpAsReceiver(code: string) {
         this._code = code;
-        this.ws = new WebSocket(info.api + "transfer/" + code);
+        this.ws = new WebSocket(info.api + "/transfer/" + code);
 
         await this.waitForWebSocketOpen();
         this.ws.send(JSON.stringify({

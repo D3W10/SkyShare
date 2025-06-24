@@ -56,8 +56,8 @@
         safeTry(async () => {
             setLock(true);
 
-            const data = await app.apiCall<{ status: boolean }>("transfer/" + code + "/check");
-            if (!data)
+            const [error, data] = await app.apiCall<{ status: boolean }>("/transfer/" + code + "/check");
+            if (error)
                 return setUnlock();
             else if (!data.status)
                 throw new AppError("invalidCode");

@@ -22,7 +22,7 @@
             setTimeout(() => codeAnim = false, 2000);
         }
         else if (type === "link") {
-            navigator.clipboard.writeText(`${info.homepage}receive/${connection.c!.code}`);
+            navigator.clipboard.writeText(`${info.homepage}/receive/${connection.c!.code}`);
             linkAnim = true;
             setTimeout(() => linkAnim = false, 2000);
         }

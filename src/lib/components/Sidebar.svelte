@@ -6,8 +6,8 @@
     import { account } from "$lib/data/account.svelte";
     import { startup } from "$lib/data/startup.svelte";
     import { cleanAll } from "$lib/data/cleanup.svelte";
-    import Icon from "./Icon.svelte";
     import LinkItem from "./LinkItem.svelte";
+    import ProfilePicture from "./ProfilePicture.svelte";
     import { settingsPath } from "$lib/utils";
     import type { IconT } from "$lib/models/IconT.type";
 
@@ -25,13 +25,9 @@
 <aside class="{!collapsed ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 {!startup.s ? "transition-[width] duration-400" : ""}">
     <LinkItem class="p-0 grid transition-[color_200ms,_padding_400ms] *:col-[1] *:row-[1]" href={!account.loggedIn ? "/account/login" : "/account"} selected={accountSelected} onclick={cleanAll}>
         {#key account.loggedIn}
-            <div class="py-2 {!collapsed ? "px-2" : ""} flex items-center gap-x-3">
+            <div class="py-2 {!collapsed ? "px-2" : ""} flex items-center gap-x-2">
                 <div in:scale={{ duration: 300, delay: 300, start: 0.5 }} out:scale={{ duration: 300, start: 0.5 }}>
-                    {#if !account.loggedIn || !account.picture}
-                        <Icon class="{!collapsed ? "w-9 min-w-9 m-1" : "w-5 min-w-5 mx-0.5"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-[width_400ms,_margin_200ms]" name="account" />
-                    {:else}
-                        <img src={account.picture} class="{!collapsed ? "w-9 min-w-9 m-1" : "w-5 min-w-5 mx-0.5"} rounded-full aspect-square transition-[width_400ms,_margin_200ms]" alt="{account.username} Profile Picture" />
-                    {/if}
+                    <ProfilePicture class="{!collapsed ? "size-9 m-1" : "w-5 min-w-5 mx-0.5"} {!accountSelected ? "group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-[width_400ms,_margin_200ms]" />
                 </div>
                 {#if !collapsed}
                     <p in:fade|global={{ duration: 200, delay: 200 }} out:fade|global={{ duration: 200 }}>{!account.loggedIn ? i18n.t("app.login") : account.username}</p>

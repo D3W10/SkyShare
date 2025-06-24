@@ -128,7 +128,11 @@
                 "loggingIn": "Está quase, estamos a iniciar a sua sessão...",
                 "welcome": "Bem-vindo"
             }
-        }
+        },
+        "title": "Conta",
+        "history" : "Histórico",
+        "settings" : "Definições de conta",
+        "logout": "Terminar sessão",
     },
     "dialog": {
         "okay": "OK",
@@ -151,6 +155,8 @@
         "invalidCodeDesc": "Este código não está associado a nenhuma transferência em curso. Verifique-o e tente novamente.",
         "senderDisconnected": "O remetente desconectou",
         "senderDisconnectedDesc": "A pessoa que estava a enviar-te ficheiros foi desconectada.",
+        "loginError": "Erro ao iniciar sessão",
+        "loginErrorDesc": "Ocorreu um erro ao iniciar a sua sessão, por favor tente novamente.",
         "nearbyShare": "Nota rápida",
         "nearbyShareDesc": [
             "Com esta funcionalidade ativa, quando tiver a página receber aberta, o seu dispositivo será descoberto por outras pessoas na mesma rede.",

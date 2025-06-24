@@ -15,6 +15,7 @@ export interface StoreSettings {
 }
 
 export interface StoreAccount {
-    username: string | null;
-    password: string | null;
+    accessToken?: string;
+    refreshToken?: string;
+    expiresOn?: number;
 }

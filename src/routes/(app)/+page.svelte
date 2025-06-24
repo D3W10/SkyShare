@@ -1,15 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { info } from "$lib/data/info.svelte";
     import { account } from "$lib/data/account.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
-    import Link from "$lib/components/Link.svelte";
-    import Icon from "$lib/components/Icon.svelte";
+    import OneAction from "$lib/components/OneAction.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
-    import { boxStyles, images } from "$lib/utils";
+    import { images } from "$lib/utils";
     import "$lib/markdown.css";
 
     let greetingKey = $state("home.morning"), changelog = $state(""), showChanges = $state(false);
@@ -47,18 +45,9 @@
             <h3 class="text-2xl font-semibold">{info.name}</h3>
         </div>
         <div class="space-y-2.5">
-            <Link type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full")} href="/send">
-                <Icon name="send" class="size-5" />
-                <p>{i18n.t("home.send")}</p>
-            </Link>
-            <Link type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full")} href="/receive">
-                <Icon name="receive" class="size-5" />
-                <p>{i18n.t("home.receive")}</p>
-            </Link>
-            <Link type="invisible" class={twMerge(boxStyles.pane, "w-fit pl-3 pr-4 py-1.5 gap-x-2 text-sm font-medium rounded-full")} href="/settings">
-                <Icon name="settings" class="size-5" />
-                <p>{i18n.t("home.settings")}</p>
-            </Link>
+            <OneAction icon="send" href="/send">{i18n.t("home.send")}</OneAction>
+            <OneAction icon="receive" href="/receive">{i18n.t("home.receive")}</OneAction>
+            <OneAction icon="settings" href="/settings">{i18n.t("home.settings")}</OneAction>
         </div>
     </div>
     <div class="w-1/2 flex justify-center items-center"></div>
