@@ -18,6 +18,7 @@
     connection.c?.setListener("fileOpen", () => ready = true);
 
     connection.c?.setListener("end", () => {
+        setUnlock();
         setError("senderDisconnected");
         goto("/receive");
     });

@@ -157,6 +157,8 @@
         "senderDisconnectedDesc": "The person that was sending you files has disconnected.",
         "loginError": "Login error",
         "loginErrorDesc": "An error occurred while logging you in, please try again.",
+        "logout": "Log out",
+        "logoutDesc": "Are you sure you want to log out?",
         "nearbyShare": "Quick note",
         "nearbyShareDesc": [
             "With this feature enabled, when you have the receive page open, your device will be discovered by other people on the same network.",

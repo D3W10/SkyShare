@@ -157,6 +157,8 @@
         "senderDisconnectedDesc": "A pessoa que estava a enviar-te ficheiros foi desconectada.",
         "loginError": "Erro ao iniciar sessão",
         "loginErrorDesc": "Ocorreu um erro ao iniciar a sua sessão, por favor tente novamente.",
+        "logout": "Terminar sessão",
+        "logoutDesc": "Tem a certeza que pretende terminar sessão?",
         "nearbyShare": "Nota rápida",
         "nearbyShareDesc": [
             "Com esta funcionalidade ativa, quando tiver a página receber aberta, o seu dispositivo será descoberto por outras pessoas na mesma rede.",
