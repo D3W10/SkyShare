@@ -132,7 +132,7 @@
         "title": "Account",
         "history" : "History",
         "settings" : "Account settings",
-        "logout": "Log out",
+        "logout": "Log out"
     },
     "dialog": {
         "okay": "Okay",

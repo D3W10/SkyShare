@@ -361,7 +361,9 @@ export class WebRTC {
     async send() {
         for (const f of this._details.files) {
             console.log("Sending file: " + f.path);
-            const fileReq = await fetch("io://" + f.path);
+
+            const query = new URLSearchParams({ path: f.path });
+            const fileReq = await fetch("io://i?" + query.toString());
             const buffer = await fileReq.arrayBuffer();
             // TODO: Handle error if result is 404
 

@@ -132,7 +132,7 @@
         "title": "Conta",
         "history" : "Histórico",
         "settings" : "Definições de conta",
-        "logout": "Terminar sessão",
+        "logout": "Terminar sessão"
     },
     "dialog": {
         "okay": "OK",

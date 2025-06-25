@@ -129,7 +129,13 @@ app.whenReady().then(() => {
 
     protocol.handle("io", req => {    
         try {
-            return new Response(fs.readFileSync(decodeURI(req.url.replace("io:", "").replace(/\\{2,}/g, "\\").replace(/\/{2,}/g, "\/"))), {
+            const query = new URLSearchParams(req.url.replace("io://i?", ""));
+            const path = query.get("path");
+
+            if (!path)
+                return new Response();
+
+            return new Response(fs.readFileSync(path), {
                 headers: { "Content-Type": "application/octet-stream" }
             });
         }
