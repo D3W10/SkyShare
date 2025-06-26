@@ -1,9 +1,10 @@
-import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, protocol, shell } from "electron";
 import fs from "fs";
 import path from "path";
 import os from "os";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
+import jwt from "jsonwebtoken";
 import { Logger } from "./lib/Logger";
 import { defaultStore } from "./lib/constants/defaultStore.const";
 import type { IStore } from "./lib/interfaces/Store.interface";
@@ -11,7 +12,7 @@ import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 
 let window: BrowserWindow, splash: BrowserWindow, closeLock = true;
 let currentFileStream: fs.WriteStream | undefined = undefined;
-const winWidth = 1000, winHeight = 600;
+const winWidth = 1000, winHeight = 600, useLocalServer = false;
 const isDev = !app.isPackaged, isDebug = isDev || process.env.DEBUG !== undefined && process.env.DEBUG.match(/true/gi) !== null || process.argv.includes("--debug");
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, "/../package.json"), "utf8"));
 const logger = new Logger("Main", "blue"), pLogger = new Logger("Prld", "cyan"), rLogger = new Logger("Rndr", "green");
@@ -104,13 +105,15 @@ async function createWindow() {
     splash.once("ready-to-show", () => splash.show());
 }
 
-if (!app.requestSingleInstanceLock())
-    app.quit();
-
-app.on("second-instance", (_, argv) => {
-    console.log("New instance opened");
-    uriHandler(argv);
-});
+if (!isDev) {
+    if (!app.requestSingleInstanceLock())
+        app.quit();
+    
+    app.on("second-instance", (_, argv) => {
+        console.log("New instance opened");
+        uriHandler(argv);
+    });
+}
 
 app.on("open-url", (_, url) => {
     console.log("New protocol URL opened");
@@ -262,7 +265,7 @@ ipcMain.on("GetAppInfo", e => {
         name: packageData.productName,
         version: packageData.version,
         homepage: packageData.homepage,
-        api: !isDev ? packageData.data.api : "http://localhost:8020/api/v1",
+        api: !isDev || !useLocalServer ? packageData.data.api : "http://localhost:8020/api/v1",
         auth: packageData.data.auth,
         isDev
     } satisfies AppInfo;
@@ -272,9 +275,26 @@ ipcMain.on("GetPlatform", e => e.returnValue = process.platform);
 
 ipcMain.on("SetProgressBar", (_, p: number) => window.setProgressBar(p / 100));
 
-ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
-
 ipcMain.handle("IsDirectory", (_, path: string) => fs.lstatSync(path).isDirectory());
+
+ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
+    let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);
+
+    return {
+        canceled: dialogResult.canceled,
+        files: dialogResult.filePaths.map(path => {
+            return {
+                name: path.replace(/.*[\/\\]/, ""),
+                path: path,
+                size: fs.statSync(path).size
+            };
+        })
+    };
+});
+
+ipcMain.handle("ShowSaveDialog", async (_, options: Electron.SaveDialogOptions) => await dialog.showSaveDialog(BrowserWindow.getAllWindows()[0], options));
+
+ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
 ipcMain.handle("GetFileAsBase64", async (_, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
 
@@ -302,21 +322,6 @@ ipcMain.on("LoginRequest", () => window.webContents.send("LoginRequest"));
 
 ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
 
-ipcMain.handle("ShowOpenDialog", async (_, options: Electron.OpenDialogOptions) => {
-    let dialogResult = await dialog.showOpenDialog(BrowserWindow.getAllWindows()[0], options);
-
-    return {
-        canceled: dialogResult.canceled,
-        files: dialogResult.filePaths.map(path => {
-            return {
-                name: path.replace(/.*[\/\\]/, ""),
-                path: path,
-                size: fs.statSync(path).size
-            };
-        })
-    };
-});
-
-ipcMain.handle("ShowSaveDialog", async (_, options: Electron.SaveDialogOptions) => await dialog.showSaveDialog(BrowserWindow.getAllWindows()[0], options));
+ipcMain.handle("DecodeJWT", (_, token: string) => jwt.decode(token, { json: true }));
 
 //#endregion

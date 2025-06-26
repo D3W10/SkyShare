@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="w-1/2 h-full pr-16 flex flex-col justify-center items-center gap-y-2.5">
-        <!-- History preview -->
+        <!-- TODO: History preview -->
     </div>
 </PageLayout>
 <Dialog bind:show={logoutAlert} title={i18n.t("dialog.logout")} text={i18n.t("dialog.yes")} cancelText={i18n.t("dialog.no")} onsubmit={() => { logout(); goto("/"); }}>

@@ -4,6 +4,7 @@ import type { StoreAccount } from "$electron/lib/interfaces/Store.interface";
 
 interface AccountState {
     loggedIn: boolean;
+    id: string;
     username: string;
     email: string;
     picture: string | undefined;
@@ -13,6 +14,7 @@ interface AccountState {
 
 const defaultState: AccountState = {
     loggedIn: false,
+    id: "",
     username: "",
     email: "",
     picture: undefined,
@@ -36,13 +38,12 @@ export function getSignup() {
 
 export async function getToken() {
     if (Date.now() >= account.auth.expiresOn) {
-        const [error, data] = await app.apiCall<{ access_token: string, refresh_token: string, expires_in: number }>(info.api + "/refresh", {
-            method: "POST",
-            body: {
+        const [error, data] = await app.apiCall<{ access_token: string, refresh_token: string, expires_on: number }>("/refresh", {
+            method: "GET",
+            params: (new URLSearchParams({
                 refreshToken: account.auth.refreshToken
-            }
+            })).toString()
         }, false);
-        console.log(error, data);
 
         if (error) {
             logout();
@@ -51,7 +52,7 @@ export async function getToken() {
 
         account.auth.accessToken = data.access_token;
         account.auth.refreshToken = data.refresh_token;
-        account.auth.expiresOn = Date.now() + data.expires_in;
+        account.auth.expiresOn = data.expires_on;
 
         app.saveCredentials(account.auth.accessToken, account.auth.refreshToken, account.auth.expiresOn);
 
@@ -61,10 +62,9 @@ export async function getToken() {
         return account.auth.accessToken;
 }
 
-export async function login(accessToken: string, refreshToken: string, expiresIn: number) {
+export async function login(accessToken: string, refreshToken: string, expiresOn: number) {
     console.log("Logging in");
 
-    const expiresOn = Date.now() + expiresIn;
     app.saveCredentials(accessToken, refreshToken, expiresOn);
     return loginComplete(accessToken, refreshToken, expiresOn);
 }
@@ -90,7 +90,12 @@ async function loginComplete(accessToken: string, refreshToken: string, expiresO
             }
         }), userInfo = await userInfoReq.json();
 
+        const payload = await app.decodeJWT(account.auth.accessToken);
+        if (!payload)
+            throw new Error("Failed to decode JWT");
+
         account.loggedIn = true;
+        account.id = payload.id;
         account.username = userInfo.preferred_username;
         account.email = userInfo.email;
         account.picture = userInfo.picture;

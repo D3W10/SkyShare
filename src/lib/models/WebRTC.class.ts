@@ -1,5 +1,6 @@
 import { app } from "$lib/data/app.svelte";
 import { info } from "$lib/data/info.svelte";
+import { account } from "$lib/data/account.svelte";
 import { AppError } from "./AppError.class";
 import type { RTCEventT } from "./RTCEventT.type";
 import type { RTCCallbackT } from "./RTCCallbackT.type";
@@ -353,7 +354,8 @@ export class WebRTC {
                 type: "details",
                 data: {
                     files: this._details.files.map(f => ({ name: f.name, size: f.size, icon: f.icon })),
-                    message: this._details.message
+                    message: this._details.message,
+                    user: account.id
                 }
             }), this.dataChannel);
     }

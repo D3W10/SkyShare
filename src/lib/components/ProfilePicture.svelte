@@ -5,15 +5,19 @@
 
     interface Props {
         class?: string;
+        picture?: string;
     }
 
     let {
-        class: className
+        class: className,
+        picture
     }: Props = $props();
+
+    const useDefault = $derived(picture === undefined);;
 </script>
 
-{#if !account.loggedIn || !account.picture}
-    <Icon name="account" class={twMerge("size-20 text-slate-500 dark:text-slate-600 rounded-full", className)} />
+{#if useDefault ? !account.loggedIn || !account.picture : !picture}
+    <Icon name="account" class={twMerge("size-20 text-slate-800 dark:text-slate-300 rounded-full", className)} />
 {:else}
-    <img src={account.picture} class={twMerge("size-20 bg-slate-950/5 dark:bg-slate-50/5 shadow-md rounded-full aspect-square", className)} alt="{account.username} Profile Picture" />
+    <img src={useDefault ? account.picture : picture} class={twMerge("size-20 bg-slate-950/5 dark:bg-slate-50/5 shadow-md rounded-full aspect-square", className)} alt={(useDefault ? account.username + " " : "") + "Profile Picture"} />
 {/if}

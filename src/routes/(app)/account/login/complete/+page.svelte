@@ -17,18 +17,23 @@
         const code = params.get("code");
         const accessToken = params.get("access_token");
         const refreshToken = params.get("refresh_token");
-        const expiresIn = params.get("expires_in");
+        const expiresOn = params.get("expires_on");
 
-        if (code === "success" && accessToken && refreshToken && expiresIn) {
-            loggedIn = await login(accessToken, refreshToken, +expiresIn);
+        const onError = () => {
+            setError("loginError");
+            goto("/account/login");
+        };
+
+        if (code === "success" && accessToken && refreshToken && expiresOn) {
+            loggedIn = await login(accessToken, refreshToken, +expiresOn);
 
             if (loggedIn)
                 setTimeout(() => goto("/account"), 3500);
+            else
+                onError();
         }
-        else {
-            setError("loginError");
-            goto("/account/login");
-        }
+        else
+            onError();
     });
 </script>
 

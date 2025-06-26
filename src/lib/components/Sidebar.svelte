@@ -27,7 +27,7 @@
         {#key account.loggedIn}
             <div class="py-2 {!collapsed ? "px-2" : ""} flex items-center gap-x-2">
                 <div in:scale={{ duration: 300, delay: 300, start: 0.5 }} out:scale={{ duration: 300, start: 0.5 }}>
-                    <ProfilePicture class="{!collapsed ? "size-9 m-1" : "w-5 min-w-5 mx-0.5"} {!accountSelected ? "group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-[width_400ms,_margin_200ms]" />
+                    <ProfilePicture class="{!collapsed ? "size-9 m-1" : "w-5 min-w-5 mx-0.5"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} transition-[width_400ms,_margin_200ms]" />
                 </div>
                 {#if !collapsed}
                     <p in:fade|global={{ duration: 200, delay: 200 }} out:fade|global={{ duration: 200 }}>{!account.loggedIn ? i18n.t("app.login") : account.username}</p>
