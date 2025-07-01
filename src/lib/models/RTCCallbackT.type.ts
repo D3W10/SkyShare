@@ -5,7 +5,7 @@ export type RTCCallbackT<T extends RTCEventT> =
     T extends "dataOpen" ? () => unknown :
     T extends "fileOpen" ? () => unknown :
     T extends "progress" ? (p: number, e: number, s: number) => unknown :
-    T extends "finish" ? () => unknown :
+    T extends "beforeFinish" ? () => unknown :
     T extends "disconnect" ? () => unknown :
     T extends "end" ? () => unknown :
     never;

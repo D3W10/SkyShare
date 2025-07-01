@@ -6,65 +6,47 @@
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Button from "$lib/components/Button.svelte";
+    import ProfilePicture from "$lib/components/ProfilePicture.svelte";
     import { boxStyles, goto } from "$lib/utils";
 
-    const details = connection.c?.details;
-
-    setTimeout(() => connection.c?.disconnect(), 300);
+    const details = connection.c?.details, remoteData = connection.c?.remotePeerData;
 </script>
 
-<PageLayout title={i18n.t("send.done.title")} class="flex gap-x-6">
-    <div class={twMerge(boxStyles.pane, "w-64 h-full p-2 flex flex-col gap-y-2 rounded-2xl overflow-y-auto")}>
-        {#if details?.files}
-            {#each details?.files as file (file.name)}
-                <div class={twMerge(boxStyles.box, "px-2 items-center")}>
-                    {#if file.icon}
-                        <img src="data:image/png;base64,{file.icon}" class="h-6" alt={i18n.t("send.fileIcon")} />
-                    {:else}
-                        <Icon name="file" class="h-6" />
-                    {/if}
-                    <div class="ml-2 flex flex-col gap-y-0">
-                        <p class="text-sm overflow-hidden break-words [display:-webkit-box] [word-break:break-all] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>
-                        <p class="text-xs text-slate-500">{app.formatFileSize(file.size)}</p>
-                    </div>
-                </div>
-            {/each}
-        {/if}
-    </div>
-    <div class="h-full px-4 flex flex-col items-center flex-1">
-        <div class="size-full">
-            <div class="flex gap-x-6">
-                <h3 class="font-semibold">{i18n.t("receive.review.sentBy")}</h3>
-                <div class="flex gap-x-1.5">
-                    <Icon name="account" class="size-6" />
-                    <p>{i18n.t("receive.review.anonymous")}</p>
+<PageLayout title={i18n.t("receive.done.title")} class="flex flex-col justify-between">
+    <div>
+        <div class="text-lg space-y-0.5">
+            <div class="flex items-center gap-x-2.5">
+                <p>{i18n.t("send.done.description.0")}</p>
+                <div class="flex items-center gap-x-1.5">
+                    <ProfilePicture picture={remoteData?.picture} class="size-5" />
+                    <p>{remoteData?.username ? remoteData.username : i18n.t("send.waiting.anonymous")}</p>
                 </div>
             </div>
-            <h3 class="mt-6 mb-2 font-semibold">{i18n.t("send.message")}</h3>
-            <div class={twMerge(boxStyles.pane, "h-32 py-1.5 overflow-y-auto", !details?.message ? "flex justify-center items-center" : "")}>
-                {#if details?.message}
-                    <p class="h-fit">{details?.message}</p>
-                {:else}
-                    <p class="font-semibold text-slate-500">{i18n.t("receive.review.noMessage")}</p>
-                {/if}
-            </div>
-            {#if details?.files}
-                <div class="mt-6 flex gap-x-4">
-                    <div class="flex-1">
-                        <h3 class="mb-2 font-semibold">{i18n.t("send.size")}</h3>
-                        <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
-                            <p>{app.formatFileSize(details.files.reduce((p, c) => p + c.size, 0))}</p>
-                        </div>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="mb-2 font-semibold">{i18n.t("send.quantity")}</h3>
-                        <div class={twMerge(boxStyles.pane, "py-1.5 grid text-sm *:col-[1] *:row-[1]")}>
-                            <p>{details.files.length} {i18n.t("send.file", { count: details.files.length })}</p>
-                        </div>
-                    </div>
-                </div>
+            <p>{i18n.t("send.done.description.1")}</p>
+        </div>
+        <div class={twMerge(boxStyles.pane, "h-40 mt-8 py-1.5 overflow-y-auto", !details?.message ? "flex justify-center items-center" : "")}>
+            {#if details?.message}
+                <p class="h-fit">{details?.message}</p>
+            {:else}
+                <p class="font-semibold text-slate-500">{i18n.t("receive.review.noMessage")}</p>
             {/if}
         </div>
-        <Button class="w-30" onclick={() => goto("/send")}>{i18n.t("send.done.finish")}</Button>
+        <div class="mt-6 flex justify-center gap-x-2.5">
+            <div class={twMerge(boxStyles.pane, "w-fit py-1.5 pl-3 pr-4 gap-x-2 text-sm font-medium rounded-full")}>
+                <Icon name="stopwatch" class="size-5" />
+                <p>{connection.c && new Date(connection.c.transferDuration).toLocaleTimeString([], { minute: "2-digit", second: "2-digit" })}</p>
+            </div>
+            <div class={twMerge(boxStyles.pane, "w-fit py-1.5 pl-3 pr-4 gap-x-2 text-sm font-medium rounded-full")}>
+                <Icon name="file" class="size-5" />
+                <p>{details?.files.length} {i18n.t("send.file", { count: details?.files.length })}</p>
+            </div>
+            <div class={twMerge(boxStyles.pane, "w-fit py-1.5 pl-3 pr-4 gap-x-2 text-sm font-medium rounded-full")}>
+                <Icon name="send" class="size-5" />
+                <p>{details?.files && app.formatFileSize(details?.files.reduce((p, c) => p + c.size, 0))}</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-end">
+        <Button class="w-45" onclick={() => goto("/send")}>{i18n.t("send.done.finish")}</Button>
     </div>
 </PageLayout>

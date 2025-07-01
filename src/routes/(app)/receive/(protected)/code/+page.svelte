@@ -39,7 +39,7 @@
     });
 
     async function fetchUser() {
-        if (userId) {
+        if (userId && connection.c) {
             const [error, data] = await app.apiCall<{ name: string, avatar: string }>("/user/info", {
                 params: (new URLSearchParams({ userId })).toString()
             }, false);
@@ -47,8 +47,7 @@
             if (error)
                 return;
 
-            userName = data.name;
-            userPicture = data.avatar;
+            connection.c.remotePeerData = { username: data.name, picture: data.avatar };
         }
     }
 
@@ -95,9 +94,9 @@
                 <div class="size-full">
                     <div class="flex gap-x-6">
                         <h3 class="font-semibold">{i18n.t("receive.review.sentBy")}</h3>
-                        <div class="flex gap-x-1.5">
+                        <div class="flex items-center gap-x-1.5">
                             <ProfilePicture picture={userPicture} class="size-6" />
-                            <p>{userName ? userName : i18n.t("receive.review.anonymous")}</p>
+                            <p>{userName ? userName : i18n.t("send.waiting.anonymous")}</p>
                         </div>
                     </div>
                     <h3 class="mt-6 mb-2 font-semibold">{i18n.t("send.message")}</h3>

@@ -16,11 +16,18 @@
         speed = s;
     });
 
-    onMount(async () => {
-        await connection.c?.send();
-        setUnlock();
-        goto("/send/done");
+    connection.c?.setListener("data", raw => {
+        const { type } = JSON.parse(raw);
+
+        if (type === "finish") {
+            connection.c?.setListener("end", () => {});
+            connection.c?.disconnect();
+            setUnlock();
+            goto("/send/done");
+        }
     });
+
+    onMount(() => connection.c?.send());
 </script>
 
 <PageLayout title={i18n.t("send.transfer.title")} class="flex flex-col items-center">

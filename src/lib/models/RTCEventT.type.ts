@@ -3,6 +3,6 @@ export type RTCEventT =
     "dataOpen" |
     "fileOpen" |
     "progress" |
-    "finish" |
+    "beforeFinish" |
     "disconnect" |
     "end";

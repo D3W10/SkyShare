@@ -8,6 +8,7 @@ import type { File } from "$electron/lib/interfaces/File.interface";
 
 type Direction = "sender" | "receiver";
 type Credentials = { username: string, password: string };
+type PeerData = { username: string, picture: string };
 
 const MAX_BUFFERED_AMOUNT = 8388608;
 
@@ -31,7 +32,9 @@ export class WebRTC {
     private fileOngoing = false;
     private fileIndex = 0;
     private transferSize = 0;
-    private progressStartTime?: number;
+    private transferStartTime = 0;
+    private _transferDuration = 0;
+    private _remotePeerData: PeerData = { username: "", picture: "" };
 
     constructor(credentials: Credentials) {
         this.rtcConfig = {
@@ -81,6 +84,18 @@ export class WebRTC {
 
     public set details(details: { files: File[], message: string }) {
         this._details = details;
+    }
+
+    public get transferDuration() {
+        return this._transferDuration;
+    }
+
+    public get remotePeerData() {
+        return this._remotePeerData;
+    }
+
+    public set remotePeerData(data: PeerData) {
+        this._remotePeerData = data;
     }
 
     private setupListeners() {
@@ -324,13 +339,13 @@ export class WebRTC {
     calculateProgress(size: number) {
         const totalSize = this._details.files.reduce((p, c) => p + c.size, 0);
 
-        if (!this.progressStartTime)
-            this.progressStartTime = Date.now();
+        if (!this.transferStartTime)
+            this.transferStartTime = Date.now();
 
         this.transferSize += size;
 
         const now = Date.now();
-        const elapsed = (now - this.progressStartTime) / 1000;
+        const elapsed = (now - this.transferStartTime) / 1000;
         const progress = Math.floor(this.transferSize * 100 / totalSize);
 
         let speed = 0,eta = 0;
@@ -371,6 +386,15 @@ export class WebRTC {
 
             await this.sendInChunks(buffer, this.fileChannel);
         }
+    }
+
+    sendFinishAck() {
+        if (!this._transferDuration)
+            this._transferDuration = Date.now() - this.transferStartTime;
+
+        this.sendInChunks(JSON.stringify({
+            type: "finish"
+        }), this.dataChannel);
     }
 
     private async sendInChunks(data: string | ArrayBuffer, channel: RTCDataChannel | undefined, chunkSize = 32 * 1024) {
@@ -420,7 +444,7 @@ export class WebRTC {
             this.fileIndex++;
 
             if (this.fileIndex === this._details.files.length)
-                this.events.finish?.();
+                this.sendFinishAck();
         }
     }
 

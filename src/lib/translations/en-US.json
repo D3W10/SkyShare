@@ -48,6 +48,7 @@
             "copyCode": "Copy code",
             "copyLink": "Copy link",
             "waiting": "Waiting...",
+            "anonymous": "Anonymous",
             "connected": "Connected"
         },
         "transfer": {
@@ -61,6 +62,10 @@
         },
         "done": {
             "title": "Files sent",
+            "description": [
+                "The selected files have been successfully sent to",
+                "You can start another transfer to send more files or go back to the home page."
+            ],
             "finish": "Finish"
         }
     },
@@ -74,7 +79,6 @@
             "obtainingInfo": "Obtaining transfer information...",
             "title": "Review files",
             "sentBy": "Sent by",
-            "anonymous": "Anonymous",
             "noMessage": "No message"
         },
         "transfer": {
@@ -82,6 +86,10 @@
         },
         "done": {
             "title": "Files received",
+            "description": [
+                "The files have been successfully received from",
+                "You can open the folder to view the files or go back to the home page."
+            ],
             "open": "Open folder"
         }
     },
