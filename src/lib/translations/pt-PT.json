@@ -49,7 +49,7 @@
             "copyLink": "Copiar link",
             "waiting": "Em espera...",
             "anonymous": "Desconhecido",
-            "connected": "Conectado"
+            "connected": "Conectado a"
         },
         "transfer": {
             "title": "A enviar",
@@ -138,9 +138,16 @@
             }
         },
         "title": "Conta",
-        "history" : "Histórico",
-        "settings" : "Definições de conta",
-        "logout": "Terminar sessão"
+        "notVerified": "Email não verificado!",
+        "settings": {
+            "info": "Informações",
+            "username": "Nome de utilizador",
+            "usernameDesc": "Alterar o nome de utilizador da sua conta",
+            "email": "Email",
+            "emailDesc": "Alterar o email da sua conta",
+            "save": "Guardar",
+            "since": "Membro desde"
+        }
     },
     "dialog": {
         "okay": "OK",
@@ -165,6 +172,8 @@
         "senderDisconnectedDesc": "A pessoa que estava a enviar-te ficheiros foi desconectada.",
         "loginError": "Erro ao iniciar sessão",
         "loginErrorDesc": "Ocorreu um erro ao iniciar a sua sessão, por favor tente novamente.",
+        "verify": "Verificar email",
+        "verifyDesc": "A sua conta ainda não está verificada, deseja receber o email de verificação agora?",
         "logout": "Terminar sessão",
         "logoutDesc": "Tem a certeza que pretende terminar sessão?",
         "nearbyShare": "Nota rápida",

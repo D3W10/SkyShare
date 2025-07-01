@@ -2,10 +2,12 @@ import { fade } from "svelte/transition";
 import { cubicIn, cubicOut } from "svelte/easing";
 import { goto as sGoto } from "$app/navigation";
 import { base } from "$app/paths";
+import { app } from "./data/app.svelte";
 import { setError } from "./data/error.svelte";
 import { setUnlock } from "./data/disable.svelte";
 import { AppError } from "./models/AppError.class";
 import type { Action } from "svelte/action";
+import type { WebRTC } from "./models/WebRTC.class.svelte";
 
 export const boxStyles = {
     basic: "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
@@ -17,6 +19,7 @@ export const boxStyles = {
 };
 
 export const settingsPath = "/settings/appearance";
+export const accountSettingsPath = "/account/settings/info";
 
 export const transitions = {
     pageIn: (node: Element) => fade(node, { duration: 200, delay: 50, easing: cubicIn }),
@@ -45,6 +48,19 @@ export async function safeTry(fn: () => Promise<unknown>) {
             setError(e.code);
         else
             setError("unknown");
+    }
+}
+
+export async function fetchUser(connection: WebRTC, userId: string) {
+    if (userId && connection) {
+        const [error, data] = await app.apiCall<{ name: string, avatar: string }>("/user/info", {
+            params: (new URLSearchParams({ userId })).toString()
+        }, false);
+
+        if (error)
+            return;
+
+        connection.remotePeerData = { username: data.name, picture: data.avatar };
     }
 }
 

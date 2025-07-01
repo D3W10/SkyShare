@@ -10,7 +10,7 @@
     import Switch from "$lib/components/Switch.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
     import Button from "$lib/components/Button.svelte";
-    import { WebRTC } from "$lib/models/WebRTC.class";
+    import { WebRTC } from "$lib/models/WebRTC.class.svelte";
     import { AppError } from "$lib/models/AppError.class";
     import { goto, safeTry } from "$lib/utils";
 

@@ -267,6 +267,7 @@ ipcMain.on("GetAppInfo", e => {
         homepage: packageData.homepage,
         api: !isDev || !useLocalServer ? packageData.data.api : "http://localhost:8020/api/v1",
         auth: packageData.data.auth,
+        appId: packageData.data.appId,
         isDev
     } satisfies AppInfo;
 });

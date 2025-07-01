@@ -16,17 +16,11 @@
     });
 
     connection.c?.setListener("beforeFinish", () => {
-        connection.c?.setListener("end", () => {});
-    });
-
-    connection.c?.setListener("data", raw => {
-        const { type } = JSON.parse(raw);
-
-        if (type === "finish") {
+        connection.c?.setListener("end", () => {
             connection.c?.disconnect();
             setUnlock();
             goto("/receive/done");
-        }
+        });
     });
 </script>
 

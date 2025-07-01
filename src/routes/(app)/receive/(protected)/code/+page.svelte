@@ -9,14 +9,13 @@
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import ProfilePicture from "$lib/components/ProfilePicture.svelte";
-    import { boxStyles, goto, transitions } from "$lib/utils";
+    import { boxStyles, fetchUser, goto, transitions } from "$lib/utils";
     import type { File } from "$electron/lib/interfaces/File.interface";
 
     let connected = $state(false), ready = $state(false);
-    let files = $state<File[]>([]), message = $state(""), userId = $state("");
-    let userName = $state(""), userPicture = $state("");
+    let files = $state<File[]>([]), message = $state("");
 
-    connection.c?.setListener("dataOpen", () => (connected = true, setUnlock()));
+    connection.c?.setListener("dataOpen", () => connection.c?.sendIdentification());
     connection.c?.setListener("fileOpen", () => ready = true);
 
     connection.c?.setListener("end", () => {
@@ -31,25 +30,13 @@
         if (type === "details" && files.length === 0 && connection.c) {
             files = data.files;
             message = data.message;
-            userId = data.user;
             connection.c.details = data;
 
-            fetchUser();
+            fetchUser(connection.c, data.user);
+            setUnlock();
+            connected = true;
         }
     });
-
-    async function fetchUser() {
-        if (userId && connection.c) {
-            const [error, data] = await app.apiCall<{ name: string, avatar: string }>("/user/info", {
-                params: (new URLSearchParams({ userId })).toString()
-            }, false);
-
-            if (error)
-                return;
-
-            connection.c.remotePeerData = { username: data.name, picture: data.avatar };
-        }
-    }
 
     async function startReceive() {
         const chosenLocation = await app.showSaveDialog({
@@ -95,8 +82,8 @@
                     <div class="flex gap-x-6">
                         <h3 class="font-semibold">{i18n.t("receive.review.sentBy")}</h3>
                         <div class="flex items-center gap-x-1.5">
-                            <ProfilePicture picture={userPicture} class="size-6" />
-                            <p>{userName ? userName : i18n.t("send.waiting.anonymous")}</p>
+                            <ProfilePicture picture={connection.c?.remotePeerData.picture} class="size-6" />
+                            <p>{connection.c?.remotePeerData.username ? connection.c?.remotePeerData.username : i18n.t("send.waiting.anonymous")}</p>
                         </div>
                     </div>
                     <h3 class="mt-6 mb-2 font-semibold">{i18n.t("send.message")}</h3>

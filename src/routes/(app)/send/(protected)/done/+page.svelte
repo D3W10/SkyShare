@@ -12,7 +12,7 @@
     const details = connection.c?.details, remoteData = connection.c?.remotePeerData;
 </script>
 
-<PageLayout title={i18n.t("receive.done.title")} class="flex flex-col justify-between">
+<PageLayout title={i18n.t("send.done.title")} class="flex flex-col justify-between">
     <div>
         <div class="text-lg space-y-0.5">
             <div class="flex items-center gap-x-2.5">
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="flex justify-end">
-        <Button class="w-45" onclick={() => goto("/send")}>{i18n.t("send.done.finish")}</Button>
+    <div class="flex justify-center">
+        <Button class="w-32" onclick={() => goto("/send")}>{i18n.t("send.done.finish")}</Button>
     </div>
 </PageLayout>

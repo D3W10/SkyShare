@@ -9,6 +9,7 @@ interface AccountState {
     email: string;
     picture: string | undefined;
     emailVerified: boolean;
+    createdAt: Date;
     auth: Required<StoreAccount>;
 }
 
@@ -19,6 +20,7 @@ const defaultState: AccountState = {
     email: "",
     picture: undefined,
     emailVerified: false,
+    createdAt: new Date(),
     auth: {
         accessToken: "",
         refreshToken: "",
@@ -99,7 +101,8 @@ async function loginComplete(accessToken: string, refreshToken: string, expiresO
         account.username = userInfo.preferred_username;
         account.email = userInfo.email;
         account.picture = userInfo.picture;
-        account.emailVerified = userInfo.email_verified;
+        account.emailVerified = payload.emailVerified;
+        account.createdAt = new Date(payload.createdTime);
 
         console.log("Login successful!");
 
@@ -109,6 +112,32 @@ async function loginComplete(accessToken: string, refreshToken: string, expiresO
         /* TODO: Handle error */
         return false;
     }
+}
+
+export async function verifyEmail() {
+    const verifyParams = new URLSearchParams({
+        type: "email",
+        dest: account.email,
+        captchaType: "none",
+        applicationId: "built-in/app-built-in"
+    });
+
+    const verifyReq = await fetch(info.auth + "/api/send-verification-code?" + verifyParams.toString(), {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        }
+    }), verify = await verifyReq.json();
+}
+
+export async function editInfo(username: string, email: string) {
+    const editReq = await fetch(info.auth + "/api/update-user", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        },
+        body: JSON.stringify({ name: username, email, displayName: username })
+    }), edit = await editReq.json();
 }
 
 export function logout() {

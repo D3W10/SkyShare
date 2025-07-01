@@ -8,7 +8,8 @@
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
-    import { boxStyles, goto } from "$lib/utils";
+    import ProfilePicture from "$lib/components/ProfilePicture.svelte";
+    import { boxStyles, fetchUser, goto } from "$lib/utils";
 
     const timeDiff = () => (connection.c?.timeout?.getTime() ?? 0) - Date.now();
 
@@ -33,20 +34,21 @@
             goto("/send");
     });
 
-    connection.c?.setListener("dataOpen", () => {
-        connected = true;
-        connection.c!.sendDetails();
-    });
-
     connection.c?.setListener("disconnect", () => {
         connected = false;
         timeLeft = timeDiff();
     });
 
     connection.c?.setListener("data", raw => {
-        const { type } = JSON.parse(raw);
+        const { type, data } = JSON.parse(raw);
 
-        if (type === "start") {
+        if (type === "identification" && connection.c) {
+            connected = true;
+
+            fetchUser(connection.c, data.user);
+            connection.c.sendDetails();
+        }
+        else if (type === "start") {
             setLock();
             goto("/send/transfer");
         }
@@ -88,8 +90,16 @@
         </Button>
     </div>
     {#key connected}
-        <div class={twMerge(boxStyles.pane, "py-1.5 absolute left-6 bottom-6 text-sm")} in:fade={{ duration: 200, delay: 200 }} out:fade={{ duration: 200 }}>
-            <p class={!connected ? "animate-pulse" : ""}>{!connected ? i18n.t("send.waiting.waiting") : i18n.t("send.waiting.connected")}</p>
+        <div class={twMerge(boxStyles.pane, "py-1.5 flex items-center gap-x-2 absolute left-6 bottom-6 text-sm")} in:fade={{ duration: 200, delay: 200 }} out:fade={{ duration: 200 }}>
+            {#if !connected}
+                <p class="animate-pulse">{i18n.t("send.waiting.waiting")}</p>
+            {:else}
+                <p>{i18n.t("send.waiting.connected")}</p>
+                <div class="flex items-center gap-x-1.5">
+                    <ProfilePicture picture={connection.c?.remotePeerData.picture} class="size-4" />
+                    <p>{connection.c?.remotePeerData.username ? connection.c?.remotePeerData.username : i18n.t("send.waiting.anonymous")}</p>
+                </div>
+            {/if}
         </div>
     {/key}
     {#if !connected}

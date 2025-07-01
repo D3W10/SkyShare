@@ -14,7 +14,7 @@
     import Icon from "$lib/components/Icon.svelte";
     import TextArea from "$lib/components/TextArea.svelte";
     import { boxStyles, goto, safeTry, transitions } from "$lib/utils";
-    import { WebRTC } from "$lib/models/WebRTC.class";
+    import { WebRTC } from "$lib/models/WebRTC.class.svelte";
     import type { File } from "$electron/lib/interfaces/File.interface";
 
     let files = $state<File[]>([]), hovering = $state(0), message = $state("");

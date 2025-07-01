@@ -27,4 +27,5 @@ export type IconT =
     "sync" |
     "updates" |
     "upload" |
+    "warning" |
     "wifiOff";

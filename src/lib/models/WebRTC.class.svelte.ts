@@ -33,8 +33,8 @@ export class WebRTC {
     private fileIndex = 0;
     private transferSize = 0;
     private transferStartTime = 0;
-    private _transferDuration = 0;
-    private _remotePeerData: PeerData = { username: "", picture: "" };
+    private _transferDuration = $state(0);
+    private _remotePeerData: PeerData = $state({ username: "", picture: "" });
 
     constructor(credentials: Credentials) {
         this.rtcConfig = {
@@ -308,9 +308,9 @@ export class WebRTC {
         channel.addEventListener("error", err => {
             if (!err.error.sctpCauseCode || err.error.sctpCauseCode !== 12) {
                 console.error("[RTC] Data channel error: " + err.error);
+                this.disconnect();
             }
         });
-        // TODO: Handle errors
     }
 
     private configFileChannel(channel: RTCDataChannel) {
@@ -331,9 +331,9 @@ export class WebRTC {
         channel.addEventListener("error", err => {
             if (!err.error.sctpCauseCode || err.error.sctpCauseCode !== 12) {
                 console.error("[RTC] File channel error: " + err.error);
+                this.disconnect();
             }
         });
-        // TODO: Handle errors
     }
 
     calculateProgress(size: number) {
@@ -348,7 +348,7 @@ export class WebRTC {
         const elapsed = (now - this.transferStartTime) / 1000;
         const progress = Math.floor(this.transferSize * 100 / totalSize);
 
-        let speed = 0,eta = 0;
+        let speed = 0, eta = 0;
         if (elapsed > 0)
             speed = this.transferSize / elapsed;
         if (speed > 0)
@@ -361,6 +361,16 @@ export class WebRTC {
         this.sendInChunks(JSON.stringify({
             type: "start"
         }), this.dataChannel);
+    }
+
+    sendIdentification() {
+        if (this.type === "receiver")
+            this.sendInChunks(JSON.stringify({
+                type: "identification",
+                data: {
+                    user: account.id
+                }
+            }), this.dataChannel);
     }
 
     sendDetails() {
@@ -381,20 +391,20 @@ export class WebRTC {
 
             const query = new URLSearchParams({ path: f.path });
             const fileReq = await fetch("io://i?" + query.toString());
-            const buffer = await fileReq.arrayBuffer();
-            // TODO: Handle error if result is 404
+            if (fileReq.status !== 200) {
+                console.error("File " + f.path + " not found, skipping...");
 
-            await this.sendInChunks(buffer, this.fileChannel);
+                this.fileChannel?.send(new ArrayBuffer(0));
+                continue;
+            }
+
+            await this.sendInChunks(await fileReq.arrayBuffer(), this.fileChannel);
         }
     }
 
-    sendFinishAck() {
+    signalEnd() {
         if (!this._transferDuration)
             this._transferDuration = Date.now() - this.transferStartTime;
-
-        this.sendInChunks(JSON.stringify({
-            type: "finish"
-        }), this.dataChannel);
     }
 
     private async sendInChunks(data: string | ArrayBuffer, channel: RTCDataChannel | undefined, chunkSize = 32 * 1024) {
@@ -443,9 +453,17 @@ export class WebRTC {
             this.fileOngoing = false;
             this.fileIndex++;
 
-            if (this.fileIndex === this._details.files.length)
-                this.sendFinishAck();
+            if (this.fileIndex === this._details.files.length) {
+                this.events.beforeFinish?.();
+                this.signalEnd();
+
+                this.sendInChunks(JSON.stringify({
+                    type: "finish"
+                }), this.dataChannel);
+            }
         }
+        else
+            this.fileIndex++;
     }
 
     private joinDataChunks(data: string) {
@@ -469,8 +487,10 @@ export class WebRTC {
     }
 
     disconnect(rtcOnly = false) {
-        if (!rtcOnly)
+        if (!rtcOnly) {
             this.ws?.close(1000, "Normal closure");
+            this.events.end = () => {};
+        }
 
         this.dataChannel?.close();
         this.fileChannel?.close();

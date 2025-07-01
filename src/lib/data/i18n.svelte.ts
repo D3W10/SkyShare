@@ -17,6 +17,6 @@ export const i18n = $state({
 });
 
 export async function changeLanguage(lng: string) {
-    i18next.language = lng;
+    i18n.language = lng;
     i18n.t = await i18next.changeLanguage(lng);
 }

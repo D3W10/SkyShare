@@ -20,7 +20,7 @@
         const { type } = JSON.parse(raw);
 
         if (type === "finish") {
-            connection.c?.setListener("end", () => {});
+            connection.c?.signalEnd();
             connection.c?.disconnect();
             setUnlock();
             goto("/send/done");

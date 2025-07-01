@@ -49,7 +49,7 @@
             "copyLink": "Copy link",
             "waiting": "Waiting...",
             "anonymous": "Anonymous",
-            "connected": "Connected"
+            "connected": "Connected to"
         },
         "transfer": {
             "title": "Sending",
@@ -138,9 +138,16 @@
             }
         },
         "title": "Account",
-        "history" : "History",
-        "settings" : "Account settings",
-        "logout": "Log out"
+        "notVerified": "Email not verified!",
+        "settings": {
+            "info": "Information",
+            "username": "Username",
+            "usernameDesc": "Change your account username",
+            "email": "Email",
+            "emailDesc": "Change your account email",
+            "save": "Save",
+            "since": "Member since"
+        }
     },
     "dialog": {
         "okay": "Okay",
@@ -165,6 +172,8 @@
         "senderDisconnectedDesc": "The person that was sending you files has disconnected.",
         "loginError": "Login error",
         "loginErrorDesc": "An error occurred while logging you in, please try again.",
+        "verify": "Verify email",
+        "verifyDesc": "Your account is not yet verified, do you want to receive the verification email now?",
         "logout": "Log out",
         "logoutDesc": "Are you sure you want to log out?",
         "nearbyShare": "Quick note",
