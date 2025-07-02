@@ -116,8 +116,21 @@ export async function editInfo(username: string, email: string) {
         headers: {
             Authorization: `Bearer ${await getToken()}`
         },
-        body: JSON.stringify({ name: username, email, displayName: username })
+        body: JSON.stringify({
+            id: account.id,
+            name: username,
+            displayName: username,
+            email,
+            avatar: account.picture,
+            owner: "built-in"
+        })
     }), edit = await editReq.json();
+
+    const success = edit.status === "ok";
+    if (success)
+        account.email = email;
+
+    return success;
 }
 
 export function logout() {

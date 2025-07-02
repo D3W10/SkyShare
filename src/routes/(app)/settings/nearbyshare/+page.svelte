@@ -18,7 +18,7 @@
     });
 </script>
 
-<div class="w-full py-2 flex flex-col space-y-6" in:transitions.pageIn out:transitions.pageOut>
+<div class="w-full py-2 flex flex-col gap-y-6" in:transitions.pageIn out:transitions.pageOut>
     <div class="w-full flex justify-between items-center gap-x-6">
         <div>
             <h3 class="mb-1 font-semibold">{i18n.t("settings.nearbyShareEnabled")}</h3>

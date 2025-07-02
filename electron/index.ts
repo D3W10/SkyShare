@@ -4,7 +4,6 @@ import path from "path";
 import os from "os";
 import Store from "electron-store";
 import { autoUpdater } from "electron-updater";
-import jwt from "jsonwebtoken";
 import { Logger } from "./lib/Logger";
 import { defaultStore } from "./lib/constants/defaultStore.const";
 import type { IStore } from "./lib/interfaces/Store.interface";
@@ -322,7 +321,5 @@ ipcMain.on("Logout", () => appConfig.set("account", {}));
 ipcMain.on("LoginRequest", () => window.webContents.send("LoginRequest"));
 
 ipcMain.on("LoginRequestFulfilled", (_, result: boolean) => splash.webContents.send("LoginRequestFulfilled", result));
-
-ipcMain.handle("DecodeJWT", (_, token: string) => jwt.decode(token, { json: true }));
 
 //#endregion

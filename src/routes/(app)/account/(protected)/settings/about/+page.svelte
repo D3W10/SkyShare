@@ -6,7 +6,7 @@
     import { boxStyles, transitions } from "$lib/utils";
 </script>
 
-<div class="w-full py-2 flex flex-col space-y-6" in:transitions.pageIn out:transitions.pageOut>
+<div class="w-full py-2 flex flex-col" in:transitions.pageIn out:transitions.pageOut>
     <div class={twMerge(boxStyles.box, "p-5")}>
         <div class="size-full flex items-center gap-x-4">
             <ProfilePicture class="size-10" />

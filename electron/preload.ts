@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 import { ErrorT } from "./lib/types/ErrorT.type";
-import type { JwtPayload } from "jsonwebtoken";
 import type { OpenDialogReturnValue } from "./lib/interfaces/OpenDialogReturnValue.interface";
 import type { AppInfo } from "./lib/interfaces/AppInfo.interface";
 import type { ApiResult } from "./lib/interfaces/ApiResult.interface";
@@ -361,15 +360,6 @@ export async function sendLoginRequest() {
 }
 
 /**
- * Decodes a JWT token
- * @param token The JWT token to decode
- * @returns The decoded JWT payload
- */
-export async function decodeJWT(token: string): Promise<JwtPayload | null> {
-    return await ipcRenderer.invoke("DecodeJWT", token);
-}
-
-/**
  * Stops the program execution for the specified amount of time
  */
 export async function sleep(ms: number) {
@@ -431,6 +421,5 @@ contextBridge.exposeInMainWorld("app", {
     saveCredentials,
     logout,
     sendLoginRequest,
-    decodeJWT,
     sleep
 });
