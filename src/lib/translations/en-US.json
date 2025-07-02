@@ -141,6 +141,8 @@
         "notVerified": "Email not verified!",
         "settings": {
             "info": "Information",
+            "personalization": "Personalization",
+            "security": "Security",
             "username": "Username",
             "usernameDesc": "Change your account username",
             "email": "Email",
@@ -172,8 +174,6 @@
         "senderDisconnectedDesc": "The person that was sending you files has disconnected.",
         "loginError": "Login error",
         "loginErrorDesc": "An error occurred while logging you in, please try again.",
-        "verify": "Verify email",
-        "verifyDesc": "Your account is not yet verified, do you want to receive the verification email now?",
         "logout": "Log out",
         "logoutDesc": "Are you sure you want to log out?",
         "nearbyShare": "Quick note",

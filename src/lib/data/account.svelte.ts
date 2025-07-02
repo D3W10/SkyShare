@@ -7,7 +7,7 @@ interface AccountState {
     id: string;
     username: string;
     email: string;
-    picture: string | undefined;
+    picture: string;
     emailVerified: boolean;
     createdAt: Date;
     auth: Required<StoreAccount>;
@@ -18,7 +18,7 @@ const defaultState: AccountState = {
     id: "",
     username: "",
     email: "",
-    picture: undefined,
+    picture: "",
     emailVerified: false,
     createdAt: new Date(),
     auth: {
@@ -86,23 +86,19 @@ async function loginComplete(accessToken: string, refreshToken: string, expiresO
     account.auth.expiresOn = expiresOn;
 
     try {
-        const userInfoReq = await fetch(info.auth + "/api/userinfo", {
+        const userInfoReq = await fetch(info.auth + "/api/get-account", {
             headers: {
                 Authorization: `Bearer ${await getToken()}`
             }
         }), userInfo = await userInfoReq.json();
 
-        const payload = await app.decodeJWT(account.auth.accessToken);
-        if (!payload)
-            throw new Error("Failed to decode JWT");
-
         account.loggedIn = true;
-        account.id = payload.id;
-        account.username = userInfo.preferred_username;
-        account.email = userInfo.email;
-        account.picture = userInfo.picture;
-        account.emailVerified = payload.emailVerified;
-        account.createdAt = new Date(payload.createdTime);
+        account.id = userInfo.data.id;
+        account.username = userInfo.data.name;
+        account.email = userInfo.data.email;
+        account.picture = userInfo.data.avatar;
+        account.emailVerified = userInfo.data.emailVerified;
+        account.createdAt = new Date(userInfo.data.createdTime);
 
         console.log("Login successful!");
 
@@ -112,22 +108,6 @@ async function loginComplete(accessToken: string, refreshToken: string, expiresO
         /* TODO: Handle error */
         return false;
     }
-}
-
-export async function verifyEmail() {
-    const verifyParams = new URLSearchParams({
-        type: "email",
-        dest: account.email,
-        captchaType: "none",
-        applicationId: "built-in/app-built-in"
-    });
-
-    const verifyReq = await fetch(info.auth + "/api/send-verification-code?" + verifyParams.toString(), {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${await getToken()}`
-        }
-    }), verify = await verifyReq.json();
 }
 
 export async function editInfo(username: string, email: string) {

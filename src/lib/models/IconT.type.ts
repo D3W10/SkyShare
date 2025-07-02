@@ -14,6 +14,7 @@ export type IconT =
     "home" |
     "identification" |
     "link" |
+    "lock" |
     "logout" |
     "minimizeWindow" |
     "nearbyShare" |

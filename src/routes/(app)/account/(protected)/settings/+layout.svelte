@@ -16,6 +16,12 @@
         <LinkItem href="/account/settings/info" icon="identification" selected={currentPage.startsWith("info")}>
             <p>{i18n.t("account.settings.info")}</p>
         </LinkItem>
+        <LinkItem href="/account/settings/personalization" icon="brush" selected={currentPage.startsWith("personalization")}>
+            <p>{i18n.t("account.settings.personalization")}</p>
+        </LinkItem>
+        <LinkItem href="/account/settings/security" icon="lock" selected={currentPage.startsWith("security")}>
+            <p>{i18n.t("account.settings.security")}</p>
+        </LinkItem>
         <LinkItem href="/account/settings/about" icon="about" selected={currentPage.startsWith("about")}>
             <p>{i18n.t("settings.about")}</p>
         </LinkItem>

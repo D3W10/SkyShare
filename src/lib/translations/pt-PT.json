@@ -141,10 +141,12 @@
         "notVerified": "Email não verificado!",
         "settings": {
             "info": "Informações",
+            "personalization": "Personalização",
+            "security": "Segurança",
             "username": "Nome de utilizador",
-            "usernameDesc": "Alterar o nome de utilizador da sua conta",
+            "usernameDesc": "Alterar o nome de utilizador da conta",
             "email": "Email",
-            "emailDesc": "Alterar o email da sua conta",
+            "emailDesc": "Alterar o email da conta",
             "save": "Guardar",
             "since": "Membro desde"
         }
@@ -172,8 +174,6 @@
         "senderDisconnectedDesc": "A pessoa que estava a enviar-te ficheiros foi desconectada.",
         "loginError": "Erro ao iniciar sessão",
         "loginErrorDesc": "Ocorreu um erro ao iniciar a sua sessão, por favor tente novamente.",
-        "verify": "Verificar email",
-        "verifyDesc": "A sua conta ainda não está verificada, deseja receber o email de verificação agora?",
         "logout": "Terminar sessão",
         "logoutDesc": "Tem a certeza que pretende terminar sessão?",
         "nearbyShare": "Nota rápida",
