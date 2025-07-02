@@ -27,7 +27,7 @@
     }: Props = $props();
 </script>
 
-<Link class={twMerge("w-full px-3 py-2 flex items-center gap-x-3 relative hover:text-slate-800 dark:hover:text-slate-300 font-medium rounded-xl transition duration-200 group z-0 *:transition-colors *:duration-200", disable.d ? "opacity-50" : "", !selected ? "text-slate-600 dark:text-slate-500" : "text-slate-800 dark:text-slate-300", boxStyles.basic, className)} {href} type="invisible" {...rest}>
+<Link class={twMerge("w-full px-3 py-2 flex items-center gap-x-3 relative hover:text-slate-800 dark:hover:text-slate-300 font-medium rounded-xl group z-0 [&_p,&_svg]:transition-colors [&_p,&_svg]:duration-200", disable.d ? "opacity-50" : "", !selected ? "text-slate-600 dark:text-slate-500" : "text-slate-800 dark:text-slate-300", boxStyles.basic, className)} {href} type="invisible" {...rest}>
     {#if selected}
         <div class={twMerge(boxStyles.box, "absolute inset-0 -z-1")} transition:scale={{ duration: 200, start: 0.95, easing: cubicOut }}></div>
     {/if}

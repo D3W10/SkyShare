@@ -143,6 +143,14 @@ export function getPlatform() {
 }
 
 /**
+ * Sets the progress bar value
+ * @param progress The progress bar value
+ */
+export function setProgressBar(progress: number) {
+    ipcRenderer.send("SetProgressBar", progress);
+}
+
+/**
  * Obtains the icon of a file stored on the filesystem
  * @param path The path to the file to get the icon from
  * @returns The base64 encoded png icon
@@ -405,6 +413,7 @@ contextBridge.exposeInMainWorld("app", {
     resetSettings,
     getAppInfo,
     getPlatform,
+    setProgressBar,
     getFileIcon,
     getFilePath,
     isDirectory,

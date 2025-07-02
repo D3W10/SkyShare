@@ -23,13 +23,19 @@
         ["--color-home", "--color-home-light", "--color-home-dark"]
     );
 
+    $effect(() => {
+        document.body.style.setProperty("--color-accent", `var(${accentColor[0]})`);
+        document.body.style.setProperty("--color-accent-light", `var(${accentColor[1]})`);    
+        document.body.style.setProperty("--color-accent-dark", `var(${accentColor[2]})`);
+    });
+
     app.addEventListener("error", setError);
 
     onMount(app.winReady);
 </script>
 
 <Framebar bind:sidebar={settings.sidebarCollapsed} />
-<div class="size-full flex" style:--color-accent={`var(${accentColor[0]})`} style:--color-accent-light={`var(${accentColor[1]})`} style:--color-accent-dark={`var(${accentColor[2]})`}>
+<div class="size-full flex">
     <Sidebar collapsed={settings.sidebarCollapsed} />
     <main class="h-full flex flex-1 relative bg-slate-50 dark:bg-slate-900 rounded-tl-xl ring-1 ring-slate-400/10 dark:ring-slate-50/10 shadow-sm overflow-hidden">
         {#if disable.loading}

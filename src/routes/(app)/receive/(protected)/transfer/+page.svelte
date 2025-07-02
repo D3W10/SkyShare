@@ -13,6 +13,7 @@
         progress = p;
         eta = e;
         speed = s;
+        app.setProgressBar(p);
     });
 
     connection.c?.setListener("beforeFinish", () => {
