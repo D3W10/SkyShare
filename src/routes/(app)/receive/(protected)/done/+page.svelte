@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="flex justify-center gap-x-2.5">
-        <Button type="secondary" class="w-full" onclick={() => connection.c?.savePath && app.showItemInFolder(connection.c?.savePath + "/" + details?.files[0].name)}>{i18n.t("receive.done.open")}</Button>
+        <Button type="secondary" class="w-full" onclick={() => connection.c?.savePath && app.showItemInFolder(connection.c?.savePath + details?.files[0].name)}>{i18n.t("receive.done.open")}</Button>
         <Button class="w-45" onclick={() => goto("/receive")}>{i18n.t("send.done.finish")}</Button>
     </div>
 </PageLayout>
