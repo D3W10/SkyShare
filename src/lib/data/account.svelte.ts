@@ -122,7 +122,7 @@ export async function editInfo(username: string, email: string) {
             displayName: username,
             email,
             avatar: account.picture,
-            owner: "built-in"
+            owner: info.org
         })
     }), edit = await editReq.json();
 
@@ -131,6 +131,23 @@ export async function editInfo(username: string, email: string) {
         account.email = email;
 
     return success;
+}
+
+export async function deleteAccount() {
+    const deleteReq = await fetch(info.auth + "/api/delete-user", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        },
+        body: JSON.stringify({
+            id: account.id,
+            name: account.username,
+            email: account.email,
+            owner: info.org
+        })
+    }), del = await deleteReq.json();
+
+    return del.status === "ok";
 }
 
 export function logout() {

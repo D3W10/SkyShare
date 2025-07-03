@@ -147,8 +147,20 @@
             "usernameDesc": "Change your account username",
             "email": "Email",
             "emailDesc": "Change your account email",
+            "delete": "Delete Account",
+            "deleteDesc": "Delete your SkyShare account",
+            "deleteButton": "Delete",
             "save": "Save",
             "since": "Member since"
+        },
+        "delete": {
+            "title": "Delete Account",
+            "features": "Account features:",
+            "continue": "Continue",
+            "confirm": {
+                "title": "Deleting Account",
+                "deleting": "Deleting your SkyShare account, hang on tight..."
+            }
         }
     },
     "dialog": {
@@ -178,6 +190,12 @@
         "logoutRequiredDesc": "In order to change your username or password, SkyShare has to log you out of your account. Do you want to proceed?",
         "editError": "Failed to save",
         "editErrorDesc": "An error occurred while saving some of your changes, please try again.",
+        "deleteConfirm": "Last warning!",
+        "deleteConfirmDesc": "Deleting your account will erase all your data in a irreversible way! Only proceed if you're sure about your decision.",
+        "deleteSuccess": "Account deleted",
+        "deleteSuccessDesc": "Your account has been successfully deleted. We hope to see you again soon!",
+        "deleteError": "Failed to delete",
+        "deleteErrorDesc": "An error occurred while deleting your account, please try again.",
         "logout": "Log out",
         "logoutDesc": "Are you sure you want to log out?",
         "nearbyShare": "Quick note",

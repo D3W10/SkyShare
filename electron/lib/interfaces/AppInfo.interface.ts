@@ -4,6 +4,6 @@ export interface AppInfo {
     homepage: string;
     api: string;
     auth: string;
-    appId: string;
+    org: string;
     isDev: boolean;
 }

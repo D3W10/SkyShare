@@ -36,7 +36,8 @@
     "homepage": "http://20.86.131.181",
     "data": {
         "api": "http://20.86.131.181/api/v1",
-        "auth": "http://20.86.131.181:8000"
+        "auth": "http://20.86.131.181:8000",
+        "org": "skyshare"
     },
     "dependencies": {
         "@sveltejs/vite-plugin-svelte": "^5.0.3",

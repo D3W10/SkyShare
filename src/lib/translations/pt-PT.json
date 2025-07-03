@@ -147,8 +147,20 @@
             "usernameDesc": "Alterar o nome de utilizador da conta",
             "email": "Email",
             "emailDesc": "Alterar o email da conta",
+            "delete": "Apagar Conta",
+            "deleteDesc": "Apagar a sua conta SkyShare",
+            "deleteButton": "Apagar",
             "save": "Guardar",
             "since": "Membro desde"
+        },
+        "delete": {
+            "title": "Apagar Conta",
+            "features": "Funcionalidades da conta:",
+            "continue": "Continuar",
+            "confirm": {
+                "title": "A apagar conta",
+                "deleting": "A apagar a sua conta SkyShare, por favor aguarde..."
+            }
         }
     },
     "dialog": {
@@ -178,6 +190,12 @@
         "logoutRequiredDesc": "Para poder alterar o seu nome de utilizador ou palavra-passe, o SkyShare precisa de terminar a sessão da sua conta. Pretende continuar?",
         "editError": "Erro ao guardar",
         "editErrorDesc": "Um erro ocorreu ao tentar guardar algumas das suas alterações, por favor tente novamente.",
+        "deleteConfirm": "Último aviso!",
+        "deleteConfirmDesc": "Ao apagar a sua conta todo os seus dados serão apagados de forma irreversível! Apenas prossiga se tiver a certeza da sua decisão.",
+        "deleteSuccess": "Conta apagada",
+        "deleteSuccessDesc": "A sua conta foi apagada com sucesso. Esperamos vê-lo de novo em breve!",
+        "deleteError": "Falha ao apagar",
+        "deleteErrorDesc": "Ocorreu um erro ao tentar apagar a sua conta, por favor tente novamente.",
         "logout": "Terminar sessão",
         "logoutDesc": "Tem a certeza que pretende terminar sessão?",
         "nearbyShare": "Nota rápida",
