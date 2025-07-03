@@ -1,6 +1,7 @@
 <script lang="ts">
     import { i18n } from "$lib/data/i18n.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
+    import { setError } from "$lib/data/error.svelte";
     import { account, editInfo, logout } from "$lib/data/account.svelte";
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
@@ -9,7 +10,7 @@
     import { goto, transitions } from "$lib/utils";
 
     let username = $state(account.username), email = $state(account.email);
-    let logoffAlert = $state(false), errorAlert = $state(false), changesMade = $state(false);
+    let logoffAlert = $state(false), changesMade = $state(false);
 
     async function onSave(bypass = false) {
         let shutdown = username !== account.username;
@@ -22,7 +23,7 @@
         setLock(true);
 
         if (!(await editInfo(username, email)))
-            errorAlert = true;
+            setError("editError");
 
         if (shutdown) {
             logout();
@@ -63,9 +64,6 @@
     </div>
     <Button class="w-32" disabled={!changesMade} onclick={() => onSave()}>{i18n.t("account.settings.save")}</Button>
 </div>
-<Dialog bind:show={logoffAlert} title={i18n.t("dialog.logoutRequired")} text={i18n.t("dialog.yes")} cancelText={i18n.t("dialog.no")} onsubmit={() => onSave(true)} oncancel={() => logoffAlert = false}>
+<Dialog bind:show={logoffAlert} title={i18n.t("dialog.logoutRequired")} text={i18n.t("dialog.yes")} cancelText={i18n.t("dialog.no")} onsubmit={() => onSave(true)}>
     <p>{i18n.t("dialog.logoutRequiredDesc")}</p>
-</Dialog>
-<Dialog bind:show={errorAlert} title={i18n.t("dialog.editError")} cancelable={false}>
-    <p>{i18n.t("dialog.editErrorDesc")}</p>
 </Dialog>

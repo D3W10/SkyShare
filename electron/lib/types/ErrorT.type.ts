@@ -7,4 +7,5 @@ export type ErrorT =
     "addingError" |
     "invalidCode" |
     "senderDisconnected" |
-    "loginError";
+    "loginError" |
+    "editError";
