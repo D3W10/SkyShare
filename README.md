@@ -42,6 +42,8 @@ This project consists in four different subprojects:
 > 🖥️&emsp;SkyShare [Desktop App](https://github.com/D3W10/SkyShare)
 >
 > 🔌&emsp;SkyShare [API](https://github.com/D3W10/SkyShare-API)
+>
+> 🌐&emsp;SkyShare [Web App](https://github.com/D3W10/SkyShare-Web)
 
 > [!NOTE]
 > The desktop app can also be compiled and used on Linux, just note that some bugs may occur.
