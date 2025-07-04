@@ -15,7 +15,5 @@ export interface StoreSettings {
 }
 
 export interface StoreAccount {
-    accessToken?: string;
     refreshToken?: string;
-    expiresOn?: number;
 }

@@ -10,7 +10,10 @@ interface AccountState {
     picture: string;
     emailVerified: boolean;
     createdAt: Date;
-    auth: Required<StoreAccount>;
+    auth: Required<StoreAccount> & {
+        accessToken: string,
+        expiresOn: number
+    };
 }
 
 const defaultState: AccountState = {
@@ -39,7 +42,7 @@ export function getSignup() {
 }
 
 export async function getToken() {
-    if (Date.now() >= account.auth.expiresOn) {
+    if (!account.auth.accessToken && Date.now() >= account.auth.expiresOn) {
         const [error, data] = await app.apiCall<{ access_token: string, refresh_token: string, expires_on: number }>("/refresh", {
             method: "GET",
             params: (new URLSearchParams({
@@ -56,7 +59,7 @@ export async function getToken() {
         account.auth.refreshToken = data.refresh_token;
         account.auth.expiresOn = data.expires_on;
 
-        app.saveCredentials(account.auth.accessToken, account.auth.refreshToken, account.auth.expiresOn);
+        app.saveCredentials(account.auth.refreshToken);
 
         return account.auth.accessToken;
     }
@@ -67,31 +70,32 @@ export async function getToken() {
 export async function login(accessToken: string, refreshToken: string, expiresOn: number) {
     console.log("Logging in");
 
-    app.saveCredentials(accessToken, refreshToken, expiresOn);
-    return loginComplete(accessToken, refreshToken, expiresOn);
+    app.saveCredentials(refreshToken);
+    account.auth.accessToken = accessToken;
+    account.auth.expiresOn = expiresOn;
+
+    return loginComplete(refreshToken);
 }
 
 export async function loginStored() {
     const storedInfo = app.getSetting("account") as StoreAccount;
 
-    if (storedInfo.accessToken && storedInfo.refreshToken && storedInfo.expiresOn)
-        return loginComplete(storedInfo.accessToken, storedInfo.refreshToken, storedInfo.expiresOn);
+    if (storedInfo.refreshToken)
+        return loginComplete(storedInfo.refreshToken);
     else
         return false;
 }
 
-async function loginComplete(accessToken: string, refreshToken: string, expiresOn: number) {
-    account.auth.accessToken = accessToken;
+async function loginComplete(refreshToken: string) {
     account.auth.refreshToken = refreshToken;
-    account.auth.expiresOn = expiresOn;
 
-    try {
-        const userInfoReq = await fetch(info.auth + "/api/get-account", {
-            headers: {
-                Authorization: `Bearer ${await getToken()}`
-            }
-        }), userInfo = await userInfoReq.json();
+    const userInfoReq = await fetch(info.auth + "/api/get-account", {
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        }
+    }), userInfo = await userInfoReq.json();
 
+    if (userInfo.status === "ok") {
         account.loggedIn = true;
         account.id = userInfo.data.id;
         account.username = userInfo.data.name;
@@ -104,10 +108,8 @@ async function loginComplete(accessToken: string, refreshToken: string, expiresO
 
         return true;
     }
-    catch {
-        /* TODO: Handle error */
+    else
         return false;
-    }
 }
 
 export async function editInfo(username: string, email: string) {

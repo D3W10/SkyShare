@@ -335,12 +335,10 @@ export function showItemInFolder(path: string) {
 
 /**
  * Saves the user credentials for future logins
- * @param accessToken The user access token
  * @param refreshToken The user refresh token
- * @param expiresOn The expiration time of the token
  */
-export function saveCredentials(accessToken: string, refreshToken: string, expiresOn: number) {
-    ipcRenderer.send("SaveCredentials", accessToken, refreshToken, expiresOn);
+export function saveCredentials(refreshToken: string) {
+    ipcRenderer.send("SaveCredentials", refreshToken);
 }
 
 /**

@@ -314,7 +314,7 @@ ipcMain.on("CloseFileStream", () => currentFileStream?.end());
 
 ipcMain.on("ShowItemInFolder", (_, path) => shell.showItemInFolder(path));
 
-ipcMain.on("SaveCredentials", (_, accessToken: string, refreshToken: string, expiresOn: number) => appConfig.set("account", { accessToken, refreshToken, expiresOn }));
+ipcMain.on("SaveCredentials", (_, refreshToken: string) => appConfig.set("account", { refreshToken }));
 
 ipcMain.on("Logout", () => appConfig.set("account", {}));
 
