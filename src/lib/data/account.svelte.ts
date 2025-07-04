@@ -133,6 +133,27 @@ export async function editInfo(username: string, email: string) {
     return success;
 }
 
+export async function changePassword(oldPassword: string, newPassword: string) {
+    const formData = new FormData();
+    formData.append("userOwner", info.org);
+    formData.append("userName", account.username);
+    formData.append("oldPassword", oldPassword);
+    formData.append("newPassword", newPassword);
+
+    const changeReq = await fetch(info.auth + "/api/set-password", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        },
+        body: formData
+    }), change = await changeReq.json();
+
+    return {
+        success: change.status === "ok",
+        message: change.msg
+    };
+}
+
 export async function deleteAccount() {
     const deleteReq = await fetch(info.auth + "/api/delete-user", {
         method: "POST",

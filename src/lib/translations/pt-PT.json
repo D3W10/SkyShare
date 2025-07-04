@@ -152,6 +152,12 @@
             "deleteDesc": "Apagar a sua conta SkyShare",
             "deleteButton": "Apagar",
             "save": "Guardar",
+            "password": "Alterar palavra-passe",
+            "passwordDesc": "Alterar a palavra-passe da sua conta",
+            "passwordButton": "Alterar",
+            "oldPassword": "Palavra-passe antiga",
+            "newPassword": "Nova palavra-passe",
+            "confirmPassword": "Confirmar palavra-passe",
             "since": "Membro desde"
         },
         "delete": {
@@ -191,6 +197,10 @@
         "logoutRequiredDesc": "Para poder alterar o seu nome de utilizador ou palavra-passe, o SkyShare precisa de terminar a sessão da sua conta. Pretende continuar?",
         "editError": "Erro ao guardar",
         "editErrorDesc": "Um erro ocorreu ao tentar guardar algumas das suas alterações, por favor tente novamente.",
+        "passwordError": "Erro ao alterar palavra-passe",
+        "passwordErrorDesc": "Um erro ocorreu ao tentar alterar a sua palavra-passe:",
+        "passwordSuccess": "Palavra-passe alterada",
+        "passwordSuccessDesc": "A sua palavra-passe foi alterada com sucesso!",
         "deleteConfirm": "Último aviso!",
         "deleteConfirmDesc": "Ao apagar a sua conta todo os seus dados serão apagados de forma irreversível! Apenas prossiga se tiver a certeza da sua decisão.",
         "deleteSuccess": "Conta apagada",
