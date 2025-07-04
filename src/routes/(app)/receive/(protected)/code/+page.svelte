@@ -66,9 +66,9 @@
                 {#each files as file (file.name)}
                     <div class={twMerge(boxStyles.box, "px-2 items-center")}>
                         {#if file.icon}
-                            <img src="data:image/png;base64,{file.icon}" class="h-6" alt={i18n.t("send.fileIcon")} />
+                            <img src="data:image/png;base64,{file.icon}" class="h-6 aspect-square" alt={i18n.t("send.fileIcon")} />
                         {:else}
-                            <Icon name="file" class="h-6" />
+                            <Icon name="file" class="h-6 aspect-square" />
                         {/if}
                         <div class="ml-2 flex flex-col gap-y-0">
                             <p class="text-sm overflow-hidden break-words [display:-webkit-box] [word-break:break-all] [-webkit-line-clamp:2] [-webkit-box-orient:vertical]" title={file.name}>{file.name}</p>

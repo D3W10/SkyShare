@@ -140,6 +140,7 @@
         "title": "Account",
         "notVerified": "Email not verified!",
         "settings": {
+            "title": "Account settings",
             "info": "Information",
             "personalization": "Personalization",
             "security": "Security",

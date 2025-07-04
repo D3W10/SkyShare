@@ -11,7 +11,7 @@
     let currentPage = $derived(page.url.pathname.replace(/\/account\/settings\//g, ""));
 </script>
 
-<PageLayout title={i18n.t("settings.title")} class="pr-8 flex gap-x-8">
+<PageLayout title={i18n.t("account.settings.title")} class="pr-8 flex gap-x-8">
     <div class={twMerge(boxStyles.pane, "w-56 h-full p-2 flex-col gap-y-1 rounded-2xl")}>
         <LinkItem href="/account/settings/info" icon="identification" selected={currentPage.startsWith("info")}>
             <p>{i18n.t("account.settings.info")}</p>

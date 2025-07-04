@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import { fade, fly } from "svelte/transition";
     import { i18n } from "$lib/data/i18n.svelte";
     import { account, login } from "$lib/data/account.svelte";
@@ -9,6 +9,7 @@
     import { goto, transitions } from "$lib/utils";
 
     let loggedIn = $state(false), revealed = $state(false);
+    let timeout: NodeJS.Timeout | undefined;
 
     onMount(async () => {
         revealed = true;
@@ -28,12 +29,16 @@
             loggedIn = await login(accessToken, refreshToken, +expiresOn);
 
             if (loggedIn)
-                setTimeout(() => goto("/account"), 3500);
+                timeout = setTimeout(() => goto("/account"), 3500);
             else
                 onError();
         }
         else
             onError();
+    });
+
+    onDestroy(() => {
+        clearTimeout(timeout);
     });
 </script>
 

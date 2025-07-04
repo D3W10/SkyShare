@@ -120,7 +120,7 @@ export class WebRTC {
         this.setUpSenderRTC();
 
         return new Promise((resolve, reject) => {
-            this.ws!.addEventListener("message", async e => {
+            this.ws?.addEventListener("message", async e => {
                 try {
                     const payload = JSON.parse(e.data);
 
@@ -158,10 +158,7 @@ export class WebRTC {
                 }
             });
 
-            this.ws!.addEventListener("close", e => {
-                console.log("[RTC] WebSocket closed:", e.reason);
-                //reject(new AppError("connection_closed"));
-            });
+            this.ws?.addEventListener("close", e => console.log("[RTC] WebSocket closed:", e.reason));
         });
     }
 

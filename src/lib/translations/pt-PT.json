@@ -140,6 +140,7 @@
         "title": "Conta",
         "notVerified": "Email não verificado!",
         "settings": {
+            "title": "Definições de conta",
             "info": "Informações",
             "personalization": "Personalização",
             "security": "Segurança",

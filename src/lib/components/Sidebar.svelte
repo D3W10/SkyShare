@@ -25,12 +25,12 @@
 <aside class="{!collapsed ? "w-64" : "w-20"} p-4 flex flex-col gap-y-1 {!startup.s ? "transition-[width] duration-400" : ""}">
     <LinkItem class="p-0 grid *:col-[1] *:row-[1]" href={!account.loggedIn ? "/account/login" : "/account"} selected={accountSelected} onclick={cleanAll}>
         {#key account.loggedIn}
-            <div class="py-2 {!collapsed ? "px-2" : "px-3.25"} flex items-center gap-x-2 transition-[padding] duration-200">
-                <div in:scale={{ duration: 300, delay: 300, start: 0.5 }} out:scale={{ duration: 300, start: 0.5 }}>
-                    <ProfilePicture class="{!collapsed ? "size-9 m-1" : "size-5 h-full"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} [transition:width_400ms,_height_400ms,_margin_200ms]" />
+            <div class="py-2 {!collapsed ? "px-2" : "px-3.25"} flex items-center gap-x-2 {!startup.s ? "transition-[padding] duration-200" : ""}">
+                <div in:scale={{ duration: !startup.s ? 300 : 0, delay: !startup.s ? 300 : 0, start: 0.5 }} out:scale={{ duration: !startup.s ? 300 : 0, start: 0.5 }}>
+                    <ProfilePicture class="{!collapsed ? "size-9 m-1" : "size-5 h-full"} {!accountSelected ? "text-slate-500 dark:text-slate-600 group-hover:text-slate-700 dark:group-hover:text-slate-400" : "text-slate-800 dark:text-slate-300"} {!startup.s ? "[transition:width_400ms,_height_400ms,_margin_200ms]" : ""}" />
                 </div>
                 {#if !collapsed}
-                    <p in:fade|global={{ duration: 100, delay: 100 }} out:fade|global={{ duration: 100 }}>{!account.loggedIn ? i18n.t("app.login") : account.username}</p>
+                    <p in:fade|global={{ duration: !startup.s ? 100 : 0, delay: !startup.s ? 100 : 0 }} out:fade|global={{ duration: !startup.s ? 100 : 0 }}>{!account.loggedIn ? i18n.t("app.login") : account.username}</p>
                 {/if}
             </div>
         {/key}

@@ -12,6 +12,7 @@
         text?: string;
         cancelable?: boolean;
         cancelText?: string;
+        disabled?: boolean;
         onsubmit?: () => unknown;
         oncancel?: () => unknown;
     }
@@ -23,6 +24,7 @@
         text,
         cancelable = true,
         cancelText,
+        disabled,
         onsubmit,
         oncancel
     }: Props = $props();
@@ -59,6 +61,6 @@
         {#if cancelable}
             <Button type="secondary" dialog onclick={() => closeModal(false)}>{cancelText || i18n.t("dialog.cancel")}</Button>
         {/if}
-        <Button dialog onclick={() => closeModal(true)}>{text || i18n.t("dialog.okay")}</Button>
+        <Button {disabled} dialog onclick={() => closeModal(true)}>{text || i18n.t("dialog.okay")}</Button>
     </div>
 </dialog>
