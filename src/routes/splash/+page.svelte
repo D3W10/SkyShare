@@ -57,7 +57,7 @@
     async function accountLogIn() {
         const storedInfo = app.getSetting("account") as StoreAccount;
 
-        if (storedInfo.accessToken && storedInfo.refreshToken && storedInfo.expiresOn) {
+        if (storedInfo.refreshToken) {
             status = "loggingIn";
             console.log("[Splash] Startup logging in...");
 
