@@ -142,8 +142,10 @@
         "viewHistory": "Ver todo o histórico",
         "history": {
             "title": "Histórico",
+            "empty": "O seu histórico está vazio",
             "from": "De",
-            "to": "Para"
+            "to": "Para",
+            "receivedBy": "Recebido por"
         },
         "settings": {
             "title": "Definições de conta",

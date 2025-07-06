@@ -2,6 +2,7 @@ import { app } from "./app.svelte";
 import { info } from "./info.svelte";
 import type { StoreAccount } from "$electron/lib/interfaces/Store.interface";
 import type { File } from "$electron/lib/interfaces/File.interface";
+import type { HistoryEntry } from "$lib/models/HistoryEntry.interface";
 
 interface AccountState {
     loggedIn: boolean;
@@ -17,19 +18,6 @@ interface AccountState {
     };
     historyDate: Date;
     history: HistoryEntry[];
-}
-
-interface HistoryEntry {
-    id: number;
-    files: {
-        name: string;
-        size: number;
-    }[];
-    message: string | null;
-    sender: string | null;
-    receiver: string | null;
-    type: "sender" | "receiver";
-    createdAt: Date;
 }
 
 const defaultState: AccountState = {
@@ -60,7 +48,7 @@ export function getSignup() {
 }
 
 export async function getToken() {
-    if (!account.auth.accessToken && Date.now() >= account.auth.expiresOn) {
+    if (!account.auth.accessToken || Date.now() >= account.auth.expiresOn) {
         const [error, data] = await app.apiCall<{ access_token: string, refresh_token: string, expires_on: number }>("/refresh", {
             method: "GET",
             params: (new URLSearchParams({
@@ -241,7 +229,7 @@ export async function getHistory() {
 
         if (!error) {
             account.historyDate = new Date();
-            account.history = history.map(e => ({ ...e, createdAt: new Date(e.created_at) }) as HistoryEntry);
+            account.history = history.map(e => ({ ...e, createdAt: new Date(e.createdAt) }) as HistoryEntry);
         }
 
         return !error;        

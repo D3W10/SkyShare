@@ -142,8 +142,10 @@
         "viewHistory": "View all history",
         "history": {
             "title": "History",
+            "empty": "Your history is empty",
             "from": "From",
-            "to": "To"
+            "to": "To",
+            "receivedBy": "Received by"
         },
         "settings": {
             "title": "Account settings",
