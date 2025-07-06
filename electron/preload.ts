@@ -229,7 +229,7 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
  * @param error A boolean indicating whether the error should be handled by the native error system
  * @returns A tuple containing the success state of the operation and an object containing the data returned by the API
  */
-export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: string, { method = "GET", params, headers, body }: { method?: string, params?: string, headers?: HeadersInit, body?: object } = {}, error = true): Promise<["", T] | [ErrorT, null]> {
+export async function apiCall<T>(endpoint: string, { method = "GET", params, headers, body }: { method?: string, params?: string, headers?: HeadersInit, body?: object } = {}, error = true): Promise<["", T] | [ErrorT, null]> {
     try {
         if (!navigator.onLine) {
             dispatch("error", "offline");
@@ -237,6 +237,12 @@ export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: s
         }
 
         console.log("[API] " + endpoint + (params ? "?" + params : ""));
+
+        const sendHeaders: HeadersInit = { "Content-Type": "application/json" };
+        if (body && headers) {
+            Object.assign(sendHeaders, headers);
+            headers = sendHeaders;
+        }
 
         const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
             method,

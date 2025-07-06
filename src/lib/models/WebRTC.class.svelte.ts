@@ -8,7 +8,7 @@ import type { File } from "$electron/lib/interfaces/File.interface";
 
 type Direction = "sender" | "receiver";
 type Credentials = { username: string, password: string };
-type PeerData = { username: string, picture: string };
+type PeerData = { id: string, username: string, picture: string };
 
 const MAX_BUFFERED_AMOUNT = 8388608;
 
@@ -34,7 +34,7 @@ export class WebRTC {
     private transferSize = 0;
     private transferStartTime = 0;
     private _transferDuration = $state(0);
-    private _remotePeerData: PeerData = $state({ username: "", picture: "" });
+    private _remotePeerData: PeerData = $state({ id: "", username: "", picture: "" });
 
     constructor(credentials: Credentials) {
         this.rtcConfig = {
@@ -384,12 +384,12 @@ export class WebRTC {
 
     async send() {
         for (const f of this._details.files) {
-            console.log("Sending file: " + f.path);
+            console.log("Sending file: " + f.name);
 
             const query = new URLSearchParams({ path: f.path });
             const fileReq = await fetch("io://i?" + query.toString());
             if (fileReq.status !== 200) {
-                console.error("File " + f.path + " not found, skipping...");
+                console.error("File " + f.name + " not found, skipping...");
 
                 this.fileChannel?.send(new ArrayBuffer(0));
                 continue;
@@ -436,7 +436,7 @@ export class WebRTC {
             if (!this.fileOngoing) {
                 const path = this.savePath + "/" + this._details.files[this.fileIndex].name;
 
-                console.log("[RTC] Initiated file stream for ", path);
+                console.log("[RTC] Initiated file stream for", this._details.files[this.fileIndex].name);
                 app.createFileStream(path);
                 this.fileOngoing = true;
             }

@@ -139,6 +139,12 @@
         },
         "title": "Account",
         "notVerified": "Email not verified!",
+        "viewHistory": "View all history",
+        "history": {
+            "title": "History",
+            "from": "From",
+            "to": "To"
+        },
         "settings": {
             "title": "Account settings",
             "info": "Information",
@@ -195,7 +201,7 @@
         "loginError": "Login error",
         "loginErrorDesc": "An error occurred while logging you in, please try again.",
         "logoutRequired": "Logout required",
-        "logoutRequiredDesc": "In order to change your username or password, SkyShare has to log you out of your account. Do you want to proceed?",
+        "logoutRequiredDesc": "In order to change your username, SkyShare has to log you out of your account. Do you want to proceed?",
         "editError": "Failed to save",
         "editErrorDesc": "An error occurred while saving some of your changes, please try again.",
         "passwordError": "Failed to change password",

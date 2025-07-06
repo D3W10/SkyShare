@@ -3,6 +3,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { setUnlock } from "$lib/data/disable.svelte";
+    import { account, pushHistory } from "$lib/data/account.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import ProgressCircle from "$lib/components/ProgressCircle.svelte";
@@ -21,8 +22,17 @@
         const { type } = JSON.parse(raw);
 
         if (type === "finish") {
+            if (account.loggedIn || connection.c?.remotePeerData?.id) {
+                const details = connection.c?.details;
+                const remote = connection.c?.remotePeerData;
+
+                if (details?.files)
+                    pushHistory(details.files, details.message || null, remote?.id ?? null);
+            }
+
             connection.c?.signalEnd();
             connection.c?.disconnect();
+            app.setProgressBar(-1);
             setUnlock();
             goto("/send/done");
         }

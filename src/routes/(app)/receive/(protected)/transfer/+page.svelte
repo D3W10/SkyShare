@@ -19,6 +19,7 @@
     connection.c?.setListener("beforeFinish", () => {
         connection.c?.setListener("end", () => {
             connection.c?.disconnect();
+            app.setProgressBar(-1);
             setUnlock();
             goto("/receive/done");
         });

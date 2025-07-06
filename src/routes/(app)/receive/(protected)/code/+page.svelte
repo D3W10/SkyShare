@@ -19,6 +19,7 @@
     connection.c?.setListener("fileOpen", () => ready = true);
 
     connection.c?.setListener("end", () => {
+        app.setProgressBar(-1);
         setUnlock();
         setError("senderDisconnected");
         goto("/receive");

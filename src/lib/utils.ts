@@ -60,7 +60,7 @@ export async function fetchUser(connection: WebRTC, userId: string) {
         if (error)
             return;
 
-        connection.remotePeerData = { username: data.name, picture: data.avatar };
+        connection.remotePeerData = { id: userId, username: data.name, picture: data.avatar };
     }
 }
 

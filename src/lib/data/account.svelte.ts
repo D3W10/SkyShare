@@ -1,6 +1,7 @@
 import { app } from "./app.svelte";
 import { info } from "./info.svelte";
 import type { StoreAccount } from "$electron/lib/interfaces/Store.interface";
+import type { File } from "$electron/lib/interfaces/File.interface";
 
 interface AccountState {
     loggedIn: boolean;
@@ -14,6 +15,21 @@ interface AccountState {
         accessToken: string,
         expiresOn: number
     };
+    historyDate: Date;
+    history: HistoryEntry[];
+}
+
+interface HistoryEntry {
+    id: number;
+    files: {
+        name: string;
+        size: number;
+    }[];
+    message: string | null;
+    sender: string | null;
+    receiver: string | null;
+    type: "sender" | "receiver";
+    createdAt: Date;
 }
 
 const defaultState: AccountState = {
@@ -28,7 +44,9 @@ const defaultState: AccountState = {
         accessToken: "",
         refreshToken: "",
         expiresOn: 0
-    }
+    },
+    historyDate: new Date(0),
+    history: []
 };
 
 export const account = $state<AccountState>(defaultState);
@@ -154,7 +172,7 @@ export async function changePicture(picture: string) {
         const query = new URLSearchParams({
             owner: info.org,
             user: account.id,
-            application: info.appId,
+            application: userInfo.data.signupApplication,
             fullFilePath: account.username.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "_") + (extension && extension.length ? extension[0] : ".jpg")
         });
 
@@ -210,6 +228,43 @@ export async function changePassword(oldPassword: string, newPassword: string) {
         success: change.status === "ok",
         message: change.msg
     };
+}
+
+export async function getHistory() {
+    if (Date.now() > account.historyDate.getTime() + 300000) {
+        const [error, history] = await app.apiCall<any[]>("/history", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${await getToken()}`
+            }
+        });
+
+        if (!error) {
+            account.historyDate = new Date();
+            account.history = history.map(e => ({ ...e, createdAt: new Date(e.created_at) }) as HistoryEntry);
+        }
+
+        return !error;        
+    }
+
+    return true;
+}
+
+export async function pushHistory(files: File[], message: string | null, receiver: string | null) {
+    const [error] = await app.apiCall("/history", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        },
+        body: {
+            files: files.map(f => ({ name: f.name, size: f.size })),
+            message,
+            sender: account.loggedIn ? account.id : null,
+            receiver
+        }
+    });
+
+    return !error;
 }
 
 export async function deleteAccount() {
