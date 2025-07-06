@@ -9,6 +9,7 @@ export type IconT =
     "checkmark" |
     "closeWindow" |
     "copy" |
+    "delete" |
     "file" |
     "history" |
     "home" |
@@ -26,6 +27,7 @@ export type IconT =
     "sidebar" |
     "stopwatch" |
     "sync" |
+    "undo" |
     "updates" |
     "upload" |
     "warning" |

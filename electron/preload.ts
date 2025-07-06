@@ -9,7 +9,7 @@ import type { CallbackT } from "./lib/types/CallbackT.type";
 
 let wReady = false, wCompressed = false, wOpen = false, wLogin = false;
 let updateProgress: (percent: number) => unknown;
-const units = ["Bytes", "KB", "MB", "GB"], apiUrl = ipcRenderer.sendSync("GetAppInfo").api;
+const units = ["Bytes", "KB", "MB", "GB"], { api: apiUrl, auth: authUrl } = ipcRenderer.sendSync("GetAppInfo");
 const handlers: { [K in AppEventT]: { f: CallbackT<AppEventT>, once: boolean }[] } = {
     ready: [],
     open: [],
@@ -224,11 +224,12 @@ export async function showSaveDialog(options: Electron.SaveDialogOptions): Promi
 
 /**
  * Makes a call to the API
- * @param options An object containing the endpoint to reach, the HTTP method and the parameters/body to send
+ * @param endpoint The endpoint to reach
+ * @param options An object containing the HTTP method and the parameters/body to send
  * @param error A boolean indicating whether the error should be handled by the native error system
  * @returns A tuple containing the success state of the operation and an object containing the data returned by the API
  */
-export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: string, { method, params, body }: { method?: string, params?: string, body?: object } = {}, error = true): Promise<["", T] | [ErrorT, null]> {
+export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: string, { method = "GET", params, headers, body }: { method?: string, params?: string, headers?: HeadersInit, body?: object } = {}, error = true): Promise<["", T] | [ErrorT, null]> {
     try {
         if (!navigator.onLine) {
             dispatch("error", "offline");
@@ -236,10 +237,10 @@ export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: s
         }
 
         console.log("[API] " + endpoint + (params ? "?" + params : ""));
-        method = method ?? "GET";
 
         const apiResult = await fetch(apiUrl + endpoint + (params ? "?" + params : ""), {
             method,
+            headers,
             body: body ? JSON.stringify(body) : undefined
         });
 
@@ -260,6 +261,31 @@ export async function apiCall<T extends { [key: string]: unknown; }>(endpoint: s
             dispatch("error", "unknown");
 
         return ["unknown", null];
+    }
+}
+
+/**
+ * Makes a call to the authentication API
+ * @param endpoint The endpoint to reach
+ * @param options An object containing the the HTTP method and the parameters/body to send 
+ * @returns A tuple containing the success state of the operation and an object containing the data returned by the API
+ */
+export async function authCall(endpoint: string, { method = "GET", params, headers, body }: { method?: string, params?: string, headers?: HeadersInit, body?: object } = {}): Promise<[boolean, any]> {
+    try {
+        console.log("[AUTH] " + endpoint + (params ? "?" + params : ""));
+
+        const authResult = await fetch(authUrl + endpoint + (params ? "?" + params : ""), {
+            method,
+            headers,
+            body: body ? JSON.stringify(body) : undefined,
+        }), json = await authResult.json();
+
+        return [json.status !== "ok", json];
+    }
+    catch (err) {
+        console.error(err instanceof Error ? err.message : err);
+
+        return [true, null];
     }
 }
 
@@ -410,6 +436,7 @@ contextBridge.exposeInMainWorld("app", {
     showOpenDialog,
     showSaveDialog,
     apiCall,
+    authCall,
     formatFileSize,
     formatTime,
     createFileStream,

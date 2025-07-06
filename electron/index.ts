@@ -296,8 +296,6 @@ ipcMain.handle("ShowSaveDialog", async (_, options: Electron.SaveDialogOptions) 
 
 ipcMain.handle("GetFileIcon", async (_, path: string) => (await app.getFileIcon(path, { size: "normal" })).toPNG().toString("base64"));
 
-ipcMain.handle("GetFileAsBase64", async (_, file: string) => ({ data: fs.readFileSync(file).toString("base64"), type: (await ((new Function("return import(\"mime\")")) as () => Promise<typeof import("mime")>)()).default.getType(file) }));
-
 ipcMain.handle("CreateFileStrem", (_, location) => {
     return new Promise<boolean>(resolve => {
         currentFileStream = fs.createWriteStream(location);

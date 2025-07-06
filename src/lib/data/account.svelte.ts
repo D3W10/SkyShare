@@ -89,13 +89,13 @@ export async function loginStored() {
 async function loginComplete(refreshToken: string) {
     account.auth.refreshToken = refreshToken;
 
-    const userInfoReq = await fetch(info.auth + "/api/get-account", {
+    const [error, userInfo] = await app.authCall("/api/get-account", {
         headers: {
             Authorization: `Bearer ${await getToken()}`
         }
-    }), userInfo = await userInfoReq.json();
+    });
 
-    if (userInfo.status === "ok") {
+    if (!error) {
         account.loggedIn = true;
         account.id = userInfo.data.id;
         account.username = userInfo.data.name;
@@ -105,27 +105,31 @@ async function loginComplete(refreshToken: string) {
         account.createdAt = new Date(userInfo.data.createdTime);
 
         console.log("Login successful!");
-
-        return true;
     }
-    else
-        return false;
+
+    return !error;
 }
 
 export async function editInfo(username: string, email: string) {
+    const userInfoReq = await fetch(info.auth + "/api/get-account", {
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        }
+    }), userInfo = await userInfoReq.json();
+
+    if (userInfo.status !== "ok")
+        return false;
+
+    userInfo.data.name = username;
+    userInfo.data.displayName = username;
+    userInfo.data.email = email;
+
     const editReq = await fetch(info.auth + "/api/update-user", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${await getToken()}`
         },
-        body: JSON.stringify({
-            id: account.id,
-            name: username,
-            displayName: username,
-            email,
-            avatar: account.picture,
-            owner: info.org
-        })
+        body: JSON.stringify(userInfo.data)
     }), edit = await editReq.json();
 
     const success = edit.status === "ok";
@@ -133,6 +137,58 @@ export async function editInfo(username: string, email: string) {
         account.email = email;
 
     return success;
+}
+
+export async function changePicture(picture: string) {
+    const [error0, userInfo] = await app.authCall("/api/get-account", {
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        }
+    });
+
+    if (error0)
+        return false;
+
+    if (picture) {
+        const extension = /\.\w+$/g.exec(picture);
+        const query = new URLSearchParams({
+            owner: info.org,
+            user: account.id,
+            application: info.appId,
+            fullFilePath: account.username.toLowerCase().replace(/[^a-zA-Z0-9]+/g, "_") + (extension && extension.length ? extension[0] : ".jpg")
+        });
+
+        const formData = new FormData();
+        formData.append("file", await (await fetch(picture)).blob());
+
+        const picUploadReq = await fetch(info.auth + "/api/upload-resource?" + query.toString(), {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${await getToken()}`
+            },
+            body: formData
+        }), picUpload = await picUploadReq.json();
+
+        if (picUpload.status !== "ok")
+            return false;
+
+        picture = picUpload.data;
+    }
+
+    userInfo.data.avatar = picture;
+
+    const [error1] = await app.authCall("/api/update-user", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${await getToken()}`
+        },
+        body: userInfo.data
+    });
+
+    if (!error1)
+        account.picture = picture;
+
+    return !error1;
 }
 
 export async function changePassword(oldPassword: string, newPassword: string) {

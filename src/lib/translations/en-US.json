@@ -152,6 +152,7 @@
             "deleteDesc": "Delete your SkyShare account",
             "deleteButton": "Delete",
             "save": "Save",
+            "choosePicture": "Choose picture",
             "password": "Change password",
             "passwordDesc": "Change your account password",
             "passwordButton": "Change",
