@@ -2,15 +2,12 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
-    import { connection } from "$lib/data/connection.svelte";
-    import { cleanup } from "$lib/data/cleanup.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Input from "$lib/components/Input.svelte";
     import Switch from "$lib/components/Switch.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
     import Button from "$lib/components/Button.svelte";
-    import { WebRTC } from "$lib/models/WebRTC.class.svelte";
     import { AppError } from "$lib/models/AppError.class";
     import { goto, safeTry } from "$lib/utils";
 
@@ -62,11 +59,7 @@
             else if (!data.status)
                 throw new AppError("invalidCode");
 
-            connection.c = new WebRTC(await WebRTC.getCredentials());
-            cleanup.push(() => connection.c?.disconnect());
-            await connection.c.setUpAsReceiver(code);
-
-            goto("/receive/code?code=" + code);
+            goto(`/receive/code?code=${code}&checked=true`);
         });
     }
 

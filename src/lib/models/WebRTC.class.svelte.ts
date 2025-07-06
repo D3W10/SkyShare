@@ -449,18 +449,23 @@ export class WebRTC {
             app.closeFileStream();
             this.fileOngoing = false;
             this.fileIndex++;
-
-            if (this.fileIndex === this._details.files.length) {
-                this.events.beforeFinish?.();
-                this.signalEnd();
-
-                this.sendInChunks(JSON.stringify({
-                    type: "finish"
-                }), this.dataChannel);
-            }
+            this.verifyEnd();
         }
-        else
+        else {
             this.fileIndex++;
+            this.verifyEnd();
+        }
+    }
+
+    private verifyEnd() {
+        if (this.fileIndex === this._details.files.length) {
+            this.events.beforeFinish?.();
+            this.signalEnd();
+
+            this.sendInChunks(JSON.stringify({
+                type: "finish"
+            }), this.dataChannel);
+        }
     }
 
     private joinDataChunks(data: string) {

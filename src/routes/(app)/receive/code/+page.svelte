@@ -1,42 +1,76 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { twMerge } from "tailwind-merge";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import { setLock, setUnlock } from "$lib/data/disable.svelte";
     import { setError } from "$lib/data/error.svelte";
+    import { cleanup } from "$lib/data/cleanup.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
     import Button from "$lib/components/Button.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import ProfilePicture from "$lib/components/ProfilePicture.svelte";
+    import { WebRTC } from "$lib/models/WebRTC.class.svelte";
     import { boxStyles, fetchUser, goto, transitions } from "$lib/utils";
     import type { File } from "$electron/lib/interfaces/File.interface";
 
     let connected = $state(false), ready = $state(false);
     let files = $state<File[]>([]), message = $state("");
 
-    connection.c?.setListener("dataOpen", () => connection.c?.sendIdentification());
-    connection.c?.setListener("fileOpen", () => ready = true);
+    onMount(async () => {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code"), checked = params.get("checked");
 
-    connection.c?.setListener("end", () => {
-        app.setProgressBar(-1);
-        setUnlock();
-        setError("senderDisconnected");
-        goto("/receive");
-    });
-
-    connection.c?.setListener("data", raw => {
-        const { type, data } = JSON.parse(raw);
-
-        if (type === "details" && files.length === 0 && connection.c) {
-            files = data.files;
-            message = data.message;
-            connection.c.details = data;
-
-            fetchUser(connection.c, data.user);
-            setUnlock();
-            connected = true;
+        if (!code) {
+            goto("/receive");
+            return;
         }
+
+        setLock(true);
+
+        if (checked === null || checked === "false") {
+            const [error, data] = await app.apiCall<{ status: boolean }>("/transfer/" + code + "/check");
+            if (error) {
+                setUnlock();
+                goto("/receive");
+                return;
+            }
+            else if (!data.status) {
+                setError("invalidCode");
+                setUnlock();
+                goto("/receive");
+                return;
+            }
+        }
+
+        connection.c = new WebRTC(await WebRTC.getCredentials());
+        cleanup.push(() => connection.c?.disconnect());
+        await connection.c.setUpAsReceiver(code);
+
+        connection.c.setListener("dataOpen", () => connection.c?.sendIdentification());
+        connection.c.setListener("fileOpen", () => ready = true);
+
+        connection.c.setListener("end", () => {
+            app.setProgressBar(-1);
+            setUnlock();
+            setError("senderDisconnected");
+            goto("/receive");
+        });
+
+        connection.c.setListener("data", raw => {
+            const { type, data } = JSON.parse(raw);
+
+            if (type === "details" && files.length === 0 && connection.c) {
+                files = data.files;
+                message = data.message;
+                connection.c.details = data;
+
+                fetchUser(connection.c, data.user);
+                setUnlock();
+                connected = true;
+            }
+        });
     });
 
     async function startReceive() {
