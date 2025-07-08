@@ -16,7 +16,7 @@
         <LinkItem href="/settings/appearance" icon="appearance" selected={currentPage.startsWith("appearance")}>
             <p>{i18n.t("settings.appearance")}</p>
         </LinkItem>
-        <LinkItem href="/settings/nearbyshare" icon="nearbyShare" selected={currentPage.startsWith("nearbyshare")}>
+        <LinkItem href="/settings/nearbyshare" class="hidden" icon="nearbyShare" selected={currentPage.startsWith("nearbyshare")}>
             <p>{i18n.t("settings.nearbyShare")}</p>
         </LinkItem>
         <LinkItem href="/settings/updates" icon="updates" selected={currentPage.startsWith("updates")}>

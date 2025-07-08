@@ -85,7 +85,7 @@
             <Input type="number" class="size-12 text-center text-3xl font-semibold" bind:value={n6} onkeydown={onKeydown} onbeforeinput={onBeforeInput} oninput={onInput} onpaste={onPaste} />
         </div>
     </div>
-    <div class="flex gap-x-4 absolute bottom-6 left-6">
+    <div class="hidden gap-x-4 absolute bottom-6 left-6">
         <p class="font-semibold">{i18n.t("receive.nearbyShare")}</p>
         <Switch bind:value={nearbyShare} />
     </div>
