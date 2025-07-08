@@ -29,7 +29,9 @@ export const transitions = {
 export const images = {
     logo: base + "/logo.svg",
     meshLight: base + "/meshLight.svg",
-    meshDark: base + "/meshDark.svg"
+    meshDark: base + "/meshDark.svg",
+    heroLight: base + "/heroLight.svg",
+    heroDark: base + "/heroDark.svg",
 }
 
 export async function goto(url: string) {

@@ -50,7 +50,10 @@
             <OneAction icon="settings" href="/settings">{i18n.t("home.settings")}</OneAction>
         </div>
     </div>
-    <div class="w-1/2 flex justify-center items-center"></div>
+    <div class="w-1/2 px-4 flex justify-center items-center">
+        <img src={images.heroLight} class="w-full block dark:hidden" alt="{info.name} Hero" />
+        <img src={images.heroDark} class="w-full hidden dark:block" alt="{info.name} Hero" />
+    </div>
 </PageLayout>
 <Dialog bind:show={showChanges} title={i18n.t("home.whatsNew", { version: info.version })} text={i18n.t("home.awesome")} cancelable={false}>
     <div class="px-3 py-2.5 bg-slate-200 dark:bg-slate-950 rounded-xl overflow-y-auto md-box">
