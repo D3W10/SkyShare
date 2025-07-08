@@ -17,7 +17,7 @@
             title: i18n.t("account.settings.choosePicture"),
             properties: ["openFile"],
             filters: [{ name: "Imagens (*.png, *.jpg, *.jpeg, *.jpe, *.jif, *.jfif, *.gif)", extensions: ["png", "jpg", "jpeg", "jpe", "jif", "jfif", "gif"] }]
-        })!;
+        });
 
         if (!photoDialog.canceled)
             picture = "io://i?path=" + photoDialog.files[0].path;

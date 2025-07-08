@@ -53,6 +53,7 @@
 
         connection.c.setListener("end", () => {
             app.setProgressBar(-1);
+            connection.c?.disconnect();
             setUnlock();
             setError("senderDisconnected");
             goto("/receive");

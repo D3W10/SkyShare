@@ -14,6 +14,7 @@
     ],
     "scripts": {
         "dev": "concurrently \"bun run vite:dev\" \"bun run watch\"",
+        "dev-m": "concurrently \"bun run vite:dev\" \"bun run watch\" \"bun run watch\"",
         "start": "concurrently \"bun run vite:dev\" \"bun run electron\"",
         "electron": "bun run compile && electron .",
         "watch": "nodemon",

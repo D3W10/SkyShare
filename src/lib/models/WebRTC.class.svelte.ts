@@ -57,7 +57,7 @@ export class WebRTC {
         const [error, data] = await app.apiCall<Credentials>("/credentials", {}, false);
 
         if (error)
-            throw new AppError("down");
+            throw new AppError(error === "offline" ? "offline" : "down");
         
         return data;
     }

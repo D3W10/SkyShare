@@ -200,6 +200,8 @@
         "invalidCodeDesc": "Este código não está associado a nenhuma transferência em curso. Verifique-o e tente novamente.",
         "senderDisconnected": "O remetente desconectou",
         "senderDisconnectedDesc": "A pessoa que estava a enviar-te ficheiros foi desconectada.",
+        "receiverDisconnected": "O destinatário desconectou",
+        "receiverDisconnectedDesc": "A pessoa que estava a receber os teus ficheiros foi desconectada.",
         "loginError": "Erro ao iniciar sessão",
         "loginErrorDesc": "Ocorreu um erro ao iniciar a sua sessão, por favor tente novamente.",
         "logoutRequired": "A sua sessão será terminada",

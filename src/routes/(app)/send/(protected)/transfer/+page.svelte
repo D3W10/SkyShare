@@ -3,6 +3,7 @@
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { setUnlock } from "$lib/data/disable.svelte";
+    import { setError } from "$lib/data/error.svelte";
     import { account, pushHistory } from "$lib/data/account.svelte";
     import { connection } from "$lib/data/connection.svelte";
     import PageLayout from "$lib/components/PageLayout.svelte";
@@ -36,6 +37,14 @@
             setUnlock();
             goto("/send/done");
         }
+    });
+
+    connection.c?.setListener("disconnect", () => {
+        app.setProgressBar(-1);
+        connection.c?.disconnect();
+        setUnlock();
+        setError("receiverDisconnected");
+        goto("/send");
     });
 
     onMount(() => connection.c?.send());

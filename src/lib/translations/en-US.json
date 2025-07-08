@@ -200,6 +200,8 @@
         "invalidCodeDesc": "This code is not associated to an ongoing transfer. Please double-check it and try again.",
         "senderDisconnected": "Sender disconnected",
         "senderDisconnectedDesc": "The person that was sending you files has disconnected.",
+        "receiverDisconnected": "Receiver disconnected",
+        "receiverDisconnectedDesc": "The person that was receiving your files has disconnected.",
         "loginError": "Login error",
         "loginErrorDesc": "An error occurred while logging you in, please try again.",
         "logoutRequired": "Logout required",
