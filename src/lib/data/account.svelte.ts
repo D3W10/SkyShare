@@ -116,33 +116,26 @@ async function loginComplete(refreshToken: string) {
     return !error;
 }
 
-export async function editInfo(username: string, email: string) {
-    const userInfoReq = await fetch(info.auth + "/api/get-account", {
-        headers: {
-            Authorization: `Bearer ${await getToken()}`
-        }
-    }), userInfo = await userInfoReq.json();
+export async function editInfo(username?: string, email?: string) {
+    const body: { [key: string]: any } = {};
 
-    if (userInfo.status !== "ok")
-        return false;
+    if (username)
+        body.username = username;
+    if (email)
+        body.email = email;
 
-    userInfo.data.name = username;
-    userInfo.data.displayName = username;
-    userInfo.data.email = email;
-
-    const editReq = await fetch(info.auth + "/api/update-user", {
-        method: "POST",
+    const [error, data] = await app.apiCall<{ username: string, email: string }>("/user/info", {
+        method: "PUT",
         headers: {
             Authorization: `Bearer ${await getToken()}`
         },
-        body: JSON.stringify(userInfo.data)
-    }), edit = await editReq.json();
+        body
+    });
 
-    const success = edit.status === "ok";
-    if (success)
-        account.email = email;
+    if (!error)
+        account.email = data.email;
 
-    return success;
+    return !error;
 }
 
 export async function changePicture(picture: string) {
