@@ -37,7 +37,7 @@
     "homepage": "https://skyshare.pt",
     "data": {
         "api": "https://skyshare.pt/api/v1",
-        "auth": "http://skyshare.pt:8000",
+        "auth": "https://auth.skyshare.pt",
         "org": "skyshare"
     },
     "dependencies": {
