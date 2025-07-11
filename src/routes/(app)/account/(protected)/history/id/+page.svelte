@@ -37,7 +37,7 @@
     });
 </script>
 
-<PageLayout title={i18n.t("account.history.title")} class="flex gap-x-6">
+<PageLayout title={entry ? entry.createdAt.toLocaleDateString(i18n.language, { day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "numeric", second: "numeric" }) : i18n.t("account.history.title")} class="flex gap-x-6">
     {#if entry}
         {@const oppositeName = entry.type === "sender" ? entry.receiver.name : entry.sender.name}
         <div class={twMerge(boxStyles.pane, "w-64 h-full p-2 flex flex-col gap-y-2 rounded-2xl overflow-y-auto")}>
