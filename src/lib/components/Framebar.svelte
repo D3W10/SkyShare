@@ -4,6 +4,7 @@
     import { app } from "$lib/data/app.svelte";
     import { i18n } from "$lib/data/i18n.svelte";
     import { info } from "$lib/data/info.svelte";
+    import { navigation } from "$lib/data/navigation.svelte";
     import { disable } from "$lib/data/disable.svelte";
     import { cleanAll } from "$lib/data/cleanup.svelte";
     import Icon from "./Icon.svelte";
@@ -12,14 +13,17 @@
 
     interface Props {
         sidebar?: boolean;
+        onBack?: () => unknown;
     }
 
     let {
-        sidebar = $bindable(true)
+        sidebar = $bindable(true),
+        onBack
     }: Props = $props();
 
     let hasFocus = $state(true), isOffline = $state(false), closeAlert = $state(false);
     let logoClick = 0, logoClickTimeout: NodeJS.Timeout;
+    const backEnabled = $derived(navigation.length !== 0);
     const platform = app.getPlatform();
 
     app.addEventListener("close", onRedButtonClick);
@@ -88,7 +92,7 @@
             <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 enabled:cursor-pointer transition duration-200" onclick={() => sidebar = !sidebar}>
                 <Icon name="sidebar" />
             </button>
-            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 enabled:cursor-pointer transition duration-200" disabled>
+            <button class="w-6 p-0.5 text-slate-500 dark:text-slate-600 enabled:hover:bg-slate-900/10 dark:enabled:hover:bg-slate-200/10 disabled:bg-transparent rounded-md disabled:opacity-50 enabled:cursor-pointer transition duration-200" disabled={!backEnabled} onclick={onBack}>
                 <Icon name="back" />
             </button>
         </div>

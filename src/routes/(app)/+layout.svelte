@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
     import { base } from "$app/paths";
     import { i18n } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
+    import { pop, push } from "$lib/data/navigation.svelte";
     import { disable } from "$lib/data/disable.svelte";
     import { settings } from "$lib/data/settings.svelte";
     import { error, hideError, setError } from "$lib/data/error.svelte";
@@ -12,6 +13,7 @@
     import Sidebar from "$lib/components/Sidebar.svelte";
     import ProgressBar from "$lib/components/ProgressBar.svelte";
     import Dialog from "$lib/components/Dialog.svelte";
+    import { goto } from "$lib/utils";
 
     let { children } = $props();
 
@@ -29,12 +31,19 @@
         document.body.style.setProperty("--color-accent-dark", `var(${accentColor[2]})`);
     });
 
+    $effect(() => {
+        const pathname = page.url.pathname.replace(base, "");
+        untrack(() => push(pathname));
+
+        console.log("Navigating to", pathname);
+    });
+
     app.addEventListener("error", setError);
 
     onMount(app.winReady);
 </script>
 
-<Framebar bind:sidebar={settings.sidebarCollapsed} />
+<Framebar bind:sidebar={settings.sidebarCollapsed} onBack={() => { const p = pop(); p && goto(p); }} />
 <div class="size-full flex">
     <Sidebar collapsed={settings.sidebarCollapsed} />
     <main class="h-full flex flex-1 relative bg-slate-50 dark:bg-slate-900 rounded-tl-xl ring-1 ring-slate-400/10 dark:ring-slate-50/10 shadow-sm overflow-hidden">

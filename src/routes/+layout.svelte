@@ -1,7 +1,5 @@
 <script lang="ts">
     import { onMount, tick } from "svelte";
-    import { page } from "$app/state";
-    import { base } from "$app/paths";
     import { changeLanguage } from "$lib/data/i18n.svelte";
     import { app } from "$lib/data/app.svelte";
     import { loginStored } from "$lib/data/account.svelte";
@@ -38,8 +36,6 @@
         setTheme(settings.theme, instantChange);
         instantChange = false;
     });
-
-    $effect(() => console.log("Navigating to", page.url.pathname.replace(base, "")));
 
     const setTheme = async (theme: string, instant = false) => {
         if (document.documentElement.getAttribute("data-theme") === theme) return;
