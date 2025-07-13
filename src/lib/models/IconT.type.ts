@@ -1,0 +1,34 @@
+export type IconT =
+    "about" |
+    "account" |
+    "add" |
+    "appearance" |
+    "arrowRight" |
+    "back" |
+    "brush" |
+    "checkmark" |
+    "closeWindow" |
+    "copy" |
+    "delete" |
+    "file" |
+    "history" |
+    "home" |
+    "identification" |
+    "link" |
+    "lock" |
+    "logout" |
+    "minimizeWindow" |
+    "nearbyShare" |
+    "receive" |
+    "remove" |
+    "reset" |
+    "send" |
+    "settings" |
+    "sidebar" |
+    "stopwatch" |
+    "sync" |
+    "undo" |
+    "updates" |
+    "upload" |
+    "warning" |
+    "wifiOff";

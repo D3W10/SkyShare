@@ -1,0 +1,239 @@
+{
+    "splash": {
+        "starting": "Starting",
+        "offline": "Waiting for network",
+        "updating": "Updating",
+        "loggingIn": "Logging in"
+    },
+    "app": {
+        "login": "Login",
+        "home": "Homepage",
+        "send": "Send",
+        "receive": "Receive",
+        "settings": "Settings",
+        "offline": "Offline"
+    },
+    "home": {
+        "morning_zero": "Good morning!",
+        "morning": "Good morning {{name}}!",
+        "afternoon_zero": "Good afternoon!",
+        "afternoon": "Good afternoon {{name}}!",
+        "evening_zero": "Good evening!",
+        "evening": "Good evening {{name}}!",
+        "send": "Send files",
+        "receive": "Receive files",
+        "settings": "Settings",
+        "whatsNew": "What's new on {{version}}",
+        "awesome": "Awesome!"
+    },
+    "send": {
+        "title": "Send files",
+        "chooseTitle": "Choose files",
+        "chooseSubtitle": "Or drop them here!",
+        "chooseHoverTitle": "Nearly there!",
+        "chooseHoverSubtitle": "Drop them here to add",
+        "chooseAdd": "Add",
+        "chooseFilter": "All files",
+        "chooseAddFiles": "Add files",
+        "message": "Message",
+        "messagePlaceholder": "Type a message...",
+        "size": "Total Size",
+        "quantity": "Total Quantity",
+        "file_one": "file",
+        "file_other": "files",
+        "fileIcon": "File icon",
+        "send": "Send",
+        "waiting": {
+            "title": "Transfer details",
+            "copyCode": "Copy code",
+            "copyLink": "Copy link",
+            "waiting": "Waiting...",
+            "anonymous": "Anonymous",
+            "connected": "Connected to"
+        },
+        "transfer": {
+            "title": "Sending",
+            "progress": "Progress",
+            "estimated": "Estimated",
+            "speed": "Speed",
+            "hours": "hours",
+            "minutes": "minutes",
+            "seconds": "seconds"
+        },
+        "done": {
+            "title": "Files sent",
+            "description": [
+                "The selected files have been successfully sent to",
+                "You can start another transfer to send more files or go back to the home page."
+            ],
+            "finish": "Finish"
+        }
+    },
+    "receive": {
+        "title": "Receive files",
+        "code": "Transfer Code",
+        "nearbyShare": "Enable NearbyShare",
+        "receive": "Receive",
+        "chooseTitle": "Choose save location",
+        "review": {
+            "obtainingInfo": "Obtaining transfer information...",
+            "title": "Review files",
+            "sentBy": "Sent by",
+            "noMessage": "No message"
+        },
+        "transfer": {
+            "title": "Receiving"
+        },
+        "done": {
+            "title": "Files received",
+            "description": [
+                "The files have been successfully received from",
+                "You can open the folder to view the files or go back to the home page."
+            ],
+            "open": "Open folder"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "appearance": "Appearance",
+        "nearbyShare": "NearbyShare",
+        "updates": "Updates",
+        "reset": "Reset",
+        "about": "About",
+        "theme": "Theme",
+        "themeDesc": "Change the application theme",
+        "themeLight": "Light",
+        "themeDark": "Dark",
+        "language": "Language",
+        "languageDesc": "Modify the application language",
+        "nearbyShareEnabled": "Enable NearbyShare",
+        "nearbyShareEnabledDesc": "Enable quick file sharing on this network",
+        "checkForUpdates": "Check for updates",
+        "checkForUpdatesDesc": "Manually check for updates",
+        "check": "Check",
+        "autoUpdate": "Automatic updates",
+        "autoUpdateDesc": "Updates the application automatically",
+        "betaUpdates": "Beta updates",
+        "betaUpdatesDesc": "Get beta updates (unstable)",
+        "resetSettings": "Reset Settings",
+        "resetSettingsDesc": "Reset all settings to the default values",
+        "resetButton": "Reset",
+        "version": "Version {{version}}"
+    },
+    "account": {
+        "login": {
+            "title" : "Log In",
+            "history": "Transfer history",
+            "historyDesc": "All your transfers using the app will be saved on a history for easy access and management",
+            "sync": "History sync",
+            "syncDesc": "Your transfer history will be synced across all devices using your account to keep it up to date",
+            "identification": "Sender ID",
+            "identificationDesc": "When people receive files from you, your name will be displayed along the transfer (must be enabled on the account settings)",
+            "login": "Log In",
+            "signup": "Create account",
+            "complete": {
+                "title": "Logging in",
+                "loggingIn": "Hang tight, we are logging you in...",
+                "welcome": "Welcome"
+            }
+        },
+        "title": "Account",
+        "notVerified": "Email not verified!",
+        "viewHistory": "View all history",
+        "history": {
+            "title": "History",
+            "empty": "Your history is empty",
+            "from": "From",
+            "to": "To",
+            "receivedBy": "Received by"
+        },
+        "settings": {
+            "title": "Account settings",
+            "info": "Information",
+            "personalization": "Personalization",
+            "security": "Security",
+            "username": "Username",
+            "usernameDesc": "Change your account username",
+            "email": "Email",
+            "emailDesc": "Change your account email",
+            "delete": "Delete Account",
+            "deleteDesc": "Delete your SkyShare account",
+            "deleteButton": "Delete",
+            "save": "Save",
+            "choosePicture": "Choose picture",
+            "password": "Change password",
+            "passwordDesc": "Change your account password",
+            "passwordButton": "Change",
+            "oldPassword": "Old password",
+            "newPassword": "New password",
+            "confirmPassword": "Confirm password",
+            "since": "Member since"
+        },
+        "delete": {
+            "title": "Delete Account",
+            "features": "Account features:",
+            "continue": "Continue",
+            "confirm": {
+                "title": "Deleting Account",
+                "deleting": "Deleting your SkyShare account, hang on tight..."
+            }
+        }
+    },
+    "dialog": {
+        "okay": "Okay",
+        "cancel": "Cancel",
+        "yes": "Yes",
+        "no": "No",
+        "unknown": "Unknown error",
+        "unknownDesc": "An unknown error occurred in the app or while trying to reach the server, this likely happened cause you're running an outdated version of SkyShare. Please make sure you're running the latest version and try again.",
+        "down": "Server error",
+        "downDesc": "Unable to reach the SkyShare server, please check your internet connection and try again.",
+        "offline": "You're offline",
+        "offlineDesc": "SkyShare could not reach the internet, make sure you're online and have a stable connection.",
+        "disabled": "Operation in progress",
+        "disabledDesc": "An operation is currently running, are you sure you want to close SkyShare?",
+        "tooManyFiles": "Limit exceeded",
+        "tooManyFilesDesc": "The maximum number of files has been exceeded! You can only send a maximum of {{amount}} files per transfer.",
+        "addingError": "Failed to add files",
+        "addingErrorDesc": "An error occurred while adding {{amount}} of the selected files, check if they still exist and if their name is unique.",
+        "invalidCode": "Invalid code",
+        "invalidCodeDesc": "This code is not associated to an ongoing transfer. Please double-check it and try again.",
+        "senderDisconnected": "Sender disconnected",
+        "senderDisconnectedDesc": "The person that was sending you files has disconnected.",
+        "receiverDisconnected": "Receiver disconnected",
+        "receiverDisconnectedDesc": "The person that was receiving your files has disconnected.",
+        "loginError": "Login error",
+        "loginErrorDesc": "An error occurred while logging you in, please try again.",
+        "logoutRequired": "Logout required",
+        "logoutRequiredDesc": "In order to change your username, SkyShare has to log you out of your account. Do you want to proceed?",
+        "editError": "Failed to save",
+        "editErrorDesc": "An error occurred while saving some of your changes, please try again.",
+        "passwordError": "Failed to change password",
+        "passwordErrorDesc": "An error occurred while changing your password:",
+        "passwordSuccess": "Password changed",
+        "passwordSuccessDesc": "Your password has been successfully changed!",
+        "deleteConfirm": "Last warning!",
+        "deleteConfirmDesc": "Deleting your account will erase all your data in a irreversible way! Only proceed if you're sure about your decision.",
+        "deleteSuccess": "Account deleted",
+        "deleteSuccessDesc": "Your account has been successfully deleted. We hope to see you again soon!",
+        "deleteError": "Failed to delete",
+        "deleteErrorDesc": "An error occurred while deleting your account, please try again.",
+        "logout": "Log out",
+        "logoutDesc": "Are you sure you want to log out?",
+        "nearbyShare": "Quick note",
+        "nearbyShareDesc": [
+            "With this feature enabled, when you have the receive page open, your device will be discovered by other people on the same network.",
+            "When someone on your network is sending files, a list of people with the NearbyShare feature on will be shown providing quick transfers without the need of sharing the transfer code.",
+            "Your info will not be shared on the network unless you have a SkyShare account and you opt-in using the \"Show my info\" switch."
+        ],
+        "noUpdates": "All good!",
+        "noUpdatesDesc": "You already have the latest version of SkyShare. That's great news!",
+        "betaUpdates": "Important note",
+        "betaUpdatesDesc": [
+            "Are you sure you want to enable this setting? Beta updates are unstable and can break your user experience.",
+            "You will have to restart SkyShare for this setting to be applied."
+        ],
+        "resetSettings": "Reset settings",
+        "resetSettingsDesc": "Are you sure you want to reset all settings? The default values will be applied."
+    }
+}

@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(html[data-theme="dark"], html[data-theme="dark"] *));
+@custom-variant disabled (&:where(:disabled, [data-disabled="true"]));
+@custom-variant enabled (&:where(:enabled, :not(button)));
+
+@theme {
+    --animate-hue: hue 5s linear infinite;
+    --animate-progress-first-line: progressFirstLine 2100ms cubic-bezier(0.65, 0.81, 0.73, 0.4) infinite;
+    --animate-progress-last-line: progressLastLine 2100ms cubic-bezier(0.16, 0.84, 0.44, 1) 1150ms infinite;
+    --animate-rotate: rotate 2s linear infinite;
+    --animate-wave: wave 10s linear infinite;
+
+    --background-image-rainbow-conic: conic-gradient(var(--color-red-500), var(--color-orange-500), var(--color-amber-500), var(--color-yellow-500), var(--color-lime-500), var(--color-green-500), var(--color-emerald-500), var(--color-teal-500), var(--color-cyan-500), var(--color-sky-500), var(--color-blue-500), var(--color-indigo-500), var(--color-violet-500), var(--color-purple-500), var(--color-fuchsia-500), var(--color-pink-500), var(--color-rose-500), var(--color-red-500));
+
+    --color-accent: var(--color-home);
+    --color-accent-light: var(--color-home-light);
+
+    --color-home: var(--color-blue-500);
+    --color-send: var(--color-rose-500);
+    --color-receive: var(--color-teal-500);
+    --color-settings: var(--color-violet-500);
+    --color-account: var(--color-amber-500);
+    --color-home-light: var(--color-blue-100);
+    --color-send-light: var(--color-rose-100);
+    --color-receive-light: var(--color-teal-100);
+    --color-settings-light: var(--color-violet-100);
+    --color-account-light: var(--color-amber-100);
+    --color-home-dark: var(--color-blue-950);
+    --color-send-dark: var(--color-rose-950);
+    --color-receive-dark: var(--color-teal-950);
+    --color-settings-dark: var(--color-violet-950);
+    --color-account-dark: var(--color-amber-950);
+
+    --ease-cubic-out: cubic-bezier(0.33, 1, 0.68, 1);
+    --ease-quart-in: cubic-bezier(0.5, 0, 0.75, 0);
+
+    --font-outfit: "Outfit";
+
+    @keyframes hue {
+        from {
+            filter: hue-rotate(0deg);
+        }
+    
+        to {
+            filter: hue-rotate(360deg);
+        }
+    }
+
+    @keyframes progressFirstLine {
+        0% {
+            left: -35%;
+            right: 100%;
+        }
+
+        60%, 100% {
+            left: 100%;
+            right: -90%;
+        }
+    }
+
+    @keyframes progressLastLine {
+        0% {
+            left: -200%;
+            right: 100%;
+        }
+
+        60%, 100% {
+            left: 107%;
+            right: -8%;
+        }
+    }
+
+    @keyframes rotate {
+        from {
+            rotate: 0deg;
+        }
+
+        to {
+            rotate: 360deg;
+        }
+    }
+
+    @keyframes wave {
+        from {
+            background-position-x: 0%;
+        }
+
+        to {
+            background-position-x: 100%;
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    @apply size-1.5 bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-slate-500/20 rounded-full;
+}
+
+::view-transition-old(root), ::view-transition-new(root) {
+    @apply animate-none mix-blend-normal;
+}
+
+html, body {
+    @apply w-full h-full flex flex-col relative;
+}
+
+body {
+    @apply text-slate-950 dark:text-slate-100 bg-white dark:bg-black font-outfit overflow-hidden select-none;
+}
+
+img {
+    -webkit-user-drag: none;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
